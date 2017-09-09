@@ -5,4 +5,5 @@ package com.robillo.oreomusicplayer.models;
  */
 
 public class Song {
+
 }
