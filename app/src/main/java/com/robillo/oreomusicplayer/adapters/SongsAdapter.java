@@ -36,7 +36,10 @@ public class SongsAdapter extends RecyclerView.Adapter<SongHolder>{
     @Override
     public void onBindViewHolder(SongHolder holder, int position) {
         holder.title.setText(list.get(position).getTitle());
-        holder.artistDuration.setText(list.get(position).getArtist() + " (" + list.get(position).getDuration() + ")");
+        long duration = Integer.valueOf(list.get(position).getDuration())/1000;
+        long mins = duration/60;
+        long seconds = duration%60;
+        holder.artistDuration.setText(list.get(position).getArtist() + " (" + String.valueOf(mins) + ":" + String.valueOf(seconds) + ")");
     }
 
     @Override
