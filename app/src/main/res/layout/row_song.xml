@@ -18,7 +18,6 @@
             android:layout_height="wrap_content"
             android:paddingLeft="10sp"
             android:paddingTop="5sp"
-            android:textStyle="bold"
             android:textColor="@color/colorPrimary"
             android:textSize="20sp"
             tools:text="I'll be your reason"
