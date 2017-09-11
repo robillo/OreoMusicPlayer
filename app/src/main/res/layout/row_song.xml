@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="4sp"
+    android:layout_margin="5sp"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10sp"
+            android:paddingTop="5sp"
+            android:fontFamily="casual"
+            android:textColor="@color/colorPrimary"
+            android:textSize="15sp"
+            tools:text="I'll be your reason"
+            android:id="@+id/title" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10sp"
+            android:paddingBottom="5sp"
+            android:fontFamily="casual"
+            android:textColor="@color/colorPrimaryLight"
+            android:textSize="15sp"
+            tools:text="Illenium (3:40)"
+            android:id="@+id/artist_duration" />
+
+    </LinearLayout>
+
+</android.support.v7.widget.CardView>

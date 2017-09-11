@@ -90,6 +90,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
                 String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
                 String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
                 String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+                String duration = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
 
                 // Save to audioList
                 audioList.add(new Song(data, title, album, artist));
