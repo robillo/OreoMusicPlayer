@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.robillo.oreomusicplayer.R;
+import com.robillo.oreomusicplayer.adapters.SongsAdapter;
 import com.robillo.oreomusicplayer.models.Song;
 
 import java.util.ArrayList;
@@ -28,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,6 +41,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     private final int PERMISSION_REQUEST_CODE = 0;
     private final int LOADER_ID = 0;
     private List<Song> audioList;
+    private SongsAdapter mAdapter;
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
@@ -52,7 +56,9 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_songs_list, container, false);
+        ButterKnife.bind(this, v);
         askForPermissions();
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         if(checkForPermission()){
             getActivity().getSupportLoaderManager().initLoader(LOADER_ID, null, this);
         }
@@ -93,9 +99,11 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
                 String duration = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
 
                 // Save to audioList
-                audioList.add(new Song(data, title, album, artist));
+                audioList.add(new Song(data, title, album, artist, duration));
             }
         }
+        mAdapter = new SongsAdapter(audioList, getActivity());
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override
