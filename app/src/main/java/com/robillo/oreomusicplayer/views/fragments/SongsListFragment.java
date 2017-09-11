@@ -94,25 +94,24 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
             while (cursor.moveToNext()) {
                 String data = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
                 String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-                String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
-                String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+                String titleKey = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE_KEY));
+                String id = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
+                String dateAdded = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATE_ADDED));
+                String dateModified = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED));
                 String duration = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
-                String temp1 = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.COMPOSER));
-                String temp2 = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
-                String temp3 = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
-                String temp4 = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_KEY));
-                String temp5 = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID));
-                String temp6 = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_KEY));
-                String temp7 = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATE_ADDED));
-                String temp8 = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED));
-                String temp9 = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE));
-                String temp10 = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.YEAR));
-                String temp11 = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE_KEY));
-
-                Log.e("STRINGS ", data + "\n" + title + "\n" + album + "\n" + artist + "\n" + duration + "\n" + temp1 + "\n" + temp2 + "\n" + temp3 + "\n" + temp4 + "\n" + temp5 + "\n" + temp6 + "\n" + temp7 + "\n" + temp8 + "\n" + temp9 + "\n" + temp10 + "\n" + temp11);
+                String composer = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.COMPOSER));
+                String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
+                String albumId = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
+                String albumKey = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_KEY));
+                String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
+                String artistId = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID));
+                String artistKey = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_KEY));
+                String size = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE));
+                String year = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.YEAR));
 
                 // Save to audioList
-                audioList.add(new Song(data, title, album, artist, duration));
+                audioList.add(new Song(data, title, titleKey, id, dateAdded, dateModified, duration, composer, album, albumId,
+                        albumKey, artist, artistId, artistKey, size, year));
             }
         }
         mAdapter = new SongsAdapter(audioList, getActivity());
