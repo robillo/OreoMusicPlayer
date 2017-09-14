@@ -41,6 +41,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
     @SuppressWarnings("FieldCanBeLocal")
     private final int PERMISSION_REQUEST_CODE = 0;
+    @SuppressWarnings("FieldCanBeLocal")
     private final int LOADER_ID = 0;
     private List<Song> audioList;
     private SongsAdapter mAdapter;
@@ -60,10 +61,10 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         View v = inflater.inflate(R.layout.fragment_songs_list, container, false);
         ButterKnife.bind(this, v);
         askForPermissions();
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         if(checkForPermission()){
             getActivity().getSupportLoaderManager().initLoader(LOADER_ID, null, this);
         }
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         return v;
     }
 
@@ -136,7 +137,11 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         super.onViewStateRestored(savedInstanceState);
         if (savedInstanceState != null) {
             audioList = savedInstanceState.getParcelableArrayList("song_parcelable");
-            Log.e("AUDIO LIST SIZE", " " + (audioList != null ? audioList.size() : 0));
+            mAdapter = new SongsAdapter(audioList, getActivity());
+            Log.e("SET ADAPTER HERE ", " " + mAdapter.getItemCount());
+            mAdapter.notifyDataSetChanged();
+            mRecyclerView.setAdapter(mAdapter);
+            mAdapter.notifyDataSetChanged();
         }
     }
 }
