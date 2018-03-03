@@ -83,8 +83,13 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+
         if (cursor != null && cursor.getCount() > 0) {
+
             audioList = new ArrayList<>();
+
+            audioList.add(new Song()); //first entry will be for empty space
+
             while (cursor.moveToNext()) {
                 String data = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
                 String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));

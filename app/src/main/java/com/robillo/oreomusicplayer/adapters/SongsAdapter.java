@@ -49,6 +49,15 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
 
     @Override
     public void onBindViewHolder(SongHolder holder, int position) {
+
+        if(position == 0) {
+            String empty = " ";
+            holder.title.setText(empty);
+            holder.artistDuration.setText(empty);
+            holder.itemView.setClickable(false);
+            return;
+        }
+
         holder.title.setText(list.get(position).getTitle());
         long duration = Integer.valueOf(list.get(position).getDuration())/1000;
         long mins = duration/60;
@@ -66,16 +75,19 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
 
                 if(mediaPlayer!=null){
                     if(mediaPlayer.isPlaying()) {
+                        mediaPlayer.stop();
                         mediaPlayer.reset();
                     }
                     mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                     try {
+                        mediaPlayer.stop();
+                        mediaPlayer.reset();
                         mediaPlayer.setDataSource(parentContext, uri);
                         mediaPlayer.prepare();
+                        mediaPlayer.start();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    mediaPlayer.start();
                 }
             }
         });

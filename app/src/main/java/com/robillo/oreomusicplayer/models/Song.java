@@ -28,6 +28,10 @@ public class Song implements Parcelable {
     private String size;
     private String year;
 
+    public Song() {
+
+    }
+
     public Song(String data, String title, String titleKey, String id, String dateAdded, String dateModified, String duration, String composer, String album, String albumId, String albumKey, String artist, String artistId, String artistKey, String size, String year) {
         this.data = data;
         this.title = title;
