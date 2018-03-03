@@ -43,13 +43,20 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Override
     public void setSongListFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(mFragmentContainer.getId(), new SongsListFragment());
+        transaction.replace(mFragmentContainer.getId(), new SongsListFragment(), getString(R.string.songs_list));
         transaction.commitAllowingStateLoss();
     }
 
     @Override
     public void setSongPlayFragment() {
-
+//        if(getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play))==null){
+//            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+//            transaction.add(mFragmentContainer.getId(), new SongsListFragment());
+//            transaction.commit();
+//        }
+//        else {
+//            //edit the same fragment by adding arguments
+//        }
     }
 
     @Override

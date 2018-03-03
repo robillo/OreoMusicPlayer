@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.models.Song;
+import com.robillo.oreomusicplayer.views.activities.main.MainActivity;
 
 import java.io.IOException;
 import java.util.List;
@@ -74,6 +75,9 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
                 uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, Long.valueOf(list.get(_pos).getId()));
 
                 if(mediaPlayer!=null){
+
+                    if(context!=null) ((MainActivity) context).setSongPlayFragment();
+
                     if(mediaPlayer.isPlaying()) {
                         mediaPlayer.stop();
                         mediaPlayer.reset();

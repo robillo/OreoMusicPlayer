@@ -42,11 +42,10 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     private MediaPlayer mediaPlayer;
 
     @SuppressWarnings("FieldCanBeLocal")
-    private final int PERMISSION_REQUEST_CODE = 0;
-    @SuppressWarnings("FieldCanBeLocal")
     private final int LOADER_ID = 0;
-    private List<Song> audioList;
+    @SuppressWarnings("FieldCanBeLocal")
     private SongsAdapter mAdapter;
+    private List<Song> audioList;
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
@@ -120,24 +119,5 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList("song_parcelable", (ArrayList<? extends Parcelable>) audioList);
-    }
-
-    @Override
-    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
-        super.onViewStateRestored(savedInstanceState);
-        if (savedInstanceState != null) {
-            audioList = savedInstanceState.getParcelableArrayList("song_parcelable");
-            mAdapter = new SongsAdapter(audioList, getActivity(), mediaPlayer);
-            Log.e("SET ADAPTER HERE ", " " + mAdapter.getItemCount());
-            mAdapter.notifyDataSetChanged();
-            mRecyclerView.setAdapter(mAdapter);
-            mAdapter.notifyDataSetChanged();
-        }
     }
 }
