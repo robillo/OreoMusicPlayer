@@ -1,13 +1,12 @@
 package com.robillo.oreomusicplayer.views.activities.main;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
 
@@ -16,6 +15,7 @@ import com.robillo.oreomusicplayer.views.activities.main.song_list_frag.SongsLis
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class MainActivity extends AppCompatActivity implements MainActivityMvpView {
 
@@ -77,5 +77,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
                 }
                 break;
         }
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
     }
 }

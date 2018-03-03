@@ -53,7 +53,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
         long duration = Integer.valueOf(list.get(position).getDuration())/1000;
         long mins = duration/60;
         long seconds = duration%60;
-        String temp = list.get(position).getArtist() + " (" + String.valueOf(mins) + ":" + String.valueOf(seconds) + ")";
+        String temp = list.get(position).getArtist() + " ( " + String.valueOf(mins) + ":" + String.valueOf(seconds) + " )";
         holder.artistDuration.setText(temp);
 
         final int _pos = position;

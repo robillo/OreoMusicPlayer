@@ -2,8 +2,6 @@
 <android.support.v7.widget.CardView android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardElevation="4sp"
-    android:layout_margin="5sp"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/song_card">
@@ -13,28 +11,40 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <TextView
+        <ImageView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10sp"
-            android:paddingTop="5sp"
-            android:textColor="@color/colorPrimary"
-            android:textSize="20sp"
-            tools:text="I'll be your reason"
-            android:id="@+id/title"
-            android:paddingStart="10sp" />
+            android:layout_height="2sp"
+            android:background="@color/colorRecyclerRowDivider"
+            tools:ignore="SmallSp"
+            android:contentDescription="@string/nothing" />
 
         <TextView
+            android:maxLines="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="10sp"
+            android:paddingTop="10sp"
+            android:textColor="@color/colorTitle"
+            android:textSize="20sp"
+            android:paddingBottom="10sp"
+            fontPath="fonts/Raleway-Regular.ttf"
+            tools:text="I'll be your reason"
+            android:id="@+id/title"
+            tools:ignore="MissingPrefix,RtlHardcoded,RtlSymmetry" />
+
+        <TextView
+            android:maxLines="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="10sp"
+            android:paddingBottom="10sp"
             android:textStyle="bold"
-            android:paddingBottom="5sp"
-            android:textColor="@color/colorPrimaryLight"
+            android:textColor="@color/colorArtist"
             android:textSize="15sp"
+            fontPath="fonts/Raleway-Regular.ttf"
             tools:text="Illenium (3:40)"
             android:id="@+id/artist_duration"
-            android:paddingStart="10sp" />
+            tools:ignore="MissingPrefix,RtlHardcoded,RtlSymmetry" />
 
     </LinearLayout>
 

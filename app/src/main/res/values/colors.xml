@@ -1,11 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#1F0A02</color>
     <color name="colorPrimaryLight">#3B1000</color>
-    <color name="colorPrimaryDark">#170801</color>
-    <color name="colorAccent">#FFFFFF</color>
     <color name="colorOffWhite">#FFFDF4</color>
     <color name="colorVeryLightBrown">#FFE8C5</color>
+
+    <color name="colorTitle">#4990E2</color>
+    <color name="colorArtist">#A3A8F8</color>
+    <color name="colorRecyclerRowDivider">#F5F5F5</color>
+
+    <color name="colorPrimary">#FFFFFF</color>
+    <color name="colorPrimaryDark">#F0F0F0</color>
+    <color name="colorAccent">#A3A8F8</color>
+    <color name="highlight">#FFB300</color>
+
+    <color name="colorTextOne">#6E7B8C</color>
+    <color name="colorTextTwo">#8B95A3</color>
+    <color name="colorTextThree">#D3D3D3</color>
+    <color name="colorTextFour">#E8E8E8</color>
+    <color name="colorTextFive">#F5F5F5</color>
+    <color name="colorBackground">#F5F7FA</color>
+
+    <array name="colors">
+        <item>#4990E2</item>
+        <item>#9ECDFF</item>
+        <item>#A3A8F8</item>
+    </array>
+
+    <color name="app1">#4990E2</color>
+    <color name="app2">#9ECDFF</color>
+    <color name="app3">#A3A8F8</color>
+
+    <color name="on_board_one">#FFFFFF</color>
+    <color name="on_board_two">#FFFFFF</color>
+    <color name="on_board_three">#FFFFFF</color>
+    <color name="on_board_four">#FFFFFF</color>
+
+    <color name="dardDarkRed">#7e000a</color>
+    <color name="dardRed">#a6000d</color>
+    <color name="rushRed">#cc0000</color>
+    <color name="red2">#ff6666</color>
+    <color name="red3">#ffb2b2</color>
+    <color name="red4">#ffe5e5</color>
+    <color name="readBlack">#323232</color>
+    <color name="dardReadBlack">#000000</color>
+
+    <color name="colorFacebook">#3b5998</color>
+    <color name="colorTwitter">#0084b4</color>
+
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="transparency_black">#33000000</color>
 </resources>
