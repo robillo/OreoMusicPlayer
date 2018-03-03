@@ -21,7 +21,8 @@
             android:textColor="@color/colorPrimary"
             android:textSize="20sp"
             tools:text="I'll be your reason"
-            android:id="@+id/title" />
+            android:id="@+id/title"
+            android:paddingStart="10sp" />
 
         <TextView
             android:layout_width="match_parent"
@@ -32,7 +33,8 @@
             android:textColor="@color/colorPrimaryLight"
             android:textSize="15sp"
             tools:text="Illenium (3:40)"
-            android:id="@+id/artist_duration" />
+            android:id="@+id/artist_duration"
+            android:paddingStart="10sp" />
 
     </LinearLayout>
 

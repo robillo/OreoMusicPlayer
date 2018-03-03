@@ -6,29 +6,33 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.robillo.oreomusicplayer.R;
-import com.robillo.oreomusicplayer.adapters.holders.SongHolder;
 import com.robillo.oreomusicplayer.models.Song;
 
 import java.io.IOException;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by robinkamboj on 11/09/17.
  */
 
-public class SongsAdapter extends RecyclerView.Adapter<SongHolder> {
+public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> {
 
     private List<Song> list;
     private MediaPlayer mediaPlayer;
-    @SuppressWarnings("FieldCanBeLocal")
     private Context context;
+    private Context parentContext;
     private Uri uri;
 
     public SongsAdapter(List<Song> list, Context context, MediaPlayer mediaPlayer) {
@@ -39,8 +43,8 @@ public class SongsAdapter extends RecyclerView.Adapter<SongHolder> {
 
     @Override
     public SongHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_song, parent, false);
-        return new SongHolder(v);
+        parentContext = parent.getContext();
+        return new SongHolder(LayoutInflater.from(parentContext).inflate(R.layout.row_song, parent, false));
     }
 
     @Override
@@ -51,17 +55,22 @@ public class SongsAdapter extends RecyclerView.Adapter<SongHolder> {
         long seconds = duration%60;
         String temp = list.get(position).getArtist() + " (" + String.valueOf(mins) + ":" + String.valueOf(seconds) + ")";
         holder.artistDuration.setText(temp);
-        uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, Long.valueOf(list.get(position).getId()));
+
+        final int _pos = position;
+
         holder.songCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+                uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, Long.valueOf(list.get(_pos).getId()));
+
                 if(mediaPlayer!=null){
                     if(mediaPlayer.isPlaying()) {
                         mediaPlayer.reset();
                     }
                     mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
                     try {
-                        mediaPlayer.setDataSource(context, uri);
+                        mediaPlayer.setDataSource(parentContext, uri);
                         mediaPlayer.prepare();
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -75,5 +84,20 @@ public class SongsAdapter extends RecyclerView.Adapter<SongHolder> {
     @Override
     public int getItemCount() {
         return list!=null?list.size():0;
+    }
+
+    class SongHolder extends RecyclerView.ViewHolder{
+
+        @BindView(R.id.title)
+        TextView title;
+        @BindView(R.id.artist_duration)
+        TextView artistDuration;
+        @BindView(R.id.song_card)
+        CardView songCard;
+
+        SongHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
     }
 }
