@@ -23,16 +23,18 @@ import java.util.List;
  * Created by robinkamboj on 11/09/17.
  */
 
-public class SongsAdapter extends RecyclerView.Adapter<SongHolder> implements View.OnClickListener{
+public class SongsAdapter extends RecyclerView.Adapter<SongHolder> {
 
     private List<Song> list;
+    private MediaPlayer mediaPlayer;
     @SuppressWarnings("FieldCanBeLocal")
     private Context context;
     private Uri uri;
 
-    public SongsAdapter(List<Song> list, Context context) {
+    public SongsAdapter(List<Song> list, Context context, MediaPlayer mediaPlayer) {
         this.list = list;
         this.context = context;
+        this.mediaPlayer = mediaPlayer;
     }
 
     @Override
@@ -47,32 +49,31 @@ public class SongsAdapter extends RecyclerView.Adapter<SongHolder> implements Vi
         long duration = Integer.valueOf(list.get(position).getDuration())/1000;
         long mins = duration/60;
         long seconds = duration%60;
-        holder.artistDuration.setText(list.get(position).getArtist() + " (" + String.valueOf(mins) + ":" + String.valueOf(seconds) + ")");
+        String temp = list.get(position).getArtist() + " (" + String.valueOf(mins) + ":" + String.valueOf(seconds) + ")";
+        holder.artistDuration.setText(temp);
         uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, Long.valueOf(list.get(position).getId()));
-        holder.songCard.setOnClickListener(this);
+        holder.songCard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mediaPlayer!=null){
+                    if(mediaPlayer.isPlaying()) {
+                        mediaPlayer.reset();
+                    }
+                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    try {
+                        mediaPlayer.setDataSource(context, uri);
+                        mediaPlayer.prepare();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    mediaPlayer.start();
+                }
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return list!=null?list.size():0;
-    }
-
-    @Override
-    public void onClick(View view) {
-        switch (view.getId()){
-            case R.id.song_card:{
-                Log.e("CLICKED", uri.toString());
-                MediaPlayer mediaPlayer = new MediaPlayer();
-                mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                try {
-                    mediaPlayer.setDataSource(context, uri);
-                    mediaPlayer.prepare();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-                mediaPlayer.start();
-                break;
-            }
-        }
     }
 }
