@@ -4,13 +4,13 @@
     <color name="colorOffWhite">#FFFDF4</color>
     <color name="colorVeryLightBrown">#FFE8C5</color>
 
-    <color name="colorTitle">#4990E2</color>
-    <color name="colorArtist">#A3A8F8</color>
+    <color name="colorTitle">#6E7B8C</color>
+    <color name="colorArtist">#8B95A3</color>
     <color name="colorRecyclerRowDivider">#F5F5F5</color>
 
-    <color name="colorPrimary">#FFFFFF</color>
-    <color name="colorPrimaryDark">#F0F0F0</color>
-    <color name="colorAccent">#A3A8F8</color>
+    <color name="colorPrimary">#FF9032</color>
+    <color name="colorPrimaryDark">#CC7328</color>
+    <color name="colorAccent">#FFB475</color>
     <color name="highlight">#FFB300</color>
 
     <color name="colorTextOne">#6E7B8C</color>
