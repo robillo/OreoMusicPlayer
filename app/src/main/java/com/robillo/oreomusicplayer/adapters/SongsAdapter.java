@@ -51,7 +51,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
     @Override
     public void onBindViewHolder(SongHolder holder, int position) {
 
-        if(position == 0) {
+        if(list.get(position).getId() == null) {
             String empty = " ";
             holder.title.setText(empty);
             holder.artistDuration.setText(empty);

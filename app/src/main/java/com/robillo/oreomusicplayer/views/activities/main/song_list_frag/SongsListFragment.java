@@ -36,6 +36,7 @@ import butterknife.ButterKnife;
  */
 public class SongsListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
 
+    private final int EMPTY_CELLS_COUNT = 2;
     private MediaPlayer mediaPlayer;
     @SuppressWarnings("FieldCanBeLocal")
     private final int LOADER_ID = 0;
@@ -106,6 +107,10 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
                 // Save to audioList
                 audioList.add(new Song(data, title, titleKey, id, dateAdded, dateModified, duration, composer, album, albumId,
                         albumKey, artist, artistId, artistKey, size, year));
+            }
+
+            for(int i=0; i<EMPTY_CELLS_COUNT; i++){
+                audioList.add(new Song());
             }
         }
         mAdapter = new SongsAdapter(audioList, getActivity(), mediaPlayer);

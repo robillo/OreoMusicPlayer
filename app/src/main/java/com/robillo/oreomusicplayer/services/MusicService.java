@@ -27,6 +27,8 @@ public class MusicService extends Service implements
         MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
         MediaPlayer.OnCompletionListener, MusicServiceInterface {
 
+    private final int EMPTY_CELLS_COUNT = 2;
+
     private final IBinder musicBind = new MusicBinder();
     //media player
     private MediaPlayer player;
@@ -106,15 +108,17 @@ public class MusicService extends Service implements
 
     @Override
     public void setSong(int songIndex){
-        Log.e("message", songs.get(songIndex).getTitle());
-        EventBus.getDefault().post(new SongChangeEvent(songs.get(songIndex)));
-        songPosn = songIndex;
-        playSong();
+        if(songIndex < songs.size() - EMPTY_CELLS_COUNT) {
+            Log.e("message", songs.get(songIndex).getTitle());
+            EventBus.getDefault().post(new SongChangeEvent(songs.get(songIndex)));
+            songPosn = songIndex;
+            playSong();
+        }
     }
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        if(songPosn < songs.size()){
+        if(songPosn < songs.size()-EMPTY_CELLS_COUNT){
             songPosn++;
             setSong(songPosn);
         }
