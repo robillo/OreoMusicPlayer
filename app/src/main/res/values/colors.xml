@@ -51,4 +51,8 @@
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
     <color name="transparency_black">#33000000</color>
+    <color name="translucent_primary">#b3ffb300</color>
+    <color name="translucent_white">#caffffff</color>
+    <color name="translucent_card">#d5cc7328</color>
+    <color name="translucent_card_upper">#ccffb475</color>
 </resources>
