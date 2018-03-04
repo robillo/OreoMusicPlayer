@@ -12,12 +12,19 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.FrameLayout;
 
 import com.robillo.oreomusicplayer.R;
+import com.robillo.oreomusicplayer.events.SongChangeEvent;
 import com.robillo.oreomusicplayer.models.Song;
 import com.robillo.oreomusicplayer.services.MusicService;
 import com.robillo.oreomusicplayer.views.activities.main.song_list_frag.SongsListFragment;
+import com.robillo.oreomusicplayer.views.activities.main.song_play_frag.SongPlayFragment;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 
@@ -30,6 +37,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     private MusicService musicService;
     private Intent playIntent;
     private boolean musicBound=false;
+
+    private Song currentSong = null;
 
     @SuppressWarnings("FieldCanBeLocal")
     private final int PERMISSION_REQUEST_CODE = 0;
@@ -92,14 +101,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void setSongPlayFragment() {
-//        if(getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play))==null){
-//            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//            transaction.add(mFragmentContainer.getId(), new SongsListFragment());
-//            transaction.commit();
-//        }
-//        else {
-//            //edit the same fragment by adding arguments
-//        }
+        if(getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play))==null){
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.add(mFragmentContainer.getId(), new SongPlayFragment(), getString(R.string.song_play));
+            transaction.commit();
+        }
     }
 
     @Override
@@ -135,9 +141,26 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     protected void onDestroy() {
         stopService(playIntent);
         musicService = null;
         super.onDestroy();
+    }
+
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(SongChangeEvent event) {
+        currentSong = event.getSong();
     }
 }

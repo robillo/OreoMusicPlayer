@@ -12,7 +12,10 @@ import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.robillo.oreomusicplayer.events.SongChangeEvent;
 import com.robillo.oreomusicplayer.models.Song;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
 
@@ -103,12 +106,18 @@ public class MusicService extends Service implements
 
     @Override
     public void setSong(int songIndex){
+        Log.e("message", songs.get(songIndex).getTitle());
+        EventBus.getDefault().post(new SongChangeEvent(songs.get(songIndex)));
         songPosn = songIndex;
         playSong();
     }
 
     @Override
     public void onCompletion(MediaPlayer mp) {
+        if(songPosn < songs.size()){
+            songPosn++;
+            setSong(songPosn);
+        }
 
     }
 

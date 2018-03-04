@@ -72,29 +72,10 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
             @Override
             public void onClick(View v) {
 
-                ((MainActivity) context).playSong(_pos);
-
-//                uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, Long.valueOf(list.get(_pos).getId()));
-//
-//                if(mediaPlayer!=null){
-//
-//                    if(context!=null) ((MainActivity) context).setSongPlayFragment();
-//
-//                    if(mediaPlayer.isPlaying()) {
-//                        mediaPlayer.stop();
-//                        mediaPlayer.reset();
-//                    }
-//                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-//                    try {
-//                        mediaPlayer.stop();
-//                        mediaPlayer.reset();
-//                        mediaPlayer.setDataSource(parentContext, uri);
-//                        mediaPlayer.prepare();
-//                        mediaPlayer.start();
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
+                if(context!=null){
+                    ((MainActivity) context).setSongPlayFragment();
+                    ((MainActivity) context).playSong(_pos);
+                }
             }
         });
     }
