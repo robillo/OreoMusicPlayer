@@ -8,4 +8,5 @@
     <string name="robin_player">Robin Player</string>
     <string name="songs_list">SONGS_LIST</string>
     <string name="song_play">SONG_PLAY</string>
+    <string name="album_art">Album Art</string>
 </resources>

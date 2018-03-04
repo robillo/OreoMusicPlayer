@@ -1,13 +1,9 @@
 package com.robillo.oreomusicplayer.views.activities.main.song_list_frag;
 
-import android.content.ComponentName;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -19,18 +15,21 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.adapters.SongsAdapter;
 import com.robillo.oreomusicplayer.models.Song;
-import com.robillo.oreomusicplayer.services.MusicService;
 import com.robillo.oreomusicplayer.views.activities.main.MainActivity;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -48,6 +47,18 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
+
+    @BindView(R.id.progress_current_song)
+    ProgressBar progressBarCurrentSong;
+
+    @BindView(R.id.current_song_album_art)
+    CircleImageView currentSongAlbumArt;
+
+    @BindView(R.id.current_song_title)
+    TextView currentSongTitle;
+
+    @BindView(R.id.current_song_artist_duration)
+    TextView currentSongArtistDuration;
 
     public SongsListFragment() {
         // Required empty public constructor
@@ -71,6 +82,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
+    @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
@@ -81,7 +93,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
         if (cursor != null && cursor.getCount() > 0) {
             audioList = new ArrayList<>();
             audioList.add(new Song());
@@ -116,12 +128,44 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
 
     }
 
     @Override
     public String returnCursorElement(Cursor cursor, String string) {
         return cursor.getString(cursor.getColumnIndex(string));
+    }
+
+    @Override
+    public void setCurrentSong(Song song) {
+        currentSongTitle.setText(song.getTitle());
+
+        long duration = Integer.valueOf(song.getDuration())/1000;
+        long mins = duration/60;
+        long seconds = duration%60;
+        String temp = song.getArtist() + " ( " + String.valueOf(mins) + ":" + String.valueOf(seconds) + " )";
+        currentSongArtistDuration.setText(temp);
+
+        String path = null;
+        if(getActivity()!=null) {
+            Cursor cursor = getActivity().getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+                    new String[] {MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
+                    MediaStore.Audio.Albums._ID+ "=?",
+                    new String[] {String.valueOf(song.getAlbumId())},
+                    null);
+            if(cursor!=null && cursor.moveToFirst()) {
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
+                // do whatever you need to do
+                cursor.close();
+            }
+        }
+
+        if(path!=null){
+            if(getActivity()!=null) Glide.with(getActivity()).load(path).into(currentSongAlbumArt);
+        }
+        else {
+            if(getActivity()!=null) Glide.with(getActivity()).load(R.drawable.oval_shape).into(currentSongAlbumArt);
+        }
     }
 }

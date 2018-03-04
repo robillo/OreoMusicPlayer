@@ -254,4 +254,5 @@ public class Song implements Parcelable {
     public void setArtist(String artist) {
         this.artist = artist;
     }
+
 }

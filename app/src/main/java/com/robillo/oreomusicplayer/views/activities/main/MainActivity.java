@@ -13,6 +13,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.events.SongChangeEvent;
@@ -160,5 +163,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onMessageEvent(SongChangeEvent event) {
         currentSong = event.getSong();
+        if(getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list))!=null){
+            ((SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list)))
+                    .setCurrentSong(currentSong);
+        }
     }
 }
