@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -34,8 +35,9 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SongsListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class SongsListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SongListMvpView {
 
+    @SuppressWarnings("FieldCanBeLocal")
     private final int EMPTY_CELLS_COUNT = 2;
     private MediaPlayer mediaPlayer;
     @SuppressWarnings("FieldCanBeLocal")
@@ -53,62 +55,56 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_songs_list, container, false);
         ButterKnife.bind(this, v);
 
-        mediaPlayer = new MediaPlayer();
-
-        getActivity().getSupportLoaderManager().initLoader(LOADER_ID, null, this);
-
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        setUp(v);
         return v;
     }
 
     @Override
+    public void setUp(View v) {
+        if(getActivity()!=null) getActivity().getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    }
+
+    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-//        ContentResolver contentResolver = getActivity().getContentResolver();
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-//        String selection = MediaStore.Audio.Media.IS_MUSIC + "!= 0";
         String sortOrder = MediaStore.Audio.Media.TITLE + " ASC";
 
+        //noinspection ConstantConditions
         return new CursorLoader(getActivity(), uri, null, null, null, sortOrder);
     }
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-
         if (cursor != null && cursor.getCount() > 0) {
-
             audioList = new ArrayList<>();
-
-            audioList.add(new Song()); //first entry will be for empty space
-
+            audioList.add(new Song());
             while (cursor.moveToNext()) {
-                String data = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA));
-                String title = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE));
-                String titleKey = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.TITLE_KEY));
-                String id = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
-                String dateAdded = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATE_ADDED));
-                String dateModified = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED));
-                String duration = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
-                String composer = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.COMPOSER));
-                String album = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM));
-                String albumId = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
-                String albumKey = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ALBUM_KEY));
-                String artist = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST));
-                String artistId = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_ID));
-                String artistKey = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.ARTIST_KEY));
-                String size = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE));
-                String year = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.YEAR));
-
-                // Save to audioList
-                audioList.add(new Song(data, title, titleKey, id, dateAdded, dateModified, duration, composer, album, albumId,
-                        albumKey, artist, artistId, artistKey, size, year));
+                audioList.add(new Song(
+                        returnCursorElement(cursor, MediaStore.Audio.Media.DATA),
+                        returnCursorElement(cursor, MediaStore.Audio.Media.TITLE),
+                        returnCursorElement(cursor, MediaStore.Audio.Media.TITLE_KEY),
+                        returnCursorElement(cursor, MediaStore.Audio.Media._ID),
+                        returnCursorElement(cursor, MediaStore.Audio.Media.DATE_ADDED),
+                        returnCursorElement(cursor, MediaStore.Audio.Media.DATE_MODIFIED),
+                        returnCursorElement(cursor, MediaStore.Audio.Media.DURATION),
+                        returnCursorElement(cursor, MediaStore.Audio.Media.COMPOSER),
+                        returnCursorElement(cursor, MediaStore.Audio.Media.ALBUM),
+                        returnCursorElement(cursor, MediaStore.Audio.Media.ALBUM_ID),
+                        returnCursorElement(cursor, MediaStore.Audio.Media.ALBUM_KEY),
+                        returnCursorElement(cursor, MediaStore.Audio.Media.ARTIST),
+                        returnCursorElement(cursor, MediaStore.Audio.Media.ARTIST_ID),
+                        returnCursorElement(cursor, MediaStore.Audio.Media.ARTIST_KEY),
+                        returnCursorElement(cursor, MediaStore.Audio.Media.SIZE),
+                        returnCursorElement(cursor, MediaStore.Audio.Media.YEAR)
+                ));
             }
-
             for(int i=0; i<EMPTY_CELLS_COUNT; i++){
                 audioList.add(new Song());
             }
@@ -117,11 +113,15 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         mRecyclerView.setAdapter(mAdapter);
 
         if (getActivity() != null) ((MainActivity) getActivity()).startServiceForAudioList(audioList);
-
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
 
+    }
+
+    @Override
+    public String returnCursorElement(Cursor cursor, String string) {
+        return cursor.getString(cursor.getColumnIndex(string));
     }
 }
