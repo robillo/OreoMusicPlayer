@@ -57,8 +57,11 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @BindView(R.id.current_song_title)
     TextView currentSongTitle;
 
-    @BindView(R.id.current_song_artist_duration)
-    TextView currentSongArtistDuration;
+    @BindView(R.id.current_song_artist)
+    TextView currentSongArtist;
+
+    @BindView(R.id.current_song_duration)
+    TextView currentSongDuration;
 
     public SongsListFragment() {
         // Required empty public constructor
@@ -78,7 +81,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void setUp(View v) {
-        if(getActivity()!=null) getActivity().getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+        if(getActivity()!=null) getActivity().getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
 
@@ -144,8 +147,10 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         long duration = Integer.valueOf(song.getDuration())/1000;
         long mins = duration/60;
         long seconds = duration%60;
-        String temp = song.getArtist() + " ( " + String.valueOf(mins) + ":" + String.valueOf(seconds) + " )";
-        currentSongArtistDuration.setText(temp);
+        String temp = song.getArtist();
+        currentSongArtist.setText(temp);
+        temp = " ( " + String.valueOf(mins) + ":" + String.valueOf(seconds) + " )";
+        currentSongDuration.setText(temp);
 
         String path = null;
         if(getActivity()!=null) {

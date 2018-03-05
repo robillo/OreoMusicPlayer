@@ -8,9 +8,9 @@
     <color name="colorArtist">#8B95A3</color>
     <color name="colorRecyclerRowDivider">#F5F5F5</color>
 
-    <color name="colorPrimary">#000000</color>
-    <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#000000</color>
+    <color name="colorPrimary">#D3D3D3</color>
+    <color name="colorPrimaryDark">#D3D3D3</color>
+    <color name="colorAccent">#D3D3D3</color>
     <color name="highlight">#FFB300</color>
 
     <color name="colorTextOne">#6E7B8C</color>
