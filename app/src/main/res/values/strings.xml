@@ -9,4 +9,7 @@
     <string name="songs_list">SONGS_LIST</string>
     <string name="song_play">SONG_PLAY</string>
     <string name="album_art">Album Art</string>
+    <string name="play_previous_song">Play Previous Song</string>
+    <string name="play_song">Play Song</string>
+    <string name="play_next_song">Play Next Song</string>
 </resources>

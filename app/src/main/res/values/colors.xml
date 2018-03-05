@@ -55,4 +55,6 @@
     <color name="translucent_white">#caffffff</color>
     <color name="translucent_card">#d5cc7328</color>
     <color name="translucent_card_upper">#ccffb475</color>
+    <color name="transparency_grey">#70757575</color>
+    <color name="colorCardDark">#e2e2e2</color>
 </resources>
