@@ -148,12 +148,12 @@ public class MusicService extends Service implements
 
     @Override
     public void playPrevious() {
-        setSong(songPosition+1);
+        setSong(songPosition-1);
     }
 
     @Override
     public void playNext() {
-        setSong(songPosition-1);
+        setSong(songPosition+1);
     }
 
     @Override

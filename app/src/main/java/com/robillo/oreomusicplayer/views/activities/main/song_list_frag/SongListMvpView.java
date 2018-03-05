@@ -16,4 +16,10 @@ public interface SongListMvpView {
     String returnCursorElement(Cursor cursor, String string);
 
     void setCurrentSong(Song song);
+
+    void playNextSong();
+
+    void playPlayer();
+
+    void pausePlayer();
 }
