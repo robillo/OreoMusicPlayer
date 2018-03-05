@@ -21,4 +21,8 @@ public interface MainActivityMvpView {
     void startServiceForAudioList(ArrayList<Song> songList);
 
     void playSong(int songIndex);
+
+    void playNextSong();
+
+    void playPreviousSong();
 }

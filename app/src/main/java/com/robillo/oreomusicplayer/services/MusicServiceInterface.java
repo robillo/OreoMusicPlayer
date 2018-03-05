@@ -17,4 +17,20 @@ public interface MusicServiceInterface {
     void playSong();
 
     void setSong(int songIndex);
+
+    int getPosition();
+
+    int getDuration();
+
+    boolean isPlaying();
+
+    void pausePlayer();
+
+    void seekPlayer(int position);
+
+    void playPlayer();
+
+    void playPrevious();
+
+    void playNext();
 }

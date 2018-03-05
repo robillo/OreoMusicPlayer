@@ -35,7 +35,7 @@ public class MusicService extends Service implements
     //song list
     private ArrayList<Song> songs;
     //current position
-    private int songPosn;
+    private int songPosition;
 
     @Override
     public void onCreate() {
@@ -43,7 +43,7 @@ public class MusicService extends Service implements
         super.onCreate();
 
         //initialize position
-        songPosn=0;
+        songPosition =0;
 
         //create player
         player = new MediaPlayer();
@@ -71,7 +71,7 @@ public class MusicService extends Service implements
     public void playSong() {
         player.reset();
         //get song
-        Song song = songs.get(songPosn);
+        Song song = songs.get(songPosition);
         //get id
         long currSong = Long.valueOf(song.getId());
         //set uri
@@ -108,19 +108,59 @@ public class MusicService extends Service implements
 
     @Override
     public void setSong(int songIndex){
-        if(songIndex < songs.size() - EMPTY_CELLS_COUNT) {
+        if(songIndex < songs.size() - EMPTY_CELLS_COUNT && songIndex >= 2) {
             Log.e("message", songs.get(songIndex).getTitle());
             EventBus.getDefault().post(new SongChangeEvent(songs.get(songIndex)));
-            songPosn = songIndex;
+            songPosition = songIndex;
             playSong();
         }
     }
 
     @Override
+    public int getPosition() {
+        return player.getCurrentPosition();
+    }
+
+    @Override
+    public int getDuration() {
+        return player.getDuration();
+    }
+
+    @Override
+    public boolean isPlaying() {
+        return player.isPlaying();
+    }
+
+    @Override
+    public void pausePlayer() {
+        player.pause();
+    }
+
+    @Override
+    public void seekPlayer(int position) {
+        player.seekTo(position);
+    }
+
+    @Override
+    public void playPlayer() {
+        player.start();
+    }
+
+    @Override
+    public void playPrevious() {
+        setSong(songPosition+1);
+    }
+
+    @Override
+    public void playNext() {
+        setSong(songPosition-1);
+    }
+
+    @Override
     public void onCompletion(MediaPlayer mp) {
-        if(songPosn < songs.size()-EMPTY_CELLS_COUNT){
-            songPosn++;
-            setSong(songPosn);
+        if(songPosition < songs.size()-EMPTY_CELLS_COUNT){
+            songPosition++;
+            setSong(songPosition);
         }
 
     }

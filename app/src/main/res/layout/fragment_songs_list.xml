@@ -85,7 +85,7 @@
                         android:textColor="@color/white"
                         android:textSize="20sp"
                         fontPath="fonts/Raleway-Regular.ttf"
-                        android:text="I'll be your reason"
+                        tools:text="I'll be your reason"
                         android:id="@+id/current_song_title"
                         tools:ignore="HardcodedText,MissingPrefix,RtlHardcoded,RtlSymmetry" />
 
@@ -97,7 +97,7 @@
                         android:textColor="@color/white"
                         android:textSize="15sp"
                         fontPath="fonts/Raleway-Regular.ttf"
-                        android:text="Illenium ( 3:40 )"
+                        tools:text="Illenium ( 3:40 )"
                         android:id="@+id/current_song_artist_duration"
                         tools:ignore="HardcodedText,MissingPrefix,RtlHardcoded,RtlSymmetry" />
 
@@ -117,7 +117,8 @@
             android:layout_height="80sp"
             android:src="@color/white"
             app:civ_border_width="3sp"
-            app:civ_border_color="#FF000000"/>
+            app:civ_border_color="#FF000000"
+            tools:ignore="RtlHardcoded" />
 
     </FrameLayout>
 

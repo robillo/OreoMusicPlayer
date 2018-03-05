@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -33,7 +34,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-public class MainActivity extends AppCompatActivity implements MainActivityMvpView {
+public class MainActivity extends AppCompatActivity implements MainActivityMvpView, MediaController.MediaPlayerControl {
 
     private MusicService musicService;
     private Intent playIntent;
@@ -167,5 +168,72 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             ((SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list)))
                     .setCurrentSong(currentSong);
         }
+    }
+
+    @Override
+    public void playNextSong() {
+        musicService.playNext();
+    }
+
+    @Override
+    public void playPreviousSong() {
+        musicService.playPrevious();
+    }
+
+    @Override
+    public void start() {
+        musicService.playPlayer();
+    }
+
+    @Override
+    public void pause() {
+        musicService.pausePlayer();
+    }
+
+    @Override
+    public int getDuration() {
+        if(musicService!=null && musicBound && musicService.isPlaying()) return musicService.getDuration();
+        else return 0;
+    }
+
+    @Override
+    public int getCurrentPosition() {
+        if(musicService!=null && musicBound && musicService.isPlaying()) return musicService.getPosition();
+        else return 0;
+    }
+
+    @Override
+    public void seekTo(int position) {
+        musicService.seekPlayer(position);
+    }
+
+    @Override
+    public boolean isPlaying() {
+        return musicService.isPlaying();
+    }
+
+    @Override
+    public int getBufferPercentage() {
+        return 0;
+    }
+
+    @Override
+    public boolean canPause() {
+        return true;
+    }
+
+    @Override
+    public boolean canSeekBackward() {
+        return true;
+    }
+
+    @Override
+    public boolean canSeekForward() {
+        return true;
+    }
+
+    @Override
+    public int getAudioSessionId() {
+        return 0;
     }
 }
