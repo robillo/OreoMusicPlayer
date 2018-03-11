@@ -313,7 +313,10 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
         //start rotating animation
         resetAlbumArtAnimation();
-        currentSongAlbumArt.startAnimation(rotatingAlbumAnim);
+        if(bottomController.getVisibility() == View.GONE) {
+            bottomController.setVisibility(View.VISIBLE);
+            currentSongAlbumArt.startAnimation(rotatingAlbumAnim);
+        }
 
     }
 
