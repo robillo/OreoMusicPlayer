@@ -32,6 +32,7 @@ import com.robillo.oreomusicplayer.models.Song;
 import com.robillo.oreomusicplayer.views.activities.main.MainActivity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,7 +50,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     private final int LOADER_ID = 0;
     @SuppressWarnings("FieldCanBeLocal")
     private SongsAdapter mAdapter;
-    private ArrayList<Song> audioList;
+    private static ArrayList<Song> audioList = new ArrayList<>();
     Animation rotatingAlbumAnim;
     private static Song currentSong = null;
 
@@ -99,7 +100,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void setUp(View v) {
         rotatingAlbumAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
-        if(getActivity()!=null) getActivity().getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -118,6 +119,21 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         });
     }
 
+    @Override
+    public void fetchSongs() {
+        if(getActivity()!=null) getActivity().getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(audioList.size() == 0) {
+            Log.e("audiolist", audioList.size() + " " + Arrays.toString(audioList.toArray()));
+            fetchSongs();
+            return;
+        }
+    }
+
     @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
@@ -131,7 +147,6 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
         if (cursor != null && cursor.getCount() > 0) {
-            audioList = new ArrayList<>();
             audioList.add(new Song());
             while (cursor.moveToNext()) {
                 audioList.add(new Song(

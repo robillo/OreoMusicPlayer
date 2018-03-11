@@ -13,6 +13,8 @@ public interface SongListMvpView {
 
     void setUp(View v);
 
+    void fetchSongs();
+
     String returnCursorElement(Cursor cursor, String string);
 
     void setCurrentSong(Song song);
