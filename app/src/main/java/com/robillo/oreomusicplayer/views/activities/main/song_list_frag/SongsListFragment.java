@@ -121,16 +121,15 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void fetchSongs() {
-        if(getActivity()!=null) getActivity().getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
+        if(getActivity()!=null) getActivity().getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         if(audioList.size() == 0) {
-            Log.e("audiolist", audioList.size() + " " + Arrays.toString(audioList.toArray()));
+            Log.e("fetch", "songs");
             fetchSongs();
-            return;
         }
     }
 
@@ -169,6 +168,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
                 ));
             }
             for(int i=0; i<EMPTY_CELLS_COUNT; i++){
+                Log.e("add", "new song");
                 audioList.add(new Song());
             }
         }
@@ -176,6 +176,8 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         mRecyclerView.setAdapter(mAdapter);
 
         if (getActivity() != null) ((MainActivity) getActivity()).startServiceForAudioList(audioList);
+
+        getActivity().getSupportLoaderManager().destroyLoader(LOADER_ID);
     }
 
     @Override
