@@ -22,4 +22,6 @@ public interface SongListMvpView {
     void playPlayer();
 
     void pausePlayer();
+
+    void resetAlbumArtAnimation();
 }

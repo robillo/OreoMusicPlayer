@@ -12,11 +12,14 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -41,12 +44,15 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
     @SuppressWarnings("FieldCanBeLocal")
     private final int EMPTY_CELLS_COUNT = 2;
-    private MediaPlayer mediaPlayer;
     @SuppressWarnings("FieldCanBeLocal")
     private final int LOADER_ID = 0;
     @SuppressWarnings("FieldCanBeLocal")
     private SongsAdapter mAdapter;
     private ArrayList<Song> audioList;
+    Animation rotatingAlbumAnim;
+
+    @BindView(R.id.play_pause_song)
+    ImageButton playPauseSong;
 
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
@@ -66,6 +72,9 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @BindView(R.id.current_song_duration)
     TextView currentSongDuration;
 
+    @BindView(R.id.bottom_controller)
+    FrameLayout bottomController;
+
     public SongsListFragment() {
         // Required empty public constructor
     }
@@ -84,6 +93,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void setUp(View v) {
+        rotatingAlbumAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
         if(getActivity()!=null) getActivity().getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
     }
@@ -127,7 +137,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
                 audioList.add(new Song());
             }
         }
-        mAdapter = new SongsAdapter(audioList, getActivity(), mediaPlayer);
+        mAdapter = new SongsAdapter(audioList, getActivity());
         mRecyclerView.setAdapter(mAdapter);
 
         if (getActivity() != null) ((MainActivity) getActivity()).startServiceForAudioList(audioList);
@@ -145,6 +155,10 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void setCurrentSong(Song song) {
+
+        if(bottomController.getVisibility()==View.GONE)
+            bottomController.setVisibility(View.VISIBLE);
+
         currentSongTitle.setText(song.getTitle());
 
         long duration = Integer.valueOf(song.getDuration())/1000;
@@ -157,6 +171,11 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
         String path = null;
         if(getActivity()!=null) {
+
+            //set play_pause button as pause since now a new song will be playing
+            playPauseSong.setImageDrawable(getActivity().getDrawable(R.drawable.ic_pause_black_24dp));
+
+            //get path for the album art for this song
             Cursor cursor = getActivity().getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
                     new String[] {MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
                     MediaStore.Audio.Albums._ID+ "=?",
@@ -167,27 +186,38 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
                 // do whatever you need to do
                 cursor.close();
             }
+
+            //set album art
+            if(path!=null) if(getActivity()!=null) Glide.with(getActivity()).load(path).into(currentSongAlbumArt);
+            else if(getActivity()!=null) Glide.with(getActivity()).load(R.drawable.oval_shape).into(currentSongAlbumArt);
+
         }
 
-        if(path!=null){
-            if(getActivity()!=null) Glide.with(getActivity()).load(path).into(currentSongAlbumArt);
-        }
-        else {
-            if(getActivity()!=null) Glide.with(getActivity()).load(R.drawable.oval_shape).into(currentSongAlbumArt);
-        }
+        resetAlbumArtAnimation();
+        currentSongAlbumArt.startAnimation(rotatingAlbumAnim);
 
-        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
-        currentSongAlbumArt.setAnimation(animation);
+    }
+
+    @OnClick(R.id.play_pause_song)
+    public void playOrPausePlayer() {
+        if(getActivity()!=null) {
+            if(((MainActivity) getActivity()).isPlaying()){     //pause the player
+                ((MainActivity) getActivity()).pause();
+                playPauseSong.setImageDrawable(getActivity().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+                resetAlbumArtAnimation();
+            }
+            else {                                              //play the player
+                ((MainActivity) getActivity()).start();
+                playPauseSong.setImageDrawable(getActivity().getDrawable(R.drawable.ic_pause_black_24dp));
+                resetAlbumArtAnimation();
+                currentSongAlbumArt.startAnimation(rotatingAlbumAnim);
+            }
+        }
     }
 
     @OnClick(R.id.play_next_song)
     public void playNextSong() {
         if(getActivity()!=null) ((MainActivity) getActivity()).playNextSong();
-    }
-
-    @OnClick(R.id.play_pause_song)
-    public void playOrPausePlayer() {
-
     }
 
     @OnClick(R.id.play_previous_song)
@@ -203,5 +233,13 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void pausePlayer() {
 
+    }
+
+    @Override
+    public void resetAlbumArtAnimation() {
+        if(currentSongAlbumArt.getAnimation() != null) {
+            currentSongAlbumArt.getAnimation().cancel();
+            currentSongAlbumArt.setAnimation(null);
+        }
     }
 }

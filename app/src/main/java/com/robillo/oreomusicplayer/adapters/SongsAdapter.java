@@ -31,15 +31,13 @@ import butterknife.ButterKnife;
 public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> {
 
     private List<Song> list;
-    private MediaPlayer mediaPlayer;
     private Context context;
     private Context parentContext;
     private Uri uri;
 
-    public SongsAdapter(List<Song> list, Context context, MediaPlayer mediaPlayer) {
+    public SongsAdapter(List<Song> list, Context context) {
         this.list = list;
         this.context = context;
-        this.mediaPlayer = mediaPlayer;
     }
 
     @Override
