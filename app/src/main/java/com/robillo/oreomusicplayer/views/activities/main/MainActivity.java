@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.MediaController;
@@ -23,6 +24,7 @@ import com.robillo.oreomusicplayer.events.SongChangeEvent;
 import com.robillo.oreomusicplayer.models.Song;
 import com.robillo.oreomusicplayer.services.MusicService;
 import com.robillo.oreomusicplayer.views.activities.main.song_list_frag.SongsListFragment;
+import com.robillo.oreomusicplayer.views.activities.main.song_play_frag.SongPlayFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -103,11 +105,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void setSongPlayFragment() {
-//        if(getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play))==null){
-//            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//            transaction.add(mFragmentContainer.getId(), new SongPlayFragment(), getString(R.string.song_play));
-//            transaction.commit();
-//        }
+        if(getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play)) == null){
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_right);
+            transaction.add(mFragmentContainer.getId(), new SongPlayFragment(), getString(R.string.song_play));
+            transaction.addToBackStack(getString(R.string.song_play));
+            transaction.commit();
+        }
     }
 
     @Override
@@ -155,11 +159,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    @Override
     protected void onDestroy() {
         if(playIntent!=null) {
             stopService(playIntent);
         }
-        musicService = null;
+
         super.onDestroy();
     }
 

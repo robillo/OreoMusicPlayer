@@ -6,6 +6,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -40,16 +41,17 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
         this.context = context;
     }
 
+    @NonNull
     @Override
-    public SongHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public SongHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         parentContext = parent.getContext();
         return new SongHolder(LayoutInflater.from(parentContext).inflate(R.layout.row_song, parent, false));
     }
 
     @Override
-    public void onBindViewHolder(SongHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SongHolder holder, int position) {
 
-        if(list.get(position).getId() == null) {
+        if(list.get(position).getTitle() == null) {
             String empty = " ";
             holder.title.setText(empty);
             holder.artistDuration.setText(empty);
@@ -71,7 +73,6 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
             public void onClick(View v) {
 
                 if(context!=null){
-                    ((MainActivity) context).setSongPlayFragment();
                     ((MainActivity) context).playSong(_pos);
                 }
             }
@@ -80,7 +81,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
 
     @Override
     public int getItemCount() {
-        return list!=null?list.size():0;
+        return list!=null ? list.size() : 0;
     }
 
     class SongHolder extends RecyclerView.ViewHolder{

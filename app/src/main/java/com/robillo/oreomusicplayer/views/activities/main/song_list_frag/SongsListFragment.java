@@ -3,6 +3,7 @@ package com.robillo.oreomusicplayer.views.activities.main.song_list_frag;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -317,6 +318,9 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
             bottomController.setVisibility(View.VISIBLE);
             currentSongAlbumArt.startAnimation(rotatingAlbumAnim);
         }
+        else {
+            currentSongAlbumArt.startAnimation(rotatingAlbumAnim);
+        }
 
     }
 
@@ -340,6 +344,16 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @OnClick(R.id.play_previous_song)
     public void playPreviousSong() {
         if(getActivity()!=null) ((MainActivity) getActivity()).playPreviousSong();
+    }
+
+    @OnClick(R.id.launch_play_frag_one)
+    public void setSongPlayFragmentOne() {
+        if(getActivity() != null) ((MainActivity) getActivity()).setSongPlayFragment();
+    }
+
+    @OnClick(R.id.launch_play_frag_two)
+    public void setSongPlayFragmentTwo() {
+        if(getActivity() != null) ((MainActivity) getActivity()).setSongPlayFragment();
     }
 
     @Override

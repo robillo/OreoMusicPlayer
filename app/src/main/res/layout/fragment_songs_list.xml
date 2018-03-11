@@ -54,7 +54,8 @@
                         android:layout_height="60sp"
                         android:background="@color/white_tx"
                         android:orientation="horizontal"
-                        tools:ignore="RtlHardcoded">
+                        tools:ignore="RtlHardcoded"
+                        android:id="@+id/launch_play_frag_one">
 
                         <View
                             android:layout_width="0sp"
@@ -96,7 +97,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="70sp"
                         android:orientation="horizontal"
-                        android:background="@color/black">
+                        android:background="@color/black"
+                        android:id="@+id/launch_play_frag_two">
 
                         <FrameLayout
                             android:layout_width="120sp"
