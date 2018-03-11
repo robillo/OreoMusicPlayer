@@ -75,6 +75,9 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @BindView(R.id.bottom_controller)
     FrameLayout bottomController;
 
+    @BindView(R.id.hide_or_show_upper)
+    TextView hideOrShowUpper;
+
     public SongsListFragment() {
         // Required empty public constructor
     }
@@ -96,6 +99,21 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         rotatingAlbumAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
         if(getActivity()!=null) getActivity().getSupportLoaderManager().restartLoader(LOADER_ID, null, this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if(dy>0) {      //scrolled up
+                    hideOrShowUpper.setVisibility(View.GONE);
+                    bottomController.setVisibility(View.GONE);
+                }
+                else {          //scrolled down
+                    hideOrShowUpper.setVisibility(View.VISIBLE);
+                    bottomController.setVisibility(View.VISIBLE);
+                }
+            }
+        });
     }
 
     @NonNull
@@ -188,11 +206,12 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
             }
 
             //set album art
-            if(path!=null) if(getActivity()!=null) Glide.with(getActivity()).load(path).into(currentSongAlbumArt);
-            else if(getActivity()!=null) Glide.with(getActivity()).load(R.drawable.oval_shape).into(currentSongAlbumArt);
+            if(path!=null) Glide.with(getActivity()).load(path).into(currentSongAlbumArt);
+            else Glide.with(getActivity()).load(R.drawable.oval_shape).into(currentSongAlbumArt);
 
         }
 
+        //start rotating animation
         resetAlbumArtAnimation();
         currentSongAlbumArt.startAnimation(rotatingAlbumAnim);
 
@@ -202,15 +221,10 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     public void playOrPausePlayer() {
         if(getActivity()!=null) {
             if(((MainActivity) getActivity()).isPlaying()){     //pause the player
-                ((MainActivity) getActivity()).pause();
-                playPauseSong.setImageDrawable(getActivity().getDrawable(R.drawable.ic_play_arrow_black_24dp));
-                resetAlbumArtAnimation();
+                pausePlayer();
             }
             else {                                              //play the player
-                ((MainActivity) getActivity()).start();
-                playPauseSong.setImageDrawable(getActivity().getDrawable(R.drawable.ic_pause_black_24dp));
-                resetAlbumArtAnimation();
-                currentSongAlbumArt.startAnimation(rotatingAlbumAnim);
+                playPlayer();
             }
         }
     }
@@ -227,12 +241,19 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void playPlayer() {
-
+        assert getActivity() != null;
+        ((MainActivity) getActivity()).start();
+        playPauseSong.setImageDrawable(getActivity().getDrawable(R.drawable.ic_pause_black_24dp));
+        resetAlbumArtAnimation();
+        currentSongAlbumArt.startAnimation(rotatingAlbumAnim);
     }
 
     @Override
     public void pausePlayer() {
-
+        assert getActivity() != null;
+        ((MainActivity) getActivity()).pause();
+        playPauseSong.setImageDrawable(getActivity().getDrawable(R.drawable.ic_play_arrow_black_24dp));
+        resetAlbumArtAnimation();
     }
 
     @Override
