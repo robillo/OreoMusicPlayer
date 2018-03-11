@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -50,6 +51,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     private SongsAdapter mAdapter;
     private ArrayList<Song> audioList;
     Animation rotatingAlbumAnim;
+    private static Song currentSong = null;
 
     @BindView(R.id.play_pause_song)
     ImageButton playPauseSong;
@@ -110,7 +112,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
                 }
                 else {          //scrolled down
                     hideOrShowUpper.setVisibility(View.VISIBLE);
-                    bottomController.setVisibility(View.VISIBLE);
+                    if(currentSong != null) bottomController.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -174,8 +176,11 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void setCurrentSong(Song song) {
 
+        currentSong = song;
+
         if(bottomController.getVisibility()==View.GONE)
-            bottomController.setVisibility(View.VISIBLE);
+            if(hideOrShowUpper.getVisibility() == View.VISIBLE)     //either both should be visible or both shouldn't
+                bottomController.setVisibility(View.VISIBLE);
 
         currentSongTitle.setText(song.getTitle());
 

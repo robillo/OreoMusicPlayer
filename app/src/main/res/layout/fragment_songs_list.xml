@@ -17,17 +17,18 @@
             android:layout_height="match_parent"
             android:id="@+id/recycler_view"/>
 
-        <TextView
-            fontPath="fonts/Raleway-Regular.ttf"
-            android:layout_width="match_parent"
-            android:background="@color/black"
-            android:layout_height="?attr/actionBarSize"
-            android:text="@string/robin_player"
-            android:textColor="@color/white"
-            android:textSize="30sp"
-            android:gravity="center"
-            tools:ignore="MissingPrefix,RtlHardcoded,RtlSymmetry"
-            android:id="@+id/hide_or_show_upper"/>
+
+            <TextView
+                fontPath="fonts/Raleway-Regular.ttf"
+                android:layout_width="match_parent"
+                android:id="@+id/hide_or_show_upper"
+                android:background="@color/black"
+                android:layout_height="?attr/actionBarSize"
+                android:text="@string/robin_player"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:gravity="center"
+                tools:ignore="MissingPrefix,RtlHardcoded,RtlSymmetry"/>
 
             <FrameLayout
                 android:layout_width="match_parent"

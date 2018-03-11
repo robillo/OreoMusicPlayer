@@ -209,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public boolean isPlaying() {
-        return musicService.isPlaying();
+        return musicService != null && musicService.isPlaying();
     }
 
     @Override
