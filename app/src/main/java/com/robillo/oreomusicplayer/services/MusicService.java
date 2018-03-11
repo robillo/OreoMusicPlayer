@@ -4,23 +4,26 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Icon;
+import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaMetadata;
 import android.media.MediaPlayer;
 import android.media.session.MediaController;
-import android.media.session.MediaSession;
 import android.media.session.MediaSessionManager;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.media.MediaMetadataCompat;
+import android.support.v4.media.session.MediaControllerCompat;
+import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
 
 import com.robillo.oreomusicplayer.R;
@@ -50,6 +53,7 @@ public class MusicService extends Service implements
 
     private final int EMPTY_CELLS_COUNT = 2;
 
+    NotifyServiceReceiver notifyServiceReceiver;
     private final IBinder musicBind = new MusicBinder();
     //media player
     private MediaPlayer player;
@@ -60,8 +64,9 @@ public class MusicService extends Service implements
 
     //for notification
     private MediaSessionManager mManager;
-    private MediaSession mSession;
+    private MediaSessionCompat mSession;
     private MediaController mController;
+    private IntentFilter notificationControlsFilter;
 
     @Override
     public void onCreate() {
@@ -69,44 +74,16 @@ public class MusicService extends Service implements
         super.onCreate();
 
         //initialize position
-        songPosition =0;
+        songPosition = 0;
 
         //create player
         player = new MediaPlayer();
+        notifyServiceReceiver = new NotifyServiceReceiver();
 
         initMusicPlayer();
 
         mManager = (MediaSessionManager) getSystemService(Context.MEDIA_SESSION_SERVICE);
-        mSession = new MediaSession(this, "MY_SESSION");
-    }
-
-    private PendingIntent retreivePlaybackAction(int which) {
-        Intent action;
-        PendingIntent pendingIntent;
-        final ComponentName serviceName = new ComponentName(this, MusicService.class);
-        switch (which) {
-            case 1:
-                // Play and pause
-                action = new Intent(ACTION_TOGGLE_PLAYBACK);
-                action.setComponent(serviceName);
-                pendingIntent = PendingIntent.getService(this, 1, action, 0);
-                return pendingIntent;
-            case 2:
-                // Skip tracks
-                action = new Intent(ACTION_NEXT);
-                action.setComponent(serviceName);
-                pendingIntent = PendingIntent.getService(this, 2, action, 0);
-                return pendingIntent;
-            case 3:
-                // Previous tracks
-                action = new Intent(ACTION_PREV);
-                action.setComponent(serviceName);
-                pendingIntent = PendingIntent.getService(this, 3, action, 0);
-                return pendingIntent;
-            default:
-                break;
-        }
-        return null;
+        mSession = new MediaSessionCompat(this, "MY_SESSION");
     }
 
     @Override
@@ -114,6 +91,13 @@ public class MusicService extends Service implements
         player.setWakeMode(getApplicationContext(),
                 PowerManager.PARTIAL_WAKE_LOCK);
         player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        notificationControlsFilter = new IntentFilter();
+        notificationControlsFilter.addAction(ACTION_PLAY);
+        notificationControlsFilter.addAction(ACTION_PAUSE);
+        notificationControlsFilter.addAction(ACTION_NEXT);
+        notificationControlsFilter.addAction(ACTION_PREV);
+        notificationControlsFilter.addAction(ACTION_STOP);
+        registerReceiver(notifyServiceReceiver, notificationControlsFilter);
 
         player.setOnPreparedListener(this);
         player.setOnCompletionListener(this);
@@ -234,7 +218,7 @@ public class MusicService extends Service implements
         mp.start();
 
         //notification
-        mSession.setMetadata(new MediaMetadata.Builder()
+        mSession.setMetadata(new MediaMetadataCompat.Builder()
                 .putString(MediaMetadata.METADATA_KEY_ARTIST, songs.get(songPosition).getArtist())
                 .putString(MediaMetadata.METADATA_KEY_ALBUM, songs.get(songPosition).getAlbum())
                 .putString(MediaMetadata.METADATA_KEY_TITLE, songs.get(songPosition).getTitle())
@@ -242,38 +226,55 @@ public class MusicService extends Service implements
         // Indicate you're ready to receive media commands
         mSession.setActive(true);
         // Attach a new Callback to receive MediaSession updates
-        mSession.setCallback(new MediaSession.Callback() {
+        mSession.setCallback(new MediaSessionCompat.Callback() {
             @Override
             public void onPlay() {
                 super.onPlay();
-                playPlayer();
             }
 
             @Override
             public void onPause() {
                 super.onPause();
-                pausePlayer();
             }
 
             @Override
             public void onSkipToNext() {
                 super.onSkipToNext();
-                playNext();
             }
 
             @Override
             public void onSkipToPrevious() {
                 super.onSkipToPrevious();
-                playPrevious();
+            }
+
+            @Override
+            public void onStop() {
+                super.onStop();
             }
         });
 
+        NotificationCompat.Action previous = new NotificationCompat
+                .Action.Builder(R.drawable.ic_skip_previous_black_24dp, "prev", retreivePlaybackAction(3))
+                .build();
+
+        NotificationCompat.Action pause = new NotificationCompat
+                .Action.Builder(R.drawable.ic_pause_black_24dp, "prev", retreivePlaybackAction(1))
+                .build();
+
+        NotificationCompat.Action next = new NotificationCompat
+                .Action.Builder(R.drawable.ic_skip_next_black_24dp, "next", retreivePlaybackAction(2))
+                .build();
+
         // Create a new Notification
-        final Notification noti = new Notification.Builder(this)
+
+        final Notification notificationController = new NotificationCompat.Builder(this, "channel_id")
                 // Hide the timestamp
                 .setShowWhen(false)
+                .addAction(previous)
+                .addAction(pause)
+                .addAction(next)
                 // Set the Notification style
-                .setStyle(new Notification.MediaStyle()
+                .setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
                         // Attach our MediaSession token
                         .setMediaSession(mSession.getSessionToken())
                         // Show our playback controls in the compat view
@@ -285,19 +286,77 @@ public class MusicService extends Service implements
                 // Set Notification content information
                 .setContentText(songs.get(songPosition).getArtist())
                 .setContentInfo(songs.get(songPosition).getAlbum())
-                .setContentTitle(songs.get(songPosition).getTitle())
+                .setContentTitle(songs.get(songPosition).getTitle()).build();
                 // Add some playback controls
-                .addAction(R.drawable.ic_skip_previous_black_24dp, "prev", retreivePlaybackAction(3))
-                .addAction(R.drawable.ic_pause_black_24dp, "pause", retreivePlaybackAction(1))
-                .addAction(R.drawable.ic_skip_next_black_24dp, "next", retreivePlaybackAction(2))
-                .build();
-
-        // Do something with your TransportControls
-        final MediaController.TransportControls controls = mSession.getController().getTransportControls();
 
         if (getSystemService(NOTIFICATION_SERVICE) != null) {
             //noinspection ConstantConditions
-            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(1, noti);
+            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(1, notificationController);
+        }
+
+        // Do something with your TransportControls
+        final MediaControllerCompat.TransportControls controls = mSession.getController().getTransportControls();
+    }
+
+    private PendingIntent retreivePlaybackAction(int which) {
+        Intent action;
+        PendingIntent pendingIntent;
+        final ComponentName serviceName = new ComponentName(this, MusicService.class);
+        switch (which) {
+            case 1:
+                // Play and pause
+                action = new Intent(ACTION_TOGGLE_PLAYBACK);
+                action.putExtra("extra", ACTION_TOGGLE_PLAYBACK);
+                action.setComponent(serviceName);
+                pendingIntent = PendingIntent.getService(this, 1, action, 0);
+                return pendingIntent;
+            case 2:
+                // Skip tracks
+                action = new Intent(ACTION_NEXT);
+                action.putExtra("extra", ACTION_NEXT);
+                action.setComponent(serviceName);
+                pendingIntent = PendingIntent.getService(this, 2, action, 0);
+                return pendingIntent;
+            case 3:
+                // Previous tracks
+                action = new Intent(ACTION_PREV);
+                action.putExtra("extra", ACTION_PREV);
+                action.setComponent(serviceName);
+                pendingIntent = PendingIntent.getService(this, 3, action, 0);
+                return pendingIntent;
+            default:
+                break;
+        }
+        return null;
+    }
+
+    public class NotifyServiceReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            Log.e("pending intent", "extras " + intent.getExtras());
+            if(action != null) {
+                Log.e("pending intent", "action " + action);
+                switch (action) {
+                    case ACTION_TOGGLE_PLAYBACK: {
+                        Log.e("pending intent", "toggle");
+                        break;
+                    }
+                    case ACTION_NEXT: {
+                        Log.e("pending intent", "next");
+                        break;
+                    }
+                    case ACTION_PREV: {
+                        Log.e("pending intent", "prev");
+                        break;
+                    }
+                    case ACTION_STOP: {
+                        Log.e("pending intent", "stop");
+                        break;
+                    }
+                }
+            }
         }
     }
 }
