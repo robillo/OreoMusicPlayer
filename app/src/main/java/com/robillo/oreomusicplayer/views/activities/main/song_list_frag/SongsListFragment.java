@@ -1,7 +1,6 @@
 package com.robillo.oreomusicplayer.views.activities.main.song_list_frag;
 
 import android.database.Cursor;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -10,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,7 +19,6 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -32,7 +29,6 @@ import com.robillo.oreomusicplayer.models.Song;
 import com.robillo.oreomusicplayer.views.activities.main.MainActivity;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -51,8 +47,10 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @SuppressWarnings("FieldCanBeLocal")
     private SongsAdapter mAdapter;
     private static ArrayList<Song> audioList = new ArrayList<>();
-    Animation rotatingAlbumAnim;
+    Animation rotatingAlbumAnim, fadeInAnimationUpper, fadeOutAnimationUpper, fadeInAnimationController, fadeOutAnimationController;
     private static Song currentSong = null;
+    private static boolean isAnimatingUpper = false;
+    private static boolean isAnimatingController = false;
 
     @BindView(R.id.play_pause_song)
     ImageButton playPauseSong;
@@ -99,6 +97,10 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void setUp(View v) {
+        fadeOutAnimationUpper = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
+        fadeInAnimationUpper = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
+        fadeInAnimationController = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in_controller);
+        fadeOutAnimationController = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out_controller);
         rotatingAlbumAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -107,13 +109,89 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if(dy>0) {      //scrolled up
-                    hideOrShowUpper.setVisibility(View.GONE);
-                    bottomController.setVisibility(View.GONE);
+                if(dy > 0) {      //scrolled up
+                    if(hideOrShowUpper.getVisibility() == View.VISIBLE && !isAnimatingUpper) {
+                        fadeOutAnimationUpper.setAnimationListener(new Animation.AnimationListener() {
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+                                isAnimatingUpper = true;
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                hideOrShowUpper.setVisibility(View.GONE);
+                                isAnimatingUpper = false;
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+
+                            }
+                        });
+                        hideOrShowUpper.startAnimation(fadeOutAnimationUpper);
+                    }
+                    if(bottomController.getVisibility() == View.VISIBLE && !isAnimatingController) {
+                        fadeOutAnimationController.setAnimationListener(new Animation.AnimationListener() {
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+                                isAnimatingController = true;
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                bottomController.setVisibility(View.GONE);
+                                isAnimatingController = false;
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+
+                            }
+                        });
+                        bottomController.startAnimation(fadeOutAnimationController);
+                    }
                 }
                 else {          //scrolled down
-                    hideOrShowUpper.setVisibility(View.VISIBLE);
-                    if(currentSong != null) bottomController.setVisibility(View.VISIBLE);
+                    if(hideOrShowUpper.getVisibility() == View.GONE && !isAnimatingUpper) {
+                        fadeInAnimationUpper.setAnimationListener(new Animation.AnimationListener() {
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+                                isAnimatingUpper = true;
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                hideOrShowUpper.setVisibility(View.VISIBLE);
+                                isAnimatingUpper = false;
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+
+                            }
+                        });
+                        hideOrShowUpper.startAnimation(fadeInAnimationUpper);
+                    }
+                    if(bottomController.getVisibility() == View.GONE && !isAnimatingController && currentSong != null) {
+                        fadeInAnimationController.setAnimationListener(new Animation.AnimationListener() {
+                            @Override
+                            public void onAnimationStart(Animation animation) {
+                                isAnimatingController = true;
+                            }
+
+                            @Override
+                            public void onAnimationEnd(Animation animation) {
+                                bottomController.setVisibility(View.VISIBLE);
+                                isAnimatingController = false;
+                            }
+
+                            @Override
+                            public void onAnimationRepeat(Animation animation) {
+
+                            }
+                        });
+                        bottomController.startAnimation(fadeInAnimationController);
+                    }
                 }
             }
         });

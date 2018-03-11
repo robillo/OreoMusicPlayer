@@ -156,7 +156,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     protected void onDestroy() {
-        stopService(playIntent);
+        if(playIntent!=null) {
+            stopService(playIntent);
+        }
         musicService = null;
         super.onDestroy();
     }
