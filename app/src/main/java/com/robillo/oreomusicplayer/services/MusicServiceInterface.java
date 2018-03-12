@@ -33,4 +33,6 @@ public interface MusicServiceInterface {
     void playPrevious();
 
     void playNext();
+
+    void buildNotification(boolean play_or_pause);
 }

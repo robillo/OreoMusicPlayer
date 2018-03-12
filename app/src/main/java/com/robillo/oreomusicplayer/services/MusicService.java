@@ -35,6 +35,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by robinkamboj on 04/03/18.
@@ -61,6 +62,7 @@ public class MusicService extends Service implements
     private int songPosition;
 
     private MediaSessionCompat mSession;
+    Notification notificationController = null;
     MediaControllerCompat.TransportControls controls;
     private final IBinder musicBind = new MusicBinder();
 
@@ -236,45 +238,26 @@ public class MusicService extends Service implements
         setSong(songPosition+1);
     }
 
-
-    //____________________________MEDIA PLAYER INTERFACE CONTROLS__________________________//
-
     @Override
-    public void onCompletion(MediaPlayer mp) {
-        if(songPosition < songs.size()-EMPTY_CELLS_COUNT){
-            songPosition++;
-            setSong(songPosition);
-        }
-    }
-
-    @Override
-    public boolean onError(MediaPlayer mp, int what, int extra) {
-        return false;
-    }
-
-    @Override
-    public void onPrepared(MediaPlayer mp) {
-        //start playback
-        mp.start();
-
-        //notification
-        mSession.setMetadata(new MediaMetadataCompat.Builder()
-                .putString(MediaMetadata.METADATA_KEY_ARTIST, songs.get(songPosition).getArtist())
-                .putString(MediaMetadata.METADATA_KEY_ALBUM, songs.get(songPosition).getAlbum())
-                .putString(MediaMetadata.METADATA_KEY_TITLE, songs.get(songPosition).getTitle())
-                .build());
+    public void buildNotification(boolean play_or_pause) {
 
 //        Intent notIntent = new Intent(this, MainActivity.class);
 //        notIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //        notIntent.setAction(ACTION_TOGGLE_PLAYBACK);
 //        PendingIntent pendInt = PendingIntent.getActivity(this, 4, notIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+        int playOrPauseDrawable = 0;
+        if(play_or_pause)
+            playOrPauseDrawable = R.drawable.ic_pause_black_24dp;
+        else
+            playOrPauseDrawable = R.drawable.ic_play_arrow_black_24dp;
+
         NotificationCompat.Action previous = new NotificationCompat
                 .Action.Builder(R.drawable.ic_skip_previous_black_24dp, "prev", retreivePlaybackAction(1))
                 .build();
 
         NotificationCompat.Action pause = new NotificationCompat
-                .Action.Builder(R.drawable.ic_pause_black_24dp, "pause", retreivePlaybackAction(2))
+                .Action.Builder(playOrPauseDrawable, "play_or_pause", retreivePlaybackAction(2))
                 .build();
 
         NotificationCompat.Action next = new NotificationCompat
@@ -307,7 +290,7 @@ public class MusicService extends Service implements
         }
 
         // Create a new Notification
-        final Notification notificationController = new NotificationCompat.Builder(this, "channel_id")
+        notificationController = new NotificationCompat.Builder(this, "channel_id")
                 // Hide the timestamp
                 .setShowWhen(false)
                 .addAction(previous)
@@ -334,6 +317,37 @@ public class MusicService extends Service implements
             //noinspection ConstantConditions
             ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(1, notificationController);
         }
+    }
+
+
+    //____________________________MEDIA PLAYER INTERFACE CONTROLS__________________________//
+
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        if(songPosition < songs.size()-EMPTY_CELLS_COUNT){
+            songPosition++;
+            setSong(songPosition);
+        }
+    }
+
+    @Override
+    public boolean onError(MediaPlayer mp, int what, int extra) {
+        return false;
+    }
+
+    @Override
+    public void onPrepared(MediaPlayer mp) {
+        //start playback
+        mp.start();
+
+        //notification
+        mSession.setMetadata(new MediaMetadataCompat.Builder()
+                .putString(MediaMetadata.METADATA_KEY_ARTIST, songs.get(songPosition).getArtist())
+                .putString(MediaMetadata.METADATA_KEY_ALBUM, songs.get(songPosition).getAlbum())
+                .putString(MediaMetadata.METADATA_KEY_TITLE, songs.get(songPosition).getTitle())
+                .build());
+
+        buildNotification(true);
     }
 
 
@@ -376,8 +390,14 @@ public class MusicService extends Service implements
         } else if (actionString.equalsIgnoreCase(ACTION_STOP)) {
             controls.stop();
         } else if (actionString.equalsIgnoreCase(ACTION_TOGGLE_PLAYBACK)) {
-            if (isPlaying()) controls.pause();
-            else controls.play();
+            if (isPlaying()) {
+                buildNotification(false);
+                controls.pause();
+            }
+            else {
+                buildNotification(true);
+                controls.play();
+            }
         }
     }
 }
