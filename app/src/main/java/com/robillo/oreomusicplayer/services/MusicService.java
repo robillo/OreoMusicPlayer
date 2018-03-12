@@ -246,50 +246,23 @@ public class MusicService extends Service implements
 //        notIntent.setAction(ACTION_TOGGLE_PLAYBACK);
 //        PendingIntent pendInt = PendingIntent.getActivity(this, 4, notIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        int playOrPauseDrawable = 0;
+        int playOrPauseDrawable;
         if(play_or_pause)
             playOrPauseDrawable = R.drawable.ic_pause_black_24dp;
         else
             playOrPauseDrawable = R.drawable.ic_play_arrow_black_24dp;
 
         NotificationCompat.Action previous = new NotificationCompat
-                .Action.Builder(R.drawable.ic_skip_previous_black_24dp, "prev", retreivePlaybackAction(1))
-                .build();
+                .Action.Builder(R.drawable.ic_skip_previous_black_24dp, "prev", retreivePlaybackAction(1)).build();
 
         NotificationCompat.Action pause = new NotificationCompat
-                .Action.Builder(playOrPauseDrawable, "play_or_pause", retreivePlaybackAction(2))
-                .build();
+                .Action.Builder(playOrPauseDrawable, "play_or_pause", retreivePlaybackAction(2)).build();
 
         NotificationCompat.Action next = new NotificationCompat
-                .Action.Builder(R.drawable.ic_skip_next_black_24dp, "next", retreivePlaybackAction(3))
-                .build();
+                .Action.Builder(R.drawable.ic_skip_next_black_24dp, "next", retreivePlaybackAction(3)).build();
 
-        String path = null;
-        if(currentSong != null) {
-            //get path for the album art for this song
-            Cursor cursor = getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
-                    new String[] {MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
-                    MediaStore.Audio.Albums._ID+ "=?",
-                    new String[] {String.valueOf(currentSong.getAlbumId())},
-                    null);
-            if(cursor!=null && cursor.moveToFirst()) {
-                path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
-                // do whatever you need to do
-                cursor.close();
-            }
-        }
+        Bitmap bitmap = getBitmapAlbumArt();
 
-        File imgFile = null;
-        if(path != null) {
-            imgFile = new File(path);
-        }
-
-        Bitmap bitmap = null;
-        if(imgFile != null && imgFile.exists()) {
-            bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-        }
-
-        // Create a new Notification
         notificationController = new NotificationCompat.Builder(this, "channel_id")
                 // Hide the timestamp
                 .setShowWhen(false)
@@ -317,6 +290,35 @@ public class MusicService extends Service implements
             //noinspection ConstantConditions
             ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(1, notificationController);
         }
+    }
+
+    @Override
+    public Bitmap getBitmapAlbumArt() {
+        String path = null;
+        if(currentSong != null) {
+            //get path for the album art for this song
+            Cursor cursor = getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+                    new String[] {MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
+                    MediaStore.Audio.Albums._ID+ "=?",
+                    new String[] {String.valueOf(currentSong.getAlbumId())},
+                    null);
+            if(cursor!=null && cursor.moveToFirst()) {
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
+                // do whatever you need to do
+                cursor.close();
+            }
+        }
+
+        File imgFile = null;
+        if(path != null) {
+            imgFile = new File(path);
+        }
+
+        Bitmap bitmap = null;
+        if(imgFile != null && imgFile.exists()) {
+            bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+        }
+        return bitmap;
     }
 
 

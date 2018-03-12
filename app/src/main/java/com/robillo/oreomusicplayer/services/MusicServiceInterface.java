@@ -1,5 +1,7 @@
 package com.robillo.oreomusicplayer.services;
 
+import android.graphics.Bitmap;
+
 import com.robillo.oreomusicplayer.models.Song;
 
 import java.util.ArrayList;
@@ -35,4 +37,6 @@ public interface MusicServiceInterface {
     void playNext();
 
     void buildNotification(boolean play_or_pause);
+
+    Bitmap getBitmapAlbumArt();
 }
