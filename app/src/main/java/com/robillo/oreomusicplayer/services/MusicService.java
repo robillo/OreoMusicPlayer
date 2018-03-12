@@ -6,6 +6,9 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ContentUris;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaMetadata;
 import android.media.MediaPlayer;
@@ -13,6 +16,7 @@ import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.media.MediaMetadataCompat;
@@ -20,6 +24,7 @@ import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
 
+import com.bumptech.glide.Glide;
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.events.SongChangeEvent;
 import com.robillo.oreomusicplayer.models.Song;
@@ -27,6 +32,7 @@ import com.robillo.oreomusicplayer.views.activities.main.MainActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -51,6 +57,7 @@ public class MusicService extends Service implements
 
     private MediaPlayer player;
     private ArrayList<Song> songs;
+    private Song currentSong;
     private int songPosition;
 
     private MediaSessionCompat mSession;
@@ -181,7 +188,8 @@ public class MusicService extends Service implements
 
     @Override
     public void setSong(int songIndex){
-        if(songIndex < songs.size() - EMPTY_CELLS_COUNT && songIndex >= 2) {
+        if(songIndex < songs.size() - EMPTY_CELLS_COUNT && songIndex >= 1) {
+            currentSong = songs.get(songIndex);
             EventBus.getDefault().post(new SongChangeEvent(songs.get(songIndex)));
             songPosition = songIndex;
             playSong();
@@ -273,8 +281,32 @@ public class MusicService extends Service implements
                 .Action.Builder(R.drawable.ic_skip_next_black_24dp, "next", retreivePlaybackAction(3))
                 .build();
 
-        // Create a new Notification
+        String path = null;
+        if(currentSong != null) {
+            //get path for the album art for this song
+            Cursor cursor = getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+                    new String[] {MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
+                    MediaStore.Audio.Albums._ID+ "=?",
+                    new String[] {String.valueOf(currentSong.getAlbumId())},
+                    null);
+            if(cursor!=null && cursor.moveToFirst()) {
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
+                // do whatever you need to do
+                cursor.close();
+            }
+        }
 
+        File imgFile = null;
+        if(path != null) {
+            imgFile = new File(path);
+        }
+
+        Bitmap bitmap = null;
+        if(imgFile != null && imgFile.exists()) {
+            bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+        }
+
+        // Create a new Notification
         final Notification notificationController = new NotificationCompat.Builder(this, "channel_id")
                 // Hide the timestamp
                 .setShowWhen(false)
@@ -290,6 +322,7 @@ public class MusicService extends Service implements
                 // Set the Notification color
                 .setColor(getResources().getColor(R.color.colorPrimary))
                 // Set the large and small icons
+                .setLargeIcon(bitmap)
                 .setSmallIcon(R.drawable.oval_shape)
                 // Set Notification content information
                 .setContentText(songs.get(songPosition).getArtist())
@@ -342,6 +375,9 @@ public class MusicService extends Service implements
             controls.skipToPrevious();
         } else if (actionString.equalsIgnoreCase(ACTION_STOP)) {
             controls.stop();
+        } else if (actionString.equalsIgnoreCase(ACTION_TOGGLE_PLAYBACK)) {
+            if (isPlaying()) controls.pause();
+            else controls.play();
         }
     }
 }
