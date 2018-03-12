@@ -27,7 +27,6 @@
         </activity>
 
         <service android:name=".services.MusicService"/>
-        <receiver android:name=".services.MusicService$NotifyServiceReceiver"/>
     </application>
 
 </manifest>
