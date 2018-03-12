@@ -38,6 +38,8 @@ public class MusicService extends Service implements
         MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
         MediaPlayer.OnCompletionListener, MusicServiceInterface {
 
+
+    //____________________________________VARIABLES AND CONSTANTS__________________________________//
     private final int EMPTY_CELLS_COUNT = 2;
     private static final String SESSION_NAME = "session_name";
     private static final String ACTION_PREV = "PREV";
@@ -54,6 +56,9 @@ public class MusicService extends Service implements
     private MediaSessionCompat mSession;
     MediaControllerCompat.TransportControls controls;
     private final IBinder musicBind = new MusicBinder();
+
+
+    //____________________________________SERVICE LIFECYCLE CALLBACkS______________________________//
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -75,6 +80,8 @@ public class MusicService extends Service implements
         initMusicPlayer();
     }
 
+
+    //____________________________________INITIAL SETUP CALL______________________________________//
     @Override
     public void initMusicPlayer() {
         player.setWakeMode(getApplicationContext(),
@@ -127,7 +134,6 @@ public class MusicService extends Service implements
     }
 
     //____________________________________BINDER STUFF__________________________________//
-
     public class MusicBinder extends Binder {
         public MusicService getService() {
             return MusicService.this;
@@ -148,7 +154,6 @@ public class MusicService extends Service implements
     }
 
     //____________________________SERVICE INTERFACE CONTROLS__________________________//
-
     @Override
     public void setList(ArrayList<Song> songsList) {
         songs = songsList;
@@ -300,7 +305,6 @@ public class MusicService extends Service implements
 
 
     //____________________________SETTING PENDING INTENTS TO NOTIFICATION ACTIONS__________________________//
-
     private PendingIntent retreivePlaybackAction(int which) {
         Intent action = new Intent(this, MusicService.class);
         switch (which) {
