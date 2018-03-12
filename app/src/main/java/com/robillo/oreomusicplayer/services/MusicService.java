@@ -39,12 +39,13 @@ public class MusicService extends Service implements
         MediaPlayer.OnCompletionListener, MusicServiceInterface {
 
     private final int EMPTY_CELLS_COUNT = 2;
+    private static final String SESSION_NAME = "session_name";
     private static final String ACTION_PREV = "PREV";
     private static final String ACTION_NEXT = "NEXT";
+    public static final String ACTION_STOP = "action_stop";
     public static final String ACTION_PLAY = "action_play";
     public static final String ACTION_PAUSE = "action_pause";
     private static final String ACTION_TOGGLE_PLAYBACK = "TOGGLE_PLAYBACK";
-    public static final String ACTION_STOP = "action_stop";
 
     private MediaPlayer player;
     private ArrayList<Song> songs;
@@ -72,9 +73,6 @@ public class MusicService extends Service implements
         player = new MediaPlayer();
 
         initMusicPlayer();
-
-        mSession = new MediaSessionCompat(this, "MY_SESSION");
-        controls = mSession.getController().getTransportControls();
     }
 
     @Override
@@ -86,6 +84,46 @@ public class MusicService extends Service implements
         player.setOnPreparedListener(this);
         player.setOnCompletionListener(this);
         player.setOnErrorListener(this);
+
+
+        mSession = new MediaSessionCompat(this, SESSION_NAME);
+        controls = mSession.getController().getTransportControls();
+
+        // Indicate you're ready to receive media commands
+        mSession.setActive(true);
+        // Attach a new Callback to receive MediaSession updates
+        mSession.setCallback(new MediaSessionCompat.Callback() {
+
+            @Override
+            public void onPlay() {
+                super.onPlay();
+                playPlayer();
+            }
+
+            @Override
+            public void onPause() {
+                super.onPause();
+                pausePlayer();
+            }
+
+            @Override
+            public void onSkipToNext() {
+                super.onSkipToNext();
+                playNext();
+            }
+
+            @Override
+            public void onSkipToPrevious() {
+                super.onSkipToPrevious();
+                playPrevious();
+            }
+
+            @Override
+            public void onStop() {
+                super.onStop();
+                Log.e("controls", "stop");
+            }
+        });
     }
 
     //____________________________________BINDER STUFF__________________________________//
@@ -139,7 +177,6 @@ public class MusicService extends Service implements
     @Override
     public void setSong(int songIndex){
         if(songIndex < songs.size() - EMPTY_CELLS_COUNT && songIndex >= 2) {
-            Log.e("message", songs.get(songIndex).getTitle());
             EventBus.getDefault().post(new SongChangeEvent(songs.get(songIndex)));
             songPosition = songIndex;
             playSong();
@@ -213,56 +250,22 @@ public class MusicService extends Service implements
                 .putString(MediaMetadata.METADATA_KEY_ALBUM, songs.get(songPosition).getAlbum())
                 .putString(MediaMetadata.METADATA_KEY_TITLE, songs.get(songPosition).getTitle())
                 .build());
-        // Indicate you're ready to receive media commands
-        mSession.setActive(true);
-        // Attach a new Callback to receive MediaSession updates
-        mSession.setCallback(new MediaSessionCompat.Callback() {
-            @Override
-            public void onPlay() {
-                super.onPlay();
-                playPlayer();
-            }
 
-            @Override
-            public void onPause() {
-                super.onPause();
-                pausePlayer();
-            }
-
-            @Override
-            public void onSkipToNext() {
-                super.onSkipToNext();
-                playNext();
-            }
-
-            @Override
-            public void onSkipToPrevious() {
-                super.onSkipToPrevious();
-                playPrevious();
-            }
-
-            @Override
-            public void onStop() {
-                super.onStop();
-                Log.e("controls", "stop");
-            }
-        });
-
-        Intent notIntent = new Intent(this, MainActivity.class);
-        notIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        notIntent.setAction(ACTION_TOGGLE_PLAYBACK);
-        PendingIntent pendInt = PendingIntent.getActivity(this, 4, notIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//        Intent notIntent = new Intent(this, MainActivity.class);
+//        notIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//        notIntent.setAction(ACTION_TOGGLE_PLAYBACK);
+//        PendingIntent pendInt = PendingIntent.getActivity(this, 4, notIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         NotificationCompat.Action previous = new NotificationCompat
-                .Action.Builder(R.drawable.ic_skip_previous_black_24dp, "prev", retreivePlaybackAction(3))
+                .Action.Builder(R.drawable.ic_skip_previous_black_24dp, "prev", retreivePlaybackAction(1))
                 .build();
 
         NotificationCompat.Action pause = new NotificationCompat
-                .Action.Builder(R.drawable.ic_pause_black_24dp, "prev", retreivePlaybackAction(1))
+                .Action.Builder(R.drawable.ic_pause_black_24dp, "pause", retreivePlaybackAction(2))
                 .build();
 
         NotificationCompat.Action next = new NotificationCompat
-                .Action.Builder(R.drawable.ic_skip_next_black_24dp, "next", retreivePlaybackAction(2))
+                .Action.Builder(R.drawable.ic_skip_next_black_24dp, "next", retreivePlaybackAction(3))
                 .build();
 
         // Create a new Notification
@@ -273,7 +276,6 @@ public class MusicService extends Service implements
                 .addAction(previous)
                 .addAction(pause)
                 .addAction(next)
-                .setContentIntent(pendInt)
                 // Set the Notification style
                 .setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
                         // Attach our MediaSession token
@@ -288,18 +290,12 @@ public class MusicService extends Service implements
                 .setContentText(songs.get(songPosition).getArtist())
                 .setContentInfo(songs.get(songPosition).getAlbum())
                 .setContentTitle(songs.get(songPosition).getTitle()).build();
-                // Add some playback controls
-
-        Log.e("actions", Arrays.toString(notificationController.actions));
 
 
         if (getSystemService(NOTIFICATION_SERVICE) != null) {
             //noinspection ConstantConditions
             ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(1, notificationController);
         }
-
-        // Do something with your TransportControls
-//        final MediaControllerCompat.TransportControls controls = mSession.getController().getTransportControls();
     }
 
 
@@ -309,16 +305,16 @@ public class MusicService extends Service implements
         Intent action = new Intent(this, MusicService.class);
         switch (which) {
             case 1:
+                // Previous tracks
+                action.setAction(ACTION_PREV);
+                return PendingIntent.getService(this, which, action, 0);
+            case 2:
                 // Play and pause
                 action.setAction(ACTION_TOGGLE_PLAYBACK);
                 return PendingIntent.getService(this, which, action, 0);
-            case 2:
+            case 3:
                 // Skip tracks
                 action.setAction(ACTION_NEXT);
-                return PendingIntent.getService(this, which, action, 0);
-            case 3:
-                // Previous tracks
-                action.setAction(ACTION_PREV);
                 return PendingIntent.getService(this, which, action, 0);
             default:
                 break;
