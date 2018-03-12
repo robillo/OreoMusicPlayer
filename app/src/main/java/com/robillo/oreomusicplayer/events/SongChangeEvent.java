@@ -8,10 +8,23 @@ import com.robillo.oreomusicplayer.models.Song;
 
 public class SongChangeEvent {
 
+    static public final int PLAY_PLAYER = 0;
+    static public final int PAUSE_PLAYER = 1;
+    static public final int DO_NOTHING = 2;
     private Song song;
+    private int event;
 
-    public SongChangeEvent(Song song) {
+    public SongChangeEvent(Song song, int event) {
         this.song = song;
+        this.event = event;
+    }
+
+    public int getEvent() {
+        return event;
+    }
+
+    public void setEvent(int event) {
+        this.event = event;
     }
 
     public Song getSong() {

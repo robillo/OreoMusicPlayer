@@ -24,18 +24,14 @@ import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.util.Log;
 
-import com.bumptech.glide.Glide;
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.events.SongChangeEvent;
 import com.robillo.oreomusicplayer.models.Song;
-import com.robillo.oreomusicplayer.views.activities.main.MainActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Created by robinkamboj on 04/03/18.
@@ -113,12 +109,14 @@ public class MusicService extends Service implements
             @Override
             public void onPlay() {
                 super.onPlay();
+                EventBus.getDefault().post(new SongChangeEvent(currentSong, SongChangeEvent.PLAY_PLAYER));
                 playPlayer();
             }
 
             @Override
             public void onPause() {
                 super.onPause();
+                EventBus.getDefault().post(new SongChangeEvent(currentSong, SongChangeEvent.PAUSE_PLAYER));
                 pausePlayer();
             }
 
@@ -192,7 +190,7 @@ public class MusicService extends Service implements
     public void setSong(int songIndex){
         if(songIndex < songs.size() - EMPTY_CELLS_COUNT && songIndex >= 1) {
             currentSong = songs.get(songIndex);
-            EventBus.getDefault().post(new SongChangeEvent(songs.get(songIndex)));
+            EventBus.getDefault().post(new SongChangeEvent(songs.get(songIndex), SongChangeEvent.DO_NOTHING));
             songPosition = songIndex;
             playSong();
         }
@@ -216,6 +214,8 @@ public class MusicService extends Service implements
     @Override
     public void pausePlayer() {
         player.pause();
+        Log.e("pause", "player");
+        buildNotification(false);
     }
 
     @Override
@@ -226,6 +226,8 @@ public class MusicService extends Service implements
     @Override
     public void playPlayer() {
         player.start();
+        Log.e("play", "player");
+        buildNotification(true);
     }
 
     @Override

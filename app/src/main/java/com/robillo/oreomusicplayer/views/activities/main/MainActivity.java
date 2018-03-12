@@ -172,12 +172,22 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         super.onDestroy();
     }
 
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
     public void onMessageEvent(SongChangeEvent event) {
+        Log.e("event", " " + event.getSong().getTitle());
+        Log.e("event", " " + event.getEvent());
         currentSong = event.getSong();
-        if(getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list))!=null){
-            ((SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list)))
-                    .setCurrentSong(currentSong);
+        SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
+        if(fragment != null){
+            fragment.setCurrentSong(currentSong);
+            switch (event.getEvent()) {
+                case 0:
+                    fragment.playPlayer();
+                    break;
+                case 1:
+                    fragment.pausePlayer();
+                    break;
+            }
         }
     }
 
