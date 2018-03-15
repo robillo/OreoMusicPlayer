@@ -257,6 +257,11 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
     }
 
+    @Override
+    public Song getCurrentSong() {
+        return currentSong;
+    }
+
     @OnClick(R.id.play_pause_song)
     public void playOrPausePlayer() {
         if(getActivity()!=null) {

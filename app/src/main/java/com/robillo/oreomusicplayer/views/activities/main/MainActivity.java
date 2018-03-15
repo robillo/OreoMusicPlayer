@@ -35,6 +35,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.robillo.oreomusicplayer.utils.AppConstants.CONTROLLER_NOTIFICATION_ID;
+
 public class MainActivity extends AppCompatActivity implements MainActivityMvpView, MediaController.MediaPlayerControl {
 
     private MusicService musicService;
@@ -152,6 +154,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
         SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
         SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
+
+        //when activity was in background and bottom controller was not updated
+        if(currentSong != null && currentSong != fragment.getCurrentSong()) fragment.setCurrentSong(currentSong);
+
         if(preferences.getBoolean("play_event", false))
             fragment.playPlayer(SongListMvpView.FROM_ACTIVITY);
         else
@@ -178,9 +184,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Override
     protected void onDestroy() {
         if(playIntent!=null) {
+            musicService.cancelNotification(this, CONTROLLER_NOTIFICATION_ID);
             stopService(playIntent);
         }
-
         super.onDestroy();
     }
 

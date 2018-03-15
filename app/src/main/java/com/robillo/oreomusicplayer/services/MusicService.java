@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -14,6 +15,7 @@ import android.media.MediaMetadata;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.provider.MediaStore;
@@ -40,6 +42,8 @@ import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_PLAY;
 import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_PREV;
 import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_STOP;
 import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_TOGGLE_PLAYBACK;
+import static com.robillo.oreomusicplayer.utils.AppConstants.CHANNEL_ID;
+import static com.robillo.oreomusicplayer.utils.AppConstants.CONTROLLER_NOTIFICATION_ID;
 
 public class MusicService extends Service implements
         MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
@@ -68,20 +72,11 @@ public class MusicService extends Service implements
     public void onCreate() {
         //create the service
         super.onCreate();
-
         //initialize position
         songPosition = 0;
-
         //create player
         player = new MediaPlayer();
-
         initMusicPlayer();
-    }
-
-    @Override
-    public void onDestroy() {
-
-        super.onDestroy();
     }
 
     //____________________________________INITIAL SETUP CALL______________________________________//
@@ -275,13 +270,22 @@ public class MusicService extends Service implements
                 // Set Notification content information
                 .setContentText(songs.get(songPosition).getArtist())
                 .setContentInfo(songs.get(songPosition).getAlbum())
-                .setContentTitle(songs.get(songPosition).getTitle()).build();
+                .setContentTitle(songs.get(songPosition).getTitle())
+                .setAutoCancel(true).build();
 
 
         if (getSystemService(NOTIFICATION_SERVICE) != null) {
             //noinspection ConstantConditions
-            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(1, notificationController);
+            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(CONTROLLER_NOTIFICATION_ID, notificationController);
         }
+    }
+
+    @Override
+    public void cancelNotification(Context context, int notificationId) {
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        if(notificationManager != null)
+                notificationManager.cancel(CONTROLLER_NOTIFICATION_ID);
+
     }
 
     @Override

@@ -17,4 +17,5 @@ public class AppConstants {
     public static final String ACTION_PLAY = "action_play";
     public static final String ACTION_PAUSE = "action_pause";
     public static final String ACTION_TOGGLE_PLAYBACK = "TOGGLE_PLAYBACK";
+    public static final int CONTROLLER_NOTIFICATION_ID = 0;
 }

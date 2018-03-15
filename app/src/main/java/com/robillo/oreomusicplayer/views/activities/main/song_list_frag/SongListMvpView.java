@@ -22,6 +22,8 @@ public interface SongListMvpView {
 
     void setCurrentSong(Song song);
 
+    Song getCurrentSong();
+
     void playNextSong();
 
     void playPlayer(int from);
