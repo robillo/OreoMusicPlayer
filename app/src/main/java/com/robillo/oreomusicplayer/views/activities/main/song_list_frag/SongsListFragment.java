@@ -3,7 +3,6 @@ package com.robillo.oreomusicplayer.views.activities.main.song_list_frag;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -52,6 +51,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     private static Song currentSong = null;
     private static boolean isAnimatingUpper = false;
     private static boolean isAnimatingController = false;
+    private static long songDurationForCountDownTimer = 0;
 
     @BindView(R.id.play_pause_song)
     ImageButton playPauseSong;
@@ -83,7 +83,6 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     public SongsListFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
@@ -204,6 +203,8 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void setCurrentSong(Song song) {
 
+        Log.e("setsong", "called for fragment");
+
         currentSong = song;
 
         if(bottomController.getVisibility()==View.GONE)
@@ -212,7 +213,9 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
         currentSongTitle.setText(song.getTitle());
 
-        long duration = Integer.valueOf(song.getDuration())/1000;
+        songDurationForCountDownTimer = Long.valueOf(song.getDuration());
+
+        long duration = Long.valueOf(song.getDuration())/1000;
         long mins = duration/60;
         long seconds = duration%60;
         String temp = song.getArtist();
@@ -222,9 +225,6 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
         String path = null;
         if(getActivity()!=null) {
-
-            //set play_pause button as pause since now a new song will be playing
-            playPauseSong.setImageDrawable(getActivity().getDrawable(R.drawable.ic_pause_black_24dp));
 
             //get path for the album art for this song
             Cursor cursor = getActivity().getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
@@ -245,16 +245,11 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         }
 
         //start rotating animation
-        resetAlbumArtAnimation();
         if(bottomController.getVisibility() == View.GONE) {
             hideOrShowUpper.setVisibility(View.VISIBLE);
             bottomController.setVisibility(View.VISIBLE);
-            currentSongAlbumArt.startAnimation(rotatingAlbumAnim);
         }
-        else {
-            currentSongAlbumArt.startAnimation(rotatingAlbumAnim);
-        }
-
+        playPlayer(FROM_ACTIVITY);
     }
 
     @Override

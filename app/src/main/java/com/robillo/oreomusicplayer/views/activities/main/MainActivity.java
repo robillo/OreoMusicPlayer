@@ -13,6 +13,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.MediaController;
 
@@ -149,25 +150,25 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
         SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
+
+        if(currentSong != null)
+            fragment.setCurrentSong(currentSong);
+
         SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
-
-        //when activity was in background and bottom controller was not updated
-        if(currentSong != null && currentSong != fragment.getCurrentSong()) fragment.setCurrentSong(currentSong);
-
         if(preferences.getBoolean("play_event", false))
             fragment.playPlayer(SongListMvpView.FROM_ACTIVITY);
         else
             fragment.pausePlayer(SongListMvpView.FROM_ACTIVITY);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
     }
 
     @Override
@@ -191,34 +192,22 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @SuppressWarnings("unused")
-    @Subscribe(threadMode = ThreadMode.MAIN)
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onMessageEvent(SongChangeEvent event) {
-        currentSong = event.getSong();
 
+        currentSong = event.getSong();
         SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
 
         if(fragment != null){
             fragment.setCurrentSong(currentSong);
 
             SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
+            Boolean play_or_pause = preferences.getBoolean("play_event", false);
 
-            switch (event.getEvent()) {
-                case AppConstants.PLAY_PLAYER: {
-                    fragment.playPlayer(SongListMvpView.FROM_ACTIVITY);
-
-                    editor.putBoolean("play_event", true);
-                    editor.apply();
-                    break;
-                }
-                case AppConstants.PAUSE_PLAYER: {
-                    fragment.pausePlayer(SongListMvpView.FROM_ACTIVITY);
-
-                    editor.putBoolean("play_event", false);
-                    editor.apply();
-                    break;
-                }
-            }
+            if(play_or_pause)
+                fragment.playPlayer(SongListMvpView.FROM_ACTIVITY);
+            else
+                fragment.pausePlayer(SongListMvpView.FROM_ACTIVITY);
         }
     }
 

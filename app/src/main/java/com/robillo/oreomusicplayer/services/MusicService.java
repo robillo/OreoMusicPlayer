@@ -7,6 +7,7 @@ import android.app.Service;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -180,6 +181,12 @@ public class MusicService extends Service implements
     public void setSong(int songIndex){
         if(songIndex < songs.size() - AppConstants.EMPTY_CELLS_COUNT && songIndex >= 1) {
             currentSong = songs.get(songIndex);
+
+            SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("play_event", true);
+            editor.apply();
+
             EventBus.getDefault().postSticky(new SongChangeEvent(songs.get(songIndex), AppConstants.DO_NOTHING));
             songPosition = songIndex;
             playSong();
@@ -210,14 +217,26 @@ public class MusicService extends Service implements
     public void playPlayer() {
         player.start();
         buildNotification(true);
-        if(isPlaying()) EventBus.getDefault().post(new SongChangeEvent(currentSong, AppConstants.PLAY_PLAYER));
+
+        SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("play_event", true);
+        editor.apply();
+
+        EventBus.getDefault().postSticky(new SongChangeEvent(currentSong, AppConstants.PLAY_PLAYER));
     }
 
     @Override
     public void pausePlayer() {
         player.pause();
         buildNotification(false);
-        if(!isPlaying()) EventBus.getDefault().post(new SongChangeEvent(currentSong, AppConstants.PAUSE_PLAYER));
+
+        SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("play_event", false);
+        editor.apply();
+
+        EventBus.getDefault().postSticky(new SongChangeEvent(currentSong, AppConstants.PAUSE_PLAYER));
     }
 
     @Override
