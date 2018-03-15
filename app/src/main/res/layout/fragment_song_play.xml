@@ -1,10 +1,206 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.robillo.oreomusicplayer.views.activities.main.song_play_frag.SongPlayFragment">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <!--back, album and menu-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_keyboard_arrow_left_black_24dp"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="@string/back_to_list"
+                android:tint="@color/colorTextOne" />
+
+            <TextView
+                android:layout_width="0sp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:text="Steve Void"
+                android:textSize="25sp"
+                android:textColor="@color/colorTextOne"
+                android:gravity="center"
+                tools:ignore="HardcodedText" />
+
+            <ImageButton
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_menu_black_24dp"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="@string/song_options"
+                android:tint="@color/colorTextOne" />
+
+        </LinearLayout>
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="250sp"
+            android:layout_height="250sp"
+            android:layout_margin="5sp"
+            app:civ_border_width="5sp"
+            android:src="@color/white"
+            android:layout_gravity="center_horizontal"
+            app:civ_border_color="@color/colorPrimary"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal">
+
+            <ImageButton
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_repeat_black_24dp"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="@string/repeat_song"
+                android:tint="@color/colorTextOne"/>
+
+            <ImageButton
+                android:layout_width="?attr/actionBarSize"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_shuffle_black_24dp"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="@string/shoffle_song"
+                android:tint="@color/colorTextOne"/>
+
+        </LinearLayout>
+
+        <!--title-->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Comfortable (Lyrics / Lyric Video)"
+            android:textSize="22sp"
+            android:textColor="@color/colorTextOne"
+            android:gravity="center"
+            tools:ignore="HardcodedText" />
+
+        <!--artist-->
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Steve Void"
+            android:textSize="18sp"
+            android:textColor="@color/colorTextTwo"
+            android:gravity="center"
+            tools:ignore="HardcodedText" />
+
+        <!--seekbar-->
+
+        <!--bottom controller-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="5sp"
+            android:layout_marginBottom="5sp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5sp"
+                android:layout_marginStart="5sp"
+                android:text="01:24"
+                android:textSize="12sp"
+                android:textColor="@color/colorTextOne"
+                android:gravity="center"
+                tools:ignore="HardcodedText,RtlHardcoded" />
+
+            <SeekBar
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:max="100"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="5sp"
+                android:layout_marginEnd="5sp"
+                android:text="03:51"
+                android:textSize="12sp"
+                android:textColor="@color/colorTextOne"
+                android:gravity="center"
+                tools:ignore="HardcodedText,RtlHardcoded" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center">
+
+            <ImageButton
+                android:layout_height="35sp"
+                android:layout_width="0sp"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_replay_10_black_24dp"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="@string/replay_previous_10_seconds"
+                android:tint="@color/colorTextOne"/>
+
+            <ImageButton
+                android:layout_height="45sp"
+                android:layout_width="0sp"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_skip_previous_black_24dp"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="@string/previous_song"
+                android:tint="@color/colorTextOne"/>
+
+            <ImageButton
+                android:layout_height="55sp"
+                android:layout_width="0sp"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_pause_circle_outline_black_24dp"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="@string/pause_song"
+                android:tint="@color/colorTextOne"/>
+
+            <ImageButton
+                android:layout_height="45sp"
+                android:layout_width="0sp"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_skip_next_black_24dp"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="@string/next_song"
+                android:tint="@color/colorTextOne"/>
+
+            <ImageButton
+                android:layout_height="35sp"
+                android:layout_width="0sp"
+                android:layout_weight="1"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_forward_10_black_24dp"
+                android:background="?attr/selectableItemBackground"
+                android:contentDescription="@string/forward_next_10_seconds"
+                android:tint="@color/colorTextOne"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
-</FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

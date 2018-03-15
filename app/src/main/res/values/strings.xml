@@ -12,4 +12,13 @@
     <string name="play_previous_song">Play Previous Song</string>
     <string name="play_song">Play Song</string>
     <string name="play_next_song">Play Next Song</string>
+    <string name="back_to_list">Go Back To Song List Screen</string>
+    <string name="song_options">Song Options</string>
+    <string name="repeat_song">Repeat Song</string>
+    <string name="shoffle_song">Shoffle Song</string>
+    <string name="pause_song">Pause Song</string>
+    <string name="replay_previous_10_seconds">Replay Previous 10 Seconds</string>
+    <string name="previous_song">Previous Song</string>
+    <string name="forward_next_10_seconds">Forward Next 10 Seconds</string>
+    <string name="next_song">Next Song</string>
 </resources>
