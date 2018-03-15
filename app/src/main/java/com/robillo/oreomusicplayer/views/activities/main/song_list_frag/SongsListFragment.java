@@ -41,6 +41,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class SongsListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SongListMvpView {
 
+    private static final int FADE_IN = 1;
+    private static final int FADE_OUT = 0;
     @SuppressWarnings("FieldCanBeLocal")
     private final int EMPTY_CELLS_COUNT = 2;
     @SuppressWarnings("FieldCanBeLocal")
@@ -112,86 +114,18 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
                 super.onScrolled(recyclerView, dx, dy);
                 if(dy > 0) {      //scrolled up
                     if(hideOrShowUpper.getVisibility() == View.VISIBLE && !isAnimatingUpper) {
-                        fadeOutAnimationUpper.setAnimationListener(new Animation.AnimationListener() {
-                            @Override
-                            public void onAnimationStart(Animation animation) {
-                                isAnimatingUpper = true;
-                            }
-
-                            @Override
-                            public void onAnimationEnd(Animation animation) {
-                                hideOrShowUpper.setVisibility(View.GONE);
-                                isAnimatingUpper = false;
-                            }
-
-                            @Override
-                            public void onAnimationRepeat(Animation animation) {
-
-                            }
-                        });
-                        hideOrShowUpper.startAnimation(fadeOutAnimationUpper);
+                        fadeOutUpper();
                     }
                     if(bottomController.getVisibility() == View.VISIBLE && !isAnimatingController) {
-                        fadeOutAnimationController.setAnimationListener(new Animation.AnimationListener() {
-                            @Override
-                            public void onAnimationStart(Animation animation) {
-                                isAnimatingController = true;
-                            }
-
-                            @Override
-                            public void onAnimationEnd(Animation animation) {
-                                bottomController.setVisibility(View.GONE);
-                                isAnimatingController = false;
-                            }
-
-                            @Override
-                            public void onAnimationRepeat(Animation animation) {
-
-                            }
-                        });
-                        bottomController.startAnimation(fadeOutAnimationController);
+                        fadeOutController();
                     }
                 }
                 else {          //scrolled down
                     if(hideOrShowUpper.getVisibility() == View.GONE && !isAnimatingUpper) {
-                        fadeInAnimationUpper.setAnimationListener(new Animation.AnimationListener() {
-                            @Override
-                            public void onAnimationStart(Animation animation) {
-                                isAnimatingUpper = true;
-                            }
-
-                            @Override
-                            public void onAnimationEnd(Animation animation) {
-                                hideOrShowUpper.setVisibility(View.VISIBLE);
-                                isAnimatingUpper = false;
-                            }
-
-                            @Override
-                            public void onAnimationRepeat(Animation animation) {
-
-                            }
-                        });
-                        hideOrShowUpper.startAnimation(fadeInAnimationUpper);
+                        fadeInUpper();
                     }
                     if(bottomController.getVisibility() == View.GONE && !isAnimatingController && currentSong != null) {
-                        fadeInAnimationController.setAnimationListener(new Animation.AnimationListener() {
-                            @Override
-                            public void onAnimationStart(Animation animation) {
-                                isAnimatingController = true;
-                            }
-
-                            @Override
-                            public void onAnimationEnd(Animation animation) {
-                                bottomController.setVisibility(View.VISIBLE);
-                                isAnimatingController = false;
-                            }
-
-                            @Override
-                            public void onAnimationRepeat(Animation animation) {
-
-                            }
-                        });
-                        bottomController.startAnimation(fadeInAnimationController);
+                        fadeInController();
                     }
                 }
             }
@@ -316,6 +250,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         resetAlbumArtAnimation();
         if(bottomController.getVisibility() == View.GONE) {
             bottomController.setVisibility(View.VISIBLE);
+            hideOrShowUpper.setVisibility(View.VISIBLE);
             currentSongAlbumArt.startAnimation(rotatingAlbumAnim);
         }
         else {
@@ -328,10 +263,10 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     public void playOrPausePlayer() {
         if(getActivity()!=null) {
             if(((MainActivity) getActivity()).isPlaying()){     //pause the player
-                pausePlayer();
+                pausePlayer(SongListMvpView.FROM_FRAGMENT);
             }
             else {                                              //play the player
-                playPlayer();
+                playPlayer(SongListMvpView.FROM_FRAGMENT);
             }
         }
     }
@@ -357,18 +292,20 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     @Override
-    public void playPlayer() {
+    public void playPlayer(int from) {
         assert getActivity() != null;
-        ((MainActivity) getActivity()).start();
+            if(from == SongListMvpView.FROM_FRAGMENT) ((MainActivity) getActivity()).start();
+
         playPauseSong.setImageDrawable(getActivity().getDrawable(R.drawable.ic_pause_black_24dp));
         resetAlbumArtAnimation();
         currentSongAlbumArt.startAnimation(rotatingAlbumAnim);
     }
 
     @Override
-    public void pausePlayer() {
+    public void pausePlayer(int from) {
         assert getActivity() != null;
-        ((MainActivity) getActivity()).pause();
+            if(from == SongListMvpView.FROM_FRAGMENT) ((MainActivity) getActivity()).pause();
+
         playPauseSong.setImageDrawable(getActivity().getDrawable(R.drawable.ic_play_arrow_black_24dp));
         resetAlbumArtAnimation();
     }
@@ -379,5 +316,98 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
             currentSongAlbumArt.getAnimation().cancel();
             currentSongAlbumArt.setAnimation(null);
         }
+    }
+
+    @Override
+    public void fadeOutUpper() {
+        Animation.AnimationListener listener = new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                isAnimatingUpper = true;
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                hideOrShowUpper.setVisibility(View.GONE);
+                isAnimatingUpper = false;
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        };
+
+        fadeOutAnimationUpper.setAnimationListener(listener);
+        hideOrShowUpper.startAnimation(fadeOutAnimationUpper);
+    }
+
+    @Override
+    public void fadeInUpper() {
+        Animation.AnimationListener listener = new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                isAnimatingUpper = true;
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                hideOrShowUpper.setVisibility(View.VISIBLE);
+                isAnimatingUpper = false;
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        };
+        fadeInAnimationUpper.setAnimationListener(listener);
+        hideOrShowUpper.startAnimation(fadeInAnimationUpper);
+    }
+
+    @Override
+    public void fadeOutController() {
+        Animation.AnimationListener listener = new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                isAnimatingController = true;
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                bottomController.setVisibility(View.GONE);
+                isAnimatingController = false;
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        };
+        fadeOutAnimationController.setAnimationListener(listener);
+        bottomController.startAnimation(fadeOutAnimationController);
+    }
+
+    @Override
+    public void fadeInController() {
+        Animation.AnimationListener listener = new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                isAnimatingController = true;
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                bottomController.setVisibility(View.VISIBLE);
+                isAnimatingController = false;
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        };
+        fadeInAnimationController.setAnimationListener(listener);
+        bottomController.startAnimation(fadeInAnimationController);
     }
 }

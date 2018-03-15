@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ContentUris;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -109,14 +110,22 @@ public class MusicService extends Service implements
             @Override
             public void onPlay() {
                 super.onPlay();
-                EventBus.getDefault().post(new SongChangeEvent(currentSong, SongChangeEvent.PLAY_PLAYER));
+//                SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
+//                SharedPreferences.Editor editor = preferences.edit();
+//                editor.putBoolean("play_event", true);
+//                editor.apply();
+                EventBus.getDefault().postSticky(new SongChangeEvent(currentSong, SongChangeEvent.PLAY_PLAYER));
                 playPlayer();
             }
 
             @Override
             public void onPause() {
                 super.onPause();
-                EventBus.getDefault().post(new SongChangeEvent(currentSong, SongChangeEvent.PAUSE_PLAYER));
+//                SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
+//                SharedPreferences.Editor editor = preferences.edit();
+//                editor.putBoolean("play_event", false);
+//                editor.apply();
+                EventBus.getDefault().postSticky(new SongChangeEvent(currentSong, SongChangeEvent.PAUSE_PLAYER));
                 pausePlayer();
             }
 
@@ -190,7 +199,7 @@ public class MusicService extends Service implements
     public void setSong(int songIndex){
         if(songIndex < songs.size() - EMPTY_CELLS_COUNT && songIndex >= 1) {
             currentSong = songs.get(songIndex);
-            EventBus.getDefault().post(new SongChangeEvent(songs.get(songIndex), SongChangeEvent.DO_NOTHING));
+            EventBus.getDefault().postSticky(new SongChangeEvent(songs.get(songIndex), SongChangeEvent.DO_NOTHING));
             songPosition = songIndex;
             playSong();
         }
@@ -214,7 +223,6 @@ public class MusicService extends Service implements
     @Override
     public void pausePlayer() {
         player.pause();
-        Log.e("pause", "player");
         buildNotification(false);
     }
 
@@ -226,7 +234,6 @@ public class MusicService extends Service implements
     @Override
     public void playPlayer() {
         player.start();
-        Log.e("play", "player");
         buildNotification(true);
     }
 

@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.IBinder;
@@ -23,6 +24,7 @@ import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.events.SongChangeEvent;
 import com.robillo.oreomusicplayer.models.Song;
 import com.robillo.oreomusicplayer.services.MusicService;
+import com.robillo.oreomusicplayer.views.activities.main.song_list_frag.SongListMvpView;
 import com.robillo.oreomusicplayer.views.activities.main.song_list_frag.SongsListFragment;
 import com.robillo.oreomusicplayer.views.activities.main.song_play_frag.SongPlayFragment;
 
@@ -147,6 +149,18 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+
+        SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
+        SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
+            if(preferences.getBoolean("play_event", false))
+                fragment.playPlayer(SongListMvpView.FROM_ACTIVITY);
+            else
+                fragment.pausePlayer(SongListMvpView.FROM_ACTIVITY);
+    }
+
+    @Override
     protected void onStart() {
         super.onStart();
         EventBus.getDefault().register(this);
@@ -172,22 +186,30 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         super.onDestroy();
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onMessageEvent(SongChangeEvent event) {
         Log.e("event", " " + event.getSong().getTitle());
         Log.e("event", " " + event.getEvent());
         currentSong = event.getSong();
+
+        SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
         SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
         if(fragment != null){
             fragment.setCurrentSong(currentSong);
             switch (event.getEvent()) {
-                case 0:
-                    fragment.playPlayer();
+                case SongChangeEvent.PLAY_PLAYER:
+                    fragment.playPlayer(SongListMvpView.FROM_ACTIVITY);
                     break;
-                case 1:
-                    fragment.pausePlayer();
+                case SongChangeEvent.PAUSE_PLAYER:
+                    fragment.pausePlayer(SongListMvpView.FROM_ACTIVITY);
                     break;
             }
+
+//            if(preferences.getBoolean("play_event", false))
+//                fragment.playPlayer(SongListMvpView.FROM_ACTIVITY);
+//            else
+//                fragment.pausePlayer(SongListMvpView.FROM_ACTIVITY);
+
         }
     }
 
