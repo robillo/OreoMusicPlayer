@@ -6,7 +6,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ContentUris;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -28,30 +27,23 @@ import android.util.Log;
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.events.SongChangeEvent;
 import com.robillo.oreomusicplayer.models.Song;
+import com.robillo.oreomusicplayer.utils.AppConstants;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
 
-/**
- * Created by robinkamboj on 04/03/18.
- */
+import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_NEXT;
+import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_PAUSE;
+import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_PLAY;
+import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_PREV;
+import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_STOP;
+import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_TOGGLE_PLAYBACK;
 
 public class MusicService extends Service implements
         MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
         MediaPlayer.OnCompletionListener, MusicServiceInterface {
-
-
-    //____________________________________VARIABLES AND CONSTANTS__________________________________//
-    private final int EMPTY_CELLS_COUNT = 2;
-    private static final String SESSION_NAME = "session_name";
-    private static final String ACTION_PREV = "PREV";
-    private static final String ACTION_NEXT = "NEXT";
-    public static final String ACTION_STOP = "action_stop";
-    public static final String ACTION_PLAY = "action_play";
-    public static final String ACTION_PAUSE = "action_pause";
-    private static final String ACTION_TOGGLE_PLAYBACK = "TOGGLE_PLAYBACK";
 
     private MediaPlayer player;
     private ArrayList<Song> songs;
@@ -86,6 +78,11 @@ public class MusicService extends Service implements
         initMusicPlayer();
     }
 
+    @Override
+    public void onDestroy() {
+
+        super.onDestroy();
+    }
 
     //____________________________________INITIAL SETUP CALL______________________________________//
     @Override
@@ -99,7 +96,7 @@ public class MusicService extends Service implements
         player.setOnErrorListener(this);
 
 
-        mSession = new MediaSessionCompat(this, SESSION_NAME);
+        mSession = new MediaSessionCompat(this, AppConstants.SESSION_NAME);
         controls = mSession.getController().getTransportControls();
 
         // Indicate you're ready to receive media commands
@@ -134,7 +131,6 @@ public class MusicService extends Service implements
             @Override
             public void onStop() {
                 super.onStop();
-                Log.e("controls", "stop");
             }
         });
     }
@@ -187,9 +183,9 @@ public class MusicService extends Service implements
 
     @Override
     public void setSong(int songIndex){
-        if(songIndex < songs.size() - EMPTY_CELLS_COUNT && songIndex >= 1) {
+        if(songIndex < songs.size() - AppConstants.EMPTY_CELLS_COUNT && songIndex >= 1) {
             currentSong = songs.get(songIndex);
-            EventBus.getDefault().postSticky(new SongChangeEvent(songs.get(songIndex), SongChangeEvent.DO_NOTHING));
+            EventBus.getDefault().postSticky(new SongChangeEvent(songs.get(songIndex), AppConstants.DO_NOTHING));
             songPosition = songIndex;
             playSong();
         }
@@ -219,14 +215,14 @@ public class MusicService extends Service implements
     public void playPlayer() {
         player.start();
         buildNotification(true);
-        if(isPlaying()) EventBus.getDefault().post(new SongChangeEvent(currentSong, SongChangeEvent.PLAY_PLAYER));
+        if(isPlaying()) EventBus.getDefault().post(new SongChangeEvent(currentSong, AppConstants.PLAY_PLAYER));
     }
 
     @Override
     public void pausePlayer() {
         player.pause();
         buildNotification(false);
-        if(!isPlaying()) EventBus.getDefault().post(new SongChangeEvent(currentSong, SongChangeEvent.PAUSE_PLAYER));
+        if(!isPlaying()) EventBus.getDefault().post(new SongChangeEvent(currentSong, AppConstants.PAUSE_PLAYER));
     }
 
     @Override
@@ -259,7 +255,7 @@ public class MusicService extends Service implements
 
         Bitmap bitmap = getBitmapAlbumArt();
 
-        notificationController = new NotificationCompat.Builder(this, "channel_id")
+        notificationController = new NotificationCompat.Builder(this, AppConstants.CHANNEL_ID)
                 // Hide the timestamp
                 .setShowWhen(false)
                 .addAction(previous)
@@ -322,7 +318,7 @@ public class MusicService extends Service implements
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        if(songPosition < songs.size()-EMPTY_CELLS_COUNT){
+        if(songPosition < songs.size() -AppConstants.EMPTY_CELLS_COUNT){
             songPosition++;
             setSong(songPosition);
         }
@@ -370,7 +366,6 @@ public class MusicService extends Service implements
         }
         return null;
     }
-
 
     //____________________________HANDLING PENDING INTENTS TO NOTIFICATION ACTIONS__________________________//
     private void handleIncomingActions(Intent playbackAction) {

@@ -20,6 +20,7 @@ import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.events.SongChangeEvent;
 import com.robillo.oreomusicplayer.models.Song;
 import com.robillo.oreomusicplayer.services.MusicService;
+import com.robillo.oreomusicplayer.utils.AppConstants;
 import com.robillo.oreomusicplayer.views.activities.main.song_list_frag.SongListMvpView;
 import com.robillo.oreomusicplayer.views.activities.main.song_list_frag.SongsListFragment;
 import com.robillo.oreomusicplayer.views.activities.main.song_play_frag.SongPlayFragment;
@@ -197,14 +198,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             SharedPreferences.Editor editor = preferences.edit();
 
             switch (event.getEvent()) {
-                case SongChangeEvent.PLAY_PLAYER: {
+                case AppConstants.PLAY_PLAYER: {
                     fragment.playPlayer(SongListMvpView.FROM_ACTIVITY);
 
                     editor.putBoolean("play_event", true);
                     editor.apply();
                     break;
                 }
-                case SongChangeEvent.PAUSE_PLAYER: {
+                case AppConstants.PAUSE_PLAYER: {
                     fragment.pausePlayer(SongListMvpView.FROM_ACTIVITY);
 
                     editor.putBoolean("play_event", false);

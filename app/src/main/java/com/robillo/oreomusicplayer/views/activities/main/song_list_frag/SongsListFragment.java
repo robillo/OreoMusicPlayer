@@ -41,8 +41,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class SongsListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SongListMvpView {
 
-    private static final int FADE_IN = 1;
-    private static final int FADE_OUT = 0;
     @SuppressWarnings("FieldCanBeLocal")
     private final int EMPTY_CELLS_COUNT = 2;
     @SuppressWarnings("FieldCanBeLocal")
