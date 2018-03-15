@@ -24,7 +24,8 @@
                 android:src="@drawable/ic_keyboard_arrow_left_black_24dp"
                 android:background="?attr/selectableItemBackground"
                 android:contentDescription="@string/back_to_list"
-                android:tint="@color/colorTextOne" />
+                android:tint="@color/colorTextOne"
+                android:id="@+id/back_to_song_list"/>
 
             <TextView
                 android:layout_width="0sp"
@@ -34,7 +35,8 @@
                 android:textSize="25sp"
                 android:textColor="@color/colorTextOne"
                 android:gravity="center"
-                tools:ignore="HardcodedText" />
+                tools:ignore="HardcodedText"
+                android:id="@+id/album_name"/>
 
             <ImageButton
                 android:layout_width="?attr/actionBarSize"
@@ -42,7 +44,8 @@
                 android:src="@drawable/ic_menu_black_24dp"
                 android:background="?attr/selectableItemBackground"
                 android:contentDescription="@string/song_options"
-                android:tint="@color/colorTextOne" />
+                android:tint="@color/colorTextOne"
+                android:id="@+id/song_menu_options" />
 
         </LinearLayout>
 
@@ -53,7 +56,8 @@
             app:civ_border_width="5sp"
             android:src="@color/white"
             android:layout_gravity="center_horizontal"
-            app:civ_border_color="@color/colorPrimary"/>
+            app:civ_border_color="@color/colorPrimary"
+            android:id="@+id/current_song_album_art"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -67,7 +71,8 @@
                 android:src="@drawable/ic_repeat_black_24dp"
                 android:background="?attr/selectableItemBackground"
                 android:contentDescription="@string/repeat_song"
-                android:tint="@color/colorTextOne"/>
+                android:tint="@color/colorTextOne"
+                android:id="@+id/repeat_song"/>
 
             <ImageButton
                 android:layout_width="?attr/actionBarSize"
@@ -75,7 +80,8 @@
                 android:src="@drawable/ic_shuffle_black_24dp"
                 android:background="?attr/selectableItemBackground"
                 android:contentDescription="@string/shoffle_song"
-                android:tint="@color/colorTextOne"/>
+                android:tint="@color/colorTextOne"
+                android:id="@+id/shuffle_songs"/>
 
         </LinearLayout>
 
@@ -89,7 +95,8 @@
             android:layout_marginTop="5sp"
             android:textColor="@color/colorTextOne"
             android:gravity="center"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText"
+            android:id="@+id/current_song_title"/>
 
         <!--artist-->
 
@@ -100,7 +107,8 @@
             android:textSize="18sp"
             android:textColor="@color/colorTextTwo"
             android:gravity="center"
-            tools:ignore="HardcodedText" />
+            tools:ignore="HardcodedText"
+            android:id="@+id/current_song_artist"/>
 
         <!--seekbar-->
 
@@ -123,13 +131,15 @@
                 android:textSize="12sp"
                 android:textColor="@color/colorTextOne"
                 android:gravity="center"
-                tools:ignore="HardcodedText,RtlHardcoded" />
+                tools:ignore="HardcodedText,RtlHardcoded"
+                android:id="@+id/current_song_current_progress"/>
 
             <SeekBar
                 android:layout_width="0sp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:max="100"/>
+                android:max="100"
+                android:id="@+id/current_song_progress_seekbar"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -140,7 +150,8 @@
                 android:textSize="12sp"
                 android:textColor="@color/colorTextOne"
                 android:gravity="center"
-                tools:ignore="HardcodedText,RtlHardcoded" />
+                tools:ignore="HardcodedText,RtlHardcoded"
+                android:id="@+id/current_song_max_progress"/>
 
         </LinearLayout>
 
@@ -160,7 +171,8 @@
                 android:src="@drawable/ic_replay_10_black_24dp"
                 android:background="?attr/selectableItemBackground"
                 android:contentDescription="@string/replay_previous_10_seconds"
-                android:tint="@color/colorTextOne"/>
+                android:tint="@color/colorTextOne"
+                android:id="@+id/back_ten_seconds"/>
 
             <ImageButton
                 android:layout_height="45sp"
@@ -170,7 +182,8 @@
                 android:src="@drawable/ic_skip_previous_black_24dp"
                 android:background="?attr/selectableItemBackground"
                 android:contentDescription="@string/previous_song"
-                android:tint="@color/colorTextOne"/>
+                android:tint="@color/colorTextOne"
+                android:id="@+id/play_previous_song"/>
 
             <ImageButton
                 android:layout_height="55sp"
@@ -180,7 +193,8 @@
                 android:src="@drawable/ic_pause_circle_outline_black_24dp"
                 android:background="?attr/selectableItemBackground"
                 android:contentDescription="@string/pause_song"
-                android:tint="@color/colorTextOne"/>
+                android:tint="@color/colorTextOne"
+                android:id="@+id/play_pause_song"/>
 
             <ImageButton
                 android:layout_height="45sp"
@@ -190,7 +204,8 @@
                 android:src="@drawable/ic_skip_next_black_24dp"
                 android:background="?attr/selectableItemBackground"
                 android:contentDescription="@string/next_song"
-                android:tint="@color/colorTextOne"/>
+                android:tint="@color/colorTextOne"
+                android:id="@+id/play_next_song"/>
 
             <ImageButton
                 android:layout_height="35sp"
@@ -200,7 +215,8 @@
                 android:src="@drawable/ic_forward_10_black_24dp"
                 android:background="?attr/selectableItemBackground"
                 android:contentDescription="@string/forward_next_10_seconds"
-                android:tint="@color/colorTextOne"/>
+                android:tint="@color/colorTextOne"
+                android:id="@+id/forward_ten_seconds"/>
 
         </LinearLayout>
 
