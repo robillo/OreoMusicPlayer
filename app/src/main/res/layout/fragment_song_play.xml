@@ -47,9 +47,9 @@
         </LinearLayout>
 
         <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="250sp"
-            android:layout_height="250sp"
-            android:layout_margin="5sp"
+            android:layout_width="200sp"
+            android:layout_height="200sp"
+            android:layout_margin="10sp"
             app:civ_border_width="5sp"
             android:src="@color/white"
             android:layout_gravity="center_horizontal"
@@ -86,6 +86,7 @@
             android:layout_height="wrap_content"
             android:text="Comfortable (Lyrics / Lyric Video)"
             android:textSize="22sp"
+            android:layout_marginTop="5sp"
             android:textColor="@color/colorTextOne"
             android:gravity="center"
             tools:ignore="HardcodedText" />
@@ -108,9 +109,10 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginTop="5sp"
-            android:layout_marginBottom="5sp">
+            android:layout_marginBottom="5sp"
+            android:orientation="horizontal"
+            android:gravity="center">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -145,6 +147,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="10sp"
+            android:layout_marginBottom="10sp"
             android:orientation="horizontal"
             android:gravity="center">
 
