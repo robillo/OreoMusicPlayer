@@ -13,12 +13,8 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
 import android.widget.MediaController;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.events.SongChangeEvent;
@@ -44,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     private Intent playIntent;
     private boolean musicBound=false;
 
+    @SuppressWarnings("FieldCanBeLocal")
     private Song currentSong = null;
 
     @SuppressWarnings("FieldCanBeLocal")
@@ -154,10 +151,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
         SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
         SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
-            if(preferences.getBoolean("play_event", false))
-                fragment.playPlayer(SongListMvpView.FROM_ACTIVITY);
-            else
-                fragment.pausePlayer(SongListMvpView.FROM_ACTIVITY);
+        if(preferences.getBoolean("play_event", false))
+            fragment.playPlayer(SongListMvpView.FROM_ACTIVITY);
+        else
+            fragment.pausePlayer(SongListMvpView.FROM_ACTIVITY);
     }
 
     @Override
@@ -186,30 +183,35 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         super.onDestroy();
     }
 
-    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    @SuppressWarnings("unused")
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(SongChangeEvent event) {
-        Log.e("event", " " + event.getSong().getTitle());
-        Log.e("event", " " + event.getEvent());
         currentSong = event.getSong();
 
-        SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
         SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
+
         if(fragment != null){
             fragment.setCurrentSong(currentSong);
+
+            SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+
             switch (event.getEvent()) {
-                case SongChangeEvent.PLAY_PLAYER:
+                case SongChangeEvent.PLAY_PLAYER: {
                     fragment.playPlayer(SongListMvpView.FROM_ACTIVITY);
+
+                    editor.putBoolean("play_event", true);
+                    editor.apply();
                     break;
-                case SongChangeEvent.PAUSE_PLAYER:
+                }
+                case SongChangeEvent.PAUSE_PLAYER: {
                     fragment.pausePlayer(SongListMvpView.FROM_ACTIVITY);
+
+                    editor.putBoolean("play_event", false);
+                    editor.apply();
                     break;
+                }
             }
-
-//            if(preferences.getBoolean("play_event", false))
-//                fragment.playPlayer(SongListMvpView.FROM_ACTIVITY);
-//            else
-//                fragment.pausePlayer(SongListMvpView.FROM_ACTIVITY);
-
         }
     }
 
@@ -225,11 +227,21 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void start() {
+        SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("play_event", true);
+        editor.apply();
+
         musicService.playPlayer();
     }
 
     @Override
     public void pause() {
+        SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("play_event", false);
+        editor.apply();
+
         musicService.pausePlayer();
     }
 

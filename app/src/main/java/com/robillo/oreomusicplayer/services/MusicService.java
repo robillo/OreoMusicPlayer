@@ -110,22 +110,12 @@ public class MusicService extends Service implements
             @Override
             public void onPlay() {
                 super.onPlay();
-//                SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
-//                SharedPreferences.Editor editor = preferences.edit();
-//                editor.putBoolean("play_event", true);
-//                editor.apply();
-                EventBus.getDefault().postSticky(new SongChangeEvent(currentSong, SongChangeEvent.PLAY_PLAYER));
                 playPlayer();
             }
 
             @Override
             public void onPause() {
                 super.onPause();
-//                SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
-//                SharedPreferences.Editor editor = preferences.edit();
-//                editor.putBoolean("play_event", false);
-//                editor.apply();
-                EventBus.getDefault().postSticky(new SongChangeEvent(currentSong, SongChangeEvent.PAUSE_PLAYER));
                 pausePlayer();
             }
 
@@ -221,12 +211,6 @@ public class MusicService extends Service implements
     }
 
     @Override
-    public void pausePlayer() {
-        player.pause();
-        buildNotification(false);
-    }
-
-    @Override
     public void seekPlayer(int position) {
         player.seekTo(position);
     }
@@ -235,6 +219,14 @@ public class MusicService extends Service implements
     public void playPlayer() {
         player.start();
         buildNotification(true);
+        if(isPlaying()) EventBus.getDefault().post(new SongChangeEvent(currentSong, SongChangeEvent.PLAY_PLAYER));
+    }
+
+    @Override
+    public void pausePlayer() {
+        player.pause();
+        buildNotification(false);
+        if(!isPlaying()) EventBus.getDefault().post(new SongChangeEvent(currentSong, SongChangeEvent.PAUSE_PLAYER));
     }
 
     @Override
@@ -249,11 +241,6 @@ public class MusicService extends Service implements
 
     @Override
     public void buildNotification(boolean play_or_pause) {
-
-//        Intent notIntent = new Intent(this, MainActivity.class);
-//        notIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        notIntent.setAction(ACTION_TOGGLE_PLAYBACK);
-//        PendingIntent pendInt = PendingIntent.getActivity(this, 4, notIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         int playOrPauseDrawable;
         if(play_or_pause)

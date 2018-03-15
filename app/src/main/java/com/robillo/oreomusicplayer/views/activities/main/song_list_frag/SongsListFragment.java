@@ -249,8 +249,8 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         //start rotating animation
         resetAlbumArtAnimation();
         if(bottomController.getVisibility() == View.GONE) {
-            bottomController.setVisibility(View.VISIBLE);
             hideOrShowUpper.setVisibility(View.VISIBLE);
+            bottomController.setVisibility(View.VISIBLE);
             currentSongAlbumArt.startAnimation(rotatingAlbumAnim);
         }
         else {
