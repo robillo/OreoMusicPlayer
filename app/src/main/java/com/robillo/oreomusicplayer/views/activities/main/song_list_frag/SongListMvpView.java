@@ -11,9 +11,6 @@ import com.robillo.oreomusicplayer.models.Song;
 
 public interface SongListMvpView {
 
-    final int FROM_ACTIVITY = 0;
-    final int FROM_FRAGMENT = 1;
-
     void setUp(View v);
 
     void fetchSongs();
@@ -21,8 +18,6 @@ public interface SongListMvpView {
     String returnCursorElement(Cursor cursor, String string);
 
     void setCurrentSong(Song song);
-
-    Song getCurrentSong();
 
     void playNextSong();
 

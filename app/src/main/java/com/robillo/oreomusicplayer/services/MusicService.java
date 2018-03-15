@@ -187,7 +187,7 @@ public class MusicService extends Service implements
             editor.putBoolean("play_event", true);
             editor.apply();
 
-            EventBus.getDefault().postSticky(new SongChangeEvent(songs.get(songIndex), AppConstants.DO_NOTHING));
+            EventBus.getDefault().postSticky(new SongChangeEvent(songs.get(songIndex)));
             songPosition = songIndex;
             playSong();
         }
@@ -223,7 +223,7 @@ public class MusicService extends Service implements
         editor.putBoolean("play_event", true);
         editor.apply();
 
-        EventBus.getDefault().postSticky(new SongChangeEvent(currentSong, AppConstants.PLAY_PLAYER));
+        EventBus.getDefault().postSticky(new SongChangeEvent(currentSong));
     }
 
     @Override
@@ -236,7 +236,7 @@ public class MusicService extends Service implements
         editor.putBoolean("play_event", false);
         editor.apply();
 
-        EventBus.getDefault().postSticky(new SongChangeEvent(currentSong, AppConstants.PAUSE_PLAYER));
+        EventBus.getDefault().postSticky(new SongChangeEvent(currentSong));
     }
 
     @Override
@@ -289,8 +289,7 @@ public class MusicService extends Service implements
                 // Set Notification content information
                 .setContentText(songs.get(songPosition).getArtist())
                 .setContentInfo(songs.get(songPosition).getAlbum())
-                .setContentTitle(songs.get(songPosition).getTitle())
-                .setAutoCancel(true).build();
+                .setContentTitle(songs.get(songPosition).getTitle()).build();
 
 
         if (getSystemService(NOTIFICATION_SERVICE) != null) {

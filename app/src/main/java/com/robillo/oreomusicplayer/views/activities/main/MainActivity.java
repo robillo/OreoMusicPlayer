@@ -13,7 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.widget.FrameLayout;
 import android.widget.MediaController;
 
@@ -37,6 +36,7 @@ import butterknife.ButterKnife;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.robillo.oreomusicplayer.utils.AppConstants.CONTROLLER_NOTIFICATION_ID;
+import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_ACTIVITY;
 
 public class MainActivity extends AppCompatActivity implements MainActivityMvpView, MediaController.MediaPlayerControl {
 
@@ -166,9 +166,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
         SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
         if(preferences.getBoolean("play_event", false))
-            fragment.playPlayer(SongListMvpView.FROM_ACTIVITY);
+            fragment.playPlayer(FROM_ACTIVITY);
         else
-            fragment.pausePlayer(SongListMvpView.FROM_ACTIVITY);
+            fragment.pausePlayer(FROM_ACTIVITY);
     }
 
     @Override
@@ -205,9 +205,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             Boolean play_or_pause = preferences.getBoolean("play_event", false);
 
             if(play_or_pause)
-                fragment.playPlayer(SongListMvpView.FROM_ACTIVITY);
+                fragment.playPlayer(FROM_ACTIVITY);
             else
-                fragment.pausePlayer(SongListMvpView.FROM_ACTIVITY);
+                fragment.pausePlayer(FROM_ACTIVITY);
         }
     }
 

@@ -35,6 +35,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_ACTIVITY;
+import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_FRAGMENT;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -51,6 +54,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     private static Song currentSong = null;
     private static boolean isAnimatingUpper = false;
     private static boolean isAnimatingController = false;
+    @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private static long songDurationForCountDownTimer = 0;
 
     @BindView(R.id.play_pause_song)
@@ -252,19 +256,14 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         playPlayer(FROM_ACTIVITY);
     }
 
-    @Override
-    public Song getCurrentSong() {
-        return currentSong;
-    }
-
     @OnClick(R.id.play_pause_song)
     public void playOrPausePlayer() {
         if(getActivity()!=null) {
             if(((MainActivity) getActivity()).isPlaying()){     //pause the player
-                pausePlayer(SongListMvpView.FROM_FRAGMENT);
+                pausePlayer(FROM_FRAGMENT);
             }
             else {                                              //play the player
-                playPlayer(SongListMvpView.FROM_FRAGMENT);
+                playPlayer(FROM_FRAGMENT);
             }
         }
     }
@@ -292,7 +291,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void playPlayer(int from) {
         assert getActivity() != null;
-            if(from == SongListMvpView.FROM_FRAGMENT) ((MainActivity) getActivity()).start();
+            if(from == FROM_FRAGMENT) ((MainActivity) getActivity()).start();
 
         playPauseSong.setImageDrawable(getActivity().getDrawable(R.drawable.ic_pause_black_24dp));
         resetAlbumArtAnimation();
@@ -302,7 +301,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void pausePlayer(int from) {
         assert getActivity() != null;
-            if(from == SongListMvpView.FROM_FRAGMENT) ((MainActivity) getActivity()).pause();
+            if(from == FROM_FRAGMENT) ((MainActivity) getActivity()).pause();
 
         playPauseSong.setImageDrawable(getActivity().getDrawable(R.drawable.ic_play_arrow_black_24dp));
         resetAlbumArtAnimation();
