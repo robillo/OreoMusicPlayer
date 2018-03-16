@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -179,7 +180,18 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play));
+
+        if(fragment != null) {                                                                      //remove song play fragment from back stack
+            super.onBackPressed();
+        }
+        else {                                                                                      //don't remove song list fragment from activity
+            Intent homeIntent = new Intent(Intent.ACTION_MAIN);
+            homeIntent.addCategory(Intent.CATEGORY_HOME);
+            homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(homeIntent);
+        }
     }
 
     @Override
