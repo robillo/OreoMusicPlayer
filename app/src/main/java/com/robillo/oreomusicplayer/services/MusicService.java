@@ -16,7 +16,6 @@ import android.media.MediaMetadata;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
-import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.provider.MediaStore;
@@ -44,7 +43,6 @@ import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_PLAY;
 import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_PREV;
 import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_STOP;
 import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_TOGGLE_PLAYBACK;
-import static com.robillo.oreomusicplayer.utils.AppConstants.CHANNEL_ID;
 import static com.robillo.oreomusicplayer.utils.AppConstants.CONTROLLER_NOTIFICATION_ID;
 
 public class MusicService extends Service implements

@@ -3,12 +3,7 @@ package com.robillo.oreomusicplayer.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.io.Serializable;
-
-/**
- * Created by robinkamboj on 09/09/17.
- */
-
+@SuppressWarnings("unused")
 public class Song implements Parcelable {
 
     private String data;

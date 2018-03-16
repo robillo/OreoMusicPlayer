@@ -143,7 +143,6 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     public void onResume() {
         super.onResume();
         if(audioList.size() == 0) {
-            Log.e("fetch", "songs");
             fetchSongs();
         }
     }
@@ -183,7 +182,6 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
                 ));
             }
             for(int i=0; i<EMPTY_CELLS_COUNT; i++){
-                Log.e("add", "new song");
                 audioList.add(new Song());
             }
         }
