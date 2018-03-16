@@ -36,6 +36,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_NEXT;
 import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_PAUSE;
@@ -80,12 +81,18 @@ public class MusicService extends Service implements
         songPosition = 0;
         //create player
         player = new MediaPlayer();
+
         initMusicPlayer();
     }
 
     //____________________________________INITIAL SETUP CALL______________________________________//
     @Override
     public void initMusicPlayer() {
+
+        SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
+        IS_REPEAT_MODE_ON = preferences.getBoolean("is_repeat_mode_on", false);
+        IS_SHUFFLE_MODE_ON = preferences.getBoolean("is_shuffle_mode_on", false);
+
         player.setWakeMode(getApplicationContext(),
                 PowerManager.PARTIAL_WAKE_LOCK);
         player.setAudioStreamType(AudioManager.STREAM_MUSIC);
@@ -244,12 +251,36 @@ public class MusicService extends Service implements
 
     @Override
     public void playPrevious() {
-        setSong(songPosition-1);
+
+        if(isShuffleModeOn()) {
+            // nextInt is normally exclusive of the top value
+            // so add 1 to make it inclusive
+            int min = 1;
+            int max = songs.size() - AppConstants.EMPTY_CELLS_COUNT + 1;
+            songPosition = ThreadLocalRandom.current().nextInt(min, max);
+        }
+        else {
+            songPosition--;
+        }
+
+        setSong(songPosition);
     }
 
     @Override
     public void playNext() {
-        setSong(songPosition+1);
+
+        if(isShuffleModeOn()) {
+            // nextInt is normally exclusive of the top value
+            // so add 1 to make it inclusive
+            int min = 1;
+            int max = songs.size() - AppConstants.EMPTY_CELLS_COUNT + 1;
+            songPosition = ThreadLocalRandom.current().nextInt(min, max);
+        }
+        else {
+            songPosition++;
+        }
+
+        setSong(songPosition);
     }
 
     @Override
@@ -347,6 +378,15 @@ public class MusicService extends Service implements
             setIsRepeatModeOn(false);
     }
 
+    @Override
+    public void toggleShuffleMode() {
+        SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
+        if(preferences.getBoolean("is_shuffle_mode_on", false))
+            setIsShuffleModeOn(true);
+        else
+            setIsShuffleModeOn(false);
+    }
+
     public static boolean isRepeatModeOn() {
         return IS_REPEAT_MODE_ON;
     }
@@ -369,8 +409,20 @@ public class MusicService extends Service implements
     public void onCompletion(MediaPlayer mp) {
         if(songPosition < songs.size() - AppConstants.EMPTY_CELLS_COUNT){
 
-            if(!isRepeatModeOn())   //if repeat mode is off, update songPosition for next song to be played
-                songPosition++;
+            if(!isRepeatModeOn()) {
+                //if repeat mode is off, update songPosition for next song to be played
+
+                if(isShuffleModeOn()) {
+                    // nextInt is normally exclusive of the top value
+                    // so add 1 to make it inclusive
+                    int min = 1;
+                    int max = songs.size() - AppConstants.EMPTY_CELLS_COUNT + 1;
+                    songPosition = ThreadLocalRandom.current().nextInt(min, max);
+                }
+                else {
+                    songPosition++;
+                }
+            }
 
             setSong(songPosition);
         }

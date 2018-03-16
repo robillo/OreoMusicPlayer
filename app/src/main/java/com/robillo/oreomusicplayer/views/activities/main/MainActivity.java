@@ -246,6 +246,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Override
     public void toggleRepeatModeInService() {
         if(musicService != null)
+            musicService.toggleShuffleMode();
+    }
+
+    @Override
+    public void toggleShuffleModeInService() {
+        if(musicService != null)
             musicService.toggleRepeatMode();
     }
 

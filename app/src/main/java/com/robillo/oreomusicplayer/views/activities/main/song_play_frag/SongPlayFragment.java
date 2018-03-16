@@ -204,6 +204,19 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
                         .setColorFilter(
                                 ContextCompat.getColor(getActivity(), R.color.colorTextOne)
                         );
+
+            if(preferences.getBoolean("is_shuffle_mode_on", false))
+                //change tint to repeat => "repeat"
+                shuffleSongs
+                        .setColorFilter(
+                                ContextCompat.getColor(getActivity(), R.color.rushRed)
+                        );
+            else
+                //change tint to repeat => "non repeat"
+                shuffleSongs
+                        .setColorFilter(
+                                ContextCompat.getColor(getActivity(), R.color.colorTextOne)
+                        );
         }
     }
 
@@ -226,8 +239,33 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
     }
 
     @OnClick(R.id.shuffle_songs)
-    void setShuffleSongs() {
+    void toggleShuffleSongs() {
+        if(getActivity() != null) {
+            SharedPreferences preferences = getActivity().getSharedPreferences("my_pref", MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
 
+            if (preferences.getBoolean("is_shuffle_mode_on", false)) {
+                editor.putBoolean("is_shuffle_mode_on", false);
+                editor.apply();
+
+                //change tint to normal => "non repeat"
+                shuffleSongs
+                        .setColorFilter(
+                                ContextCompat.getColor(getActivity(), R.color.colorTextOne)
+                        );
+            } else {
+                editor.putBoolean("is_shuffle_mode_on", true);
+                editor.apply();
+
+                //change tint to repeat => "repeat"
+                shuffleSongs
+                        .setColorFilter(
+                                ContextCompat.getColor(getActivity(), R.color.rushRed)
+                        );
+            }
+
+            ((MainActivity) getActivity()).toggleRepeatModeInService();
+        }
     }
 
     @OnClick(R.id.repeat_song)

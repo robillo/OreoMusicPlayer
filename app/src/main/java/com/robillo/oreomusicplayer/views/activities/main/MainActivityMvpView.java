@@ -29,4 +29,6 @@ public interface MainActivityMvpView {
     Song getCurrentSong();
 
     void toggleRepeatModeInService();
+
+    void toggleShuffleModeInService();
 }

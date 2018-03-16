@@ -44,4 +44,6 @@ public interface MusicServiceInterface {
     Bitmap getBitmapAlbumArt();
 
     void toggleRepeatMode();
+
+    void toggleShuffleMode();
 }
