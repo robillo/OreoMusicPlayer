@@ -207,8 +207,6 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void setCurrentSong(Song song) {
 
-        Log.e("setsong", "called for fragment");
-
         currentSong = song;
 
         if(bottomController.getVisibility()==View.GONE)

@@ -25,4 +25,6 @@ public interface MainActivityMvpView {
     void playNextSong();
 
     void playPreviousSong();
+
+    Song getCurrentSong();
 }

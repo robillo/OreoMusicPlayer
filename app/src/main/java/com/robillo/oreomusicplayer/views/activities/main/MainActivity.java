@@ -196,18 +196,35 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     public void onMessageEvent(SongChangeEvent event) {
 
         currentSong = event.getSong();
-        SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
 
-        if(fragment != null){
-            fragment.setCurrentSong(currentSong);
+        SongsListFragment songListFragment =
+                (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
+
+        if(songListFragment != null) {
+            songListFragment.setCurrentSong(currentSong);
 
             SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
             Boolean play_or_pause = preferences.getBoolean("play_event", false);
 
             if(play_or_pause)
-                fragment.playPlayer(FROM_ACTIVITY);
+                songListFragment.playPlayer(FROM_ACTIVITY);
             else
-                fragment.pausePlayer(FROM_ACTIVITY);
+                songListFragment.pausePlayer(FROM_ACTIVITY);
+        }
+
+        SongPlayFragment songPlayFragment =
+                (SongPlayFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play));
+
+        if(songPlayFragment != null) {
+            songPlayFragment.setCurrentSong(currentSong);
+
+            SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
+            Boolean play_or_pause = preferences.getBoolean("play_event", false);
+
+            if(play_or_pause)
+                songPlayFragment.playPlayer(FROM_ACTIVITY);
+            else
+                songPlayFragment.pausePlayer(FROM_ACTIVITY);
         }
     }
 
@@ -219,6 +236,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Override
     public void playPreviousSong() {
         musicService.playPrevious();
+    }
+
+    @Override
+    public Song getCurrentSong() {
+        return currentSong;
     }
 
     @Override
