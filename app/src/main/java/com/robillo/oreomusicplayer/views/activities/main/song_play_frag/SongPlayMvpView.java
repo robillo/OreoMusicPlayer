@@ -22,4 +22,8 @@ public interface SongPlayMvpView {
     void pausePlayer(int from);
 
     void setPreferencesToViews();
+
+    void seekTenSecondsForward();
+
+    void seekTenSecondsBackwards();
 }

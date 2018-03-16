@@ -229,6 +229,16 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
         }
     }
 
+    @Override
+    public void seekTenSecondsForward() {
+        if(getActivity()!=null) ((MainActivity) getActivity()).seekTenSecondsForward();
+    }
+
+    @Override
+    public void seekTenSecondsBackwards() {
+        if(getActivity()!=null) ((MainActivity) getActivity()).seekTenSecondsBackwards();
+    }
+
     @OnClick(R.id.play_pause_song)
     public void playOrPausePlayer() {
         if(getActivity()!=null) {
@@ -273,7 +283,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
                         );
             }
 
-            ((MainActivity) getActivity()).toggleRepeatModeInService();
+            ((MainActivity) getActivity()).toggleShuffleModeInService();
         }
     }
 
@@ -310,12 +320,12 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
 
     @OnClick(R.id.forward_ten_seconds)
     void setTenSecondsForward() {
-
+        seekTenSecondsForward();
     }
 
     @OnClick(R.id.back_ten_seconds)
     void setTenSecondsBack() {
-
+        seekTenSecondsBackwards();
     }
 
     @OnClick(R.id.current_song_progress_seekbar)

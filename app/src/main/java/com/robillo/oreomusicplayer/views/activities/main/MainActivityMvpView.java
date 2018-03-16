@@ -31,4 +31,8 @@ public interface MainActivityMvpView {
     void toggleRepeatModeInService();
 
     void toggleShuffleModeInService();
+
+    void seekTenSecondsForward();
+
+    void seekTenSecondsBackwards();
 }

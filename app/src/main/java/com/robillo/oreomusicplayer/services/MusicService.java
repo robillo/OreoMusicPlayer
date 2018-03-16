@@ -387,6 +387,36 @@ public class MusicService extends Service implements
             setIsShuffleModeOn(false);
     }
 
+    @Override
+    public void seekTenSecondsForward() {
+        if(player.getCurrentPosition() < (player.getDuration() - 11000)) {                          //1 second for performance lag
+            player.seekTo(player.getCurrentPosition() + 10000);
+        }
+        else {
+            if(isRepeatModeOn()) {
+                setSong(songPosition);
+            }
+            else {
+                playNext();
+            }
+        }
+    }
+
+    @Override
+    public void seekTenSecondsBackwards() {
+        if(player.getCurrentPosition() > 11000) {                                                   //current position is more than 10 seconds
+            player.seekTo(player.getCurrentPosition() - 10000);
+        }
+        else {
+            if(isRepeatModeOn()) {
+                setSong(songPosition);
+            }
+            else {
+                playPrevious();
+            }
+        }
+    }
+
     public static boolean isRepeatModeOn() {
         return IS_REPEAT_MODE_ON;
     }
@@ -409,8 +439,7 @@ public class MusicService extends Service implements
     public void onCompletion(MediaPlayer mp) {
         if(songPosition < songs.size() - AppConstants.EMPTY_CELLS_COUNT){
 
-            if(!isRepeatModeOn()) {
-                //if repeat mode is off, update songPosition for next song to be played
+            if(!isRepeatModeOn()) {                             //if repeat mode is off, update songPosition for next song to be played
 
                 if(isShuffleModeOn()) {
                     // nextInt is normally exclusive of the top value
@@ -422,7 +451,7 @@ public class MusicService extends Service implements
                 else {
                     songPosition++;
                 }
-            }
+            }                                                   //else don't update song position so that same song plays again
 
             setSong(songPosition);
         }

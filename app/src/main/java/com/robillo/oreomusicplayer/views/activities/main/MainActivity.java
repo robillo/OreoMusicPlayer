@@ -161,14 +161,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
         SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
 
-        if(currentSong != null)
-            fragment.setCurrentSong(currentSong);
+        if(fragment != null) {
+            if(currentSong != null)
+                fragment.setCurrentSong(currentSong);
 
-        SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
-        if(preferences.getBoolean("play_event", false))
-            fragment.playPlayer(FROM_ACTIVITY);
-        else
-            fragment.pausePlayer(FROM_ACTIVITY);
+            SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
+            if(preferences.getBoolean("play_event", false))
+                fragment.playPlayer(FROM_ACTIVITY);
+            else
+                fragment.pausePlayer(FROM_ACTIVITY);
+        }
     }
 
     @Override
@@ -246,13 +248,25 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Override
     public void toggleRepeatModeInService() {
         if(musicService != null)
-            musicService.toggleShuffleMode();
+            musicService.toggleRepeatMode();
     }
 
     @Override
     public void toggleShuffleModeInService() {
         if(musicService != null)
-            musicService.toggleRepeatMode();
+            musicService.toggleShuffleMode();
+    }
+
+    @Override
+    public void seekTenSecondsForward() {
+        if(musicService != null)
+            musicService.seekTenSecondsForward();
+    }
+
+    @Override
+    public void seekTenSecondsBackwards() {
+        if(musicService != null)
+            musicService.seekTenSecondsBackwards();
     }
 
     @Override

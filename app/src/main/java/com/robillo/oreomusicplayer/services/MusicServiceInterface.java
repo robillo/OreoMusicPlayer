@@ -46,4 +46,8 @@ public interface MusicServiceInterface {
     void toggleRepeatMode();
 
     void toggleShuffleMode();
+
+    void seekTenSecondsForward();
+
+    void seekTenSecondsBackwards();
 }
