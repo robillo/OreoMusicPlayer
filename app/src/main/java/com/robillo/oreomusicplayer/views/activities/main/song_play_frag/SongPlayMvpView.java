@@ -20,4 +20,6 @@ public interface SongPlayMvpView {
     void playPlayer(int from);
 
     void pausePlayer(int from);
+
+    void setPreferencesToViews();
 }

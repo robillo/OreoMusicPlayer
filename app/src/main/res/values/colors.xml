@@ -35,8 +35,8 @@
     <color name="on_board_three">#FFFFFF</color>
     <color name="on_board_four">#FFFFFF</color>
 
-    <color name="dardDarkRed">#7e000a</color>
-    <color name="dardRed">#a6000d</color>
+    <color name="darkDarkRed">#7e000a</color>
+    <color name="darkRed">#a6000d</color>
     <color name="rushRed">#cc0000</color>
     <color name="red2">#ff6666</color>
     <color name="red3">#ffb2b2</color>

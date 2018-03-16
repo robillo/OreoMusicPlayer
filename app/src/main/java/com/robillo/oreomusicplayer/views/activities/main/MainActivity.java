@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     private MusicService musicService;
     private Intent playIntent;
-    private boolean musicBound=false;
+    private boolean musicBound = false;
 
     @SuppressWarnings("FieldCanBeLocal")
     private Song currentSong = null;
@@ -241,6 +241,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Override
     public Song getCurrentSong() {
         return currentSong;
+    }
+
+    @Override
+    public void toggleRepeatModeInService() {
+        if(musicService != null)
+            musicService.toggleRepeatMode();
     }
 
     @Override

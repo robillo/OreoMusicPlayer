@@ -1,6 +1,8 @@
 package com.robillo.oreomusicplayer.views.activities.main.song_play_frag;
 
 
+import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
 import android.media.Image;
 import android.os.Bundle;
@@ -8,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +32,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_ACTIVITY;
 import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_FRAGMENT;
 
@@ -105,6 +109,8 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
         ButterKnife.bind(this, v);
         rotatingAlbumAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
 
+        setPreferencesToViews();
+
         if(getActivity() != null){
             currentSong = ((MainActivity) getActivity()).getCurrentSong();
             setCurrentSong(currentSong);
@@ -124,7 +130,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
         long seconds = duration%60;
         String temp = song.getArtist();
         currentSongArtist.setText(temp);
-        temp = " ( " + String.valueOf(mins) + ":" + String.valueOf(seconds) + " )";
+        temp = String.valueOf(mins) + ":" + String.valueOf(seconds);
         currentSongMaxProgress.setText(temp);
 
         String path = null;
@@ -181,6 +187,26 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
         resetAlbumArtAnimation();
     }
 
+    @Override
+    public void setPreferencesToViews() {
+        if(getActivity() != null) {
+            SharedPreferences preferences = getActivity().getSharedPreferences("my_pref", MODE_PRIVATE);
+
+            if(preferences.getBoolean("is_repeat_mode_on", false))
+                //change tint to repeat => "repeat"
+                repeatSong
+                        .setColorFilter(
+                                ContextCompat.getColor(getActivity(), R.color.rushRed)
+                        );
+            else
+                //change tint to repeat => "non repeat"
+                repeatSong
+                        .setColorFilter(
+                                ContextCompat.getColor(getActivity(), R.color.colorTextOne)
+                        );
+        }
+    }
+
     @OnClick(R.id.play_pause_song)
     public void playOrPausePlayer() {
         if(getActivity()!=null) {
@@ -205,8 +231,34 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
     }
 
     @OnClick(R.id.repeat_song)
-    void setRepeatSong() {
+    void toggleRepeatSong() {
+        if(getActivity() != null) {
+            SharedPreferences preferences = getActivity().getSharedPreferences("my_pref", MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
 
+            if(preferences.getBoolean("is_repeat_mode_on", false)) {
+                editor.putBoolean("is_repeat_mode_on", false);
+                editor.apply();
+
+                //change tint to normal => "non repeat"
+                repeatSong
+                        .setColorFilter(
+                                ContextCompat.getColor(getActivity(), R.color.colorTextOne)
+                        );
+            }
+            else {
+                editor.putBoolean("is_repeat_mode_on", true);
+                editor.apply();
+
+                //change tint to repeat => "repeat"
+                repeatSong
+                        .setColorFilter(
+                                ContextCompat.getColor(getActivity(), R.color.rushRed)
+                        );
+            }
+
+            ((MainActivity) getActivity()).toggleRepeatModeInService();
+        }
     }
 
     @OnClick(R.id.forward_ten_seconds)

@@ -27,4 +27,6 @@ public interface MainActivityMvpView {
     void playPreviousSong();
 
     Song getCurrentSong();
+
+    void toggleRepeatModeInService();
 }

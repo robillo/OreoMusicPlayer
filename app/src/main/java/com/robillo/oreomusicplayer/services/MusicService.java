@@ -50,6 +50,9 @@ public class MusicService extends Service implements
         MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
         MediaPlayer.OnCompletionListener, MusicServiceInterface {
 
+    private static boolean IS_REPEAT_MODE_ON = false;
+    private static boolean IS_SHUFFLE_MODE_ON = false;
+
     private MediaPlayer player;
     private ArrayList<Song> songs;
     private Song currentSong;
@@ -335,13 +338,40 @@ public class MusicService extends Service implements
         return bitmap;
     }
 
+    @Override
+    public void toggleRepeatMode() {
+        SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
+        if(preferences.getBoolean("is_repeat_mode_on", false))
+            setIsRepeatModeOn(true);
+        else
+            setIsRepeatModeOn(false);
+    }
+
+    public static boolean isRepeatModeOn() {
+        return IS_REPEAT_MODE_ON;
+    }
+
+    public static void setIsRepeatModeOn(boolean isRepeatModeOn) {
+        IS_REPEAT_MODE_ON = isRepeatModeOn;
+    }
+
+    public static boolean isShuffleModeOn() {
+        return IS_SHUFFLE_MODE_ON;
+    }
+
+    public static void setIsShuffleModeOn(boolean isShuffleModeOn) {
+        IS_SHUFFLE_MODE_ON = isShuffleModeOn;
+    }
 
     //____________________________MEDIA PLAYER INTERFACE CONTROLS__________________________//
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        if(songPosition < songs.size() -AppConstants.EMPTY_CELLS_COUNT){
-            songPosition++;
+        if(songPosition < songs.size() - AppConstants.EMPTY_CELLS_COUNT){
+
+            if(!isRepeatModeOn())   //if repeat mode is off, update songPosition for next song to be played
+                songPosition++;
+
             setSong(songPosition);
         }
     }

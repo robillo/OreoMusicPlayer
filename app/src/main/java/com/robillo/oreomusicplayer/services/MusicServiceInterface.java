@@ -42,4 +42,6 @@ public interface MusicServiceInterface {
     void cancelNotification(Context context, int notificationId);
 
     Bitmap getBitmapAlbumArt();
+
+    void toggleRepeatMode();
 }
