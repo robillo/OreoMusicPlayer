@@ -21,4 +21,5 @@
     <string name="previous_song">Previous Song</string>
     <string name="forward_next_10_seconds">Forward Next 10 Seconds</string>
     <string name="next_song">Next Song</string>
+    <string name="app_menu_options">App Menu Options</string>
 </resources>

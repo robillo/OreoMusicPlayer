@@ -82,7 +82,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     FrameLayout bottomController;
 
     @BindView(R.id.hide_or_show_upper)
-    TextView hideOrShowUpper;
+    FrameLayout hideOrShowUpper;
 
     public SongsListFragment() {
         // Required empty public constructor
