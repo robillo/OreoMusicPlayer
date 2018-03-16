@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="com.robillo.oreomusicplayer.views.activities.main.song_play_frag.SongPlayFragment">
+    tools:context="com.robillo.oreomusicplayer.views.activities.main.song_play_frag.SongPlayFragment"
+    android:id="@+id/coordinator_layout">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,6 +36,7 @@
                 android:textSize="25sp"
                 android:textColor="@color/colorTextOne"
                 android:gravity="center"
+                android:maxLines="1"
                 tools:ignore="HardcodedText"
                 android:id="@+id/album_name"/>
 
@@ -94,6 +96,7 @@
             android:textSize="22sp"
             android:layout_marginTop="5sp"
             android:textColor="@color/colorTextOne"
+            android:maxLines="1"
             android:gravity="center"
             tools:ignore="HardcodedText"
             android:id="@+id/current_song_title"/>
@@ -106,6 +109,7 @@
             android:text="Steve Void"
             android:textSize="18sp"
             android:textColor="@color/colorTextTwo"
+            android:maxLines="1"
             android:gravity="center"
             tools:ignore="HardcodedText"
             android:id="@+id/current_song_artist"/>
@@ -130,6 +134,7 @@
                 android:text="01:24"
                 android:textSize="12sp"
                 android:textColor="@color/colorTextOne"
+                android:maxLines="1"
                 android:gravity="center"
                 tools:ignore="HardcodedText,RtlHardcoded"
                 android:id="@+id/current_song_current_progress"/>
@@ -149,6 +154,7 @@
                 android:text="03:51"
                 android:textSize="12sp"
                 android:textColor="@color/colorTextOne"
+                android:maxLines="1"
                 android:gravity="center"
                 tools:ignore="HardcodedText,RtlHardcoded"
                 android:id="@+id/current_song_max_progress"/>

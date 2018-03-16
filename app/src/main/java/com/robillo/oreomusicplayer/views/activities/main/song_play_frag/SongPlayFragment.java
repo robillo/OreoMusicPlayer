@@ -6,6 +6,7 @@ import android.media.Image;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -82,6 +83,9 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
     @BindView(R.id.current_song_artist)
     TextView currentSongArtist;
 
+    @BindView(R.id.coordinator_layout)
+    CoordinatorLayout coordinatorLayout;
+
     public SongPlayFragment() {
         // Required empty public constructor
     }
@@ -144,7 +148,10 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
 
         }
 
-        playPlayer(FROM_ACTIVITY);
+        if(getActivity()!=null) {
+            if(((MainActivity) getActivity()).isPlaying()) playPlayer(FROM_ACTIVITY);
+            else pausePlayer(FROM_ACTIVITY);
+        }
     }
 
     @Override
@@ -229,6 +236,11 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
 
     @OnClick(R.id.current_song_current_progress)
     void setCurrentSongCurrentProgress() {
+
+    }
+
+    @OnClick(R.id.coordinator_layout)
+    void  setCoordinatorLayout() {
 
     }
 }
