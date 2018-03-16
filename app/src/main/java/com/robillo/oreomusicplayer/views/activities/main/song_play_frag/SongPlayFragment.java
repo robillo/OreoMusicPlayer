@@ -125,12 +125,21 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
         currentSongTitle.setText(song.getTitle());
         albumName.setText(song.getAlbum());
 
+        currentSongArtist.setText(song.getArtist());
+
         long duration = Long.valueOf(song.getDuration())/1000;
         long mins = duration/60;
         long seconds = duration%60;
-        String temp = song.getArtist();
-        currentSongArtist.setText(temp);
-        temp = String.valueOf(mins) + ":" + String.valueOf(seconds);
+
+        String lhs, rhs;
+
+        if(mins < 10) lhs = "0" + String.valueOf(mins);
+        else lhs = String.valueOf(mins);
+
+        if(seconds < 10) rhs = "0" + String.valueOf(seconds);
+        else rhs = String.valueOf(seconds);
+
+        String temp = lhs + ":" + rhs;
         currentSongMaxProgress.setText(temp);
 
         String path = null;
