@@ -19,6 +19,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -82,7 +83,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     FrameLayout bottomController;
 
     @BindView(R.id.hide_or_show_upper)
-    FrameLayout hideOrShowUpper;
+    LinearLayout hideOrShowUpper;
 
     public SongsListFragment() {
         // Required empty public constructor

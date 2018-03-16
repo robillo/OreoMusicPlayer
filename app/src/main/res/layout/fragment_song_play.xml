@@ -22,7 +22,7 @@
             <ImageButton
                 android:layout_width="?attr/actionBarSize"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_keyboard_arrow_left_black_24dp"
+                android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
                 android:background="?attr/selectableItemBackground"
                 android:contentDescription="@string/back_to_list"
                 android:tint="@color/colorTextOne"

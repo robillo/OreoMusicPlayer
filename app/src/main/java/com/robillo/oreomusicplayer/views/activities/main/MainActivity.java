@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     public void setSongPlayFragment() {
         if(getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play)) == null){
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.setCustomAnimations(R.anim.slide_in_right, 0, 0, R.anim.slide_out_right);
+            transaction.setCustomAnimations(R.anim.bottom_up_song_play, 0, 0, R.anim.top_down_song_play);
             transaction.add(mFragmentContainer.getId(), new SongPlayFragment(), getString(R.string.song_play));
             transaction.addToBackStack(getString(R.string.song_play));
             transaction.commit();
