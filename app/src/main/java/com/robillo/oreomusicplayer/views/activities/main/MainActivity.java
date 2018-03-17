@@ -5,7 +5,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.IBinder;
@@ -20,6 +19,7 @@ import android.widget.MediaController;
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.events.SongChangeEvent;
 import com.robillo.oreomusicplayer.models.Song;
+import com.robillo.oreomusicplayer.preferences.AppPreferencesHelper;
 import com.robillo.oreomusicplayer.services.MusicService;
 import com.robillo.oreomusicplayer.views.activities.main.song_list_frag.SongsListFragment;
 import com.robillo.oreomusicplayer.views.activities.main.song_play_frag.SongPlayFragment;
@@ -183,8 +183,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             if(currentSong != null)
                 fragment.setCurrentSong(currentSong);
 
-            SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
-            if(preferences.getBoolean("play_event", false))
+            AppPreferencesHelper helper = new AppPreferencesHelper(this);
+
+            if(helper.isPlayEvent())
                 fragment.playPlayer(FROM_ACTIVITY);
             else
                 fragment.pausePlayer(FROM_ACTIVITY);
@@ -238,10 +239,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         if(songListFragment != null) {
             songListFragment.setCurrentSong(currentSong);
 
-            SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
-            Boolean play_or_pause = preferences.getBoolean("play_event", false);
+            AppPreferencesHelper helper = new AppPreferencesHelper(this);
 
-            if(play_or_pause)
+            if(helper.isPlayEvent())
                 songListFragment.playPlayer(FROM_ACTIVITY);
             else
                 songListFragment.pausePlayer(FROM_ACTIVITY);
@@ -253,10 +253,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         if(songPlayFragment != null) {
             songPlayFragment.setCurrentSong(currentSong);
 
-            SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
-            Boolean play_or_pause = preferences.getBoolean("play_event", false);
+            AppPreferencesHelper helper = new AppPreferencesHelper(this);
 
-            if(play_or_pause)
+            if(helper.isPlayEvent())
                 songPlayFragment.playPlayer(FROM_ACTIVITY);
             else
                 songPlayFragment.pausePlayer(FROM_ACTIVITY);
@@ -304,20 +303,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void start() {
-        SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("play_event", true);
-        editor.apply();
+        AppPreferencesHelper helper = new AppPreferencesHelper(this);
+        helper.setIsPlayEvent(true);
 
         musicService.playPlayer();
     }
 
     @Override
     public void pause() {
-        SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("play_event", false);
-        editor.apply();
+        AppPreferencesHelper helper = new AppPreferencesHelper(this);
+        helper.setIsPlayEvent(false);
 
         musicService.pausePlayer();
     }

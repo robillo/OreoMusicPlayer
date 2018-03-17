@@ -1,7 +1,5 @@
 package com.robillo.oreomusicplayer.views.activities.main.song_play_frag;
 
-
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -21,6 +19,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.models.Song;
+import com.robillo.oreomusicplayer.preferences.AppPreferencesHelper;
 import com.robillo.oreomusicplayer.views.activities.main.MainActivity;
 
 import butterknife.BindView;
@@ -28,7 +27,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static android.content.Context.MODE_PRIVATE;
 import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_ACTIVITY;
 import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_FRAGMENT;
 
@@ -195,9 +193,9 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
     @Override
     public void setPreferencesToViews() {
         if(getActivity() != null) {
-            SharedPreferences preferences = getActivity().getSharedPreferences("my_pref", MODE_PRIVATE);
+            AppPreferencesHelper helper = new AppPreferencesHelper(getActivity());
 
-            if(preferences.getBoolean("is_repeat_mode_on", false))
+            if(helper.isRepeatModeOn())
                 //change tint to repeat => "repeat"
                 repeatSong
                         .setColorFilter(
@@ -210,7 +208,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
                                 ContextCompat.getColor(getActivity(), R.color.colorTextOne)
                         );
 
-            if(preferences.getBoolean("is_shuffle_mode_on", false))
+            if(helper.isShuffleModeOn())
                 //change tint to repeat => "repeat"
                 shuffleSongs
                         .setColorFilter(
@@ -256,12 +254,11 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
     @OnClick(R.id.shuffle_songs)
     void toggleShuffleSongs() {
         if(getActivity() != null) {
-            SharedPreferences preferences = getActivity().getSharedPreferences("my_pref", MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
 
-            if (preferences.getBoolean("is_shuffle_mode_on", false)) {
-                editor.putBoolean("is_shuffle_mode_on", false);
-                editor.apply();
+            AppPreferencesHelper helper = new AppPreferencesHelper(getActivity());
+
+            if (helper.isShuffleModeOn()) {
+                helper.setIsShuffleModeOn(false);
 
                 //change tint to normal => "non repeat"
                 shuffleSongs
@@ -269,8 +266,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
                                 ContextCompat.getColor(getActivity(), R.color.colorTextOne)
                         );
             } else {
-                editor.putBoolean("is_shuffle_mode_on", true);
-                editor.apply();
+                helper.setIsShuffleModeOn(true);
 
                 //change tint to repeat => "repeat"
                 shuffleSongs
@@ -286,12 +282,11 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
     @OnClick(R.id.repeat_song)
     void toggleRepeatSong() {
         if(getActivity() != null) {
-            SharedPreferences preferences = getActivity().getSharedPreferences("my_pref", MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
 
-            if(preferences.getBoolean("is_repeat_mode_on", false)) {
-                editor.putBoolean("is_repeat_mode_on", false);
-                editor.apply();
+            AppPreferencesHelper helper = new AppPreferencesHelper(getActivity());
+
+            if(helper.isRepeatModeOn()) {
+                helper.setIsRepeatModeOn(false);
 
                 //change tint to normal => "non repeat"
                 repeatSong
@@ -300,8 +295,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
                         );
             }
             else {
-                editor.putBoolean("is_repeat_mode_on", true);
-                editor.apply();
+                helper.setIsRepeatModeOn(true);
 
                 //change tint to repeat => "repeat"
                 repeatSong

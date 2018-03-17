@@ -4,6 +4,12 @@ import android.provider.MediaStore;
 
 public class AppConstants {
 
+    //SharedPreferencesHelper
+    public static final String PREF_FILE_NAME = "MY_PREFERENCES";
+    public static final String KEY_IS_REPEAT_MODE_ON = "is_repeat_mode_on";
+    public static final String KEY_IS_SHUFFLE_MODE_ON = "is_shuffle_mode_on";
+    public static final String KEY_IS_PLAY_EVENT = "is_play_event";
+
     //MusicService
     public static final int EMPTY_CELLS_COUNT = 2;
     public static final String CHANNEL_ID = "channelId";

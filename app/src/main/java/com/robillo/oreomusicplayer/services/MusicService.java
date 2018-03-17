@@ -7,7 +7,6 @@ import android.app.Service;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -29,6 +28,7 @@ import android.util.Log;
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.events.SongChangeEvent;
 import com.robillo.oreomusicplayer.models.Song;
+import com.robillo.oreomusicplayer.preferences.AppPreferencesHelper;
 import com.robillo.oreomusicplayer.utils.AppConstants;
 
 import org.greenrobot.eventbus.EventBus;
@@ -87,9 +87,9 @@ public class MusicService extends Service implements
     @Override
     public void initMusicPlayer() {
 
-        SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
-        IS_REPEAT_MODE_ON = preferences.getBoolean("is_repeat_mode_on", false);
-        IS_SHUFFLE_MODE_ON = preferences.getBoolean("is_shuffle_mode_on", false);
+        AppPreferencesHelper helper = new AppPreferencesHelper(this);
+        IS_REPEAT_MODE_ON = helper.isRepeatModeOn();
+        IS_SHUFFLE_MODE_ON = helper.isShuffleModeOn();
 
         player.setWakeMode(getApplicationContext(),
                 PowerManager.PARTIAL_WAKE_LOCK);
@@ -190,10 +190,8 @@ public class MusicService extends Service implements
         if(songIndex < songs.size() - AppConstants.EMPTY_CELLS_COUNT && songIndex >= 1) {
             currentSong = songs.get(songIndex);
 
-            SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean("play_event", true);
-            editor.apply();
+            AppPreferencesHelper helper = new AppPreferencesHelper(this);
+            helper.setIsPlayEvent(true);
 
             EventBus.getDefault().postSticky(new SongChangeEvent(songs.get(songIndex)));
             songPosition = songIndex;
@@ -226,10 +224,8 @@ public class MusicService extends Service implements
         player.start();
         buildNotification(true);
 
-        SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("play_event", true);
-        editor.apply();
+        AppPreferencesHelper helper = new AppPreferencesHelper(this);
+        helper.setIsPlayEvent(true);
 
         EventBus.getDefault().postSticky(new SongChangeEvent(currentSong));
     }
@@ -239,10 +235,8 @@ public class MusicService extends Service implements
         player.pause();
         buildNotification(false);
 
-        SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("play_event", false);
-        editor.apply();
+        AppPreferencesHelper helper = new AppPreferencesHelper(this);
+        helper.setIsPlayEvent(false);
 
         EventBus.getDefault().postSticky(new SongChangeEvent(currentSong));
     }
@@ -369,8 +363,8 @@ public class MusicService extends Service implements
 
     @Override
     public void toggleRepeatMode() {
-        SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
-        if(preferences.getBoolean("is_repeat_mode_on", false))
+        AppPreferencesHelper helper = new AppPreferencesHelper(this);
+        if(helper.isRepeatModeOn())
             setIsRepeatModeOn(true);
         else
             setIsRepeatModeOn(false);
@@ -378,8 +372,8 @@ public class MusicService extends Service implements
 
     @Override
     public void toggleShuffleMode() {
-        SharedPreferences preferences = getSharedPreferences("my_pref", MODE_PRIVATE);
-        if(preferences.getBoolean("is_shuffle_mode_on", false))
+        AppPreferencesHelper helper = new AppPreferencesHelper(this);
+        if(helper.isShuffleModeOn())
             setIsShuffleModeOn(true);
         else
             setIsShuffleModeOn(false);
