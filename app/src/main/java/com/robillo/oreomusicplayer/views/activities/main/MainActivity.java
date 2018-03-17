@@ -23,6 +23,7 @@ import com.robillo.oreomusicplayer.models.Song;
 import com.robillo.oreomusicplayer.services.MusicService;
 import com.robillo.oreomusicplayer.views.activities.main.song_list_frag.SongsListFragment;
 import com.robillo.oreomusicplayer.views.activities.main.song_play_frag.SongPlayFragment;
+import com.robillo.oreomusicplayer.views.activities.main.songs_sort_frag.SongsSortFragment;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -117,6 +118,24 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @Override
+    public void setSongsSortFragment() {
+        if(getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_sort)) == null){
+
+            SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
+            if(fragment != null) {
+                fragment.fadeOutController();
+                fragment.fadeOutUpper();
+            }
+
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.setCustomAnimations(R.anim.songs_sort_fade_in, 0, 0, R.anim.songs_sort_fade_out);
+            transaction.add(mFragmentContainer.getId(), new SongsSortFragment(), getString(R.string.songs_sort));
+            transaction.addToBackStack(getString(R.string.songs_sort));
+            transaction.commit();
+        }
+    }
+
+    @Override
     public void askForDevicePermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED
@@ -181,9 +200,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Override
     public void onBackPressed() {
 
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play));
+        Fragment songPlayFragment = getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play));
+        Fragment songsSortFragment = getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_sort));
 
-        if(fragment != null) {                                                                      //remove song play fragment from back stack
+        if(songPlayFragment != null) {                                                                      //remove song play fragment from back stack
+            super.onBackPressed();
+        }
+        else if(songsSortFragment != null) {
             super.onBackPressed();
         }
         else {                                                                                      //don't remove song list fragment from activity

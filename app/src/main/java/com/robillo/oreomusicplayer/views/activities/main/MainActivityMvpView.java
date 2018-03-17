@@ -12,6 +12,8 @@ public interface MainActivityMvpView {
 
     void setSongPlayFragment();
 
+    void setSongsSortFragment();
+
     void askForDevicePermissions();
 
     void startServiceForAudioList(ArrayList<Song> songList);

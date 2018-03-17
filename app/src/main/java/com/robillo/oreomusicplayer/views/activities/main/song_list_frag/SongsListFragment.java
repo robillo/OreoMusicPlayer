@@ -85,6 +85,9 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @BindView(R.id.hide_or_show_upper)
     LinearLayout hideOrShowUpper;
 
+    @BindView(R.id.sort_options)
+    ImageButton sortOptions;
+
     public SongsListFragment() {
         // Required empty public constructor
     }
@@ -263,6 +266,11 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
                 playPlayer(FROM_FRAGMENT);
             }
         }
+    }
+
+    @OnClick(R.id.sort_options)
+    void setSortOptions() {
+        if(getActivity()!=null) ((MainActivity) getActivity()).setSongsSortFragment();
     }
 
     @OnClick(R.id.play_next_song)
