@@ -24,7 +24,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.robillo.oreomusicplayer.R;
-import com.robillo.oreomusicplayer.adapters.SongsAdapter;
+import com.robillo.oreomusicplayer.views.activities.main.song_list_frag.adapters.SongsAdapter;
 import com.robillo.oreomusicplayer.models.Song;
 import com.robillo.oreomusicplayer.preferences.AppPreferencesHelper;
 import com.robillo.oreomusicplayer.views.activities.main.MainActivity;

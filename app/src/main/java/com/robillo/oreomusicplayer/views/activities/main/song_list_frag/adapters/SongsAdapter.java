@@ -1,4 +1,4 @@
-package com.robillo.oreomusicplayer.adapters;
+package com.robillo.oreomusicplayer.views.activities.main.song_list_frag.adapters;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
