@@ -27,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.adapters.SongsAdapter;
 import com.robillo.oreomusicplayer.models.Song;
+import com.robillo.oreomusicplayer.utils.AppConstants;
 import com.robillo.oreomusicplayer.views.activities.main.MainActivity;
 
 import java.util.ArrayList;
@@ -154,7 +155,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        String sortOrder = MediaStore.Audio.Media.TITLE + " ASC";
+        String sortOrder = AppConstants.DATE_ADDED_ASCENDING;
 
         //noinspection ConstantConditions
         return new CursorLoader(getActivity(), uri, null, null, null, sortOrder);

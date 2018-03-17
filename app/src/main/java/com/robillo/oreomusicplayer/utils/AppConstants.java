@@ -1,5 +1,7 @@
 package com.robillo.oreomusicplayer.utils;
 
+import android.provider.MediaStore;
+
 public class AppConstants {
 
     //MusicService
@@ -17,4 +19,33 @@ public class AppConstants {
     //SongListFragment
     public static final int FROM_ACTIVITY = 0;
     public static final int FROM_FRAGMENT = 1;
+
+    //SongListFragment SortOrder
+    private static final String ASCENDING = "ASC";
+    private static final String DESCENDING = "DESC";
+
+    public static final String SIZE_ASCENDING = MediaStore.Audio.Media.SIZE + " " + ASCENDING;
+    public static final String SIZE_DESCENDING = MediaStore.Audio.Media.SIZE + " " + DESCENDING;
+
+    public static final String YEAR_ASCENDING = MediaStore.Audio.Media.YEAR + " " + ASCENDING;
+    public static final String YEAR_DESCENDING = MediaStore.Audio.Media.YEAR + " " + DESCENDING;
+
+    public static final String ALBUM_ASCENDING = MediaStore.Audio.Media.ALBUM + " " + ASCENDING;
+    public static final String ALBUM_DESCENDING = MediaStore.Audio.Media.ALBUM + " " + DESCENDING;
+
+    public static final String TITLE_ASCENDING = MediaStore.Audio.Media.TITLE + " " + ASCENDING;
+    public static final String TITLE_DESCENDING = MediaStore.Audio.Media.TITLE + " " + DESCENDING;
+
+    public static final String ARTIST_ASCENDING = MediaStore.Audio.Media.ARTIST + " " + ASCENDING;
+    public static final String ARTIST_DESCENDING = MediaStore.Audio.Media.ARTIST + " " + DESCENDING;
+
+    public static final String DURATION_ASCENDING = MediaStore.Audio.Media.DURATION + " " + ASCENDING;
+    public static final String DURATION_DESCENDING = MediaStore.Audio.Media.DURATION + " " + DESCENDING;
+
+    public static final String DATE_ADDED_ASCENDING = MediaStore.Audio.Media.DATE_ADDED + " " + ASCENDING;
+    public static final String DATE_ADDED_DESCENDING = MediaStore.Audio.Media.DATE_ADDED + " " + DESCENDING;
+
+    public static final String DATE_MODIFIED_ASCENDING = MediaStore.Audio.Media.DATE_MODIFIED + " " + ASCENDING;
+    public static final String DATE_MODIFIED_DESCENDING = MediaStore.Audio.Media.DATE_MODIFIED + " " + DESCENDING;
+
 }
