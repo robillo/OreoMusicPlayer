@@ -302,6 +302,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @Override
+    public void repopulateListSongsListFragment() {
+        SongsListFragment fragment =
+                (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
+
+        if(fragment != null) {
+            fragment.fetchSongs();
+        }
+    }
+
+    @Override
     public void start() {
         AppPreferencesHelper helper = new AppPreferencesHelper(this);
         helper.setIsPlayEvent(true);

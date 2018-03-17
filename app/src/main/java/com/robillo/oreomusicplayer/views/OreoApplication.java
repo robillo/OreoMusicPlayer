@@ -6,10 +6,6 @@ import com.robillo.oreomusicplayer.R;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
-/**
- * Created by robinkamboj on 04/03/18.
- */
-
 public class OreoApplication extends Application {
 
     @Override

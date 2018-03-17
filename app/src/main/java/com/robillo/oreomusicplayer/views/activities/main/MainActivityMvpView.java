@@ -33,4 +33,6 @@ public interface MainActivityMvpView {
     void seekTenSecondsForward();
 
     void seekTenSecondsBackwards();
+
+    void repopulateListSongsListFragment();
 }

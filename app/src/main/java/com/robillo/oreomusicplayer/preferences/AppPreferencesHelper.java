@@ -50,6 +50,6 @@ public class AppPreferencesHelper implements PreferencesHelper {
 
     @Override
     public void setSortOrderForSongs(String sortOrderForSongs) {
-        prefs.edit().putString(AppConstants.KEY_IS_PLAY_EVENT, sortOrderForSongs).apply();
+        prefs.edit().putString(AppConstants.KEY_SORT_ORDER_FOR_SONGS, sortOrderForSongs).apply();
     }
 }
