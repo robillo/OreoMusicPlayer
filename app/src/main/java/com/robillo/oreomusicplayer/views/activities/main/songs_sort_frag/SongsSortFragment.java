@@ -4,23 +4,53 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.robillo.oreomusicplayer.R;
+import com.robillo.oreomusicplayer.models.SortItem;
+import com.robillo.oreomusicplayer.views.activities.main.songs_sort_frag.adapters.SortSongsAdapter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.robillo.oreomusicplayer.utils.AppConstants.ALBUM_ASCENDING;
+import static com.robillo.oreomusicplayer.utils.AppConstants.ALBUM_DESCENDING;
+import static com.robillo.oreomusicplayer.utils.AppConstants.ARTIST_ASCENDING;
+import static com.robillo.oreomusicplayer.utils.AppConstants.ARTIST_DESCENDING;
+import static com.robillo.oreomusicplayer.utils.AppConstants.DATE_ADDED_ASCENDING;
+import static com.robillo.oreomusicplayer.utils.AppConstants.DATE_ADDED_DESCENDING;
+import static com.robillo.oreomusicplayer.utils.AppConstants.DATE_MODIFIED_ASCENDING;
+import static com.robillo.oreomusicplayer.utils.AppConstants.DATE_MODIFIED_DESCENDING;
+import static com.robillo.oreomusicplayer.utils.AppConstants.DURATION_ASCENDING;
+import static com.robillo.oreomusicplayer.utils.AppConstants.DURATION_DESCENDING;
+import static com.robillo.oreomusicplayer.utils.AppConstants.SIZE_ASCENDING;
+import static com.robillo.oreomusicplayer.utils.AppConstants.SIZE_DESCENDING;
+import static com.robillo.oreomusicplayer.utils.AppConstants.TITLE_ASCENDING;
+import static com.robillo.oreomusicplayer.utils.AppConstants.TITLE_DESCENDING;
+import static com.robillo.oreomusicplayer.utils.AppConstants.YEAR_ASCENDING;
+import static com.robillo.oreomusicplayer.utils.AppConstants.YEAR_DESCENDING;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class SongsSortFragment extends Fragment implements SongsSortMvpView {
 
+    List<SortItem> sortItems = new ArrayList<>();
+    private SortSongsAdapter sortAdapter;
+
     @BindView(R.id.coordinator_layout)
     CoordinatorLayout coordinatorLayout;
+
+    @BindView(R.id.recycler_view)
+    RecyclerView recyclerView;
 
     public SongsSortFragment() {
         // Required empty public constructor
@@ -39,6 +69,30 @@ public class SongsSortFragment extends Fragment implements SongsSortMvpView {
     @Override
     public void setup(View v) {
         ButterKnife.bind(this, v);
+        inflateSortItemsList();
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        sortAdapter = new SortSongsAdapter(getActivity(), sortItems);
+        recyclerView.setAdapter(sortAdapter);
+    }
+
+    @Override
+    public void inflateSortItemsList() {
+        sortItems.add(new SortItem("Size Ascending", SIZE_ASCENDING));
+        sortItems.add(new SortItem("Size Descending", SIZE_DESCENDING));
+        sortItems.add(new SortItem("Year Ascending", YEAR_ASCENDING));
+        sortItems.add(new SortItem("Year Descending", YEAR_DESCENDING));
+        sortItems.add(new SortItem("Album Ascending", ALBUM_ASCENDING));
+        sortItems.add(new SortItem("Album Descending", ALBUM_DESCENDING));
+        sortItems.add(new SortItem("Title Ascending", TITLE_ASCENDING));
+        sortItems.add(new SortItem("Title Descending", TITLE_DESCENDING));
+        sortItems.add(new SortItem("Artist Ascending", ARTIST_ASCENDING));
+        sortItems.add(new SortItem("Artist Descending", ARTIST_DESCENDING));
+        sortItems.add(new SortItem("Duration Ascending", DURATION_ASCENDING));
+        sortItems.add(new SortItem("Duration Descending", DURATION_DESCENDING));
+        sortItems.add(new SortItem("Date Added Ascending", DATE_ADDED_ASCENDING));
+        sortItems.add(new SortItem("Date Added Descending", DATE_ADDED_DESCENDING));
+        sortItems.add(new SortItem("Date Modified Ascending", DATE_MODIFIED_ASCENDING));
+        sortItems.add(new SortItem("Date Modified Descending", DATE_MODIFIED_DESCENDING));
     }
 
     @OnClick(R.id.coordinator_layout)

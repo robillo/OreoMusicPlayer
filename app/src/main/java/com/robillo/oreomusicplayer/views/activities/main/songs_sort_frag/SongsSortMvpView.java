@@ -5,4 +5,6 @@ import android.view.View;
 public interface SongsSortMvpView {
 
     void setup(View v);
+
+    void inflateSortItemsList();
 }

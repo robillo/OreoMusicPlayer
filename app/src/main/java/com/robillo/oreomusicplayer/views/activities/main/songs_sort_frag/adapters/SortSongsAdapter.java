@@ -17,10 +17,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-/**
- * Created by robinkamboj on 17/03/18.
- */
-
 public class SortSongsAdapter extends RecyclerView.Adapter<SortSongsAdapter.SortSongsHolder> {
 
     private Context context;
@@ -57,7 +53,7 @@ public class SortSongsAdapter extends RecyclerView.Adapter<SortSongsAdapter.Sort
 
     class SortSongsHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.title)
+        @BindView(R.id.text)
         TextView title;
 
         SortSongsHolder(View itemView) {
