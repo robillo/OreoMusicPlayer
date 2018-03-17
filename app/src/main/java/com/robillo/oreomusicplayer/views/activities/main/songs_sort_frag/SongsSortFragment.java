@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.models.SortItem;
+import com.robillo.oreomusicplayer.preferences.AppPreferencesHelper;
+import com.robillo.oreomusicplayer.utils.AppConstants;
 import com.robillo.oreomusicplayer.views.activities.main.songs_sort_frag.adapters.SortSongsAdapter;
 
 import java.util.ArrayList;
@@ -71,28 +73,29 @@ public class SongsSortFragment extends Fragment implements SongsSortMvpView {
         ButterKnife.bind(this, v);
         inflateSortItemsList();
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        sortAdapter = new SortSongsAdapter(getActivity(), sortItems);
+        AppPreferencesHelper helper = new AppPreferencesHelper(getActivity());
+        sortAdapter = new SortSongsAdapter(getActivity(), sortItems, helper.getSortOrderForSongs());
         recyclerView.setAdapter(sortAdapter);
     }
 
     @Override
     public void inflateSortItemsList() {
-        sortItems.add(new SortItem("Size Ascending", SIZE_ASCENDING));
-        sortItems.add(new SortItem("Size Descending", SIZE_DESCENDING));
-        sortItems.add(new SortItem("Year Ascending", YEAR_ASCENDING));
-        sortItems.add(new SortItem("Year Descending", YEAR_DESCENDING));
-        sortItems.add(new SortItem("Album Ascending", ALBUM_ASCENDING));
-        sortItems.add(new SortItem("Album Descending", ALBUM_DESCENDING));
-        sortItems.add(new SortItem("Title Ascending", TITLE_ASCENDING));
-        sortItems.add(new SortItem("Title Descending", TITLE_DESCENDING));
-        sortItems.add(new SortItem("Artist Ascending", ARTIST_ASCENDING));
-        sortItems.add(new SortItem("Artist Descending", ARTIST_DESCENDING));
-        sortItems.add(new SortItem("Duration Ascending", DURATION_ASCENDING));
-        sortItems.add(new SortItem("Duration Descending", DURATION_DESCENDING));
-        sortItems.add(new SortItem("Date Added Ascending", DATE_ADDED_ASCENDING));
-        sortItems.add(new SortItem("Date Added Descending", DATE_ADDED_DESCENDING));
-        sortItems.add(new SortItem("Date Modified Ascending", DATE_MODIFIED_ASCENDING));
-        sortItems.add(new SortItem("Date Modified Descending", DATE_MODIFIED_DESCENDING));
+        sortItems.add(new SortItem(AppConstants.sortOrderMap.get(SIZE_ASCENDING), SIZE_ASCENDING));
+        sortItems.add(new SortItem(AppConstants.sortOrderMap.get(SIZE_DESCENDING), SIZE_DESCENDING));
+        sortItems.add(new SortItem(AppConstants.sortOrderMap.get(YEAR_ASCENDING), YEAR_ASCENDING));
+        sortItems.add(new SortItem(AppConstants.sortOrderMap.get(YEAR_DESCENDING), YEAR_DESCENDING));
+        sortItems.add(new SortItem(AppConstants.sortOrderMap.get(ALBUM_ASCENDING), ALBUM_ASCENDING));
+        sortItems.add(new SortItem(AppConstants.sortOrderMap.get(ALBUM_DESCENDING), ALBUM_DESCENDING));
+        sortItems.add(new SortItem(AppConstants.sortOrderMap.get(TITLE_ASCENDING), TITLE_ASCENDING));
+        sortItems.add(new SortItem(AppConstants.sortOrderMap.get(TITLE_DESCENDING), TITLE_DESCENDING));
+        sortItems.add(new SortItem(AppConstants.sortOrderMap.get(ARTIST_ASCENDING), ARTIST_ASCENDING));
+        sortItems.add(new SortItem(AppConstants.sortOrderMap.get(ARTIST_DESCENDING), ARTIST_DESCENDING));
+        sortItems.add(new SortItem(AppConstants.sortOrderMap.get(DURATION_ASCENDING), DURATION_ASCENDING));
+        sortItems.add(new SortItem(AppConstants.sortOrderMap.get(DURATION_DESCENDING), DURATION_DESCENDING));
+        sortItems.add(new SortItem(AppConstants.sortOrderMap.get(DATE_ADDED_ASCENDING), DATE_ADDED_ASCENDING));
+        sortItems.add(new SortItem(AppConstants.sortOrderMap.get(DATE_ADDED_DESCENDING), DATE_ADDED_DESCENDING));
+        sortItems.add(new SortItem(AppConstants.sortOrderMap.get(DATE_MODIFIED_ASCENDING), DATE_MODIFIED_ASCENDING));
+        sortItems.add(new SortItem(AppConstants.sortOrderMap.get(DATE_MODIFIED_DESCENDING), DATE_MODIFIED_DESCENDING));
     }
 
     @OnClick(R.id.coordinator_layout)

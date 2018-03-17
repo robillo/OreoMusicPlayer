@@ -2,6 +2,9 @@ package com.robillo.oreomusicplayer.utils;
 
 import android.provider.MediaStore;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @SuppressWarnings("unused")
 public class AppConstants {
 
@@ -56,4 +59,24 @@ public class AppConstants {
     public static final String DATE_MODIFIED_ASCENDING = MediaStore.Audio.Media.DATE_MODIFIED + " " + ASCENDING;
     public static final String DATE_MODIFIED_DESCENDING = MediaStore.Audio.Media.DATE_MODIFIED + " " + DESCENDING;
 
+    public static HashMap<String, String> sortOrderMap = new HashMap<>();
+
+    static {
+        sortOrderMap.put(SIZE_ASCENDING, "Size Ascending");
+        sortOrderMap.put(SIZE_DESCENDING, "Size Descending");
+        sortOrderMap.put(YEAR_ASCENDING, "Year Ascending");
+        sortOrderMap.put(YEAR_DESCENDING, "Year Descending");
+        sortOrderMap.put(ALBUM_ASCENDING, "Album Ascending");
+        sortOrderMap.put(ALBUM_DESCENDING, "Album Descending");
+        sortOrderMap.put(TITLE_ASCENDING, "Title Ascending");
+        sortOrderMap.put(TITLE_DESCENDING, "Title Descending");
+        sortOrderMap.put(ARTIST_ASCENDING, "Artist Ascending");
+        sortOrderMap.put(ARTIST_DESCENDING, "Artist Descending");
+        sortOrderMap.put(DURATION_ASCENDING, "Duration Ascending");
+        sortOrderMap.put(DURATION_DESCENDING, "Duration Descending");
+        sortOrderMap.put(DATE_ADDED_ASCENDING, "Date Added Ascending");
+        sortOrderMap.put(DATE_ADDED_DESCENDING, "Date Added Descending");
+        sortOrderMap.put(DATE_MODIFIED_ASCENDING, "Date Modified Ascending");
+        sortOrderMap.put(DATE_MODIFIED_DESCENDING, "Date Modified Descending");
+    }
 }
