@@ -2,6 +2,7 @@ package com.robillo.oreomusicplayer.utils;
 
 import android.provider.MediaStore;
 
+@SuppressWarnings("unused")
 public class AppConstants {
 
     //SharedPreferencesHelper
@@ -9,6 +10,7 @@ public class AppConstants {
     public static final String KEY_IS_REPEAT_MODE_ON = "is_repeat_mode_on";
     public static final String KEY_IS_SHUFFLE_MODE_ON = "is_shuffle_mode_on";
     public static final String KEY_IS_PLAY_EVENT = "is_play_event";
+    public static final String KEY_SORT_ORDER_FOR_SONGS = "sort_order_for_songs";
 
     //MusicService
     public static final int EMPTY_CELLS_COUNT = 2;
@@ -48,7 +50,7 @@ public class AppConstants {
     public static final String DURATION_ASCENDING = MediaStore.Audio.Media.DURATION + " " + ASCENDING;
     public static final String DURATION_DESCENDING = MediaStore.Audio.Media.DURATION + " " + DESCENDING;
 
-    public static final String DATE_ADDED_ASCENDING = MediaStore.Audio.Media.DATE_ADDED + " " + ASCENDING;
+    public static final String DATE_ADDED_ASCENDING = MediaStore.Audio.Media.DATE_ADDED + " " + ASCENDING;      //DEFAULT
     public static final String DATE_ADDED_DESCENDING = MediaStore.Audio.Media.DATE_ADDED + " " + DESCENDING;
 
     public static final String DATE_MODIFIED_ASCENDING = MediaStore.Audio.Media.DATE_MODIFIED + " " + ASCENDING;

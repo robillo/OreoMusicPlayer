@@ -11,7 +11,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,7 @@ import com.bumptech.glide.Glide;
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.adapters.SongsAdapter;
 import com.robillo.oreomusicplayer.models.Song;
-import com.robillo.oreomusicplayer.utils.AppConstants;
+import com.robillo.oreomusicplayer.preferences.AppPreferencesHelper;
 import com.robillo.oreomusicplayer.views.activities.main.MainActivity;
 
 import java.util.ArrayList;
@@ -58,6 +57,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     private static boolean isAnimatingController = false;
     @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private static long songDurationForCountDownTimer = 0;
+    private static String SORT_ORDER = null;
 
     @BindView(R.id.play_pause_song)
     ImageButton playPauseSong;
@@ -106,11 +106,16 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void setUp(View v) {
+
         fadeOutAnimationUpper = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
         fadeInAnimationUpper = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
         fadeInAnimationController = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in_controller);
         fadeOutAnimationController = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out_controller);
         rotatingAlbumAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
+
+        AppPreferencesHelper helper = new AppPreferencesHelper(getActivity());
+
+        SORT_ORDER = helper.getSortOrderForSongs();
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
@@ -155,10 +160,8 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-        String sortOrder = AppConstants.DATE_ADDED_ASCENDING;
-
         //noinspection ConstantConditions
-        return new CursorLoader(getActivity(), uri, null, null, null, sortOrder);
+        return new CursorLoader(getActivity(), uri, null, null, null, SORT_ORDER);
     }
 
     @Override

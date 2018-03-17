@@ -11,4 +11,7 @@ interface PreferencesHelper {
     boolean isPlayEvent();
     void setIsPlayEvent(boolean value);
 
+    String getSortOrderForSongs();
+    void setSortOrderForSongs(String sortOrderForSongs);
+
 }

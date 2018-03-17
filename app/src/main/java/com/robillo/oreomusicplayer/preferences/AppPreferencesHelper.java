@@ -42,4 +42,14 @@ public class AppPreferencesHelper implements PreferencesHelper {
     public void setIsPlayEvent(boolean value) {
         prefs.edit().putBoolean(AppConstants.KEY_IS_PLAY_EVENT, value).apply();
     }
+
+    @Override
+    public String getSortOrderForSongs() {
+        return prefs.getString(AppConstants.KEY_SORT_ORDER_FOR_SONGS, AppConstants.DATE_ADDED_ASCENDING);
+    }
+
+    @Override
+    public void setSortOrderForSongs(String sortOrderForSongs) {
+        prefs.edit().putString(AppConstants.KEY_IS_PLAY_EVENT, sortOrderForSongs).apply();
+    }
 }
