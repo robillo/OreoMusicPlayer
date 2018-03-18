@@ -6,11 +6,21 @@ import android.graphics.Color;
 public class ThemeColors {
 
     private int colorPrimary, colorPrimaryDark, colorAccent;
+    private String colorName;
 
-    public ThemeColors(int colorPrimary, int colorPrimaryDark, int colorAccent) {
+    public ThemeColors(int colorPrimary, int colorPrimaryDark, int colorAccent, String colorName) {
         this.colorPrimary = colorPrimary;
         this.colorPrimaryDark = colorPrimaryDark;
         this.colorAccent = colorAccent;
+        this.colorName = colorName;
+    }
+
+    public String getColorName() {
+        return colorName;
+    }
+
+    public void setColorName(String colorName) {
+        this.colorName = colorName;
     }
 
     public int getColorPrimary() {

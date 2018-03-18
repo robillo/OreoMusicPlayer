@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.models.ThemeColors;
@@ -41,6 +42,7 @@ public class ThemeChoicesAdapter extends RecyclerView.Adapter<ThemeChoicesAdapte
                 themeColors.get(position).getColorPrimary(),
                 themeColors.get(position).getColorAccent()
         ));
+        holder.colorName.setText(themeColors.get(position).getColorName());
     }
 
     @Override
@@ -52,9 +54,9 @@ public class ThemeChoicesAdapter extends RecyclerView.Adapter<ThemeChoicesAdapte
         return new GradientDrawable(
                 GradientDrawable.Orientation.TL_BR,
                 new int[]{
-                        context.getResources().getColor(colorPrimaryDark),
                         context.getResources().getColor(colorPrimary),
-                        context.getResources().getColor(colorAccent)
+                        context.getResources().getColor(colorPrimary),
+                        context.getResources().getColor(colorPrimary)
                 }
         );
     }
@@ -63,6 +65,9 @@ public class ThemeChoicesAdapter extends RecyclerView.Adapter<ThemeChoicesAdapte
 
         @BindView(R.id.gradient_image_view)
         ImageView gradientImageView;
+
+        @BindView(R.id.color_name)
+        TextView colorName;
 
         ThemeChoicesHolder(View itemView) {
             super(itemView);
