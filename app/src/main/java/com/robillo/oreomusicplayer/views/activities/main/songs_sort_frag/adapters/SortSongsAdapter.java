@@ -80,11 +80,10 @@ public class SortSongsAdapter extends RecyclerView.Adapter<SortSongsAdapter.Sort
                 holder.title.setBackgroundColor(activityContext.getResources().getColor(R.color.colorTextFive));
                 notifyDataSetChanged();
 
-
                 helper.setSortOrderForSongs(sortItems.get(pos).getConstantSortOrder());
 
                 ((MainActivity) activityContext).showSnackBar(
-                        "Successfully sorted list for: " + sortItems.get(pos).getTextToDisplay()
+                        activityContext.getString(R.string.sort_successful) + sortItems.get(pos).getTextToDisplay()
                 );
 
                 //refresh the loader for new sort order here

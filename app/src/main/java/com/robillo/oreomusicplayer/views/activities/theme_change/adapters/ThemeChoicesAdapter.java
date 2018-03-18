@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.models.ThemeColors;
+import com.robillo.oreomusicplayer.preferences.AppPreferencesHelper;
 import com.robillo.oreomusicplayer.views.activities.theme_change.ThemeChangeActivity;
 
 import java.util.List;
@@ -71,6 +72,9 @@ public class ThemeChoicesAdapter extends RecyclerView.Adapter<ThemeChoicesAdapte
             public void onClick(View v) {
                 currentUserThemeColorsIndex = pos;
                 notifyDataSetChanged();
+
+                AppPreferencesHelper helper = new AppPreferencesHelper(context);
+                helper.setUserThemeName(themeColors.get(pos).getColorName());
 
                 ((ThemeChangeActivity) context).showSnackBarThemeSet(themeColors.get(pos).getColorName());
             }
