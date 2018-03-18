@@ -3,6 +3,7 @@ package com.robillo.oreomusicplayer.views.activities.main.song_play_frag;
 import android.view.View;
 
 import com.robillo.oreomusicplayer.models.Song;
+import com.robillo.oreomusicplayer.models.ThemeColors;
 
 public interface SongPlayMvpView {
 
@@ -21,4 +22,7 @@ public interface SongPlayMvpView {
     void seekTenSecondsForward();
 
     void seekTenSecondsBackwards();
+
+    void refreshForUserThemeColors(ThemeColors currentUserThemeColors);
+
 }

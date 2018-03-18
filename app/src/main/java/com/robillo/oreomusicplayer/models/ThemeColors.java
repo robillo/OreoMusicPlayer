@@ -3,11 +3,11 @@ package com.robillo.oreomusicplayer.models;
 import android.graphics.Color;
 
 @SuppressWarnings("unused")
-public class ThemeColor {
+public class ThemeColors {
 
     private int colorPrimary, colorPrimaryDark, colorAccent;
 
-    public ThemeColor(int colorPrimary, int colorPrimaryDark, int colorAccent) {
+    public ThemeColors(int colorPrimary, int colorPrimaryDark, int colorAccent) {
         this.colorPrimary = colorPrimary;
         this.colorPrimaryDark = colorPrimaryDark;
         this.colorAccent = colorAccent;

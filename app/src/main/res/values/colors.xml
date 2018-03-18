@@ -29,44 +29,44 @@
     <!--________________________ THEME COLORS ______________________________-->
 
     <!-- THEME : ALL BLACK -->
-    <color name="all_black_primary">#4990E2</color>
-    <color name="all_black_primary_dark">#9ECDFF</color>
-    <color name="all_black_accent">#A3A8F8</color>
+    <color name="all_black_primary">#000000</color>
+    <color name="all_black_primary_dark">#000000</color>
+    <color name="all_black_accent">#000000</color>
 
     <!-- THEME : VIOLET LIGHT -->
-    <color name="violet_primary">#4990E2</color>
-    <color name="violet_primary_dark">#9ECDFF</color>
-    <color name="violet_accent">#A3A8F8</color>
+    <color name="violet_primary">#9301CC</color>
+    <color name="violet_primary_dark">#67277F</color>
+    <color name="violet_accent">#B801FF</color>
 
     <!-- THEME : INDIGO LIGHT -->
-    <color name="indigo_primary">#4990E2</color>
-    <color name="indigo_primary_dark">#9ECDFF</color>
-    <color name="indigo_accent">#A3A8F8</color>
+    <color name="indigo_primary">#4D04CC</color>
+    <color name="indigo_primary_dark">#48297F</color>
+    <color name="indigo_accent">#6005FF</color>
 
     <!-- THEME : BLUE LIGHT -->
-    <color name="blue_primary">#4990E2</color>
-    <color name="blue_primary_dark">#9ECDFF</color>
-    <color name="blue_accent">#A3A8F8</color>
+    <color name="blue_primary">#0713CC</color>
+    <color name="blue_primary_dark">#2B307F</color>
+    <color name="blue_accent">#0917FF</color>
 
     <!-- THEME : GREEN LIGHT -->
-    <color name="green_primary">#4990E2</color>
-    <color name="green_primary_dark">#9ECDFF</color>
-    <color name="green_accent">#A3A8F8</color>
+    <color name="green_primary">#00CC47</color>
+    <color name="green_primary_dark">#267F45</color>
+    <color name="green_accent">#00FF58</color>
 
     <!-- THEME : YELLOW LIGHT -->
-    <color name="yellow_primary">#4990E2</color>
-    <color name="yellow_primary_dark">#9ECDFF</color>
-    <color name="yellow_accent">#A3A8F8</color>
+    <color name="yellow_primary">#CC9300</color>
+    <color name="yellow_primary_dark">#7F6726</color>
+    <color name="yellow_accent">#FFB800</color>
 
     <!-- THEME : ORANGE LIGHT -->
-    <color name="orange_primary">#4990E2</color>
-    <color name="orange_primary_dark">#9ECDFF</color>
-    <color name="orange_accent">#A3A8F8</color>
+    <color name="orange_primary">#CC6100</color>
+    <color name="orange_primary_dark">#7F5126</color>
+    <color name="orange_accent">#FF7900</color>
 
     <!-- THEME : RED LIGHT -->
-    <color name="red_primary">#4990E2</color>
-    <color name="red_primary_dark">#9ECDFF</color>
-    <color name="red_accent">#A3A8F8</color>
+    <color name="red_primary">#CC0000</color>
+    <color name="red_primary_dark">#7F2626</color>
+    <color name="red_accent">#FF4C4C</color>
 
     <!--____________________ THEME COLORS END HERE _______________________-->
 

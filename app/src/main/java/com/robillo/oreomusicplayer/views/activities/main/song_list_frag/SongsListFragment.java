@@ -1,6 +1,7 @@
 package com.robillo.oreomusicplayer.views.activities.main.song_list_frag;
 
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -25,6 +26,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.robillo.oreomusicplayer.R;
+import com.robillo.oreomusicplayer.models.ThemeColors;
+import com.robillo.oreomusicplayer.utils.AppConstants;
 import com.robillo.oreomusicplayer.views.activities.main.song_list_frag.adapters.SongsAdapter;
 import com.robillo.oreomusicplayer.models.Song;
 import com.robillo.oreomusicplayer.preferences.AppPreferencesHelper;
@@ -43,6 +46,7 @@ import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_FRAGMENT;
 /**
  * A simple {@link Fragment} subclass.
  */
+@SuppressWarnings("FieldCanBeLocal")
 public class SongsListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SongListMvpView {
 
     @SuppressWarnings("FieldCanBeLocal")
@@ -60,6 +64,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     private static long songDurationForCountDownTimer = 0;
     AppPreferencesHelper helper = null;
     private static String SORT_ORDER = null;
+    private ThemeColors currentUserThemeColors = null;
 
     @BindView(R.id.play_pause_song)
     ImageButton playPauseSong;
@@ -88,6 +93,9 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @BindView(R.id.hide_or_show_upper)
     LinearLayout hideOrShowUpper;
 
+    @BindView(R.id.launch_play_frag_two)
+    LinearLayout launchPlayFragmentTwo;
+
     @BindView(R.id.sort_options)
     ImageButton sortOptions;
 
@@ -108,6 +116,9 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void setUp(View v) {
+        helper = new AppPreferencesHelper(getActivity());
+        currentUserThemeColors = AppConstants.themeMap.get(helper.getUserThemeName());
+        refreshForUserThemeColors(currentUserThemeColors);
 
         fadeOutAnimationUpper = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
         fadeInAnimationUpper = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
@@ -141,6 +152,13 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
                 }
             }
         });
+    }
+
+
+    @Override
+    public void refreshForUserThemeColors(ThemeColors userThemeColors) {
+        hideOrShowUpper.setBackgroundColor(getResources().getColor(userThemeColors.getColorPrimaryDark()));
+        launchPlayFragmentTwo.setBackgroundColor(getResources().getColor(userThemeColors.getColorPrimaryDark()));
     }
 
     @Override

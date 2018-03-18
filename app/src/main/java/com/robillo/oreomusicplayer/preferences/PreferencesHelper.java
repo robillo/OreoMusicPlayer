@@ -14,4 +14,7 @@ interface PreferencesHelper {
     String getSortOrderForSongs();
     void setSortOrderForSongs(String sortOrderForSongs);
 
+    String getUserThemeName();
+    void setUserThemeName(String themeName);
+
 }

@@ -4,6 +4,7 @@ import android.database.Cursor;
 import android.view.View;
 
 import com.robillo.oreomusicplayer.models.Song;
+import com.robillo.oreomusicplayer.models.ThemeColors;
 
 public interface SongListMvpView {
 
@@ -30,4 +31,7 @@ public interface SongListMvpView {
     void fadeOutController();
 
     void fadeInController();
+
+    void refreshForUserThemeColors(ThemeColors currentUserThemeColors);
+
 }

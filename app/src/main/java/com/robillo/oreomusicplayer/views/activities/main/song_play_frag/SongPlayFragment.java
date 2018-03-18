@@ -13,13 +13,16 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.models.Song;
+import com.robillo.oreomusicplayer.models.ThemeColors;
 import com.robillo.oreomusicplayer.preferences.AppPreferencesHelper;
+import com.robillo.oreomusicplayer.utils.AppConstants;
 import com.robillo.oreomusicplayer.views.activities.main.MainActivity;
 
 import butterknife.BindView;
@@ -37,7 +40,13 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
 
     @SuppressWarnings("FieldCanBeLocal")
     private static Song currentSong = null;
+    private AppPreferencesHelper helper = null;
+    @SuppressWarnings("FieldCanBeLocal")
+    private ThemeColors currentUserThemeColors = null;
     Animation rotatingAlbumAnim;
+
+    @BindView(R.id.bottom_controller)
+    LinearLayout bottomController;
 
     @BindView(R.id.back_to_song_list)
     ImageButton backToSongList;
@@ -101,6 +110,11 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
     @Override
     public void setUp(View v) {
         ButterKnife.bind(this, v);
+
+        helper = new AppPreferencesHelper(getActivity());
+        currentUserThemeColors = AppConstants.themeMap.get(helper.getUserThemeName());
+        refreshForUserThemeColors(currentUserThemeColors);
+
         rotatingAlbumAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
 
         setPreferencesToViews();
@@ -109,6 +123,12 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
             currentSong = ((MainActivity) getActivity()).getCurrentSong();
             setCurrentSong(currentSong);
         }
+    }
+
+
+    @Override
+    public void refreshForUserThemeColors(ThemeColors currentUserThemeColors) {
+        bottomController.setBackgroundColor(getResources().getColor(currentUserThemeColors.getColorPrimaryDark()));
     }
 
     @Override
@@ -193,7 +213,6 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
     @Override
     public void setPreferencesToViews() {
         if(getActivity() != null) {
-            AppPreferencesHelper helper = new AppPreferencesHelper(getActivity());
 
             if(helper.isRepeatModeOn())
                 //change tint to repeat => "repeat"

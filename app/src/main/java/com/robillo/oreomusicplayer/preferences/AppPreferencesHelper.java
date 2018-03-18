@@ -52,4 +52,14 @@ public class AppPreferencesHelper implements PreferencesHelper {
     public void setSortOrderForSongs(String sortOrderForSongs) {
         prefs.edit().putString(AppConstants.KEY_SORT_ORDER_FOR_SONGS, sortOrderForSongs).apply();
     }
+
+    @Override
+    public String getUserThemeName() {
+        return prefs.getString(AppConstants.KEY_USER_THEME_NAME, AppConstants.RED_LIGHT);
+    }
+
+    @Override
+    public void setUserThemeName(String themeName) {
+        prefs.edit().putString(AppConstants.KEY_USER_THEME_NAME, themeName).apply();
+    }
 }

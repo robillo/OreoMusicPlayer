@@ -25,7 +25,7 @@
             android:layout_height="?attr/actionBarSize"
             android:id="@+id/hide_or_show_upper"
             android:orientation="horizontal"
-            android:background="@color/black">
+            tools:background="@color/black">
 
             <ImageButton
                 android:id="@+id/sort_options"
@@ -124,7 +124,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="70sp"
                     android:orientation="horizontal"
-                    android:background="@color/black"
+                    tools:background="@color/black"
                     android:id="@+id/launch_play_frag_two">
 
                     <FrameLayout
