@@ -29,4 +29,5 @@
     <string name="duration">Duration</string>
     <string name="date_added">Date Added</string>
     <string name="songs_sort">SONGS_SORT</string>
+    <string name="your_settings">Your Settings</string>
 </resources>

@@ -29,6 +29,7 @@ import com.robillo.oreomusicplayer.utils.AppConstants;
 import com.robillo.oreomusicplayer.views.activities.main.song_list_frag.SongsListFragment;
 import com.robillo.oreomusicplayer.views.activities.main.song_play_frag.SongPlayFragment;
 import com.robillo.oreomusicplayer.views.activities.main.songs_sort_frag.SongsSortFragment;
+import com.robillo.oreomusicplayer.views.activities.theme_change.ThemeChangeActivity;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     private boolean musicBound = false;
     @SuppressWarnings("FieldCanBeLocal")
     private ThemeColors currentUserThemeColors = null;
+    @SuppressWarnings("FieldCanBeLocal")
     private AppPreferencesHelper helper = null;
 
     @SuppressWarnings("FieldCanBeLocal")
@@ -122,6 +124,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
         // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(this, currentUserThemeColors.getColorPrimaryDark()));
+    }
+
+    @Override
+    public void startThemeChangeActivityForResult() {
+        startActivity(new Intent(this, ThemeChangeActivity.class));
     }
 
     @Override

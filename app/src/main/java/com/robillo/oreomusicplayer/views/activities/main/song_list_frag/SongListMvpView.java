@@ -34,4 +34,6 @@ public interface SongListMvpView {
 
     void refreshForUserThemeColors(ThemeColors currentUserThemeColors);
 
+    void startThemeChangeActivity();
+
 }

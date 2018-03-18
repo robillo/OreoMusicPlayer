@@ -30,7 +30,8 @@
 
         <service android:name=".services.MusicService" />
 
-        <activity android:name=".views.activities.theme_change.ThemeChangeActivity"></activity>
+        <activity android:name=".views.activities.theme_change.ThemeChangeActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

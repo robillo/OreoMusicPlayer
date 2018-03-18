@@ -39,4 +39,6 @@ public interface MainActivityMvpView {
 
     void refreshForUserThemeColors(ThemeColors currentUserThemeColors);
 
+    void startThemeChangeActivityForResult();
+
 }

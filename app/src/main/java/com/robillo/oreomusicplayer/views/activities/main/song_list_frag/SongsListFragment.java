@@ -99,6 +99,9 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @BindView(R.id.sort_options)
     ImageButton sortOptions;
 
+    @BindView(R.id.app_menu_options)
+    ImageButton appMenuOptions;
+
     public SongsListFragment() {
         // Required empty public constructor
     }
@@ -157,6 +160,12 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     public void refreshForUserThemeColors(ThemeColors userThemeColors) {
         hideOrShowUpper.setBackgroundColor(getResources().getColor(userThemeColors.getColorPrimaryDark()));
         launchPlayFragmentTwo.setBackgroundColor(getResources().getColor(userThemeColors.getColorPrimaryDark()));
+    }
+
+    @Override
+    public void startThemeChangeActivity() {
+        if(getActivity() != null)
+            ((MainActivity) getActivity()).startThemeChangeActivityForResult();
     }
 
     @Override
@@ -317,6 +326,11 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @OnClick(R.id.launch_play_frag_two)
     public void setSongPlayFragmentTwo() {
         if(getActivity() != null) ((MainActivity) getActivity()).setSongPlayFragment();
+    }
+
+    @OnClick(R.id.app_menu_options)
+    void setAppMenuOptions() {
+        startThemeChangeActivity();
     }
 
     @Override
