@@ -31,7 +31,8 @@
         <service android:name=".services.MusicService" />
 
         <activity android:name=".views.activities.theme_change.ThemeChangeActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
     </application>
 
 </manifest>
