@@ -6,4 +6,5 @@ public interface ThemeChangeMvpView {
 
     void inflateThemeColors();
 
+    void showSnackBarThemeSet(String themeName);
 }

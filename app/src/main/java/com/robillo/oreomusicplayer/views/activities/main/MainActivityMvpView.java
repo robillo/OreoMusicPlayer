@@ -41,4 +41,6 @@ public interface MainActivityMvpView {
 
     void startThemeChangeActivityForResult();
 
+    void showSnackBar(String text);
+
 }

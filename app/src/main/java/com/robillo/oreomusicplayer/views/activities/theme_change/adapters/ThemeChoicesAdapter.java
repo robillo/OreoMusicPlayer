@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.models.ThemeColors;
+import com.robillo.oreomusicplayer.views.activities.theme_change.ThemeChangeActivity;
 
 import java.util.List;
 
@@ -22,10 +23,18 @@ public class ThemeChoicesAdapter extends RecyclerView.Adapter<ThemeChoicesAdapte
 
     private Context context;
     List<ThemeColors> themeColors;
+    int currentUserThemeColorsIndex = -1;
 
-    public ThemeChoicesAdapter(Context context, List<ThemeColors> themeColors) {
+    public ThemeChoicesAdapter(Context context, List<ThemeColors> themeColors, ThemeColors currentUserThemeColors) {
         this.context = context;
         this.themeColors = themeColors;
+
+        for(int i = 0; i < themeColors.size(); i++) {
+            if(themeColors.get(i).equals(currentUserThemeColors)) {
+                currentUserThemeColorsIndex = i;
+                break;
+            }
+        }
     }
 
     @NonNull
@@ -37,12 +46,35 @@ public class ThemeChoicesAdapter extends RecyclerView.Adapter<ThemeChoicesAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ThemeChoicesHolder holder, int position) {
+
+        holder.colorName.setText(themeColors.get(position).getColorName());
+
+        if(position == currentUserThemeColorsIndex) {
+            holder.colorName.setTextColor(context.getResources().getColor(R.color.white));
+            holder.colorName.setBackgroundColor(context.getResources().getColor(R.color.green_primary_dark));
+        }
+        else {
+            holder.colorName.setTextColor(context.getResources().getColor(R.color.colorTextOne));
+            holder.colorName.setBackgroundColor(context.getResources().getColor(R.color.white));
+        }
+
         holder.gradientImageView.setBackground(createGradientDrawable(
                 themeColors.get(position).getColorPrimaryDark(),
                 themeColors.get(position).getColorPrimary(),
                 themeColors.get(position).getColorAccent()
         ));
-        holder.colorName.setText(themeColors.get(position).getColorName());
+
+        //noinspection UnnecessaryLocalVariable
+        final int pos = position;
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                currentUserThemeColorsIndex = pos;
+                notifyDataSetChanged();
+
+                ((ThemeChangeActivity) context).showSnackBarThemeSet(themeColors.get(pos).getColorName());
+            }
+        });
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.robillo.oreomusicplayer.views.activities.theme_change;
 
 import android.content.Context;
 import android.os.Build;
+import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -61,7 +62,7 @@ public class ThemeChangeActivity extends AppCompatActivity implements ThemeChang
 
         inflateThemeColors();
 
-        choicesAdapter = new ThemeChoicesAdapter(this, themeColorsList);
+        choicesAdapter = new ThemeChoicesAdapter(this, themeColorsList, currentUserThemeColors);
         recyclerView.setAdapter(choicesAdapter);
     }
 
@@ -75,6 +76,14 @@ public class ThemeChangeActivity extends AppCompatActivity implements ThemeChang
         themeColorsList.add(AppConstants.themeMap.get(AppConstants.YELLOW_LIGHT));
         themeColorsList.add(AppConstants.themeMap.get(AppConstants.ORANGE_LIGHT));
         themeColorsList.add(AppConstants.themeMap.get(AppConstants.RED_LIGHT));
+    }
+
+    @Override
+    public void showSnackBarThemeSet(String themeName) {
+        Snackbar.make(findViewById(R.id.coordinator_layout),
+                getString(R.string.theme_set_successful) + " " + themeName,
+                Snackbar.LENGTH_SHORT)
+                .show();
     }
 
     @Override

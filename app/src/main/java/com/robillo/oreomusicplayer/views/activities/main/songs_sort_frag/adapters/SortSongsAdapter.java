@@ -83,6 +83,10 @@ public class SortSongsAdapter extends RecyclerView.Adapter<SortSongsAdapter.Sort
 
                 helper.setSortOrderForSongs(sortItems.get(pos).getConstantSortOrder());
 
+                ((MainActivity) activityContext).showSnackBar(
+                        "Successfully sorted list for: " + sortItems.get(pos).getTextToDisplay()
+                );
+
                 //refresh the loader for new sort order here
                 //Possibly using EventBus on loader in SongListFragment
                 ((MainActivity) activityContext).repopulateListSongsListFragment();

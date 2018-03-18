@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
@@ -129,6 +130,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Override
     public void startThemeChangeActivityForResult() {
         startActivity(new Intent(this, ThemeChangeActivity.class));
+    }
+
+    @Override
+    public void showSnackBar(String text) {
+        Snackbar.make(
+                    findViewById(R.id.coordinator_layout), text, Snackbar.LENGTH_SHORT
+                ).show();
     }
 
     @Override
