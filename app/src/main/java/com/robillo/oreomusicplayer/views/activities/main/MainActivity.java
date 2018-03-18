@@ -153,14 +153,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     public void setSongsSortFragment() {
         if(getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_sort)) == null){
 
-//            SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
-//            if(fragment != null) {
-//                fragment.fadeOutController();
-//                fragment.fadeOutUpper();
-//            }
-
             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//            transaction.setCustomAnimations(R.anim.songs_sort_fade_in, 0, 0, R.anim.songs_sort_fade_out);
             transaction.setCustomAnimations(R.anim.songs_sort_fade_in, 0, 0, 0);
             transaction.add(mFragmentContainer.getId(), new SongsSortFragment(), getString(R.string.songs_sort));
             transaction.addToBackStack(getString(R.string.songs_sort));

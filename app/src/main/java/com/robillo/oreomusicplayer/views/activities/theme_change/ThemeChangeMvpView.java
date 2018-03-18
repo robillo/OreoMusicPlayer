@@ -4,4 +4,6 @@ public interface ThemeChangeMvpView {
 
     void setup();
 
+    void inflateThemeColors();
+
 }

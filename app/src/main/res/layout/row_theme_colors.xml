@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="100sp"
+    android:layout_height="100sp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="5sp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardCornerRadius="5sp"
+    app:cardBackgroundColor="@color/white"
+    app:cardElevation="5sp">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="5sp"
+        tools:background="@drawable/gradient"
+        android:contentDescription="@string/gradient_colors"
+        android:id="@+id/gradient_image_view"/>
+
+</android.support.v7.widget.CardView>

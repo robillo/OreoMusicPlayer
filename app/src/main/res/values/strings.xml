@@ -30,4 +30,6 @@
     <string name="date_added">Date Added</string>
     <string name="songs_sort">SONGS_SORT</string>
     <string name="your_settings">Your Settings</string>
+    <string name="select_player_theme">Select Player Theme:</string>
+    <string name="gradient_colors">Gradient Colors</string>
 </resources>
