@@ -2,8 +2,10 @@ package com.robillo.oreomusicplayer.utils;
 
 import android.provider.MediaStore;
 
+import com.robillo.oreomusicplayer.R;
+import com.robillo.oreomusicplayer.models.ThemeColor;
+
 import java.util.HashMap;
-import java.util.Map;
 
 @SuppressWarnings("unused")
 public class AppConstants {
@@ -14,6 +16,19 @@ public class AppConstants {
     public static final String KEY_IS_SHUFFLE_MODE_ON = "is_shuffle_mode_on";
     public static final String KEY_IS_PLAY_EVENT = "is_play_event";
     public static final String KEY_SORT_ORDER_FOR_SONGS = "sort_order_for_songs";
+    public static final String KEY_COLOR_PRIMARY = "color_primary";
+    public static final String KEY_COLOR_PRIMARY_DARK = "color_primary_dark";
+    public static final String KEY_COLOR_ACCENT = "color_accent";
+
+    //ThemeChange
+    public static final String ALL_BLACK = "ALL BLACK";
+    public static final String RED_LIGHT = "RED - LIGHT";
+    public static final String ORANGE_LIGHT = "ORANGE - LIGHT";
+    public static final String YELLOW_LIGHT = "YELLOW - LIGHT";
+    public static final String GREEN_LIGHT = "GREEN - LIGHT";
+    public static final String BLUE_LIGHT = "BLUE - LIGHT";
+    public static final String INDIGO_LIGHT = "INDIGO - LIGHT";
+    public static final String VIOLET_LIGHT = "VOILET - LIGHT";
 
     //MusicService
     public static final int EMPTY_CELLS_COUNT = 2;
@@ -60,6 +75,7 @@ public class AppConstants {
     public static final String DATE_MODIFIED_DESCENDING = MediaStore.Audio.Media.DATE_MODIFIED + " " + DESCENDING;
 
     public static HashMap<String, String> sortOrderMap = new HashMap<>();
+    public static HashMap<String, ThemeColor> themeMap = new HashMap<>();
 
     static {
         sortOrderMap.put(SIZE_ASCENDING, "Size Ascending");
@@ -78,5 +94,38 @@ public class AppConstants {
         sortOrderMap.put(DATE_ADDED_DESCENDING, "Date Added Descending");
         sortOrderMap.put(DATE_MODIFIED_ASCENDING, "Date Modified Ascending");
         sortOrderMap.put(DATE_MODIFIED_DESCENDING, "Date Modified Descending");
+
+        themeMap.put(
+                ALL_BLACK,
+                new ThemeColor(R.color.all_black_primary, R.color.all_black_primary_dark, R.color.all_black_accent)
+        );
+        themeMap.put(
+                VIOLET_LIGHT,
+                new ThemeColor(R.color.violet_primary, R.color.violet_primary_dark, R.color.violet_accent)
+        );
+        themeMap.put(
+                INDIGO_LIGHT,
+                new ThemeColor(R.color.indigo_primary, R.color.indigo_primary_dark, R.color.indigo_accent)
+        );
+        themeMap.put(
+                BLUE_LIGHT,
+                new ThemeColor(R.color.blue_primary, R.color.blue_primary_dark, R.color.blue_accent)
+        );
+        themeMap.put(
+                GREEN_LIGHT,
+                new ThemeColor(R.color.green_primary, R.color.green_primary_dark, R.color.green_accent)
+        );
+        themeMap.put(
+                YELLOW_LIGHT,
+                new ThemeColor(R.color.yellow_primary, R.color.yellow_primary_dark, R.color.yellow_accent)
+        );
+        themeMap.put(
+                ORANGE_LIGHT,
+                new ThemeColor(R.color.orange_primary, R.color.orange_primary_dark, R.color.orange_accent)
+        );
+        themeMap.put(
+                RED_LIGHT,
+                new ThemeColor(R.color.red_primary, R.color.red_primary_dark, R.color.red_accent)
+        );
     }
 }

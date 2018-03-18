@@ -26,6 +26,50 @@
         <item>#A3A8F8</item>
     </array>
 
+    <!--________________________ THEME COLORS ______________________________-->
+
+    <!-- THEME : ALL BLACK -->
+    <color name="all_black_primary">#4990E2</color>
+    <color name="all_black_primary_dark">#9ECDFF</color>
+    <color name="all_black_accent">#A3A8F8</color>
+
+    <!-- THEME : VIOLET LIGHT -->
+    <color name="violet_primary">#4990E2</color>
+    <color name="violet_primary_dark">#9ECDFF</color>
+    <color name="violet_accent">#A3A8F8</color>
+
+    <!-- THEME : INDIGO LIGHT -->
+    <color name="indigo_primary">#4990E2</color>
+    <color name="indigo_primary_dark">#9ECDFF</color>
+    <color name="indigo_accent">#A3A8F8</color>
+
+    <!-- THEME : BLUE LIGHT -->
+    <color name="blue_primary">#4990E2</color>
+    <color name="blue_primary_dark">#9ECDFF</color>
+    <color name="blue_accent">#A3A8F8</color>
+
+    <!-- THEME : GREEN LIGHT -->
+    <color name="green_primary">#4990E2</color>
+    <color name="green_primary_dark">#9ECDFF</color>
+    <color name="green_accent">#A3A8F8</color>
+
+    <!-- THEME : YELLOW LIGHT -->
+    <color name="yellow_primary">#4990E2</color>
+    <color name="yellow_primary_dark">#9ECDFF</color>
+    <color name="yellow_accent">#A3A8F8</color>
+
+    <!-- THEME : ORANGE LIGHT -->
+    <color name="orange_primary">#4990E2</color>
+    <color name="orange_primary_dark">#9ECDFF</color>
+    <color name="orange_accent">#A3A8F8</color>
+
+    <!-- THEME : RED LIGHT -->
+    <color name="red_primary">#4990E2</color>
+    <color name="red_primary_dark">#9ECDFF</color>
+    <color name="red_accent">#A3A8F8</color>
+
+    <!--____________________ THEME COLORS END HERE _______________________-->
+
     <color name="app1">#4990E2</color>
     <color name="app2">#9ECDFF</color>
     <color name="app3">#A3A8F8</color>
