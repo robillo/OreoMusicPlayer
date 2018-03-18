@@ -9,9 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.models.SortItem;
+import com.robillo.oreomusicplayer.models.ThemeColors;
 import com.robillo.oreomusicplayer.preferences.AppPreferencesHelper;
 import com.robillo.oreomusicplayer.utils.AppConstants;
 import com.robillo.oreomusicplayer.views.activities.main.songs_sort_frag.adapters.SortSongsAdapter;
@@ -46,13 +49,19 @@ import static com.robillo.oreomusicplayer.utils.AppConstants.YEAR_DESCENDING;
 public class SongsSortFragment extends Fragment implements SongsSortMvpView {
 
     List<SortItem> sortItems = new ArrayList<>();
-    private SortSongsAdapter sortAdapter;
+    AppPreferencesHelper helper = null;
 
     @BindView(R.id.coordinator_layout)
     CoordinatorLayout coordinatorLayout;
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+
+    @BindView(R.id.header)
+    TextView header;
+
+    @BindView(R.id.line_colored)
+    ImageView lineColored;
 
     public SongsSortFragment() {
         // Required empty public constructor
@@ -71,11 +80,22 @@ public class SongsSortFragment extends Fragment implements SongsSortMvpView {
     @Override
     public void setup(View v) {
         ButterKnife.bind(this, v);
+
+        helper = new AppPreferencesHelper(getActivity());
+        ThemeColors currentUserThemeColors = AppConstants.themeMap.get(helper.getUserThemeName());
+        refreshForUserThemeColors(currentUserThemeColors);
+
         inflateSortItemsList();
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         AppPreferencesHelper helper = new AppPreferencesHelper(getActivity());
-        sortAdapter = new SortSongsAdapter(getActivity(), sortItems, helper.getSortOrderForSongs());
+        SortSongsAdapter sortAdapter = new SortSongsAdapter(getActivity(), sortItems, helper.getSortOrderForSongs());
         recyclerView.setAdapter(sortAdapter);
+    }
+
+    @Override
+    public void refreshForUserThemeColors(ThemeColors currentUserThemeColors) {
+        header.setBackgroundColor(getResources().getColor(currentUserThemeColors.getColorPrimaryDark()));
+        lineColored.setBackgroundColor(getResources().getColor(currentUserThemeColors.getColorAccent()));
     }
 
     @Override

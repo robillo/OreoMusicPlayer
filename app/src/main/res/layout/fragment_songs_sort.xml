@@ -32,15 +32,17 @@
                 android:paddingTop="10sp"
                 android:text="@string/sort_songs_by"
                 android:textColor="@color/white"
-                android:background="@color/black"
+                tools:background="@color/black"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:id="@+id/header"/>
 
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="3sp"
-                android:background="@color/rushRed"
-                tools:ignore="ContentDescription,SmallSp" />
+                tools:background="@color/rushRed"
+                tools:ignore="ContentDescription,SmallSp"
+                android:id="@+id/line_colored"/>
 
             <android.support.v7.widget.RecyclerView
                 android:layout_width="match_parent"

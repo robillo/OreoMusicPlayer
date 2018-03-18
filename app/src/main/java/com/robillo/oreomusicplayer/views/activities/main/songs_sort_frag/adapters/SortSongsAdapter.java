@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.models.SortItem;
+import com.robillo.oreomusicplayer.models.ThemeColors;
 import com.robillo.oreomusicplayer.preferences.AppPreferencesHelper;
 import com.robillo.oreomusicplayer.utils.AppConstants;
 import com.robillo.oreomusicplayer.views.activities.main.MainActivity;
@@ -53,10 +54,14 @@ public class SortSongsAdapter extends RecyclerView.Adapter<SortSongsAdapter.Sort
     @Override
     public void onBindViewHolder(@NonNull final SortSongsHolder holder, int position) {
 
-        holder.title.setText(sortItems.get(position).getTextToDisplay());
+        final AppPreferencesHelper helper = new AppPreferencesHelper(activityContext);
+        final ThemeColors currentUserThemeColors = AppConstants.themeMap.get(helper.getUserThemeName());
 
+        holder.title.setText(sortItems.get(position).getTextToDisplay());
         if(currentSongOrderForSongsIndex == position) {
-            holder.title.setTextColor(activityContext.getResources().getColor(R.color.rushRed));    //highlight selected item
+            holder.title.setTextColor(
+                    activityContext.getResources().getColor(currentUserThemeColors.getColorPrimary())
+            );    //highlight selected item
             holder.title.setBackgroundColor(activityContext.getResources().getColor(R.color.colorTextFive));
         }
         else {
@@ -69,11 +74,13 @@ public class SortSongsAdapter extends RecyclerView.Adapter<SortSongsAdapter.Sort
             @Override
             public void onClick(View v) {
                 currentSongOrderForSongsIndex = pos;
-                holder.title.setTextColor(activityContext.getResources().getColor(R.color.rushRed));
+                holder.title.setTextColor(activityContext.getResources().getColor(
+                        currentUserThemeColors.getColorPrimary())
+                );
                 holder.title.setBackgroundColor(activityContext.getResources().getColor(R.color.colorTextFive));
                 notifyDataSetChanged();
 
-                AppPreferencesHelper helper = new AppPreferencesHelper(activityContext);
+
                 helper.setSortOrderForSongs(sortItems.get(pos).getConstantSortOrder());
 
                 //refresh the loader for new sort order here
