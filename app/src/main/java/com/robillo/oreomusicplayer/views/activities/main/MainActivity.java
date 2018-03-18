@@ -12,7 +12,10 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.MediaController;
 
@@ -45,6 +48,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     private MusicService musicService;
     private Intent playIntent;
     private boolean musicBound = false;
+    @SuppressWarnings("FieldCanBeLocal")
+    private ThemeColors currentUserThemeColors = null;
+    private AppPreferencesHelper helper = null;
 
     @SuppressWarnings("FieldCanBeLocal")
     private Song currentSong = null;
@@ -98,7 +104,24 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void setUp() {
+        helper = new AppPreferencesHelper(this);
+        currentUserThemeColors = AppConstants.themeMap.get(helper.getUserThemeName());
+        refreshForUserThemeColors(currentUserThemeColors);
+
         askForDevicePermissions();
+    }
+
+    @Override
+    public void refreshForUserThemeColors(ThemeColors currentUserThemeColors) {
+        Window window = getWindow();
+        // clear FLAG_TRANSLUCENT_STATUS flag:
+        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+
+        // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+
+        // finally change the color
+        window.setStatusBarColor(ContextCompat.getColor(this, currentUserThemeColors.getColorPrimaryDark()));
     }
 
     @Override

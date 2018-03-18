@@ -1,6 +1,7 @@
 package com.robillo.oreomusicplayer.views.activities.main;
 
 import com.robillo.oreomusicplayer.models.Song;
+import com.robillo.oreomusicplayer.models.ThemeColors;
 
 import java.util.ArrayList;
 
@@ -35,4 +36,7 @@ public interface MainActivityMvpView {
     void seekTenSecondsBackwards();
 
     void repopulateListSongsListFragment();
+
+    void refreshForUserThemeColors(ThemeColors currentUserThemeColors);
+
 }

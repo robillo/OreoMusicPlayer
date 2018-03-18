@@ -218,7 +218,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
                 //change tint to repeat => "repeat"
                 repeatSong
                         .setColorFilter(
-                                ContextCompat.getColor(getActivity(), R.color.rushRed)
+                                ContextCompat.getColor(getActivity(), currentUserThemeColors.getColorAccent())
                         );
             else
                 //change tint to repeat => "non repeat"
@@ -231,7 +231,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
                 //change tint to repeat => "repeat"
                 shuffleSongs
                         .setColorFilter(
-                                ContextCompat.getColor(getActivity(), R.color.rushRed)
+                                ContextCompat.getColor(getActivity(), currentUserThemeColors.getColorAccent())
                         );
             else
                 //change tint to repeat => "non repeat"
@@ -290,7 +290,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
                 //change tint to repeat => "repeat"
                 shuffleSongs
                         .setColorFilter(
-                                ContextCompat.getColor(getActivity(), R.color.rushRed)
+                                ContextCompat.getColor(getActivity(), currentUserThemeColors.getColorAccent())
                         );
             }
 
@@ -319,7 +319,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
                 //change tint to repeat => "repeat"
                 repeatSong
                         .setColorFilter(
-                                ContextCompat.getColor(getActivity(), R.color.rushRed)
+                                ContextCompat.getColor(getActivity(), currentUserThemeColors.getColorAccent())
                         );
             }
 
