@@ -28,10 +28,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ThemeChangeActivity extends AppCompatActivity implements ThemeChangeMvpView {
 
-    private ThemeColors currentUserThemeColors = null;
-    private AppPreferencesHelper helper = null;
     private List<ThemeColors> themeColorsList = new ArrayList<>();
-    private ThemeChoicesAdapter choicesAdapter;
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -62,12 +59,12 @@ public class ThemeChangeActivity extends AppCompatActivity implements ThemeChang
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.white));
 
-        helper = new AppPreferencesHelper(this);
-        currentUserThemeColors = AppConstants.themeMap.get(helper.getUserThemeName());
+        AppPreferencesHelper helper = new AppPreferencesHelper(this);
+        ThemeColors currentUserThemeColors = AppConstants.themeMap.get(helper.getUserThemeName());
 
         inflateThemeColors();
 
-        choicesAdapter = new ThemeChoicesAdapter(this, themeColorsList, currentUserThemeColors);
+        ThemeChoicesAdapter choicesAdapter = new ThemeChoicesAdapter(this, themeColorsList, currentUserThemeColors);
         recyclerView.setAdapter(choicesAdapter);
     }
 
