@@ -226,7 +226,7 @@
                 android:layout_marginLeft="20sp"
                 android:src="@color/white"
                 app:civ_border_color="@color/white"
-                app:civ_border_width="3sp"
+                app:civ_border_width="5sp"
                 tools:ignore="RtlHardcoded"/>
 
         </FrameLayout>
