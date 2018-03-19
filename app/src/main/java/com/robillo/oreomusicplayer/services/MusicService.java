@@ -1,6 +1,7 @@
 package com.robillo.oreomusicplayer.services;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -15,6 +16,7 @@ import android.media.MediaMetadata;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.provider.MediaStore;
@@ -45,6 +47,7 @@ import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_PLAY;
 import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_PREV;
 import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_STOP;
 import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_TOGGLE_PLAYBACK;
+import static com.robillo.oreomusicplayer.utils.AppConstants.CHANNEL_ID;
 import static com.robillo.oreomusicplayer.utils.AppConstants.CONTROLLER_NOTIFICATION_ID;
 
 public class MusicService extends Service implements
@@ -148,6 +151,7 @@ public class MusicService extends Service implements
     }
 
     //____________________________________BINDER STUFF__________________________________//
+
     public class MusicBinder extends Binder {
         public MusicService getService() {
             return MusicService.this;
@@ -306,7 +310,7 @@ public class MusicService extends Service implements
 
         Bitmap bitmap = getBitmapAlbumArt();
 
-        notificationController = new NotificationCompat.Builder(this, AppConstants.CHANNEL_ID)
+        notificationController = new NotificationCompat.Builder(this, CHANNEL_ID)
                 // Hide the timestamp
                 .setShowWhen(false)
                 .addAction(previous)
@@ -329,18 +333,33 @@ public class MusicService extends Service implements
                 .setContentTitle(songs.get(songPosition).getTitle())
                 .build();
 
+        int importance = 0;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            importance = NotificationManager.IMPORTANCE_HIGH;
+        }
 
-        if (getSystemService(NOTIFICATION_SERVICE) != null) {
-            //noinspection ConstantConditions
-            ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).notify(CONTROLLER_NOTIFICATION_ID, notificationController);
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if(mNotificationManager != null) {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, AppConstants.CHANNEL_NAME, importance);
+                mNotificationManager.createNotificationChannel(mChannel);
+            }
+
+            mNotificationManager.notify(CONTROLLER_NOTIFICATION_ID, notificationController);
         }
     }
 
     @Override
     public void cancelNotification(Context context, int notificationId) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        if(notificationManager != null)
-                notificationManager.cancel(CONTROLLER_NOTIFICATION_ID);
+        if(notificationManager != null) {
+            notificationManager.cancel(CONTROLLER_NOTIFICATION_ID);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                notificationManager.deleteNotificationChannel(AppConstants.CHANNEL_ID);
+            }
+        }
 
     }
 
