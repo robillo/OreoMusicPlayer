@@ -23,6 +23,8 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.robillo.oreomusicplayer.R;
@@ -48,6 +50,11 @@ import static com.robillo.oreomusicplayer.utils.AppConstants.CONTROLLER_NOTIFICA
 public class MusicService extends Service implements
         MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
         MediaPlayer.OnCompletionListener, MusicServiceInterface {
+
+    //Handle incoming phone calls
+    private boolean ongoingCall = false;
+    private PhoneStateListener phoneStateListener;
+    private TelephonyManager telephonyManager;
 
     private static boolean IS_REPEAT_MODE_ON = false;
     private static boolean IS_SHUFFLE_MODE_ON = false;
@@ -159,6 +166,9 @@ public class MusicService extends Service implements
     }
 
     //____________________________SERVICE INTERFACE CONTROLS__________________________//
+
+
+
     @Override
     public void setList(ArrayList<Song> songsList) {
         songs = songsList;
@@ -412,6 +422,43 @@ public class MusicService extends Service implements
     @Override
     public void updateAudioList(ArrayList<Song> songs) {
         this.songs = songs;
+    }
+
+    //Handle incoming phone calls
+    @Override
+    public void callStateListener() {
+        // Get the telephony manager
+        telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        //Starting listening for PhoneState changes
+        phoneStateListener = new PhoneStateListener() {
+            @Override
+            public void onCallStateChanged(int state, String incomingNumber) {
+                switch (state) {
+                    //if at least one call exists or the phone is ringing
+                    //pause the MediaPlayer
+                    case TelephonyManager.CALL_STATE_OFFHOOK:
+                    case TelephonyManager.CALL_STATE_RINGING:
+                        if (player != null) {
+                            pausePlayer();
+                            ongoingCall = true;
+                        }
+                        break;
+                    case TelephonyManager.CALL_STATE_IDLE:
+                        // Phone idle. Start playing.
+                        if (player != null) {
+                            if (ongoingCall) {
+                                ongoingCall = false;
+                                playPlayer();
+                            }
+                        }
+                        break;
+                }
+            }
+        };
+        // Register the listener with the telephony manager
+        // Listen for changes to the device call state.
+        telephonyManager.listen(phoneStateListener,
+                PhoneStateListener.LISTEN_CALL_STATE);
     }
 
 //    @Override

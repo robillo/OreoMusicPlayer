@@ -49,5 +49,7 @@ public interface MusicServiceInterface {
 
     void updateAudioList(ArrayList<Song> songs);
 
+    void callStateListener();
+
 //    void refreshNotificationForThemeChange();
 }
