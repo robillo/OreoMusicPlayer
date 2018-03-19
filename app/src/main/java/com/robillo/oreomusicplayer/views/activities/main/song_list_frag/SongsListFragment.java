@@ -162,6 +162,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     public void refreshForUserThemeColors(ThemeColors userThemeColors) {
         hideOrShowUpper.setBackgroundColor(getResources().getColor(userThemeColors.getColorPrimaryDark()));
         launchPlayFragmentTwo.setBackgroundColor(getResources().getColor(userThemeColors.getColorPrimaryDark()));
+        currentSongAlbumArt.setBorderColor(getResources().getColor(userThemeColors.getColorMat()));
     }
 
     @Override

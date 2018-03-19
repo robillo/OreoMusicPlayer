@@ -92,7 +92,7 @@
 
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="3sp"
+                    android:layout_height="2sp"
                     android:background="@color/black"
                     tools:ignore="ContentDescription,SmallSp" />
 

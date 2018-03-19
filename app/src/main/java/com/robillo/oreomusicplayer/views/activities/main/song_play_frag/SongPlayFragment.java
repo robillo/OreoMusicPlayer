@@ -132,6 +132,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
     @Override
     public void refreshForUserThemeColors(ThemeColors currentUserThemeColors) {
         bottomController.setBackgroundColor(getResources().getColor(currentUserThemeColors.getColorPrimaryDark()));
+        currentSongAlbumArt.setBorderColor(getResources().getColor(currentUserThemeColors.getColorMat()));
     }
 
     @Override
