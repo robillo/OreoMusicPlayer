@@ -163,7 +163,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void startThemeChangeActivity() {
         if(getActivity() != null)
-            ((MainActivity) getActivity()).startThemeChangeActivityForResult();
+            ((MainActivity) getActivity()).startThemeChangeActivity();
     }
 
     @Override

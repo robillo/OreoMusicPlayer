@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.models.ThemeColors;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class ThemeChangeActivity extends AppCompatActivity implements ThemeChangeMvpView {
@@ -33,6 +35,9 @@ public class ThemeChangeActivity extends AppCompatActivity implements ThemeChang
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
+
+    @BindView(R.id.go_back_to_main)
+    ImageButton goBackToMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,5 +94,16 @@ public class ThemeChangeActivity extends AppCompatActivity implements ThemeChang
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+
+    @OnClick(R.id.go_back_to_main)
+    void setGoBackToMain() {
+        onBackPressed();
     }
 }

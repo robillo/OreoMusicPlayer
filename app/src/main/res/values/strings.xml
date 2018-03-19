@@ -34,4 +34,5 @@
     <string name="gradient_colors">Gradient Colors</string>
     <string name="theme_set_successful">Theme successfully set as</string>
     <string name="sort_successful">Successfully sorted list for:</string>
+    <string name="back_pressed">Back Pressed</string>
 </resources>

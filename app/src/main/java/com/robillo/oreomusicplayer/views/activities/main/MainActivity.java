@@ -130,8 +130,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @Override
-    public void startThemeChangeActivityForResult() {
+    public void startThemeChangeActivity() {
         startActivity(new Intent(this, ThemeChangeActivity.class));
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     @Override

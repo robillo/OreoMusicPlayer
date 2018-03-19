@@ -40,7 +40,7 @@ public interface MainActivityMvpView {
 
     void refreshForUserThemeColors();
 
-    void startThemeChangeActivityForResult();
+    void startThemeChangeActivity();
 
     void showSnackBar(String text);
 
