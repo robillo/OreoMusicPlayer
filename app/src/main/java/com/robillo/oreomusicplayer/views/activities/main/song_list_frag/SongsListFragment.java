@@ -127,6 +127,10 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         fadeOutAnimationController = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out_controller);
         rotatingAlbumAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
 
+        //marqueue
+        currentSongTitle.setSelected(true);
+        currentSongArtist.setSelected(true);
+
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {

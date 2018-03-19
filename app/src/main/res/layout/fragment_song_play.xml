@@ -36,9 +36,11 @@
                 android:textSize="25sp"
                 android:textColor="@color/colorTextOne"
                 android:gravity="center"
-                android:maxLines="1"
                 tools:ignore="HardcodedText"
-                android:id="@+id/album_name"/>
+                android:id="@+id/album_name"
+                android:scrollHorizontally="true"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:singleLine="true"/>
 
             <ImageButton
                 android:layout_width="?attr/actionBarSize"
@@ -96,10 +98,13 @@
             android:textSize="22sp"
             android:layout_marginTop="5sp"
             android:textColor="@color/colorTextOne"
-            android:maxLines="1"
             android:gravity="center"
             tools:ignore="HardcodedText"
-            android:id="@+id/current_song_title"/>
+            android:id="@+id/current_song_title"
+            android:scrollHorizontally="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:ellipsize="marquee"/>
 
         <!--artist-->
 
@@ -109,10 +114,13 @@
             android:text="Steve Void"
             android:textSize="18sp"
             android:textColor="@color/colorTextTwo"
-            android:maxLines="1"
             android:gravity="center"
             tools:ignore="HardcodedText"
-            android:id="@+id/current_song_artist"/>
+            android:id="@+id/current_song_artist"
+            android:scrollHorizontally="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:ellipsize="marquee"/>
 
         <!--seekbar-->
 

@@ -189,23 +189,29 @@
                             fontPath="fonts/Raleway-Regular.ttf"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:maxLines="1"
                             android:textColor="@color/white"
                             android:textSize="20sp"
                             tools:ignore="HardcodedText,MissingPrefix,RtlHardcoded,RtlSymmetry"
-                            tools:text="I'll be your reason" />
+                            tools:text="I'll be your reason"
+                            android:scrollHorizontally="true"
+                            android:marqueeRepeatLimit="marquee_forever"
+                            android:singleLine="true"
+                            android:ellipsize="marquee"/>
 
                         <TextView
                             android:id="@+id/current_song_artist"
                             fontPath="fonts/Raleway-Regular.ttf"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:maxLines="1"
                             android:textColor="@color/white"
                             android:textSize="15sp"
                             android:textStyle="bold"
                             tools:ignore="HardcodedText,MissingPrefix,RtlHardcoded,RtlSymmetry"
-                            tools:text="Illenium" />
+                            tools:text="Illenium"
+                            android:scrollHorizontally="true"
+                            android:marqueeRepeatLimit="marquee_forever"
+                            android:singleLine="true"
+                            android:ellipsize="marquee"/>
 
                     </LinearLayout>
 

@@ -114,10 +114,12 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
         helper = new AppPreferencesHelper(getActivity());
         currentUserThemeColors = AppConstants.themeMap.get(helper.getUserThemeName());
         refreshForUserThemeColors(currentUserThemeColors);
-
         rotatingAlbumAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
-
         setPreferencesToViews();
+
+        //marqueue
+        currentSongTitle.setSelected(true);
+        currentSongArtist.setSelected(true);
 
         if(getActivity() != null){
             currentSong = ((MainActivity) getActivity()).getCurrentSong();
