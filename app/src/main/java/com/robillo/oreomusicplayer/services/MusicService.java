@@ -143,6 +143,8 @@ public class MusicService extends Service implements
                 super.onStop();
             }
         });
+
+        callStateListener();
     }
 
     //____________________________________BINDER STUFF__________________________________//

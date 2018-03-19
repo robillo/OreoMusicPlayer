@@ -7,6 +7,7 @@ import com.robillo.oreomusicplayer.models.Song;
 
 import java.util.ArrayList;
 
+@SuppressWarnings("unused")
 public interface MusicServiceInterface {
 
     void initMusicPlayer();
