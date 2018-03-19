@@ -221,7 +221,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
                 //change tint to repeat => "repeat"
                 repeatSong
                         .setColorFilter(
-                                ContextCompat.getColor(getActivity(), currentUserThemeColors.getColorAccent())
+                                ContextCompat.getColor(getActivity(), currentUserThemeColors.getColorPrimary())
                         );
             else
                 //change tint to repeat => "non repeat"
@@ -234,7 +234,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
                 //change tint to repeat => "repeat"
                 shuffleSongs
                         .setColorFilter(
-                                ContextCompat.getColor(getActivity(), currentUserThemeColors.getColorAccent())
+                                ContextCompat.getColor(getActivity(), currentUserThemeColors.getColorPrimary())
                         );
             else
                 //change tint to repeat => "non repeat"
@@ -293,7 +293,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
                 //change tint to repeat => "repeat"
                 shuffleSongs
                         .setColorFilter(
-                                ContextCompat.getColor(getActivity(), currentUserThemeColors.getColorAccent())
+                                ContextCompat.getColor(getActivity(), currentUserThemeColors.getColorPrimary())
                         );
             }
 
@@ -322,7 +322,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
                 //change tint to repeat => "repeat"
                 repeatSong
                         .setColorFilter(
-                                ContextCompat.getColor(getActivity(), currentUserThemeColors.getColorAccent())
+                                ContextCompat.getColor(getActivity(), currentUserThemeColors.getColorPrimary())
                         );
             }
 

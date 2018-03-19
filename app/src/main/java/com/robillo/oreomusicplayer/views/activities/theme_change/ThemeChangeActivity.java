@@ -70,14 +70,14 @@ public class ThemeChangeActivity extends AppCompatActivity implements ThemeChang
 
     @Override
     public void inflateThemeColors() {
-        themeColorsList.add(AppConstants.themeMap.get(AppConstants.ALL_BLACK));
-        themeColorsList.add(AppConstants.themeMap.get(AppConstants.VIOLET_LIGHT));
-        themeColorsList.add(AppConstants.themeMap.get(AppConstants.INDIGO_LIGHT));
-        themeColorsList.add(AppConstants.themeMap.get(AppConstants.BLUE_LIGHT));
-        themeColorsList.add(AppConstants.themeMap.get(AppConstants.GREEN_LIGHT));
-        themeColorsList.add(AppConstants.themeMap.get(AppConstants.YELLOW_LIGHT));
-        themeColorsList.add(AppConstants.themeMap.get(AppConstants.ORANGE_LIGHT));
-        themeColorsList.add(AppConstants.themeMap.get(AppConstants.RED_LIGHT));
+        themeColorsList.add(AppConstants.themeMap.get(AppConstants.BLUE_GREY));
+        themeColorsList.add(AppConstants.themeMap.get(AppConstants.DEEP_BROWN));
+        themeColorsList.add(AppConstants.themeMap.get(AppConstants.DEEP_BLUE));
+        themeColorsList.add(AppConstants.themeMap.get(AppConstants.DEEP_GREEN));
+        themeColorsList.add(AppConstants.themeMap.get(AppConstants.DEEP_ORANGE));
+        themeColorsList.add(AppConstants.themeMap.get(AppConstants.AMBER));
+        themeColorsList.add(AppConstants.themeMap.get(AppConstants.CYAN));
+        themeColorsList.add(AppConstants.themeMap.get(AppConstants.LIME));
     }
 
     @Override

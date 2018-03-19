@@ -5,14 +5,23 @@ import android.graphics.Color;
 @SuppressWarnings("unused")
 public class ThemeColors {
 
-    private int colorPrimary, colorPrimaryDark, colorAccent;
+    private int colorPrimary, colorPrimaryDark, colorAccent, colorMat;
     private String colorName;
 
-    public ThemeColors(int colorPrimary, int colorPrimaryDark, int colorAccent, String colorName) {
+    public ThemeColors(int colorPrimary, int colorPrimaryDark, int colorAccent, int colorMat, String colorName) {
         this.colorPrimary = colorPrimary;
         this.colorPrimaryDark = colorPrimaryDark;
         this.colorAccent = colorAccent;
         this.colorName = colorName;
+        this.colorMat = colorMat;
+    }
+
+    public int getColorMat() {
+        return colorMat;
+    }
+
+    public void setColorMat(int colorMat) {
+        this.colorMat = colorMat;
     }
 
     public String getColorName() {

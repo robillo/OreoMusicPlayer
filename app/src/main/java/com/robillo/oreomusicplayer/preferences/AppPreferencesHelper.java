@@ -55,7 +55,7 @@ public class AppPreferencesHelper implements PreferencesHelper {
 
     @Override
     public String getUserThemeName() {
-        return prefs.getString(AppConstants.KEY_USER_THEME_NAME, AppConstants.INDIGO_LIGHT);
+        return prefs.getString(AppConstants.KEY_USER_THEME_NAME, AppConstants.BLUE_GREY);
     }
 
     @Override

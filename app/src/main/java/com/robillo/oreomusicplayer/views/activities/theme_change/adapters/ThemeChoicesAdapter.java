@@ -96,9 +96,9 @@ public class ThemeChoicesAdapter extends RecyclerView.Adapter<ThemeChoicesAdapte
         return new GradientDrawable(
                 GradientDrawable.Orientation.TL_BR,
                 new int[]{
+                        context.getResources().getColor(colorPrimaryDark),
                         context.getResources().getColor(colorPrimary),
-                        context.getResources().getColor(colorPrimary),
-                        context.getResources().getColor(colorPrimary)
+                        context.getResources().getColor(colorAccent)
                 }
         );
     }

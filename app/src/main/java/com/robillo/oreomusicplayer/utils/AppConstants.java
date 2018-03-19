@@ -6,6 +6,7 @@ import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.models.ThemeColors;
 
 import java.util.HashMap;
+import java.util.List;
 
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class AppConstants {
@@ -17,16 +18,6 @@ public class AppConstants {
     public static final String KEY_IS_PLAY_EVENT = "is_play_event";
     public static final String KEY_SORT_ORDER_FOR_SONGS = "sort_order_for_songs";
     public static final String KEY_USER_THEME_NAME = "theme_name";
-
-    //ThemeChange
-    public static final String ALL_BLACK = "ALL BLACK";
-    public static final String RED_LIGHT = "RED - LIGHT";
-    public static final String ORANGE_LIGHT = "ORANGE - LIGHT";
-    public static final String YELLOW_LIGHT = "YELLOW - LIGHT";
-    public static final String GREEN_LIGHT = "GREEN - LIGHT";
-    public static final String BLUE_LIGHT = "BLUE - LIGHT";
-    public static final String INDIGO_LIGHT = "INDIGO - LIGHT";
-    public static final String VIOLET_LIGHT = "VOILET - LIGHT";
 
     //MusicService
     public static final int EMPTY_CELLS_COUNT = 2;
@@ -75,6 +66,26 @@ public class AppConstants {
     public static HashMap<String, String> sortOrderMap = new HashMap<>();
     public static HashMap<String, ThemeColors> themeMap = new HashMap<>();
 
+    //ThemeChange
+    public static final String ALL_BLACK = "ALL BLACK";
+    public static final String RED_LIGHT = "RED - LIGHT";
+    public static final String ORANGE_LIGHT = "ORANGE - LIGHT";
+    public static final String YELLOW_LIGHT = "YELLOW - LIGHT";
+    public static final String GREEN_LIGHT = "GREEN - LIGHT";
+    public static final String BLUE_LIGHT = "BLUE - LIGHT";
+    public static final String INDIGO_LIGHT = "INDIGO - LIGHT";
+    public static final String VIOLET_LIGHT = "VOILET - LIGHT";
+
+    public static final String BLUE_GREY = "BLUE GREY";
+    public static final String DEEP_BROWN = "DEEP BROWN";
+    public static final String DEEP_ORANGE = "DEEP ORANGE";
+    public static final String DEEP_GREEN = "DEEP GREEN";
+    public static final String DEEP_BLUE = "DEEP BLUE";
+    public static final String AMBER = "AMBER";
+    public static final String LIME = "LIME";
+    public static final String CYAN = "CYAN";
+
+
     static {
         sortOrderMap.put(SIZE_ASCENDING, "Size Ascending");
         sortOrderMap.put(SIZE_DESCENDING, "Size Descending");
@@ -94,36 +105,116 @@ public class AppConstants {
         sortOrderMap.put(DATE_MODIFIED_DESCENDING, "Date Modified Descending");
 
         themeMap.put(
-                ALL_BLACK,
-                new ThemeColors(R.color.all_black_primary, R.color.all_black_primary_dark, R.color.all_black_accent, ALL_BLACK)
+                BLUE_GREY,
+                new ThemeColors(
+                        R.color.blue_grey_primary,
+                        R.color.blue_grey_primary_dark,
+                        R.color.blue_grey_accent,
+                        R.color.blue_grey_mat,
+                        BLUE_GREY)
         );
+
         themeMap.put(
-                VIOLET_LIGHT,
-                new ThemeColors(R.color.violet_primary, R.color.violet_primary_dark, R.color.violet_accent, VIOLET_LIGHT)
+                DEEP_BROWN,
+                new ThemeColors(
+                        R.color.deep_brown_primary,
+                        R.color.deep_brown_primary_dark,
+                        R.color.deep_brown_accent,
+                        R.color.deep_brown_mat,
+                        DEEP_BROWN)
         );
+
         themeMap.put(
-                INDIGO_LIGHT,
-                new ThemeColors(R.color.indigo_primary, R.color.indigo_primary_dark, R.color.indigo_accent, INDIGO_LIGHT)
+                DEEP_ORANGE,
+                new ThemeColors(
+                        R.color.deep_orange_primary,
+                        R.color.deep_orange_primary_dark,
+                        R.color.deep_orange_accent,
+                        R.color.deep_orange_mat,
+                        DEEP_ORANGE)
         );
+
         themeMap.put(
-                BLUE_LIGHT,
-                new ThemeColors(R.color.blue_primary, R.color.blue_primary_dark, R.color.blue_accent, BLUE_LIGHT)
+                DEEP_GREEN,
+                new ThemeColors(
+                        R.color.deep_green_primary,
+                        R.color.deep_green_primary_dark,
+                        R.color.deep_green_accent,
+                        R.color.deep_green_mat,
+                        DEEP_GREEN)
         );
+
         themeMap.put(
-                GREEN_LIGHT,
-                new ThemeColors(R.color.green_primary, R.color.green_primary_dark, R.color.green_accent, GREEN_LIGHT)
+                DEEP_BLUE,
+                new ThemeColors(
+                        R.color.deep_blue_primary,
+                        R.color.deep_blue_primary_dark,
+                        R.color.deep_blue_accent,
+                        R.color.deep_blue_mat,
+                        DEEP_BLUE)
         );
+
         themeMap.put(
-                YELLOW_LIGHT,
-                new ThemeColors(R.color.yellow_primary, R.color.yellow_primary_dark, R.color.yellow_accent, YELLOW_LIGHT)
+                AMBER,
+                new ThemeColors(
+                        R.color.amber_primary,
+                        R.color.amber_primary_dark,
+                        R.color.amber_accent,
+                        R.color.amber_mat,
+                        AMBER)
         );
+
         themeMap.put(
-                ORANGE_LIGHT,
-                new ThemeColors(R.color.orange_primary, R.color.orange_primary_dark, R.color.orange_accent, ORANGE_LIGHT)
+                LIME,
+                new ThemeColors(
+                        R.color.lime_primary,
+                        R.color.lime_primary_dark,
+                        R.color.lime_accent,
+                        R.color.lime_mat,
+                        LIME)
         );
+
         themeMap.put(
-                RED_LIGHT,
-                new ThemeColors(R.color.red_primary, R.color.red_primary_dark, R.color.red_accent, RED_LIGHT)
+                CYAN,
+                new ThemeColors(
+                        R.color.cyan_primary,
+                        R.color.cyan_primary_dark,
+                        R.color.cyan_accent,
+                        R.color.cyan_mat,
+                        CYAN)
         );
+//
+//        themeMap.put(
+//                ALL_BLACK,
+//                new ThemeColors(R.color.all_black_primary, R.color.all_black_primary_dark, R.color.all_black_accent, ALL_BLACK)
+//        );
+//        themeMap.put(
+//                VIOLET_LIGHT,
+//                new ThemeColors(R.color.violet_primary, R.color.violet_primary_dark, R.color.violet_accent, VIOLET_LIGHT)
+//        );
+//        themeMap.put(
+//                INDIGO_LIGHT,
+//                new ThemeColors(R.color.indigo_primary, R.color.indigo_primary_dark, R.color.indigo_accent, INDIGO_LIGHT)
+//        );
+//        themeMap.put(
+//                BLUE_LIGHT,
+//                new ThemeColors(R.color.blue_primary, R.color.blue_primary_dark, R.color.blue_accent, BLUE_LIGHT)
+//        );
+//        themeMap.put(
+//                GREEN_LIGHT,
+//                new ThemeColors(R.color.green_primary, R.color.green_primary_dark, R.color.green_accent, GREEN_LIGHT)
+//        );
+//        themeMap.put(
+//                YELLOW_LIGHT,
+//                new ThemeColors(R.color.yellow_primary, R.color.yellow_primary_dark, R.color.yellow_accent, YELLOW_LIGHT)
+//        );
+//        themeMap.put(
+//                ORANGE_LIGHT,
+//                new ThemeColors(R.color.orange_primary, R.color.orange_primary_dark, R.color.orange_accent, ORANGE_LIGHT)
+//        );
+//        themeMap.put(
+//                RED_LIGHT,
+//                new ThemeColors(R.color.red_primary, R.color.red_primary_dark, R.color.red_accent, RED_LIGHT)
+//        );
     }
 }

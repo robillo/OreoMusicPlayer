@@ -28,6 +28,54 @@
 
     <!--________________________ THEME COLORS ______________________________-->
 
+    <!-- THEME : BLUE GREY -->
+    <color name="blue_grey_primary">#263238</color>
+    <color name="blue_grey_primary_dark">#000a12</color>
+    <color name="blue_grey_accent">#4f5b62</color>
+    <color name="blue_grey_mat">#607d8b</color>
+
+    <!-- THEME : DEEP BROWN -->
+    <color name="deep_brown_primary">#3e2723</color>
+    <color name="deep_brown_primary_dark">#1b0000</color>
+    <color name="deep_brown_accent">#6a4f4b</color>
+    <color name="deep_brown_mat">#6d4c41</color>
+
+    <!-- THEME : AMBER -->
+    <color name="amber_primary">#ff6f00</color>
+    <color name="amber_primary_dark">#c43e00</color>
+    <color name="amber_accent">#ffa040</color>
+    <color name="amber_mat">#ffe57f</color>
+
+    <!-- THEME : DEEP ORANGE -->
+    <color name="deep_orange_primary">#bf360c</color>
+    <color name="deep_orange_primary_dark">#870000</color>
+    <color name="deep_orange_accent">#f9683a</color>
+    <color name="deep_orange_mat">#ff9e80</color>
+
+    <!-- THEME : DEEP GREEN -->
+    <color name="deep_green_primary">#1b5e20</color>
+    <color name="deep_green_primary_dark">#003300</color>
+    <color name="deep_green_accent">#4c8c4a</color>
+    <color name="deep_green_mat">#69f0ae</color>
+
+    <!-- THEME : LIME -->
+    <color name="lime_primary">#c0ca33</color>
+    <color name="lime_primary_dark">#8c9900</color>
+    <color name="lime_accent">#f5fd67</color>
+    <color name="lime_mat">#f4ff81</color>
+
+    <!-- THEME : CYAN -->
+    <color name="cyan_primary">#0097a7</color>
+    <color name="cyan_primary_dark">#006978</color>
+    <color name="cyan_accent">#56c8d8</color>
+    <color name="cyan_mat">#baffff</color>
+
+    <!-- THEME : DEEP BLUE -->
+    <color name="deep_blue_primary">#0d47a1</color>
+    <color name="deep_blue_primary_dark">#002171</color>
+    <color name="deep_blue_accent">#5472d3</color>
+    <color name="deep_blue_mat">#82b1ff</color>
+
     <!-- THEME : ALL BLACK -->
     <color name="all_black_primary">#000000</color>
     <color name="all_black_primary_dark">#000000</color>
