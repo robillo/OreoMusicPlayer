@@ -46,8 +46,7 @@
             <ImageButton
                 android:layout_width="?attr/actionBarSize"
                 android:layout_height="match_parent"
-                android:src="@drawable/ic_menu_black_24dp"
-                android:background="?attr/selectableItemBackground"
+                android:visibility="invisible"
                 android:contentDescription="@string/song_options"
                 android:tint="@color/colorTextOne"
                 android:id="@+id/song_menu_options" />
