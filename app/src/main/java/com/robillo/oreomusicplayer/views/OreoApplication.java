@@ -12,7 +12,7 @@ public class OreoApplication extends Application {
     public void onCreate() {
         super.onCreate();
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                .setDefaultFontPath("fonts/Raleway-Regular.ttf")
+                .setDefaultFontPath("fonts/Rounded_Elegance.ttf")
                 .setFontAttrId(R.attr.fontPath)
                 .build()
         );

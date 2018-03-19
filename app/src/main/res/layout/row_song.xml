@@ -28,7 +28,6 @@
             android:textColor="@color/colorTitle"
             android:textSize="20sp"
             android:paddingBottom="10sp"
-            fontPath="fonts/Raleway-Regular.ttf"
             tools:text="I'll be your reason"
             android:id="@+id/title"
             tools:ignore="MissingPrefix,RtlHardcoded,RtlSymmetry" />
@@ -42,7 +41,6 @@
             android:textStyle="bold"
             android:textColor="@color/colorArtist"
             android:textSize="15sp"
-            fontPath="fonts/Raleway-Regular.ttf"
             tools:text="Illenium (3:40)"
             android:id="@+id/artist_duration"
             tools:ignore="MissingPrefix,RtlHardcoded,RtlSymmetry" />
