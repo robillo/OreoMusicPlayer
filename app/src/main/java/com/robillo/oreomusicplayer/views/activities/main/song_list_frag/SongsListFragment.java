@@ -1,7 +1,6 @@
 package com.robillo.oreomusicplayer.views.activities.main.song_list_frag;
 
 import android.database.Cursor;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -12,7 +11,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -226,7 +224,16 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         mAdapter = new SongsAdapter(audioList, getActivity());
         mRecyclerView.setAdapter(mAdapter);
 
-        if (getActivity() != null) ((MainActivity) getActivity()).startServiceForAudioList(audioList);
+        MainActivity activity = (MainActivity) getActivity();
+
+        if (activity != null) {
+            if(activity.getMusicService() == null) {
+                activity.startServiceForAudioList(audioList);
+            }
+            else {
+                activity.updateServiceList(audioList);
+            }
+        }
 
         getActivity().getSupportLoaderManager().destroyLoader(LOADER_ID);
     }

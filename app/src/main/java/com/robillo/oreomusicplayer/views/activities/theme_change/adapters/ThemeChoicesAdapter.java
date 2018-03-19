@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +26,8 @@ import butterknife.ButterKnife;
 public class ThemeChoicesAdapter extends RecyclerView.Adapter<ThemeChoicesAdapter.ThemeChoicesHolder> {
 
     private Context context;
-    List<ThemeColors> themeColors;
-    int currentUserThemeColorsIndex = -1;
+    private List<ThemeColors> themeColors;
+    private int currentUserThemeColorsIndex = -1;
 
     public ThemeChoicesAdapter(Context context, List<ThemeColors> themeColors, ThemeColors currentUserThemeColors) {
         this.context = context;
@@ -80,9 +79,9 @@ public class ThemeChoicesAdapter extends RecyclerView.Adapter<ThemeChoicesAdapte
                 AppPreferencesHelper helper = new AppPreferencesHelper(context);
                 helper.setUserThemeName(themeColors.get(pos).getColorName());
 
-                EventBus.getDefault().postSticky(new ThemeChangeEvent());
-
                 ((ThemeChangeActivity) context).showSnackBarThemeSet(themeColors.get(pos).getColorName());
+
+                EventBus.getDefault().postSticky(new ThemeChangeEvent());
             }
         });
     }
@@ -92,6 +91,7 @@ public class ThemeChoicesAdapter extends RecyclerView.Adapter<ThemeChoicesAdapte
         return themeColors.size();
     }
 
+    @SuppressWarnings("unused")
     private GradientDrawable createGradientDrawable(int colorPrimaryDark, int colorPrimary, int colorAccent) {
         return new GradientDrawable(
                 GradientDrawable.Orientation.TL_BR,

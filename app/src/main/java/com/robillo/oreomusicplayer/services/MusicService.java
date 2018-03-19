@@ -56,7 +56,6 @@ public class MusicService extends Service implements
     private ArrayList<Song> songs;
     private Song currentSong;
     private int songPosition;
-    private AppPreferencesHelper helper;
     private MediaSessionCompat mSession;
     Notification notificationController = null;
     MediaControllerCompat.TransportControls controls;
@@ -190,7 +189,7 @@ public class MusicService extends Service implements
         if(songIndex < songs.size() - AppConstants.EMPTY_CELLS_COUNT && songIndex >= 1) {
             currentSong = songs.get(songIndex);
 
-            helper = new AppPreferencesHelper(this);
+            AppPreferencesHelper helper = new AppPreferencesHelper(this);
             helper.setIsPlayEvent(true);
 
             EventBus.getDefault().postSticky(new SongChangeEvent(songs.get(songIndex)));
@@ -295,8 +294,6 @@ public class MusicService extends Service implements
 
         Bitmap bitmap = getBitmapAlbumArt();
 
-        AppPreferencesHelper helper = new AppPreferencesHelper(this);
-
         notificationController = new NotificationCompat.Builder(this, AppConstants.CHANNEL_ID)
                 // Hide the timestamp
                 .setShowWhen(false)
@@ -310,14 +307,15 @@ public class MusicService extends Service implements
                         // Show our playback controls in the compat view
                         .setShowActionsInCompactView(0, 1, 2))
                 // Set the Notification color
-                .setColor(getResources().getColor(AppConstants.themeMap.get(helper.getUserThemeName()).getColorPrimary()))
+                .setColor(getResources().getColor(R.color.black))
                 // Set the large and small icons
                 .setLargeIcon(bitmap)
                 .setSmallIcon(R.drawable.oval_shape)
                 // Set Notification content information
                 .setContentText(songs.get(songPosition).getArtist())
                 .setContentInfo(songs.get(songPosition).getAlbum())
-                .setContentTitle(songs.get(songPosition).getTitle()).build();
+                .setContentTitle(songs.get(songPosition).getTitle())
+                .build();
 
 
         if (getSystemService(NOTIFICATION_SERVICE) != null) {
@@ -412,12 +410,17 @@ public class MusicService extends Service implements
     }
 
     @Override
-    public void refreshNotificationForThemeChange() {
-        if(currentSong != null) {
-            AppPreferencesHelper helper = new AppPreferencesHelper(this);
-            buildNotification(helper.isPlayEvent());
-        }
+    public void updateAudioList(ArrayList<Song> songs) {
+        this.songs = songs;
     }
+
+//    @Override
+//    public void refreshNotificationForThemeChange() {
+//        if(currentSong != null) {
+//            AppPreferencesHelper helper = new AppPreferencesHelper(this);
+//            buildNotification(helper.isPlayEvent());
+//        }
+//    }
 
     public static boolean isRepeatModeOn() {
         return IS_REPEAT_MODE_ON;

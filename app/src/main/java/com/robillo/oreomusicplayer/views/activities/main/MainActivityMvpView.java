@@ -2,6 +2,7 @@ package com.robillo.oreomusicplayer.views.activities.main;
 
 import com.robillo.oreomusicplayer.models.Song;
 import com.robillo.oreomusicplayer.models.ThemeColors;
+import com.robillo.oreomusicplayer.services.MusicService;
 
 import java.util.ArrayList;
 
@@ -42,5 +43,9 @@ public interface MainActivityMvpView {
     void startThemeChangeActivityForResult();
 
     void showSnackBar(String text);
+
+    MusicService getMusicService();
+
+    void updateServiceList(ArrayList<Song> updatedAudioList);
 
 }

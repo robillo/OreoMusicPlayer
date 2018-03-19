@@ -15,7 +15,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -140,6 +139,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         Snackbar.make(
                     findViewById(R.id.coordinator_layout), text, Snackbar.LENGTH_SHORT
                 ).show();
+    }
+
+    @Override
+    public MusicService getMusicService() {
+        return musicService;
+    }
+
+    @Override
+    public void updateServiceList(ArrayList<Song> updatedAudioList) {
+        musicService.updateAudioList(updatedAudioList);
     }
 
     @Override
@@ -276,9 +285,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             songListFragment.refreshForUserThemeColors(currentUserThemeColors);
         }
 
-        if(musicService != null) {
-            musicService.refreshNotificationForThemeChange();
-        }
+//        if(musicService != null) {
+//            musicService.refreshNotificationForThemeChange();
+//        }
     }
 
     @SuppressWarnings("unused")
