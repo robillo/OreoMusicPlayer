@@ -52,7 +52,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
     ImageButton backToSongList;
 
     @BindView(R.id.album_name)
-    TextView albumName;
+    TextView currentSongAlbumName;
 
     @BindView(R.id.song_menu_options)
     ImageButton songMenuOptions;
@@ -120,6 +120,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
         //marqueue
         currentSongTitle.setSelected(true);
         currentSongArtist.setSelected(true);
+        currentSongAlbumName.setSelected(true);
 
         if(getActivity() != null){
             currentSong = ((MainActivity) getActivity()).getCurrentSong();
@@ -139,7 +140,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
         currentSong = song;
 
         currentSongTitle.setText(song.getTitle());
-        albumName.setText(song.getAlbum());
+        currentSongAlbumName.setText(song.getAlbum());
 
         currentSongArtist.setText(song.getArtist());
 

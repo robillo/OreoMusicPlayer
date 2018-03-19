@@ -40,7 +40,8 @@
                 android:id="@+id/album_name"
                 android:scrollHorizontally="true"
                 android:marqueeRepeatLimit="marquee_forever"
-                android:singleLine="true"/>
+                android:singleLine="true"
+                android:ellipsize="marquee"/>
 
             <ImageButton
                 android:layout_width="?attr/actionBarSize"
