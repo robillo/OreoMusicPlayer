@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -23,6 +24,7 @@ import android.widget.MediaController;
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.events.SongChangeEvent;
 import com.robillo.oreomusicplayer.models.Song;
+import com.robillo.oreomusicplayer.models.ThemeChangeEvent;
 import com.robillo.oreomusicplayer.models.ThemeColors;
 import com.robillo.oreomusicplayer.preferences.AppPreferencesHelper;
 import com.robillo.oreomusicplayer.services.MusicService;
@@ -107,15 +109,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void setUp() {
-        helper = new AppPreferencesHelper(this);
-        currentUserThemeColors = AppConstants.themeMap.get(helper.getUserThemeName());
-        refreshForUserThemeColors(currentUserThemeColors);
-
+        refreshForUserThemeColors();
         askForDevicePermissions();
     }
 
     @Override
-    public void refreshForUserThemeColors(ThemeColors currentUserThemeColors) {
+    public void refreshForUserThemeColors() {
+
+        helper = new AppPreferencesHelper(this);
+        currentUserThemeColors = AppConstants.themeMap.get(helper.getUserThemeName());
+
         Window window = getWindow();
         // clear FLAG_TRANSLUCENT_STATUS flag:
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -259,6 +262,23 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             stopService(playIntent);
         }
         super.onDestroy();
+    }
+
+    @SuppressWarnings("unused")
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(ThemeChangeEvent event) {
+
+        SongsListFragment songListFragment =
+                (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
+
+        if(songListFragment != null) {
+            refreshForUserThemeColors();
+            songListFragment.refreshForUserThemeColors(currentUserThemeColors);
+        }
+
+        if(musicService != null) {
+            musicService.refreshNotificationForThemeChange();
+        }
     }
 
     @SuppressWarnings("unused")

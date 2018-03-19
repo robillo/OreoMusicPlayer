@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.GradientDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +12,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.robillo.oreomusicplayer.R;
+import com.robillo.oreomusicplayer.models.ThemeChangeEvent;
 import com.robillo.oreomusicplayer.models.ThemeColors;
 import com.robillo.oreomusicplayer.preferences.AppPreferencesHelper;
 import com.robillo.oreomusicplayer.views.activities.theme_change.ThemeChangeActivity;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.List;
 
@@ -75,6 +79,8 @@ public class ThemeChoicesAdapter extends RecyclerView.Adapter<ThemeChoicesAdapte
 
                 AppPreferencesHelper helper = new AppPreferencesHelper(context);
                 helper.setUserThemeName(themeColors.get(pos).getColorName());
+
+                EventBus.getDefault().postSticky(new ThemeChangeEvent());
 
                 ((ThemeChangeActivity) context).showSnackBarThemeSet(themeColors.get(pos).getColorName());
             }

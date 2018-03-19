@@ -56,7 +56,7 @@ public class MusicService extends Service implements
     private ArrayList<Song> songs;
     private Song currentSong;
     private int songPosition;
-
+    private AppPreferencesHelper helper;
     private MediaSessionCompat mSession;
     Notification notificationController = null;
     MediaControllerCompat.TransportControls controls;
@@ -190,7 +190,7 @@ public class MusicService extends Service implements
         if(songIndex < songs.size() - AppConstants.EMPTY_CELLS_COUNT && songIndex >= 1) {
             currentSong = songs.get(songIndex);
 
-            AppPreferencesHelper helper = new AppPreferencesHelper(this);
+            helper = new AppPreferencesHelper(this);
             helper.setIsPlayEvent(true);
 
             EventBus.getDefault().postSticky(new SongChangeEvent(songs.get(songIndex)));
@@ -295,6 +295,8 @@ public class MusicService extends Service implements
 
         Bitmap bitmap = getBitmapAlbumArt();
 
+        AppPreferencesHelper helper = new AppPreferencesHelper(this);
+
         notificationController = new NotificationCompat.Builder(this, AppConstants.CHANNEL_ID)
                 // Hide the timestamp
                 .setShowWhen(false)
@@ -308,7 +310,7 @@ public class MusicService extends Service implements
                         // Show our playback controls in the compat view
                         .setShowActionsInCompactView(0, 1, 2))
                 // Set the Notification color
-                .setColor(getResources().getColor(R.color.colorPrimary))
+                .setColor(getResources().getColor(AppConstants.themeMap.get(helper.getUserThemeName()).getColorPrimary()))
                 // Set the large and small icons
                 .setLargeIcon(bitmap)
                 .setSmallIcon(R.drawable.oval_shape)
@@ -406,6 +408,14 @@ public class MusicService extends Service implements
             else {
                 playPrevious();
             }
+        }
+    }
+
+    @Override
+    public void refreshNotificationForThemeChange() {
+        if(currentSong != null) {
+            AppPreferencesHelper helper = new AppPreferencesHelper(this);
+            buildNotification(helper.isPlayEvent());
         }
     }
 

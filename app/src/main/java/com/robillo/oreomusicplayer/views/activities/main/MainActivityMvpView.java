@@ -37,7 +37,7 @@ public interface MainActivityMvpView {
 
     void repopulateListSongsListFragment();
 
-    void refreshForUserThemeColors(ThemeColors currentUserThemeColors);
+    void refreshForUserThemeColors();
 
     void startThemeChangeActivityForResult();
 

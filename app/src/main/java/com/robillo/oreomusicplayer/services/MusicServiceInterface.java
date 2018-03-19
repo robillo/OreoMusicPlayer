@@ -46,4 +46,6 @@ public interface MusicServiceInterface {
     void seekTenSecondsForward();
 
     void seekTenSecondsBackwards();
+
+    void refreshNotificationForThemeChange();
 }
