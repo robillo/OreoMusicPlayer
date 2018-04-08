@@ -29,6 +29,8 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.Gravity;
+import android.widget.Toast;
 
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.events.SongChangeEvent;
@@ -50,6 +52,7 @@ import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_STOP;
 import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_TOGGLE_PLAYBACK;
 import static com.robillo.oreomusicplayer.utils.AppConstants.CHANNEL_ID;
 import static com.robillo.oreomusicplayer.utils.AppConstants.CONTROLLER_NOTIFICATION_ID;
+import static com.robillo.oreomusicplayer.utils.AppConstants.EMPTY_CELLS_COUNT;
 import static com.robillo.oreomusicplayer.utils.AppConstants.REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE;
 import static com.robillo.oreomusicplayer.utils.AppConstants.REPEAT_MODE_VALUE_LOOP;
 import static com.robillo.oreomusicplayer.utils.AppConstants.REPEAT_MODE_VALUE_REPEAT;
@@ -220,6 +223,11 @@ public class MusicService extends Service implements
         else if(isRepeatModeOn().equals(AppConstants.REPEAT_MODE_VALUE_LOOP)) {
             setSong(1);
         }
+        else {
+            Toast toast = Toast.makeText(this, "End Of List", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 10);
+            toast.show();
+        }
     }
 
     @Override
@@ -291,7 +299,7 @@ public class MusicService extends Service implements
             int max = songs.size() - AppConstants.EMPTY_CELLS_COUNT + 1;
             songPosition = ThreadLocalRandom.current().nextInt(min, max);
         }
-        else {
+        else if(songPosition < songs.size() - AppConstants.EMPTY_CELLS_COUNT){
             songPosition++;
         }
 
@@ -495,14 +503,6 @@ public class MusicService extends Service implements
 //    }
 
 
-    public static boolean isIsLoopingModeOn() {
-        return IS_LOOPING_MODE_ON;
-    }
-
-    public static void setIsLoopingModeOn(boolean isLoopingModeOn) {
-        IS_LOOPING_MODE_ON = isLoopingModeOn;
-    }
-
     public static String isRepeatModeOn() {
         return IS_REPEAT_MODE_ON;
     }
@@ -541,6 +541,11 @@ public class MusicService extends Service implements
             }                                                   //else don't update song position so that same song plays again
 
             setSong(songPosition);
+        }
+
+        if(isRepeatModeOn().equals(REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE) && songPosition == songs.size() - EMPTY_CELLS_COUNT) {
+            Log.e("completion", "end");
+            pausePlayer();
         }
     }
 
