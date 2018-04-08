@@ -22,6 +22,7 @@ import android.os.PowerManager;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -49,6 +50,9 @@ import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_STOP;
 import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_TOGGLE_PLAYBACK;
 import static com.robillo.oreomusicplayer.utils.AppConstants.CHANNEL_ID;
 import static com.robillo.oreomusicplayer.utils.AppConstants.CONTROLLER_NOTIFICATION_ID;
+import static com.robillo.oreomusicplayer.utils.AppConstants.REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE;
+import static com.robillo.oreomusicplayer.utils.AppConstants.REPEAT_MODE_VALUE_LOOP;
+import static com.robillo.oreomusicplayer.utils.AppConstants.REPEAT_MODE_VALUE_REPEAT;
 
 public class MusicService extends Service implements
         MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
@@ -59,8 +63,9 @@ public class MusicService extends Service implements
     private PhoneStateListener phoneStateListener;
     private TelephonyManager telephonyManager;
 
-    private static boolean IS_REPEAT_MODE_ON = false;
+    private static String IS_REPEAT_MODE_ON = AppConstants.REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE;
     private static boolean IS_SHUFFLE_MODE_ON = false;
+    private static boolean IS_LOOPING_MODE_ON = false;
 
     private MediaPlayer player;
     private ArrayList<Song> songs;
@@ -211,6 +216,9 @@ public class MusicService extends Service implements
             EventBus.getDefault().postSticky(new SongChangeEvent(songs.get(songIndex)));
             songPosition = songIndex;
             playSong();
+        }
+        else if(isRepeatModeOn().equals(AppConstants.REPEAT_MODE_VALUE_LOOP)) {
+            setSong(1);
         }
     }
 
@@ -393,12 +401,8 @@ public class MusicService extends Service implements
     }
 
     @Override
-    public void toggleRepeatMode() {
-        AppPreferencesHelper helper = new AppPreferencesHelper(this);
-        if(helper.isRepeatModeOn())
-            setIsRepeatModeOn(true);
-        else
-            setIsRepeatModeOn(false);
+    public void toggleRepeatMode(String value) {
+        setIsRepeatModeOn(value);
     }
 
     @Override
@@ -416,7 +420,7 @@ public class MusicService extends Service implements
             player.seekTo(player.getCurrentPosition() + 10000);
         }
         else {
-            if(isRepeatModeOn()) {
+            if(isRepeatModeOn().equals(AppConstants.REPEAT_MODE_VALUE_REPEAT)) {
                 setSong(songPosition);
             }
             else {
@@ -431,7 +435,7 @@ public class MusicService extends Service implements
             player.seekTo(player.getCurrentPosition() - 10000);
         }
         else {
-            if(isRepeatModeOn()) {
+            if(isRepeatModeOn().equals(AppConstants.REPEAT_MODE_VALUE_REPEAT)) {
                 setSong(songPosition);
             }
             else {
@@ -490,11 +494,20 @@ public class MusicService extends Service implements
 //        }
 //    }
 
-    public static boolean isRepeatModeOn() {
+
+    public static boolean isIsLoopingModeOn() {
+        return IS_LOOPING_MODE_ON;
+    }
+
+    public static void setIsLoopingModeOn(boolean isLoopingModeOn) {
+        IS_LOOPING_MODE_ON = isLoopingModeOn;
+    }
+
+    public static String isRepeatModeOn() {
         return IS_REPEAT_MODE_ON;
     }
 
-    public static void setIsRepeatModeOn(boolean isRepeatModeOn) {
+    public static void setIsRepeatModeOn(String isRepeatModeOn) {
         IS_REPEAT_MODE_ON = isRepeatModeOn;
     }
 
@@ -512,7 +525,8 @@ public class MusicService extends Service implements
     public void onCompletion(MediaPlayer mp) {
         if(songPosition < songs.size() - AppConstants.EMPTY_CELLS_COUNT){
 
-            if(!isRepeatModeOn()) {                             //if repeat mode is off, update songPosition for next song to be played
+            if(!isRepeatModeOn().equals(AppConstants.REPEAT_MODE_VALUE_REPEAT)) {
+                //if repeat mode is off, update songPosition for next song to be played
 
                 if(isShuffleModeOn()) {
                     // nextInt is normally exclusive of the top value

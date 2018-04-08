@@ -40,7 +40,7 @@ public interface MusicServiceInterface {
 
     Bitmap getBitmapAlbumArt();
 
-    void toggleRepeatMode();
+    void toggleRepeatMode(String value);
 
     void toggleShuffleMode();
 

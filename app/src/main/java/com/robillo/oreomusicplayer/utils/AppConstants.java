@@ -19,6 +19,10 @@ public class AppConstants {
     public static final String KEY_SORT_ORDER_FOR_SONGS = "sort_order_for_songs";
     public static final String KEY_USER_THEME_NAME = "theme_name";
 
+    public static final String REPEAT_MODE_VALUE_REPEAT = "repeating";
+    public static final String REPEAT_MODE_VALUE_LOOP = "looping";
+    public static final String REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE = "linearly_traversing_once";
+
     //MusicService
     public static final int EMPTY_CELLS_COUNT = 2;
     public static final String CHANNEL_ID = "channelId";

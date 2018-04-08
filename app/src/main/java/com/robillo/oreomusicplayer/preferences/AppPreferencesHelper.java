@@ -13,14 +13,15 @@ public class AppPreferencesHelper implements PreferencesHelper {
         prefs = context.getSharedPreferences(AppConstants.PREF_FILE_NAME, Context.MODE_PRIVATE);
     }
 
+
     @Override
-    public boolean isRepeatModeOn() {
-        return prefs.getBoolean(AppConstants.KEY_IS_REPEAT_MODE_ON, false);
+    public String isRepeatModeOn() {
+        return prefs.getString(AppConstants.KEY_IS_REPEAT_MODE_ON, AppConstants.REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE);
     }
 
     @Override
-    public void setIsRepeatModeOn(boolean value) {
-        prefs.edit().putBoolean(AppConstants.KEY_IS_REPEAT_MODE_ON, value).apply();
+    public void setIsRepeatModeOn(String value) {
+        prefs.edit().putString(AppConstants.KEY_IS_REPEAT_MODE_ON, value).apply();
     }
 
     @Override

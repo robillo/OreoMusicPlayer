@@ -2,8 +2,8 @@ package com.robillo.oreomusicplayer.preferences;
 
 interface PreferencesHelper {
 
-    boolean isRepeatModeOn();
-    void setIsRepeatModeOn(boolean value);
+    String isRepeatModeOn();
+    void setIsRepeatModeOn(String value);
 
     boolean isShuffleModeOn();
     void setIsShuffleModeOn(boolean value);

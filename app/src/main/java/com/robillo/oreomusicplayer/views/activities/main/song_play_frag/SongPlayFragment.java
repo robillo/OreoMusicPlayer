@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -131,7 +132,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
 
     @Override
     public void refreshForUserThemeColors(ThemeColors currentUserThemeColors) {
-        bottomController.setBackgroundColor(getResources().getColor(currentUserThemeColors.getColorPrimaryDark()));
+        bottomController.setBackgroundColor(getResources().getColor(currentUserThemeColors.getColorPrimary()));
         currentSongAlbumArt.setBorderColor(getResources().getColor(currentUserThemeColors.getColorMat()));
     }
 
@@ -218,18 +219,42 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
     public void setPreferencesToViews() {
         if(getActivity() != null) {
 
-            if(helper.isRepeatModeOn())
-                //change tint to repeat => "repeat"
-                repeatSong
-                        .setColorFilter(
-                                ContextCompat.getColor(getActivity(), currentUserThemeColors.getColorPrimary())
-                        );
-            else
-                //change tint to repeat => "non repeat"
-                repeatSong
-                        .setColorFilter(
-                                ContextCompat.getColor(getActivity(), R.color.colorTextOne)
-                        );
+            switch (helper.isRepeatModeOn()) {
+                case AppConstants.REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE:
+                    //change tint to linear traverse => "unticked grey" and drawable to loop
+                    repeatSong
+                            .setImageDrawable(
+                                    getResources().getDrawable(R.drawable.ic_repeat_black_24dp)
+                            );
+                    repeatSong
+                            .setColorFilter(
+                                    ContextCompat.getColor(getActivity(), R.color.colorTextOne)
+                            );
+                    break;
+                case AppConstants.REPEAT_MODE_VALUE_LOOP:
+                    //change tint to loop list => "ticked primary" and drawable to loop
+                    repeatSong
+                            .setImageDrawable(
+                                    getResources().getDrawable(R.drawable.ic_repeat_black_24dp)
+                            );
+                    repeatSong
+                            .setColorFilter(
+                                    ContextCompat.getColor(getActivity(), currentUserThemeColors.getColorPrimary())
+                            );
+                    break;
+                case AppConstants.REPEAT_MODE_VALUE_REPEAT:
+                    //change tint to repeat => "ticked primary" and drawable to repeat one
+                    repeatSong
+                            .setImageDrawable(
+                                    getResources().getDrawable(R.drawable.ic_repeat_one_black_24dp)
+                            );
+                    repeatSong
+                            .setColorFilter(
+                                    ContextCompat.getColor(getActivity(), currentUserThemeColors.getColorPrimary())
+                            );
+                    break;
+            }
+
 
             if(helper.isShuffleModeOn())
                 //change tint to repeat => "repeat"
@@ -308,26 +333,47 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
 
             AppPreferencesHelper helper = new AppPreferencesHelper(getActivity());
 
-            if(helper.isRepeatModeOn()) {
-                helper.setIsRepeatModeOn(false);
+            switch (helper.isRepeatModeOn()) {
+                case AppConstants.REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE:
+                    helper.setIsRepeatModeOn(AppConstants.REPEAT_MODE_VALUE_LOOP);
+                    repeatSong
+                            .setImageDrawable(
+                                    getResources().getDrawable(R.drawable.ic_repeat_black_24dp)
+                            );
+                    repeatSong
+                            .setColorFilter(
+                                    ContextCompat.getColor(getActivity(), currentUserThemeColors.getColorPrimary())
+                            );
 
-                //change tint to normal => "non repeat"
-                repeatSong
-                        .setColorFilter(
-                                ContextCompat.getColor(getActivity(), R.color.colorTextOne)
-                        );
+                    Log.e("tag", helper.isRepeatModeOn());
+                    break;
+                case AppConstants.REPEAT_MODE_VALUE_LOOP:
+                    helper.setIsRepeatModeOn(AppConstants.REPEAT_MODE_VALUE_REPEAT);
+                    repeatSong
+                            .setImageDrawable(
+                                    getResources().getDrawable(R.drawable.ic_repeat_one_black_24dp)
+                            );
+                    repeatSong
+                            .setColorFilter(
+                                    ContextCompat.getColor(getActivity(), currentUserThemeColors.getColorPrimary())
+                            );
+                    Log.e("tag", helper.isRepeatModeOn());
+                    break;
+                case AppConstants.REPEAT_MODE_VALUE_REPEAT:
+                    helper.setIsRepeatModeOn(AppConstants.REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE);
+                    repeatSong
+                            .setImageDrawable(
+                                    getResources().getDrawable(R.drawable.ic_repeat_black_24dp)
+                            );
+                    repeatSong
+                            .setColorFilter(
+                                    ContextCompat.getColor(getActivity(), R.color.colorTextOne)
+                            );
+                    Log.e("tag", helper.isRepeatModeOn());
+                    break;
             }
-            else {
-                helper.setIsRepeatModeOn(true);
 
-                //change tint to repeat => "repeat"
-                repeatSong
-                        .setColorFilter(
-                                ContextCompat.getColor(getActivity(), currentUserThemeColors.getColorPrimary())
-                        );
-            }
-
-            ((MainActivity) getActivity()).toggleRepeatModeInService();
+            ((MainActivity) getActivity()).toggleRepeatModeInService(helper.isRepeatModeOn());
         }
     }
 
