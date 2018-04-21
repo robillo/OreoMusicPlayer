@@ -3,6 +3,8 @@ package com.robillo.oreomusicplayer.views.activities.main.song_play_frag;
 import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -202,8 +204,16 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
             //set duration
             currentDurationProgress = ((MainActivity) getActivity()).getCurrentSongDuration()/1000;
             totalDurationProgress = ((MainActivity) getActivity()).getDuration()/1000;
-            if(totalDurationProgress != 0)
-                currentSongProgressSeekBar.setProgress((currentDurationProgress * 100)/totalDurationProgress);
+            if(totalDurationProgress != 0) {
+                currentSongProgressSeekBar.setProgress((currentDurationProgress * 100) / totalDurationProgress);
+                Log.e(
+                        "tag",
+                        currentDurationProgress + " " +
+                                totalDurationProgress + " " +
+                                currentSongProgressSeekBar.getProgress()
+                );
+                startProgressBarProgress();
+            }
 
             //play or pause
             if(((MainActivity) getActivity()).isPlaying()) playPlayer(FROM_ACTIVITY);
@@ -476,6 +486,31 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
 
     @Override
     public void startProgressBarProgress() {
+        if(totalDurationProgress > 0 && currentDurationProgress < totalDurationProgress) {
+            CountDownTimer timer =
+                    new CountDownTimer(
+                            (totalDurationProgress - currentDurationProgress) * 1000,
+                            1500
+                    ) {
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            currentDurationProgress = (totalDurationProgress - (int) (millisUntilFinished/1000));
+                            int percentProgress = (currentDurationProgress * 100)/totalDurationProgress;
+                            currentSongProgressSeekBar.setProgress(percentProgress);
+                            Log.e(
+                                    "tag",
+                                    currentDurationProgress + " " +
+                                            totalDurationProgress + " " +
+                                            currentSongProgressSeekBar.getProgress()
+                            );
+                        }
 
+                        @Override
+                        public void onFinish() {
+
+                        }
+                    };
+            timer.start();
+        }
     }
 }
