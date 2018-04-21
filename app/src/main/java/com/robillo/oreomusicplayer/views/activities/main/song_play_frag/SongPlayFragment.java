@@ -20,7 +20,6 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.robillo.oreomusicplayer.R;
@@ -45,12 +44,14 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
 
     @SuppressWarnings("FieldCanBeLocal")
     private static Song currentSong = null;
+    @SuppressWarnings("FieldCanBeLocal")
     private boolean isHidingAlready = false;
     private GestureDetector mGestureDetector;
     private AppPreferencesHelper helper = null;
     @SuppressWarnings("FieldCanBeLocal")
     private ThemeColors currentUserThemeColors = null;
-    Animation rotatingAlbumAnim;
+    private Animation rotatingAlbumAnim;
+    private int currentDurationProgress, totalDurationProgress;
 
     @BindView(R.id.bottom_controller)
     LinearLayout bottomController;
@@ -104,7 +105,6 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
         // Required empty public constructor
     }
 
-
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -119,6 +119,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
     public void setUp(View v) {
         ButterKnife.bind(this, v);
 
+        //noinspection ConstantConditions
         helper = new AppPreferencesHelper(getActivity());
         currentUserThemeColors = AppConstants.themeMap.get(helper.getUserThemeName());
         refreshForUserThemeColors(currentUserThemeColors);
@@ -198,6 +199,13 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
         }
 
         if(getActivity()!=null) {
+            //set duration
+            currentDurationProgress = ((MainActivity) getActivity()).getCurrentSongDuration()/1000;
+            totalDurationProgress = ((MainActivity) getActivity()).getDuration()/1000;
+            if(totalDurationProgress != 0)
+                currentSongProgressSeekBar.setProgress((currentDurationProgress * 100)/totalDurationProgress);
+
+            //play or pause
             if(((MainActivity) getActivity()).isPlaying()) playPlayer(FROM_ACTIVITY);
             else pausePlayer(FROM_ACTIVITY);
         }
@@ -444,6 +452,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
 
     @Override
     public boolean onScroll(MotionEvent eventOne, MotionEvent eventTwo, float dx, float dy) {
+        //noinspection StatementWithEmptyBody
         if(dy < 0) {      //scrolled down
             if(!isHidingAlready)
                 if(getActivity() != null)
@@ -463,5 +472,10 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
     @Override
     public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
         return false;
+    }
+
+    @Override
+    public void startProgressBarProgress() {
+
     }
 }

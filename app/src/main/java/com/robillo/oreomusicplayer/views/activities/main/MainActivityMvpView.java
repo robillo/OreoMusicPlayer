@@ -48,4 +48,6 @@ public interface MainActivityMvpView {
 
     void updateServiceList(ArrayList<Song> updatedAudioList);
 
+    int getCurrentSongDuration();
+
 }

@@ -25,4 +25,5 @@ public interface SongPlayMvpView {
 
     void refreshForUserThemeColors(ThemeColors currentUserThemeColors);
 
+    void startProgressBarProgress();
 }

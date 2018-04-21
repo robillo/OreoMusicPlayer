@@ -153,6 +153,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @Override
+    public int getCurrentSongDuration() {
+        if(musicService!=null && musicBound && musicService.isPlaying()) return musicService.getPosition();
+        else return 0;
+    }
+
+    @Override
     public void setSongListFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(mFragmentContainer.getId(), new SongsListFragment(), getString(R.string.songs_list));

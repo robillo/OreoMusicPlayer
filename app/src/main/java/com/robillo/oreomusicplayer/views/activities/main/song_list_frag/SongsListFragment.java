@@ -59,8 +59,11 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @SuppressWarnings("FieldCanBeLocal")
     private SongsAdapter mAdapter;
     private static ArrayList<Song> audioList = null;
-    Animation rotatingAlbumAnim, fadeInAnimationUpper, fadeOutAnimationUpper, fadeInAnimationController, fadeOutAnimationController;
-    private GestureDetector mGestureDetector;
+    Animation rotatingAlbumAnim,
+            fadeInAnimationUpper,
+            fadeOutAnimationUpper,
+            fadeInAnimationController,
+            fadeOutAnimationController;
     private static Song currentSong = null;
     private static boolean isAnimatingUpper = false;
     private static boolean isAnimatingController = false;
@@ -123,6 +126,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void setUp(View v) {
+        //noinspection ConstantConditions
         helper = new AppPreferencesHelper(getActivity());
         currentUserThemeColors = AppConstants.themeMap.get(helper.getUserThemeName());
         refreshForUserThemeColors(currentUserThemeColors);
@@ -138,8 +142,6 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         currentSongArtist.setSelected(true);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        mGestureDetector = new GestureDetector(getActivity(), this);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override

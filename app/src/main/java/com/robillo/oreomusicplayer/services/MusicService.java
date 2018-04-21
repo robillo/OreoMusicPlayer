@@ -22,7 +22,6 @@ import android.os.PowerManager;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -56,8 +55,6 @@ import static com.robillo.oreomusicplayer.utils.AppConstants.CONTROLLER_NOTIFICA
 import static com.robillo.oreomusicplayer.utils.AppConstants.EMPTY_CELLS_COUNT;
 import static com.robillo.oreomusicplayer.utils.AppConstants.LAUNCHED_FROM_NOTIFICATION;
 import static com.robillo.oreomusicplayer.utils.AppConstants.REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE;
-import static com.robillo.oreomusicplayer.utils.AppConstants.REPEAT_MODE_VALUE_LOOP;
-import static com.robillo.oreomusicplayer.utils.AppConstants.REPEAT_MODE_VALUE_REPEAT;
 
 public class MusicService extends Service implements
         MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
@@ -65,12 +62,13 @@ public class MusicService extends Service implements
 
     //Handle incoming phone calls
     private boolean ongoingCall = false;
+    @SuppressWarnings("FieldCanBeLocal")
     private PhoneStateListener phoneStateListener;
+    @SuppressWarnings("FieldCanBeLocal")
     private TelephonyManager telephonyManager;
 
     private static String IS_REPEAT_MODE_ON = AppConstants.REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE;
     private static boolean IS_SHUFFLE_MODE_ON = false;
-    private static boolean IS_LOOPING_MODE_ON = false;
 
     private MediaPlayer player;
     private ArrayList<Song> songs;
@@ -328,21 +326,13 @@ public class MusicService extends Service implements
 
         Bitmap bitmap = getBitmapAlbumArt();
 
-//        Intent notificationIntent = new Intent(context, MainActivity.class);
-//
-//        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-//                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//
-//        PendingIntent intent = PendingIntent.getActivity(context, 0,
-//                notificationIntent, 0);
-
-        Intent notifIntent = new Intent(this, MainActivity.class);
-        notifIntent.putExtra(LAUNCHED_FROM_NOTIFICATION, true);
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        notificationIntent.putExtra(LAUNCHED_FROM_NOTIFICATION, true);
 
         PendingIntent contentIntent = PendingIntent.getActivity(
                 this,
                 0,
-                notifIntent,
+                notificationIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT
         );
 
