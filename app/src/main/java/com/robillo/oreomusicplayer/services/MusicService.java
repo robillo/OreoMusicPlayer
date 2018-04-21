@@ -37,6 +37,7 @@ import com.robillo.oreomusicplayer.events.SongChangeEvent;
 import com.robillo.oreomusicplayer.models.Song;
 import com.robillo.oreomusicplayer.preferences.AppPreferencesHelper;
 import com.robillo.oreomusicplayer.utils.AppConstants;
+import com.robillo.oreomusicplayer.views.activities.main.MainActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -53,6 +54,7 @@ import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_TOGGLE_PLAYB
 import static com.robillo.oreomusicplayer.utils.AppConstants.CHANNEL_ID;
 import static com.robillo.oreomusicplayer.utils.AppConstants.CONTROLLER_NOTIFICATION_ID;
 import static com.robillo.oreomusicplayer.utils.AppConstants.EMPTY_CELLS_COUNT;
+import static com.robillo.oreomusicplayer.utils.AppConstants.LAUNCHED_FROM_NOTIFICATION;
 import static com.robillo.oreomusicplayer.utils.AppConstants.REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE;
 import static com.robillo.oreomusicplayer.utils.AppConstants.REPEAT_MODE_VALUE_LOOP;
 import static com.robillo.oreomusicplayer.utils.AppConstants.REPEAT_MODE_VALUE_REPEAT;
@@ -326,6 +328,24 @@ public class MusicService extends Service implements
 
         Bitmap bitmap = getBitmapAlbumArt();
 
+//        Intent notificationIntent = new Intent(context, MainActivity.class);
+//
+//        notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+//                | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//
+//        PendingIntent intent = PendingIntent.getActivity(context, 0,
+//                notificationIntent, 0);
+
+        Intent notifIntent = new Intent(this, MainActivity.class);
+        notifIntent.putExtra(LAUNCHED_FROM_NOTIFICATION, true);
+
+        PendingIntent contentIntent = PendingIntent.getActivity(
+                this,
+                0,
+                notifIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
+
         notificationController = new NotificationCompat.Builder(this, CHANNEL_ID)
                 // Hide the timestamp
                 .setShowWhen(false)
@@ -347,6 +367,7 @@ public class MusicService extends Service implements
                 .setContentText(songs.get(songPosition).getArtist())
                 .setContentInfo(songs.get(songPosition).getAlbum())
                 .setContentTitle(songs.get(songPosition).getTitle())
+                .setContentIntent(contentIntent)
                 .build();
 
         int importance = 0;

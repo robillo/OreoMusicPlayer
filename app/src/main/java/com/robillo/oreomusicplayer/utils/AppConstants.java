@@ -11,6 +11,9 @@ import java.util.List;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class AppConstants {
 
+    //IntentExtra
+    public static final String LAUNCHED_FROM_NOTIFICATION = "launched_from_notification";
+
     //SharedPreferencesHelper
     public static final String PREF_FILE_NAME = "MY_PREFERENCES";
     public static final String KEY_IS_REPEAT_MODE_ON = "is_repeat_mode_on";

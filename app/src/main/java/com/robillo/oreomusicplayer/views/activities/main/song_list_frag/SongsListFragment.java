@@ -11,7 +11,10 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -21,6 +24,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.robillo.oreomusicplayer.R;
@@ -40,12 +44,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_ACTIVITY;
 import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_FRAGMENT;
+import static com.robillo.oreomusicplayer.utils.AppConstants.LAUNCHED_FROM_NOTIFICATION;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 @SuppressWarnings("FieldCanBeLocal")
-public class SongsListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SongListMvpView {
+public class SongsListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SongListMvpView, GestureDetector.OnGestureListener {
 
     @SuppressWarnings("FieldCanBeLocal")
     private final int EMPTY_CELLS_COUNT = 2;
@@ -55,6 +60,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     private SongsAdapter mAdapter;
     private static ArrayList<Song> audioList = null;
     Animation rotatingAlbumAnim, fadeInAnimationUpper, fadeOutAnimationUpper, fadeInAnimationController, fadeOutAnimationController;
+    private GestureDetector mGestureDetector;
     private static Song currentSong = null;
     private static boolean isAnimatingUpper = false;
     private static boolean isAnimatingController = false;
@@ -133,6 +139,8 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        mGestureDetector = new GestureDetector(getActivity(), this);
+
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -181,6 +189,11 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         super.onResume();
         if(audioList == null || audioList.size() == 0) {
             fetchSongs();
+        }
+        else if(getActivity() != null){
+            if(getActivity().getIntent().getBooleanExtra(LAUNCHED_FROM_NOTIFICATION, false)) {
+                fetchSongs();
+            }
         }
     }
 
@@ -463,5 +476,43 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         };
         fadeInAnimationController.setAnimationListener(listener);
         bottomController.startAnimation(fadeInAnimationController);
+    }
+
+    @Override
+    public boolean onDown(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent motionEvent) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent eventOne, MotionEvent eventTwo, float dx, float dy) {
+        Log.e("log", "scrolling");
+        if(dy < 0) {      //scrolled down
+            Log.e("log", "scrolling down");
+        }
+        else if(dy > 0) {          //scrolled up
+            Log.e("log", "scrolling up");
+            Toast.makeText(getActivity(), "UP " + bottomController.getVisibility(), Toast.LENGTH_SHORT).show();
+        }
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent motionEvent) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        return false;
     }
 }

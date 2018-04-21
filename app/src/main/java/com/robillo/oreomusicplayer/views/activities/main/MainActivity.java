@@ -262,13 +262,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         Fragment songPlayFragment = getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play));
         Fragment songsSortFragment = getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_sort));
 
-        if(songPlayFragment != null) {                                                                      //remove song play fragment from back stack
+        if(songPlayFragment != null) {                                  //remove song play fragment from back stack
             super.onBackPressed();
         }
         else if(songsSortFragment != null) {
             super.onBackPressed();
         }
-        else {                                                                                      //don't remove song list fragment from activity
+        else {                                                          //don't remove song list fragment from activity
             Intent homeIntent = new Intent(Intent.ACTION_MAIN);
             homeIntent.addCategory(Intent.CATEGORY_HOME);
             homeIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

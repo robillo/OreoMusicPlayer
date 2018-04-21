@@ -1,5 +1,6 @@
 package com.robillo.oreomusicplayer.views.activities.main.song_play_frag;
 
+import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -8,7 +9,9 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -17,6 +20,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.robillo.oreomusicplayer.R;
@@ -37,10 +41,12 @@ import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_FRAGMENT;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SongPlayFragment extends Fragment implements SongPlayMvpView {
+public class SongPlayFragment extends Fragment implements SongPlayMvpView, GestureDetector.OnGestureListener {
 
     @SuppressWarnings("FieldCanBeLocal")
     private static Song currentSong = null;
+    private boolean isHidingAlready = false;
+    private GestureDetector mGestureDetector;
     private AppPreferencesHelper helper = null;
     @SuppressWarnings("FieldCanBeLocal")
     private ThemeColors currentUserThemeColors = null;
@@ -108,6 +114,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
         return v;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void setUp(View v) {
         ButterKnife.bind(this, v);
@@ -117,6 +124,14 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
         refreshForUserThemeColors(currentUserThemeColors);
         rotatingAlbumAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
         setPreferencesToViews();
+
+        mGestureDetector = new GestureDetector(getActivity(), this);
+        coordinatorLayout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                return mGestureDetector.onTouchEvent(motionEvent);
+            }
+        });
 
         //marqueue
         currentSongTitle.setSelected(true);
@@ -410,5 +425,43 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView {
     @OnClick(R.id.coordinator_layout)
     void  setCoordinatorLayout() {
 
+    }
+
+    @Override
+    public boolean onDown(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public void onShowPress(MotionEvent motionEvent) {
+
+    }
+
+    @Override
+    public boolean onSingleTapUp(MotionEvent motionEvent) {
+        return false;
+    }
+
+    @Override
+    public boolean onScroll(MotionEvent eventOne, MotionEvent eventTwo, float dx, float dy) {
+        if(dy < 0) {      //scrolled down
+            if(!isHidingAlready)
+                if(getActivity() != null)
+                    getActivity().onBackPressed();
+        }
+        else {          //scrolled up
+
+        }
+        return false;
+    }
+
+    @Override
+    public void onLongPress(MotionEvent motionEvent) {
+
+    }
+
+    @Override
+    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+        return false;
     }
 }
