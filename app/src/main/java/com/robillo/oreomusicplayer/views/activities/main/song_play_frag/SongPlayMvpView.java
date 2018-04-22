@@ -26,4 +26,8 @@ public interface SongPlayMvpView {
     void refreshForUserThemeColors(ThemeColors currentUserThemeColors);
 
     void startProgressBarProgress();
+
+    void setProgressToSeekBar(int currentDuration, int totalDuration);
+
+    int computeCurrentDuration(int standardDuration, int forwardedSeconds);
 }

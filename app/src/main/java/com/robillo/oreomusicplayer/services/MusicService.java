@@ -435,7 +435,7 @@ public class MusicService extends Service implements
 
     @Override
     public void seekTenSecondsForward() {
-        if(player.getCurrentPosition() < (player.getDuration() - 11000)) {                          //1 second for performance lag
+        if(player.getCurrentPosition() < (player.getDuration() - 11000)) {        //1 second for performance lag
             player.seekTo(player.getCurrentPosition() + 10000);
         }
         else {
@@ -450,7 +450,7 @@ public class MusicService extends Service implements
 
     @Override
     public void seekTenSecondsBackwards() {
-        if(player.getCurrentPosition() > 11000) {                                                   //current position is more than 10 seconds
+        if(player.getCurrentPosition() > 11000) {                                 //current position is more than 10 seconds
             player.seekTo(player.getCurrentPosition() - 10000);
         }
         else {

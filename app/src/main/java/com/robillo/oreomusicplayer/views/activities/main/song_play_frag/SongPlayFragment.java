@@ -44,6 +44,7 @@ import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_FRAGMENT;
  */
 public class SongPlayFragment extends Fragment implements SongPlayMvpView, GestureDetector.OnGestureListener {
 
+    private static int forwardedSeconds;
     @SuppressWarnings("FieldCanBeLocal")
     private static Song currentSong = null;
     @SuppressWarnings("FieldCanBeLocal")
@@ -157,6 +158,10 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
     @Override
     public void setCurrentSong(Song song) {
 
+        forwardedSeconds = 0;
+        currentDurationProgress = 0;
+        totalDurationProgress = 0;
+
         currentSong = song;
 
         currentSongTitle.setText(song.getTitle());
@@ -206,12 +211,6 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
             totalDurationProgress = ((MainActivity) getActivity()).getDuration()/1000;
             if(totalDurationProgress != 0) {
                 currentSongProgressSeekBar.setProgress((currentDurationProgress * 100) / totalDurationProgress);
-                Log.e(
-                        "tag",
-                        currentDurationProgress + " " +
-                                totalDurationProgress + " " +
-                                currentSongProgressSeekBar.getProgress()
-                );
                 startProgressBarProgress();
             }
 
@@ -412,11 +411,26 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
 
     @OnClick(R.id.forward_ten_seconds)
     void setTenSecondsForward() {
+        forwardedSeconds += 10;
+        //even if it is greater than song duration, music service
+        //will change to next song, setcurrent song will be called
+        //and current duration will be reset to zero
+        setProgressToSeekBar(
+                computeCurrentDuration(
+                        currentDurationProgress, forwardedSeconds
+                )
+                , totalDurationProgress);
         seekTenSecondsForward();
     }
 
     @OnClick(R.id.back_ten_seconds)
     void setTenSecondsBack() {
+        forwardedSeconds -= 10;
+        setProgressToSeekBar(
+                computeCurrentDuration(
+                        currentDurationProgress, forwardedSeconds
+                )
+                , totalDurationProgress);
         seekTenSecondsBackwards();
     }
 
@@ -490,18 +504,17 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
             CountDownTimer timer =
                     new CountDownTimer(
                             (totalDurationProgress - currentDurationProgress) * 1000,
-                            1500
+                            1000
                     ) {
                         @Override
                         public void onTick(long millisUntilFinished) {
-                            currentDurationProgress = (totalDurationProgress - (int) (millisUntilFinished/1000));
-                            int percentProgress = (currentDurationProgress * 100)/totalDurationProgress;
-                            currentSongProgressSeekBar.setProgress(percentProgress);
-                            Log.e(
-                                    "tag",
-                                    currentDurationProgress + " " +
-                                            totalDurationProgress + " " +
-                                            currentSongProgressSeekBar.getProgress()
+                            currentDurationProgress += 1;
+                            setProgressToSeekBar(
+                                    computeCurrentDuration(
+                                            currentDurationProgress,
+                                            forwardedSeconds
+                                    ),
+                                    totalDurationProgress
                             );
                         }
 
@@ -512,5 +525,24 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
                     };
             timer.start();
         }
+    }
+
+    @Override
+    public void setProgressToSeekBar(int currentDuration, int totalDuration) {
+        if(totalDuration != 0) {
+            int percentProgress = (currentDuration * 100)/totalDuration;
+            currentSongProgressSeekBar.setProgress(percentProgress);
+            Log.e(
+                    "tag",
+                    currentDuration + " " +
+                            totalDuration + " " +
+                            currentSongProgressSeekBar.getProgress()
+            );
+        }
+    }
+
+    @Override
+    public int computeCurrentDuration(int standardDuration, int forwardedSeconds) {
+        return standardDuration + forwardedSeconds;
     }
 }
