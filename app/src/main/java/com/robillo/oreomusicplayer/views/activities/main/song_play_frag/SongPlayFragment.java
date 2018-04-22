@@ -407,26 +407,18 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
 
     @OnClick(R.id.forward_ten_seconds)
     void setTenSecondsForward() {
-        forwardedSeconds += 10;
+        currentDurationProgress += 10;
         //even if it is greater than song duration, music service
         //will change to next song, setcurrent song will be called
         //and current duration will be reset to zero
-        setProgressToSeekBar(
-                computeCurrentDuration(
-                        currentDurationProgress, forwardedSeconds
-                )
-                , totalDurationProgress);
+        setProgressToSeekBar(currentDurationProgress, totalDurationProgress);
         seekTenSecondsForward();
     }
 
     @OnClick(R.id.back_ten_seconds)
     void setTenSecondsBack() {
-        forwardedSeconds -= 10;
-        setProgressToSeekBar(
-                computeCurrentDuration(
-                        currentDurationProgress, forwardedSeconds
-                )
-                , totalDurationProgress);
+        currentDurationProgress -= 10;
+        setProgressToSeekBar(currentDurationProgress, totalDurationProgress);
         seekTenSecondsBackwards();
     }
 
@@ -538,11 +530,6 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
         else {
             currentSongProgressSeekBar.setProgress(0);
         }
-    }
-
-    @Override
-    public int computeCurrentDuration(int standardDuration, int forwardedSeconds) {
-        return standardDuration + forwardedSeconds;
     }
 
     @Override
