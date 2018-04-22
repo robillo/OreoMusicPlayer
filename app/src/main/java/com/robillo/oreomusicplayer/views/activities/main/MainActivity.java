@@ -15,6 +15,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -22,6 +23,7 @@ import android.widget.MediaController;
 
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.events.SongChangeEvent;
+import com.robillo.oreomusicplayer.models.SetSeekBarEvent;
 import com.robillo.oreomusicplayer.models.Song;
 import com.robillo.oreomusicplayer.models.ThemeChangeEvent;
 import com.robillo.oreomusicplayer.models.ThemeColors;
@@ -340,6 +342,21 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
                 songPlayFragment.playPlayer(FROM_ACTIVITY);
             else
                 songPlayFragment.pausePlayer(FROM_ACTIVITY);
+        }
+    }
+
+    @SuppressWarnings("unused")
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(SetSeekBarEvent event) {
+
+        Log.e("set seek bar event", "yes");
+
+        SongPlayFragment fragment =
+                (SongPlayFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play));
+
+        if(fragment != null) {
+            Log.e("fragment", "not null");
+            fragment.setDurationValues(event.getCurrentDuration(), event.getTotalDuration());
         }
     }
 

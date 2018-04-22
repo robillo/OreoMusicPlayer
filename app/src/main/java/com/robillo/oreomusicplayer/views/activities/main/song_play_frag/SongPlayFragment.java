@@ -44,7 +44,7 @@ import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_FRAGMENT;
  */
 public class SongPlayFragment extends Fragment implements SongPlayMvpView, GestureDetector.OnGestureListener {
 
-    private static int forwardedSeconds;
+    private int forwardedSeconds;
     @SuppressWarnings("FieldCanBeLocal")
     private static Song currentSong = null;
     @SuppressWarnings("FieldCanBeLocal")
@@ -137,6 +137,12 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
             }
         });
 
+//      //set duration
+        forwardedSeconds = 0;
+        currentDurationProgress = ((MainActivity) getActivity()).getCurrentSongDuration()/1000;
+        totalDurationProgress = ((MainActivity) getActivity()).getDuration()/1000;
+        setProgressToSeekBar(currentDurationProgress, totalDurationProgress);
+
         //marqueue
         currentSongTitle.setSelected(true);
         currentSongArtist.setSelected(true);
@@ -157,10 +163,6 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
 
     @Override
     public void setCurrentSong(Song song) {
-
-        forwardedSeconds = 0;
-        currentDurationProgress = 0;
-        totalDurationProgress = 0;
 
         currentSong = song;
 
@@ -206,17 +208,11 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
         }
 
         if(getActivity()!=null) {
-            //set duration
-            currentDurationProgress = ((MainActivity) getActivity()).getCurrentSongDuration()/1000;
-            totalDurationProgress = ((MainActivity) getActivity()).getDuration()/1000;
-            if(totalDurationProgress != 0) {
-                currentSongProgressSeekBar.setProgress((currentDurationProgress * 100) / totalDurationProgress);
-                startProgressBarProgress();
-            }
-
             //play or pause
             if(((MainActivity) getActivity()).isPlaying()) playPlayer(FROM_ACTIVITY);
             else pausePlayer(FROM_ACTIVITY);
+
+//           startProgressBarProgress();
         }
     }
 
@@ -500,31 +496,31 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
 
     @Override
     public void startProgressBarProgress() {
-        if(totalDurationProgress > 0 && currentDurationProgress < totalDurationProgress) {
-            CountDownTimer timer =
-                    new CountDownTimer(
-                            (totalDurationProgress - currentDurationProgress) * 1000,
-                            1000
-                    ) {
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-                            currentDurationProgress += 1;
-                            setProgressToSeekBar(
-                                    computeCurrentDuration(
-                                            currentDurationProgress,
-                                            forwardedSeconds
-                                    ),
-                                    totalDurationProgress
-                            );
-                        }
-
-                        @Override
-                        public void onFinish() {
-
-                        }
-                    };
-            timer.start();
-        }
+//        if(totalDurationProgress > 0 && currentDurationProgress < totalDurationProgress) {
+//            CountDownTimer timer =
+//                    new CountDownTimer(
+//                            (totalDurationProgress - currentDurationProgress) * 1000,
+//                            1000
+//                    ) {
+//                        @Override
+//                        public void onTick(long millisUntilFinished) {
+//                            currentDurationProgress += 1;
+//                            setProgressToSeekBar(
+//                                    computeCurrentDuration(
+//                                            currentDurationProgress,
+//                                            forwardedSeconds
+//                                    ),
+//                                    totalDurationProgress
+//                            );
+//                        }
+//
+//                        @Override
+//                        public void onFinish() {
+//
+//                        }
+//                    };
+//            timer.start();
+//        }
     }
 
     @Override
@@ -539,10 +535,21 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
                             currentSongProgressSeekBar.getProgress()
             );
         }
+        else {
+            currentSongProgressSeekBar.setProgress(0);
+        }
     }
 
     @Override
     public int computeCurrentDuration(int standardDuration, int forwardedSeconds) {
         return standardDuration + forwardedSeconds;
+    }
+
+    @Override
+    public void setDurationValues(int currentDuration, int totalDuration) {
+        currentDurationProgress = currentDuration;
+        totalDurationProgress = totalDuration;
+        forwardedSeconds = 0;
+        setProgressToSeekBar(currentDuration, totalDuration);
     }
 }

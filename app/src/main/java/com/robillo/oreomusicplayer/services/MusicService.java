@@ -33,6 +33,7 @@ import android.widget.Toast;
 
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.events.SongChangeEvent;
+import com.robillo.oreomusicplayer.models.SetSeekBarEvent;
 import com.robillo.oreomusicplayer.models.Song;
 import com.robillo.oreomusicplayer.preferences.AppPreferencesHelper;
 import com.robillo.oreomusicplayer.utils.AppConstants;
@@ -578,6 +579,8 @@ public class MusicService extends Service implements
                 .build());
 
         buildNotification(true);
+
+        EventBus.getDefault().postSticky(new SetSeekBarEvent(0, mp.getDuration()));
     }
 
 
