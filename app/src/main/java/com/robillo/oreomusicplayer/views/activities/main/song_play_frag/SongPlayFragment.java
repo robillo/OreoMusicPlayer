@@ -3,6 +3,8 @@ package com.robillo.oreomusicplayer.views.activities.main.song_play_frag;
 import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -43,6 +45,7 @@ import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_FRAGMENT;
  */
 public class SongPlayFragment extends Fragment implements SongPlayMvpView, GestureDetector.OnGestureListener {
 
+    private CountDownTimer timer;
     @SuppressWarnings("FieldCanBeLocal")
     private static Song currentSong = null;
     @SuppressWarnings("FieldCanBeLocal")
@@ -138,7 +141,8 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
 //      //set duration
         currentDurationProgress = ((MainActivity) getActivity()).getCurrentSongDuration()/1000;
         totalDurationProgress = ((MainActivity) getActivity()).getDuration()/1000;
-        setProgressToSeekBar(currentDurationProgress, totalDurationProgress);
+
+        setDurationValues(currentDurationProgress, totalDurationProgress);
 
         //marqueue
         currentSongTitle.setSelected(true);
@@ -205,12 +209,9 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
 
         }
 
-        if(getActivity()!=null) {
-            //play or pause
+        if(getActivity()!=null) {                                                   //play or pause
             if(((MainActivity) getActivity()).isPlaying()) playPlayer(FROM_ACTIVITY);
             else pausePlayer(FROM_ACTIVITY);
-
-//           startProgressBarProgress();
         }
     }
 
@@ -485,35 +486,6 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
     }
 
     @Override
-    public void startProgressBarProgress() {
-//        if(totalDurationProgress > 0 && currentDurationProgress < totalDurationProgress) {
-//            CountDownTimer timer =
-//                    new CountDownTimer(
-//                            (totalDurationProgress - currentDurationProgress) * 1000,
-//                            1000
-//                    ) {
-//                        @Override
-//                        public void onTick(long millisUntilFinished) {
-//                            currentDurationProgress += 1;
-//                            setProgressToSeekBar(
-//                                    computeCurrentDuration(
-//                                            currentDurationProgress,
-//                                            forwardedSeconds
-//                                    ),
-//                                    totalDurationProgress
-//                            );
-//                        }
-//
-//                        @Override
-//                        public void onFinish() {
-//
-//                        }
-//                    };
-//            timer.start();
-//        }
-    }
-
-    @Override
     public void setProgressToSeekBar(int currentDuration, int totalDuration) {
         if(totalDuration != 0) {
             int percentProgress = (currentDuration * 100)/totalDuration;
@@ -542,5 +514,39 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
         currentDurationProgress = currentDuration;
         totalDurationProgress = totalDuration;
         setProgressToSeekBar(currentDuration, totalDuration);
+
+        startTimerForProgress();
+
+    }
+
+    @Override
+    public void startTimerForProgress() {
+        updateTimer((totalDurationProgress - currentDurationProgress) * 1000, 1000);
+        timer.start();
+    }
+
+    @Override
+    public void stopTimerForProgress() {
+        if(timer != null) {
+            timer.cancel();
+        }
+    }
+
+    @Override
+    public void updateTimer(int millisInFuture, int countDownInterval) {
+        if(timer != null) timer = null;
+
+        timer = new CountDownTimer(millisInFuture, countDownInterval) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                currentDurationProgress += 1;
+                setProgressToSeekBar(currentDurationProgress, totalDurationProgress);
+            }
+
+            @Override
+            public void onFinish() {
+                timer.cancel();
+            }
+        };
     }
 }

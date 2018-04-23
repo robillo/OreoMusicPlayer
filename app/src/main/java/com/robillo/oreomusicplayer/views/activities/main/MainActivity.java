@@ -349,14 +349,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onMessageEvent(SetSeekBarEvent event) {
 
-        Log.e("set seek bar event", "yes");
-
         SongPlayFragment fragment =
                 (SongPlayFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play));
 
         if(fragment != null) {
-            Log.e("fragment", "not null");
-            fragment.setDurationValues(event.getCurrentDuration(), event.getTotalDuration());
+            fragment.setDurationValues(event.getCurrentDuration(), event.getTotalDuration()/1000);
         }
     }
 
