@@ -3,8 +3,6 @@ package com.robillo.oreomusicplayer.views.activities.main.song_play_frag;
 import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.os.CountDownTimer;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.CoordinatorLayout;
@@ -29,6 +27,7 @@ import com.robillo.oreomusicplayer.models.Song;
 import com.robillo.oreomusicplayer.models.ThemeColors;
 import com.robillo.oreomusicplayer.preferences.AppPreferencesHelper;
 import com.robillo.oreomusicplayer.utils.AppConstants;
+import com.robillo.oreomusicplayer.utils.ApplicationUtils;
 import com.robillo.oreomusicplayer.views.activities.main.MainActivity;
 
 import butterknife.BindView;
@@ -44,7 +43,6 @@ import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_FRAGMENT;
  */
 public class SongPlayFragment extends Fragment implements SongPlayMvpView, GestureDetector.OnGestureListener {
 
-    private int forwardedSeconds;
     @SuppressWarnings("FieldCanBeLocal")
     private static Song currentSong = null;
     @SuppressWarnings("FieldCanBeLocal")
@@ -138,7 +136,6 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
         });
 
 //      //set duration
-        forwardedSeconds = 0;
         currentDurationProgress = ((MainActivity) getActivity()).getCurrentSongDuration()/1000;
         totalDurationProgress = ((MainActivity) getActivity()).getDuration()/1000;
         setProgressToSeekBar(currentDurationProgress, totalDurationProgress);
@@ -171,20 +168,21 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
 
         currentSongArtist.setText(song.getArtist());
 
-        long duration = Long.valueOf(song.getDuration())/1000;
-        long mins = duration/60;
-        long seconds = duration%60;
+        currentSongMaxProgress
+                .setText(
+                        new ApplicationUtils()
+                                .formatStringOutOfSeconds(
+                                        Integer.valueOf(song.getDuration())/1000
+                                )
+                );
 
-        String lhs, rhs;
-
-        if(mins < 10) lhs = "0" + String.valueOf(mins);
-        else lhs = String.valueOf(mins);
-
-        if(seconds < 10) rhs = "0" + String.valueOf(seconds);
-        else rhs = String.valueOf(seconds);
-
-        String temp = lhs + ":" + rhs;
-        currentSongMaxProgress.setText(temp);
+        currentSongCurrentProgress
+                .setText(
+                        new ApplicationUtils()
+                                .formatStringOutOfSeconds(
+                                        currentDurationProgress
+                                )
+                );
 
         String path = null;
         if(getActivity()!=null) {
@@ -520,6 +518,13 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
         if(totalDuration != 0) {
             int percentProgress = (currentDuration * 100)/totalDuration;
             currentSongProgressSeekBar.setProgress(percentProgress);
+            currentSongCurrentProgress
+                    .setText(
+                            new ApplicationUtils()
+                                    .formatStringOutOfSeconds(
+                                            currentDuration
+                                    )
+                    );
             Log.e(
                     "tag",
                     currentDuration + " " +
@@ -536,7 +541,6 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
     public void setDurationValues(int currentDuration, int totalDuration) {
         currentDurationProgress = currentDuration;
         totalDurationProgress = totalDuration;
-        forwardedSeconds = 0;
         setProgressToSeekBar(currentDuration, totalDuration);
     }
 }
