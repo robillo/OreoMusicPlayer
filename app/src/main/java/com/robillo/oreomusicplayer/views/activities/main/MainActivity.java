@@ -156,7 +156,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public int getCurrentSongDuration() {
-        if(musicService!=null && musicBound && musicService.isPlaying()) return musicService.getPosition();
+//        if(musicService!=null && musicBound && musicService.isPlaying()) return musicService.getPosition();
+        if(musicService!=null && musicBound) return musicService.getPosition();
         else return 0;
     }
 
@@ -424,13 +425,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public int getDuration() {
-        if(musicService!=null && musicBound && musicService.isPlaying()) return musicService.getDuration();
+//        if(musicService!=null && musicBound && musicService.isPlaying()) return musicService.getDuration();
+        if(musicService!=null && musicBound) return musicService.getDuration();
         else return 0;
     }
 
     @Override
     public int getCurrentPosition() {
-        if(musicService!=null && musicBound && musicService.isPlaying()) return musicService.getPosition();
+//        if(musicService!=null && musicBound && musicService.isPlaying()) return musicService.getPosition();
+        if(musicService!=null && musicBound) return musicService.getPosition();
         else return 0;
     }
 

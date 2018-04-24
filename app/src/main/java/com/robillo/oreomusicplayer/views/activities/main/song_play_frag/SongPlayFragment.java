@@ -142,6 +142,8 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
         currentDurationProgress = ((MainActivity) getActivity()).getCurrentSongDuration()/1000;
         totalDurationProgress = ((MainActivity) getActivity()).getDuration()/1000;
 
+        Log.e("starting", "" + currentDurationProgress + " " + totalDurationProgress);
+
         setDurationValues(currentDurationProgress, totalDurationProgress);
 
         //marqueue
@@ -228,6 +230,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
         assert getActivity() != null;
         if(from == FROM_FRAGMENT) ((MainActivity) getActivity()).start();
 
+        startTimerForProgress();
         playPauseSong.setImageDrawable(getActivity().getDrawable(R.drawable.ic_pause_circle_outline_black_24dp));
         resetAlbumArtAnimation();
         currentSongAlbumArt.startAnimation(rotatingAlbumAnim);
@@ -238,6 +241,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
         assert getActivity() != null;
         if(from == FROM_FRAGMENT) ((MainActivity) getActivity()).pause();
 
+        stopTimerForProgress();
         playPauseSong.setImageDrawable(getActivity().getDrawable(R.drawable.ic_play_circle_outline_black_24dp));
         resetAlbumArtAnimation();
     }
@@ -311,8 +315,12 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
     @OnClick(R.id.play_pause_song)
     public void playOrPausePlayer() {
         if(getActivity()!=null) {
-            if(((MainActivity) getActivity()).isPlaying()) pausePlayer(FROM_FRAGMENT);
-            else playPlayer(FROM_FRAGMENT);
+            if(((MainActivity) getActivity()).isPlaying()) {
+                pausePlayer(FROM_FRAGMENT);
+            }
+            else {
+                playPlayer(FROM_FRAGMENT);
+            }
         }
     }
 
@@ -529,12 +537,16 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
     public void stopTimerForProgress() {
         if(timer != null) {
             timer.cancel();
+            timer = null;
         }
     }
 
     @Override
     public void updateTimer(int millisInFuture, int countDownInterval) {
-        if(timer != null) timer = null;
+        if(timer != null) {
+            timer.cancel();
+            timer = null;
+        }
 
         timer = new CountDownTimer(millisInFuture, countDownInterval) {
             @Override
