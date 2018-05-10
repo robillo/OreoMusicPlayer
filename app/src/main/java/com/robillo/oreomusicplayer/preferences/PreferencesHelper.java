@@ -17,4 +17,7 @@ interface PreferencesHelper {
     String getUserThemeName();
     void setUserThemeName(String themeName);
 
+    boolean isSongPlaying();
+    void setIsSongPlaying(boolean isSongPlaying);
+
 }

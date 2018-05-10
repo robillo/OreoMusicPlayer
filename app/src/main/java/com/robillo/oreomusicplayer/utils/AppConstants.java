@@ -21,6 +21,7 @@ public class AppConstants {
     public static final String KEY_IS_PLAY_EVENT = "is_play_event";
     public static final String KEY_SORT_ORDER_FOR_SONGS = "sort_order_for_songs";
     public static final String KEY_USER_THEME_NAME = "theme_name";
+    public static final String KEY_IS_SONG_PLAYING = "is_song_playing";
 
     public static final String REPEAT_MODE_VALUE_REPEAT = "repeating";
     public static final String REPEAT_MODE_VALUE_LOOP = "looping";

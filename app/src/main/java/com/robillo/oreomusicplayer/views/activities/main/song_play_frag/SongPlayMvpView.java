@@ -34,4 +34,8 @@ public interface SongPlayMvpView {
     void setProgressToSeekBar(int currentDuration, int totalDuration);
 
     void setDurationValues(int currentDuration, int totalDuration);
+
+    void pauseTimer();
+
+    void resumeTimer(int millisInFuture, int countDownInterval);
 }
