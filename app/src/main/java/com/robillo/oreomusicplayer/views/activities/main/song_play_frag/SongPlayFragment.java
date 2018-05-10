@@ -558,7 +558,14 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
             @Override
             public void onFinish() {
                 timer.cancel();
+                timer = null;
             }
         };
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(getActivity() != null) currentDurationProgress = ((MainActivity) getActivity()).getCurrentSongDuration()/1000;
     }
 }
