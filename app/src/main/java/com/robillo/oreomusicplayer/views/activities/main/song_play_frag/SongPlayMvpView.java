@@ -38,4 +38,6 @@ public interface SongPlayMvpView {
     void pauseTimer();
 
     void resumeTimer(int millisInFuture, int countDownInterval);
+
+    void setSeekBarOnSeekChangeListener();
 }

@@ -81,6 +81,7 @@ public class SongsSortFragment extends Fragment implements SongsSortMvpView {
     public void setup(View v) {
         ButterKnife.bind(this, v);
 
+        //noinspection ConstantConditions
         helper = new AppPreferencesHelper(getActivity());
         ThemeColors currentUserThemeColors = AppConstants.themeMap.get(helper.getUserThemeName());
         refreshForUserThemeColors(currentUserThemeColors);
@@ -94,8 +95,8 @@ public class SongsSortFragment extends Fragment implements SongsSortMvpView {
 
     @Override
     public void refreshForUserThemeColors(ThemeColors currentUserThemeColors) {
-        header.setBackgroundColor(getResources().getColor(currentUserThemeColors.getColorPrimaryDark()));
-        lineColored.setBackgroundColor(getResources().getColor(currentUserThemeColors.getColorAccent()));
+        header.setBackgroundColor(getResources().getColor(currentUserThemeColors.getColorPrimary()));
+        lineColored.setBackgroundColor(getResources().getColor(currentUserThemeColors.getColorPrimaryDark()));
     }
 
     @Override

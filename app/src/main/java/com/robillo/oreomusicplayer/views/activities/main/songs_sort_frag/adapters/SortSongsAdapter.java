@@ -62,7 +62,7 @@ public class SortSongsAdapter extends RecyclerView.Adapter<SortSongsAdapter.Sort
             holder.title.setTextColor(
                     activityContext.getResources().getColor(currentUserThemeColors.getColorPrimary())
             );    //highlight selected item
-            holder.title.setBackgroundColor(activityContext.getResources().getColor(R.color.colorTextFive));
+            holder.title.setBackgroundColor(activityContext.getResources().getColor(R.color.colorTextFour));
         }
         else {
             holder.title.setTextColor(activityContext.getResources().getColor(R.color.colorTextOne));

@@ -144,6 +144,8 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
 
         setDurationValues(currentDurationProgress, totalDurationProgress);
 
+        setSeekBarOnSeekChangeListener();
+
         //marqueue
         currentSongTitle.setSelected(true);
         currentSongArtist.setSelected(true);
@@ -372,6 +374,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
 
             switch (helper.isRepeatModeOn()) {
                 case AppConstants.REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE:
+
                     helper.setIsRepeatModeOn(AppConstants.REPEAT_MODE_VALUE_LOOP);
                     repeatSong
                             .setImageDrawable(
@@ -382,9 +385,9 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
                                     ContextCompat.getColor(getActivity(), currentUserThemeColors.getColorPrimary())
                             );
 
-                    Log.e("tag", helper.isRepeatModeOn());
                     break;
                 case AppConstants.REPEAT_MODE_VALUE_LOOP:
+
                     helper.setIsRepeatModeOn(AppConstants.REPEAT_MODE_VALUE_REPEAT);
                     repeatSong
                             .setImageDrawable(
@@ -394,9 +397,10 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
                             .setColorFilter(
                                     ContextCompat.getColor(getActivity(), currentUserThemeColors.getColorPrimary())
                             );
-                    Log.e("tag", helper.isRepeatModeOn());
+
                     break;
                 case AppConstants.REPEAT_MODE_VALUE_REPEAT:
+
                     helper.setIsRepeatModeOn(AppConstants.REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE);
                     repeatSong
                             .setImageDrawable(
@@ -406,7 +410,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
                             .setColorFilter(
                                     ContextCompat.getColor(getActivity(), R.color.colorTextOne)
                             );
-                    Log.e("tag", helper.isRepeatModeOn());
+
                     break;
             }
 
@@ -584,5 +588,27 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
     @Override
     public void resumeTimer(int millisInFuture, int countDownInterval) {
 
+    }
+
+    @Override
+    public void setSeekBarOnSeekChangeListener() {
+        currentSongProgressSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int percentage, boolean isChangedByUser) {
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                    currentDurationProgress = (int) (((float)seekBar.getProgress()/(float)100) * ((float)totalDurationProgress));
+                    if(getActivity()!=null) ((MainActivity) getActivity()).seekTo(currentDurationProgress * 1000);
+                    Log.e("progress", currentDurationProgress + " " + seekBar.getProgress());
+            }
+        });
     }
 }
