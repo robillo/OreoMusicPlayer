@@ -45,7 +45,7 @@ import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_FRAGMENT;
  */
 public class SongPlayFragment extends Fragment implements SongPlayMvpView, GestureDetector.OnGestureListener {
 
-    private CountDownTimer timer;
+    private static CountDownTimer timer;
     @SuppressWarnings("FieldCanBeLocal")
     private static Song currentSong = null;
     @SuppressWarnings("FieldCanBeLocal")
@@ -607,6 +607,8 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
             public void onStopTrackingTouch(SeekBar seekBar) {
                     currentDurationProgress = (int) (((float)seekBar.getProgress()/(float)100) * ((float)totalDurationProgress));
                     if(getActivity()!=null) ((MainActivity) getActivity()).seekTo(currentDurationProgress * 1000);
+                    updateTimer((totalDurationProgress - currentDurationProgress) * 1000, 1000);
+                    timer.start();
                     Log.e("progress", currentDurationProgress + " " + seekBar.getProgress());
             }
         });
