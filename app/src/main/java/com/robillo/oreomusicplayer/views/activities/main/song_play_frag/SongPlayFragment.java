@@ -207,7 +207,7 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
 
             //set album art
             if(path!=null) Glide.with(getActivity()).load(path).into(currentSongAlbumArt);
-            else Glide.with(getActivity()).load(R.drawable.oval_shape).into(currentSongAlbumArt);
+            else Glide.with(getActivity()).load(R.drawable.icon_drawable).into(currentSongAlbumArt);
 
         }
 
