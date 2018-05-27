@@ -185,7 +185,7 @@ public class MusicService extends Service implements
 
     @Override
     public void onAudioFocusChange(int focusChange) {
-        Log.e("error", focusChange + " focus change");
+        Log.e("changed to ", focusChange + " focus change");
         switch (focusChange) {
             case AudioManager.AUDIOFOCUS_GAIN:
                 if (mPlayOnAudioFocus && !isPlaying()) {
@@ -207,7 +207,7 @@ public class MusicService extends Service implements
                 }
                 break;
             case AudioManager.AUDIOFOCUS_LOSS:
-//                abandonAudioFocus();
+                abandonAudioFocus();
                 mPlayOnAudioFocus = false;
                 pausePlayer();
                 break;
@@ -315,6 +315,10 @@ public class MusicService extends Service implements
         if (currentSong == null)
             return;
 
+        if(!audioManagerRequestAudioFocus()) {
+            return;
+        }
+
         player.start();
         buildNotification(true);
 
@@ -328,6 +332,7 @@ public class MusicService extends Service implements
     public void pausePlayer() {
         if(currentSong != null) {
             if (!mPlayOnAudioFocus) {
+                Log.e("abandon", "from pause");
                 abandonAudioFocus();
             }
 
@@ -603,7 +608,19 @@ public class MusicService extends Service implements
                             .build();
         }
 
-        int audioFocus = audioManager.requestAudioFocus(this,
+        if(audioManagerRequestAudioFocus()) {
+            //do something
+        }
+    }
+
+    @Override
+    public void configMediaPlayerState(MediaPlayer mp) {
+
+    }
+
+    @Override
+    public boolean audioManagerRequestAudioFocus() {
+        int audioFocus = audioManager.requestAudioFocus(this, //audio focus change listener
                 // Use the music stream.
                 AudioManager.STREAM_MUSIC,
                 // Request permanent focus.
@@ -612,6 +629,7 @@ public class MusicService extends Service implements
 
         if (audioFocus == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
             // other app had stopped playing song now , so u can do u stuff now .
+            Log.e("audio focus", "granted");
         }
 
         int focusRequest = -10;
@@ -624,11 +642,9 @@ public class MusicService extends Service implements
             case AudioManager.AUDIOFOCUS_REQUEST_GRANTED:
                 // actually start playback
         }
-    }
 
-    @Override
-    public void configMediaPlayerState(MediaPlayer mp) {
-
+        return audioFocus == AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
+//        return (audioFocus == AudioManager.AUDIOFOCUS_REQUEST_GRANTED || focusRequest == AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     }
 
 //    @Override
@@ -693,6 +709,10 @@ public class MusicService extends Service implements
 
     @Override
     public void onPrepared(MediaPlayer mp) {
+
+        if(!audioManagerRequestAudioFocus())
+            return;
+
         //start playback
         mp.start();
 

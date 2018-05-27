@@ -59,5 +59,7 @@ public interface MusicServiceInterface {
 
     void configMediaPlayerState(MediaPlayer mp);
 
+    boolean audioManagerRequestAudioFocus();
+
 //    void refreshNotificationForThemeChange();
 }
