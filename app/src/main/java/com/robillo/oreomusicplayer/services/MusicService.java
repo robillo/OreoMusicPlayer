@@ -315,7 +315,7 @@ public class MusicService extends Service implements
         if (currentSong == null)
             return;
 
-        if(!audioManagerRequestAudioFocus()) {
+        if(audioManagerRequestAudioFocus()) {
             return;
         }
 
@@ -585,11 +585,6 @@ public class MusicService extends Service implements
     }
 
     @Override
-    public void audioManagerServiceListener() {
-
-    }
-
-    @Override
     public void audioFocusChangeListenerPrelims() {
         audioManager = (AudioManager) this.getSystemService(AUDIO_SERVICE);
 
@@ -607,15 +602,6 @@ public class MusicService extends Service implements
                             .setOnAudioFocusChangeListener(this)
                             .build();
         }
-
-        if(audioManagerRequestAudioFocus()) {
-            //do something
-        }
-    }
-
-    @Override
-    public void configMediaPlayerState(MediaPlayer mp) {
-
     }
 
     @Override
@@ -643,18 +629,8 @@ public class MusicService extends Service implements
                 // actually start playback
         }
 
-//        return audioFocus == AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
-        return (audioFocus == AudioManager.AUDIOFOCUS_REQUEST_GRANTED || focusRequest == AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
+        return (audioFocus != AudioManager.AUDIOFOCUS_REQUEST_GRANTED && focusRequest != AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     }
-
-//    @Override
-//    public void refreshNotificationForThemeChange() {
-//        if(currentSong != null) {
-//            AppPreferencesHelper helper = new AppPreferencesHelper(this);
-//            buildNotification(helper.isPlayEvent());
-//        }
-//    }
-
 
     public static String isRepeatModeOn() {
         return IS_REPEAT_MODE_ON;
@@ -710,7 +686,7 @@ public class MusicService extends Service implements
     @Override
     public void onPrepared(MediaPlayer mp) {
 
-        if(!audioManagerRequestAudioFocus())
+        if(audioManagerRequestAudioFocus())
             return;
 
         //start playback

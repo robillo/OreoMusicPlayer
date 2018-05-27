@@ -53,13 +53,7 @@ public interface MusicServiceInterface {
 
     void callStateListener();
 
-    void audioManagerServiceListener();
-
     void audioFocusChangeListenerPrelims();
 
-    void configMediaPlayerState(MediaPlayer mp);
-
     boolean audioManagerRequestAudioFocus();
-
-//    void refreshNotificationForThemeChange();
 }
