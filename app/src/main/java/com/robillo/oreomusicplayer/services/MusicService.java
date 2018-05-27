@@ -643,8 +643,8 @@ public class MusicService extends Service implements
                 // actually start playback
         }
 
-        return audioFocus == AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
-//        return (audioFocus == AudioManager.AUDIOFOCUS_REQUEST_GRANTED || focusRequest == AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
+//        return audioFocus == AudioManager.AUDIOFOCUS_REQUEST_GRANTED;
+        return (audioFocus == AudioManager.AUDIOFOCUS_REQUEST_GRANTED || focusRequest == AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     }
 
 //    @Override
