@@ -5,12 +5,16 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.AudioAttributes;
+import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.media.MediaMetadata;
 import android.media.MediaPlayer;
@@ -22,6 +26,7 @@ import android.os.PowerManager;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.media.AudioAttributesCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -54,22 +59,34 @@ import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_TOGGLE_PLAYB
 import static com.robillo.oreomusicplayer.utils.AppConstants.CHANNEL_ID;
 import static com.robillo.oreomusicplayer.utils.AppConstants.CONTROLLER_NOTIFICATION_ID;
 import static com.robillo.oreomusicplayer.utils.AppConstants.EMPTY_CELLS_COUNT;
-import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_EVERYWHERE_ELSE;
-import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_INTERRUPT;
 import static com.robillo.oreomusicplayer.utils.AppConstants.LAUNCHED_FROM_NOTIFICATION;
 import static com.robillo.oreomusicplayer.utils.AppConstants.REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE;
 
 public class MusicService extends Service implements
         MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
-        MediaPlayer.OnCompletionListener, MusicServiceInterface {
+        MediaPlayer.OnCompletionListener, MusicServiceInterface, AudioManager.OnAudioFocusChangeListener {
 
     //Handle incoming phone calls
     private boolean ongoingCall = false;
     private boolean wasPausedByInterrupt = false;
+    private boolean mPlayOnAudioFocus = false;
     @SuppressWarnings("FieldCanBeLocal")
     private PhoneStateListener phoneStateListener;
     @SuppressWarnings("FieldCanBeLocal")
+    private AudioManager audioManager = null;
+    @SuppressWarnings("FieldCanBeLocal")
     private TelephonyManager telephonyManager;
+    @SuppressWarnings("FieldCanBeLocal")
+    private AudioAttributes audioAttributes;
+    AudioFocusRequest audioFocusRequest;
+    private BroadcastReceiver mNoisyReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(player != null && isPlaying()) {
+                pausePlayer();
+            }
+        }
+    };
 
     private static String IS_REPEAT_MODE_ON = AppConstants.REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE;
     private static boolean IS_SHUFFLE_MODE_ON = false;
@@ -101,6 +118,9 @@ public class MusicService extends Service implements
         //create player
         player = new MediaPlayer();
 
+        IntentFilter filter = new IntentFilter(AudioManager.ACTION_AUDIO_BECOMING_NOISY);
+        registerReceiver(mNoisyReceiver, filter);
+
         initMusicPlayer();
     }
 
@@ -119,7 +139,6 @@ public class MusicService extends Service implements
         player.setOnPreparedListener(this);
         player.setOnCompletionListener(this);
         player.setOnErrorListener(this);
-
 
         mSession = new MediaSessionCompat(this, AppConstants.SESSION_NAME);
         controls = mSession.getController().getTransportControls();
@@ -160,6 +179,40 @@ public class MusicService extends Service implements
         });
 
         callStateListener();
+        audioFocusChangeListenerPrelims();
+    }
+
+    @Override
+    public void onAudioFocusChange(int focusChange) {
+        Log.e("error", focusChange + " focus change");
+        switch (focusChange) {
+            case AudioManager.AUDIOFOCUS_GAIN:
+                if (mPlayOnAudioFocus && !isPlaying()) {
+                    playPlayer();
+                } else if (isPlaying()) {
+//                    setVolume(MEDIA_VOLUME_DEFAULT);
+                }
+                mPlayOnAudioFocus = false;
+                break;
+            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+//                setVolume(MediaPlayer.MEDIA_VOLUME_DUCK);
+                break;
+            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                if (isPlaying()) {
+                    mPlayOnAudioFocus = true;
+                    pausePlayer();
+                }
+                break;
+            case AudioManager.AUDIOFOCUS_LOSS:
+                abandonAudioFocus();
+                mPlayOnAudioFocus = false;
+//                stop();
+                break;
+        }
+    }
+
+    private void abandonAudioFocus() {
+        audioManager.abandonAudioFocus(this);
     }
 
     //____________________________________BINDER STUFF__________________________________//
@@ -519,6 +572,42 @@ public class MusicService extends Service implements
                 PhoneStateListener.LISTEN_CALL_STATE);
     }
 
+    @Override
+    public void audioManagerServiceListener() {
+
+    }
+
+    @Override
+    public void audioFocusChangeListenerPrelims() {
+        audioManager = (AudioManager) this.getSystemService(AUDIO_SERVICE);
+
+        audioAttributes =
+                new AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_MEDIA)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                        .build();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            audioFocusRequest =
+                    new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+                            .setAudioAttributes(audioAttributes)
+                            .setAcceptsDelayedFocusGain(true)
+                            .setOnAudioFocusChangeListener(this)
+                            .build();
+        }
+
+        int focusRequest = -10;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            focusRequest = audioManager.requestAudioFocus(audioFocusRequest);
+        }
+        switch (focusRequest) {
+            case AudioManager.AUDIOFOCUS_REQUEST_FAILED:
+                // don’t start playback
+            case AudioManager.AUDIOFOCUS_REQUEST_GRANTED:
+                // actually start playback
+        }
+    }
+
 //    @Override
 //    public void refreshNotificationForThemeChange() {
 //        if(currentSong != null) {
@@ -644,5 +733,13 @@ public class MusicService extends Service implements
                 controls.play();
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        player = null;
+        unregisterReceiver(mNoisyReceiver);
     }
 }
