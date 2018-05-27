@@ -26,7 +26,6 @@ import android.os.PowerManager;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
-import android.support.v4.media.AudioAttributesCompat;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.MediaSessionCompat;
@@ -178,6 +177,8 @@ public class MusicService extends Service implements
             }
         });
 
+
+
         callStateListener();
         audioFocusChangeListenerPrelims();
     }
@@ -191,11 +192,13 @@ public class MusicService extends Service implements
                     playPlayer();
                 } else if (isPlaying()) {
 //                    setVolume(MEDIA_VOLUME_DEFAULT);
+                      player.setVolume(1f, 1f);
                 }
                 mPlayOnAudioFocus = false;
                 break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
 //                setVolume(MediaPlayer.MEDIA_VOLUME_DUCK);
+                player.setVolume(0.2f, 0.2f);
                 break;
             case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
                 if (isPlaying()) {
@@ -204,9 +207,9 @@ public class MusicService extends Service implements
                 }
                 break;
             case AudioManager.AUDIOFOCUS_LOSS:
-                abandonAudioFocus();
+//                abandonAudioFocus();
                 mPlayOnAudioFocus = false;
-//                stop();
+                pausePlayer();
                 break;
         }
     }
@@ -324,6 +327,10 @@ public class MusicService extends Service implements
     @Override
     public void pausePlayer() {
         if(currentSong != null) {
+            if (!mPlayOnAudioFocus) {
+                abandonAudioFocus();
+            }
+
             player.pause();
             buildNotification(false);
 
@@ -596,6 +603,17 @@ public class MusicService extends Service implements
                             .build();
         }
 
+        int audioFocus = audioManager.requestAudioFocus(this,
+                // Use the music stream.
+                AudioManager.STREAM_MUSIC,
+                // Request permanent focus.
+                AudioManager.AUDIOFOCUS_GAIN);
+
+
+        if (audioFocus == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+            // other app had stopped playing song now , so u can do u stuff now .
+        }
+
         int focusRequest = -10;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             focusRequest = audioManager.requestAudioFocus(audioFocusRequest);
@@ -606,6 +624,11 @@ public class MusicService extends Service implements
             case AudioManager.AUDIOFOCUS_REQUEST_GRANTED:
                 // actually start playback
         }
+    }
+
+    @Override
+    public void configMediaPlayerState(MediaPlayer mp) {
+
     }
 
 //    @Override

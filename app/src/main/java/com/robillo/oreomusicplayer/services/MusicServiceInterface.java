@@ -2,6 +2,7 @@ package com.robillo.oreomusicplayer.services;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 
 import com.robillo.oreomusicplayer.models.Song;
 
@@ -55,6 +56,8 @@ public interface MusicServiceInterface {
     void audioManagerServiceListener();
 
     void audioFocusChangeListenerPrelims();
+
+    void configMediaPlayerState(MediaPlayer mp);
 
 //    void refreshNotificationForThemeChange();
 }
