@@ -47,6 +47,7 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 import static com.robillo.oreomusicplayer.utils.AppConstants.CONTROLLER_NOTIFICATION_ID;
 import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_ACTIVITY;
+import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_EVERYWHERE_ELSE;
 
 public class MainActivity extends AppCompatActivity implements MainActivityMvpView, MediaController.MediaPlayerControl {
 

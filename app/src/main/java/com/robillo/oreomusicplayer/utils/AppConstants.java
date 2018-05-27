@@ -39,6 +39,8 @@ public class AppConstants {
     public static final String ACTION_PAUSE = "action_pause";
     public static final String ACTION_TOGGLE_PLAYBACK = "TOGGLE_PLAYBACK";
     public static final int CONTROLLER_NOTIFICATION_ID = 0;
+    public static final int FROM_INTERRUPT = 1;
+    public static final int FROM_EVERYWHERE_ELSE = 0;
 
     //SongListFragment
     public static final int FROM_ACTIVITY = 0;

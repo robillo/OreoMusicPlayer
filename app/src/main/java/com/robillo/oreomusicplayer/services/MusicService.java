@@ -54,6 +54,8 @@ import static com.robillo.oreomusicplayer.utils.AppConstants.ACTION_TOGGLE_PLAYB
 import static com.robillo.oreomusicplayer.utils.AppConstants.CHANNEL_ID;
 import static com.robillo.oreomusicplayer.utils.AppConstants.CONTROLLER_NOTIFICATION_ID;
 import static com.robillo.oreomusicplayer.utils.AppConstants.EMPTY_CELLS_COUNT;
+import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_EVERYWHERE_ELSE;
+import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_INTERRUPT;
 import static com.robillo.oreomusicplayer.utils.AppConstants.LAUNCHED_FROM_NOTIFICATION;
 import static com.robillo.oreomusicplayer.utils.AppConstants.REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE;
 
@@ -63,6 +65,7 @@ public class MusicService extends Service implements
 
     //Handle incoming phone calls
     private boolean ongoingCall = false;
+    private boolean wasPausedByInterrupt = false;
     @SuppressWarnings("FieldCanBeLocal")
     private PhoneStateListener phoneStateListener;
     @SuppressWarnings("FieldCanBeLocal")
@@ -253,6 +256,9 @@ public class MusicService extends Service implements
 
     @Override
     public void playPlayer() {
+        if (currentSong == null)
+            return;
+
         player.start();
         buildNotification(true);
 
@@ -264,13 +270,14 @@ public class MusicService extends Service implements
 
     @Override
     public void pausePlayer() {
-        player.pause();
-        buildNotification(false);
+        if(currentSong != null) {
+            player.pause();
+            buildNotification(false);
 
-        AppPreferencesHelper helper = new AppPreferencesHelper(this);
-        helper.setIsPlayEvent(false);
+            new AppPreferencesHelper(this).setIsPlayEvent(false);
 
-        EventBus.getDefault().postSticky(new SongChangeEvent(currentSong));
+            EventBus.getDefault().postSticky(new SongChangeEvent(currentSong));
+        }
     }
 
     @Override
@@ -484,7 +491,10 @@ public class MusicService extends Service implements
                     case TelephonyManager.CALL_STATE_OFFHOOK:
                     case TelephonyManager.CALL_STATE_RINGING:
                         if (player != null) {
-                            pausePlayer();
+                            if(new AppPreferencesHelper(MusicService.this).isPlayEvent()) {
+                                pausePlayer();
+                                wasPausedByInterrupt = true;
+                            }
                             ongoingCall = true;
                         }
                         break;
@@ -493,7 +503,10 @@ public class MusicService extends Service implements
                         if (player != null) {
                             if (ongoingCall) {
                                 ongoingCall = false;
-                                playPlayer();
+                                if(wasPausedByInterrupt && currentSong != null) {
+                                    playPlayer();
+                                    wasPausedByInterrupt = false;
+                                }
                             }
                         }
                         break;

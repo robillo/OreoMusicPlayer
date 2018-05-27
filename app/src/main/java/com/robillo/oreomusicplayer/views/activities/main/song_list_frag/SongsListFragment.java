@@ -273,6 +273,9 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
         currentSong = song;
 
+        if(currentSong == null)
+            return;
+
         if(bottomController.getVisibility()==View.GONE)
             if(hideOrShowUpper.getVisibility() == View.VISIBLE)     //either both should be visible or both shouldn't
                 bottomController.setVisibility(View.VISIBLE);
