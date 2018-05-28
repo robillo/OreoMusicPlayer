@@ -59,6 +59,9 @@ import static com.robillo.oreomusicplayer.utils.AppConstants.CHANNEL_ID;
 import static com.robillo.oreomusicplayer.utils.AppConstants.CONTROLLER_NOTIFICATION_ID;
 import static com.robillo.oreomusicplayer.utils.AppConstants.EMPTY_CELLS_COUNT;
 import static com.robillo.oreomusicplayer.utils.AppConstants.LAUNCHED_FROM_NOTIFICATION;
+import static com.robillo.oreomusicplayer.utils.AppConstants.NEXT_NOT;
+import static com.robillo.oreomusicplayer.utils.AppConstants.PLAY_OR_PAUSE_NOT;
+import static com.robillo.oreomusicplayer.utils.AppConstants.PREVIOUS_NOT;
 import static com.robillo.oreomusicplayer.utils.AppConstants.REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE;
 
 public class MusicService extends Service implements
@@ -388,49 +391,27 @@ public class MusicService extends Service implements
         else
             playOrPauseDrawable = R.drawable.ic_play_arrow_black_24dp;
 
-        NotificationCompat.Action previous = new NotificationCompat
-                .Action.Builder(R.drawable.ic_skip_previous_black_24dp, "prev", retreivePlaybackAction(1)).build();
-
-        NotificationCompat.Action pause = new NotificationCompat
-                .Action.Builder(playOrPauseDrawable, "play_or_pause", retreivePlaybackAction(2)).build();
-
-        NotificationCompat.Action next = new NotificationCompat
-                .Action.Builder(R.drawable.ic_skip_next_black_24dp, "next", retreivePlaybackAction(3)).build();
-
-        Bitmap bitmap = getBitmapAlbumArt();
-
-        Intent notificationIntent = new Intent(this, MainActivity.class);
-        notificationIntent.putExtra(LAUNCHED_FROM_NOTIFICATION, true);
-
-        PendingIntent contentIntent = PendingIntent.getActivity(
-                this,
-                0,
-                notificationIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT
-        );
+        NotificationCompat.Action previous = returnAction(R.drawable.ic_skip_previous_black_24dp, PREVIOUS_NOT, 1);
+        NotificationCompat.Action pause = returnAction(playOrPauseDrawable, PLAY_OR_PAUSE_NOT, 2);
+        NotificationCompat.Action next = returnAction(R.drawable.ic_skip_next_black_24dp, NEXT_NOT, 3);
 
         notificationController = new NotificationCompat.Builder(this, CHANNEL_ID)
-                // Hide the timestamp
                 .setShowWhen(false)
                 .addAction(previous)
                 .addAction(pause)
                 .addAction(next)
-                // Set the Notification style
                 .setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
                         // Attach our MediaSession token
                         .setMediaSession(mSession.getSessionToken())
                         // Show our playback controls in the compat view
                         .setShowActionsInCompactView(0, 1, 2))
-                // Set the Notification color
                 .setColor(getResources().getColor(R.color.black))
-                // Set the large and small icons
-                .setLargeIcon(bitmap)
+                .setLargeIcon(getBitmapAlbumArt())
                 .setSmallIcon(R.drawable.oval_shape)
-                // Set Notification content information
                 .setContentText(songs.get(songPosition).getArtist())
                 .setContentInfo(songs.get(songPosition).getAlbum())
                 .setContentTitle(songs.get(songPosition).getTitle())
-                .setContentIntent(contentIntent)
+                .setContentIntent(setupNotificationPendingIntent())
                 .build();
 
         int importance = 0;
@@ -449,6 +430,12 @@ public class MusicService extends Service implements
 
             mNotificationManager.notify(CONTROLLER_NOTIFICATION_ID, notificationController);
         }
+    }
+
+    @Override
+    public NotificationCompat.Action returnAction(int id, String title, int which) {
+        return new NotificationCompat
+                .Action.Builder(id, title, retreivePlaybackAction(which)).build();
     }
 
     @Override
@@ -630,6 +617,19 @@ public class MusicService extends Service implements
         }
 
         return (audioFocus != AudioManager.AUDIOFOCUS_REQUEST_GRANTED && focusRequest != AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
+    }
+
+    @Override
+    public PendingIntent setupNotificationPendingIntent() {
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        notificationIntent.putExtra(LAUNCHED_FROM_NOTIFICATION, true);
+
+        return PendingIntent.getActivity(
+                this,
+                0,
+                notificationIntent,
+                PendingIntent.FLAG_UPDATE_CURRENT
+        );
     }
 
     public static String isRepeatModeOn() {

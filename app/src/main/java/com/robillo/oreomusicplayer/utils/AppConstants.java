@@ -42,6 +42,11 @@ public class AppConstants {
     public static final int FROM_INTERRUPT = 1;
     public static final int FROM_EVERYWHERE_ELSE = 0;
 
+    //Notification
+    public static final String PREVIOUS_NOT = "prev";
+    public static final String NEXT_NOT = "next";
+    public static final String PLAY_OR_PAUSE_NOT = "play_or_pause";
+
     //SongListFragment
     public static final int FROM_ACTIVITY = 0;
     public static final int FROM_FRAGMENT = 1;

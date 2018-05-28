@@ -1,8 +1,10 @@
 package com.robillo.oreomusicplayer.services;
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.media.MediaPlayer;
+import android.support.v4.app.NotificationCompat;
 
 import com.robillo.oreomusicplayer.models.Song;
 
@@ -56,4 +58,8 @@ public interface MusicServiceInterface {
     void audioFocusChangeListenerPrelims();
 
     boolean audioManagerRequestAudioFocus();
+
+    PendingIntent setupNotificationPendingIntent();
+
+    NotificationCompat.Action returnAction(int id, String title, int which);
 }
