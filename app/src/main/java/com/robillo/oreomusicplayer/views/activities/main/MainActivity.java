@@ -16,7 +16,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -46,9 +45,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
-import static com.robillo.oreomusicplayer.utils.AppConstants.CONTROLLER_NOTIFICATION_ID;
 import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_ACTIVITY;
-import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_EVERYWHERE_ELSE;
 import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_FRAGMENT;
 import static com.robillo.oreomusicplayer.utils.AppConstants.REQUEST_CODE;
 
@@ -146,11 +143,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         if (requestCode == REQUEST_CODE) {
             if(resultCode == Activity.RESULT_OK){
                 rescanDevice();
-                Log.e("abnormal", "scan return");
             }
-            else if (resultCode == Activity.RESULT_CANCELED) {
+            else //noinspection StatementWithEmptyBody
+                if (resultCode == Activity.RESULT_CANCELED) {
                 //Write your code if there's no result
-                Log.e("cancelled", "cancelled return");
             }
         }
     }

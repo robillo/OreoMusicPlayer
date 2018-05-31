@@ -6,8 +6,6 @@ import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.models.ThemeColors;
 
 import java.util.HashMap;
-import java.util.List;
-
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class AppConstants {
 
