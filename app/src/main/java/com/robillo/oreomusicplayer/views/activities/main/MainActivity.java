@@ -1,6 +1,7 @@
 package com.robillo.oreomusicplayer.views.activities.main;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -48,6 +49,8 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 import static com.robillo.oreomusicplayer.utils.AppConstants.CONTROLLER_NOTIFICATION_ID;
 import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_ACTIVITY;
 import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_EVERYWHERE_ELSE;
+import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_FRAGMENT;
+import static com.robillo.oreomusicplayer.utils.AppConstants.REQUEST_CODE;
 
 public class MainActivity extends AppCompatActivity implements MainActivityMvpView, MediaController.MediaPlayerControl {
 
@@ -134,8 +137,22 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void startThemeChangeActivity() {
-        startActivity(new Intent(this, ThemeChangeActivity.class));
+        startActivityForResult(new Intent(this, ThemeChangeActivity.class), REQUEST_CODE);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_CODE) {
+            if(resultCode == Activity.RESULT_OK){
+                rescanDevice();
+                Log.e("abnormal", "scan return");
+            }
+            else if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+                Log.e("cancelled", "cancelled return");
+            }
+        }
     }
 
     @Override
@@ -160,6 +177,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 //        if(musicService!=null && musicBound && musicService.isPlaying()) return musicService.getPosition();
         if(musicService!=null && musicBound) return musicService.getPosition();
         else return 0;
+    }
+
+    @Override
+    public void rescanDevice() {
+        if(getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list)) != null){
+            SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
+            fragment.fetchSongs(FROM_ACTIVITY);
+        }
     }
 
     @Override
@@ -289,7 +314,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Override
     protected void onDestroy() {
         if(playIntent!=null) {
-            musicService.cancelNotification(this, CONTROLLER_NOTIFICATION_ID);
             stopService(playIntent);
         }
         super.onDestroy();
@@ -404,7 +428,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
                 (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
 
         if(fragment != null) {
-            fragment.fetchSongs();
+            fragment.fetchSongs(FROM_FRAGMENT);
         }
     }
 

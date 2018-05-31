@@ -42,6 +42,9 @@ public class AppConstants {
     public static final int FROM_INTERRUPT = 1;
     public static final int FROM_EVERYWHERE_ELSE = 0;
 
+    //generic stuff
+    public static final int REQUEST_CODE = 101;
+
     //Notification
     public static final String PREVIOUS_NOT = "prev";
     public static final String NEXT_NOT = "next";

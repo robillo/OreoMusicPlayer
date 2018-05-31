@@ -1,6 +1,8 @@
 package com.robillo.oreomusicplayer.views.activities.theme_change;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -10,12 +12,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.models.ThemeColors;
 import com.robillo.oreomusicplayer.preferences.AppPreferencesHelper;
 import com.robillo.oreomusicplayer.utils.AppConstants;
+import com.robillo.oreomusicplayer.views.activities.main.MainActivity;
 import com.robillo.oreomusicplayer.views.activities.theme_change.adapters.ThemeChoicesAdapter;
 
 import java.util.ArrayList;
@@ -35,6 +39,9 @@ public class ThemeChangeActivity extends AppCompatActivity implements ThemeChang
 
     @BindView(R.id.go_back_to_main)
     ImageButton goBackToMain;
+
+    @BindView(R.id.rescan_device)
+    Button rescanDevice;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +108,13 @@ public class ThemeChangeActivity extends AppCompatActivity implements ThemeChang
 
     @OnClick(R.id.go_back_to_main)
     void setGoBackToMain() {
+        setResult(Activity.RESULT_CANCELED, new Intent());
+        onBackPressed();
+    }
+
+    @OnClick(R.id.rescan_device)
+    void setRescanDevice() {
+        setResult(Activity.RESULT_OK, new Intent());
         onBackPressed();
     }
 }

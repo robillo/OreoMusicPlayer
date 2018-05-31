@@ -72,6 +72,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     AppPreferencesHelper helper = null;
     private static String SORT_ORDER = null;
     private ThemeColors currentUserThemeColors = null;
+    private int from = FROM_FRAGMENT;
 
     @BindView(R.id.play_pause_song)
     ImageButton playPauseSong;
@@ -182,19 +183,24 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     @Override
-    public void fetchSongs() {
-        if(getActivity()!=null) getActivity().getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+    public void fetchSongs(int from) {
+        this.from = from;
+        Log.e("fetch", "songs");
+        if(getActivity()!=null) {
+            Log.e("initting", "loader");
+            getActivity().getSupportLoaderManager().initLoader(LOADER_ID, null, this);
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        if(audioList == null || audioList.size() == 0) {
-            fetchSongs();
+        if(audioList == null || audioList.size() == 0 && from != FROM_ACTIVITY) {
+            fetchSongs(FROM_FRAGMENT);
         }
         else if(getActivity() != null){
             if(getActivity().getIntent().getBooleanExtra(LAUNCHED_FROM_NOTIFICATION, false)) {
-                fetchSongs();
+                fetchSongs(FROM_FRAGMENT);
             }
         }
     }
@@ -215,6 +221,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+
         if (cursor != null && cursor.getCount() > 0) {
             audioList.add(new Song());
             while (cursor.moveToNext()) {
@@ -255,6 +262,12 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
             }
         }
 
+        Log.e("from", "fr " + from);
+
+        if(from == FROM_ACTIVITY) {
+            Toast.makeText(getActivity(), "Device Rescanned", Toast.LENGTH_SHORT).show();
+            from = FROM_FRAGMENT;
+        }
         getActivity().getSupportLoaderManager().destroyLoader(LOADER_ID);
     }
 

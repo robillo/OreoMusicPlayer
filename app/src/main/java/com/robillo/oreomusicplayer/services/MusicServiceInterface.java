@@ -39,7 +39,7 @@ public interface MusicServiceInterface {
 
     void buildNotification(boolean play_or_pause);
 
-    void cancelNotification(Context context, int notificationId);
+    void cancelNotification();
 
     Bitmap getBitmapAlbumArt();
 

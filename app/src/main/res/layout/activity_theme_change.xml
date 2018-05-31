@@ -63,18 +63,16 @@
             android:textColor="@color/colorTextOne"
             android:text="@string/select_player_theme"
             android:textSize="20sp"
-            android:padding="20sp"
+            android:padding="10sp"
             android:gravity="start|center_vertical"/>
 
         <ImageView
-            android:layout_width="150sp"
-            android:layout_height="3sp"
+            android:layout_width="match_parent"
+            android:layout_height="2sp"
             android:background="@color/transparency_black"
             tools:ignore="ContentDescription,SmallSp" />
 
         <android.support.v7.widget.RecyclerView
-            android:layout_marginTop="20sp"
-            android:layout_marginBottom="20sp"
             android:paddingTop="10sp"
             android:paddingBottom="10sp"
             android:layout_width="match_parent"
@@ -86,6 +84,29 @@
             tools:listitem="@layout/row_theme_colors">
 
         </android.support.v7.widget.RecyclerView>
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2sp"
+            android:background="@color/transparency_black"
+            tools:ignore="ContentDescription,SmallSp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/transparency_black"
+            android:text="@string/rescan_device"
+            android:textSize="20sp"
+            android:paddingLeft="20sp"
+            android:paddingRight="20sp"
+            android:paddingBottom="10sp"
+            android:paddingTop="10sp"
+            android:background="@drawable/button_settings"
+            android:layout_margin="15sp"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/rescan_device"/>
+
 
     </LinearLayout>
 

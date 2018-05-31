@@ -98,7 +98,9 @@ public class MusicService extends Service implements
     private Song currentSong;
     private int songPosition;
     private MediaSessionCompat mSession;
-    Notification notificationController = null;
+    NotificationCompat.Builder builder = null;
+    NotificationManager notificationManager = null;
+    NotificationChannel mChannel = null;
     MediaControllerCompat.TransportControls controls;
     private final IBinder musicBind = new MusicBinder();
 
@@ -180,6 +182,17 @@ public class MusicService extends Service implements
             }
         });
 
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        int importance = 0;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            importance = NotificationManager.IMPORTANCE_HIGH;
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            mChannel = new NotificationChannel(CHANNEL_ID, AppConstants.CHANNEL_NAME, importance);
+            notificationManager.createNotificationChannel(mChannel);
+        }
 
 
         callStateListener();
@@ -386,16 +399,14 @@ public class MusicService extends Service implements
     public void buildNotification(boolean play_or_pause) {
 
         int playOrPauseDrawable;
-        if(play_or_pause)
-            playOrPauseDrawable = R.drawable.ic_pause_black_24dp;
-        else
-            playOrPauseDrawable = R.drawable.ic_play_arrow_black_24dp;
+        if(play_or_pause) playOrPauseDrawable = R.drawable.ic_pause_black_24dp;
+        else playOrPauseDrawable = R.drawable.ic_play_arrow_black_24dp;
 
         NotificationCompat.Action previous = returnAction(R.drawable.ic_skip_previous_black_24dp, PREVIOUS_NOT, 1);
         NotificationCompat.Action pause = returnAction(playOrPauseDrawable, PLAY_OR_PAUSE_NOT, 2);
         NotificationCompat.Action next = returnAction(R.drawable.ic_skip_next_black_24dp, NEXT_NOT, 3);
 
-        notificationController = new NotificationCompat.Builder(this, CHANNEL_ID)
+        builder = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setShowWhen(false)
                 .addAction(previous)
                 .addAction(pause)
@@ -411,25 +422,9 @@ public class MusicService extends Service implements
                 .setContentText(songs.get(songPosition).getArtist())
                 .setContentInfo(songs.get(songPosition).getAlbum())
                 .setContentTitle(songs.get(songPosition).getTitle())
-                .setContentIntent(setupNotificationPendingIntent())
-                .build();
+                .setContentIntent(setupNotificationPendingIntent());
 
-        int importance = 0;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            importance = NotificationManager.IMPORTANCE_HIGH;
-        }
-
-        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        if(mNotificationManager != null) {
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, AppConstants.CHANNEL_NAME, importance);
-                mNotificationManager.createNotificationChannel(mChannel);
-            }
-
-            mNotificationManager.notify(CONTROLLER_NOTIFICATION_ID, notificationController);
-        }
+        notificationManager.notify(CONTROLLER_NOTIFICATION_ID, builder.build());
     }
 
     @Override
@@ -439,15 +434,13 @@ public class MusicService extends Service implements
     }
 
     @Override
-    public void cancelNotification(Context context, int notificationId) {
-        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+    public void cancelNotification() {
         if(notificationManager != null) {
             notificationManager.cancel(CONTROLLER_NOTIFICATION_ID);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 notificationManager.deleteNotificationChannel(AppConstants.CHANNEL_ID);
             }
         }
-
     }
 
     @Override
@@ -759,6 +752,7 @@ public class MusicService extends Service implements
         super.onDestroy();
 
         player = null;
+        cancelNotification();
         unregisterReceiver(mNoisyReceiver);
     }
 }

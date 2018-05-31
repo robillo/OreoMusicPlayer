@@ -10,7 +10,7 @@ public interface SongListMvpView {
 
     void setUp(View v);
 
-    void fetchSongs();
+    void fetchSongs(int from);
 
     String returnCursorElement(Cursor cursor, String string);
 

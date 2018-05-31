@@ -50,4 +50,6 @@ public interface MainActivityMvpView {
 
     int getCurrentSongDuration();
 
+    void rescanDevice();
+
 }
