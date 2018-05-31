@@ -185,9 +185,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void fetchSongs(int from) {
         this.from = from;
-        Log.e("fetch", "songs");
         if(getActivity()!=null) {
-            Log.e("initting", "loader");
             getActivity().getSupportLoaderManager().initLoader(LOADER_ID, null, this);
         }
     }
@@ -262,10 +260,8 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
             }
         }
 
-        Log.e("from", "fr " + from);
-
         if(from == FROM_ACTIVITY) {
-            Toast.makeText(getActivity(), "Device Rescanned", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), R.string.rescanned, Toast.LENGTH_SHORT).show();
             from = FROM_FRAGMENT;
         }
         getActivity().getSupportLoaderManager().destroyLoader(LOADER_ID);
