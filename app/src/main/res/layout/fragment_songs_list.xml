@@ -207,10 +207,7 @@
                             android:textStyle="bold"
                             tools:ignore="HardcodedText,MissingPrefix,RtlHardcoded,RtlSymmetry"
                             tools:text="Illenium"
-                            android:scrollHorizontally="true"
-                            android:marqueeRepeatLimit="marquee_forever"
-                            android:singleLine="true"
-                            android:ellipsize="marquee"/>
+                            android:singleLine="true"/>
 
                     </LinearLayout>
 

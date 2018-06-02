@@ -49,7 +49,6 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
     @SuppressWarnings("FieldCanBeLocal")
     private static Song currentSong = null;
     @SuppressWarnings("FieldCanBeLocal")
-    private boolean isHidingAlready = false;
     private GestureDetector mGestureDetector;
     private AppPreferencesHelper helper = null;
     @SuppressWarnings("FieldCanBeLocal")
@@ -477,15 +476,6 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
 
     @Override
     public boolean onScroll(MotionEvent eventOne, MotionEvent eventTwo, float dx, float dy) {
-        //noinspection StatementWithEmptyBody
-        if(dy < 0) {      //scrolled down
-            if(!isHidingAlready)
-                if(getActivity() != null)
-                    getActivity().onBackPressed();
-        }
-        else {          //scrolled up
-
-        }
         return false;
     }
 
@@ -494,8 +484,37 @@ public class SongPlayFragment extends Fragment implements SongPlayMvpView, Gestu
 
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+        final int SWIPE_MIN_DISTANCE = 120;
+        final int SWIPE_MAX_OFF_PATH = 250;
+        final int SWIPE_THRESHOLD_VELOCITY = 200;
+
+        if (Math.abs(e1.getY() - e2.getY()) > SWIPE_MAX_OFF_PATH) {
+            if (Math.abs(e1.getX() - e2.getX()) > SWIPE_MAX_OFF_PATH || Math.abs(velocityY) < SWIPE_THRESHOLD_VELOCITY) {
+                return false;
+            }
+            if (e1.getY() - e2.getY() > SWIPE_MIN_DISTANCE) {
+                //bottom to top
+            }
+            else if (e2.getY() - e1.getY() > SWIPE_MIN_DISTANCE) {
+                //top to bottom
+                if(getActivity()!=null) getActivity().onBackPressed();
+                return true;
+            }
+        } else {
+            if (Math.abs(velocityX) < SWIPE_THRESHOLD_VELOCITY) {
+                return false;
+            }
+            if (e1.getX() - e2.getX() > SWIPE_MIN_DISTANCE) {
+                //right to left
+            }
+            else if (e2.getX() - e1.getX() > SWIPE_MIN_DISTANCE) {
+                //left to right
+            }
+        }
+
         return false;
     }
 
