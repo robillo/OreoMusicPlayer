@@ -85,6 +85,8 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
         SongHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            title.setSelected(true);
+            artistDuration.setSelected(true);
         }
     }
 }

@@ -20,7 +20,6 @@
             android:contentDescription="@string/nothing" />
 
         <TextView
-            android:maxLines="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="10sp"
@@ -30,10 +29,13 @@
             android:paddingBottom="10sp"
             tools:text="I'll be your reason"
             android:id="@+id/title"
+            android:scrollHorizontally="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:ellipsize="marquee"
             tools:ignore="MissingPrefix,RtlHardcoded,RtlSymmetry" />
 
         <TextView
-            android:maxLines="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingLeft="10sp"
@@ -43,6 +45,10 @@
             android:textSize="15sp"
             tools:text="Illenium (3:40)"
             android:id="@+id/artist_duration"
+            android:scrollHorizontally="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:ellipsize="marquee"
             tools:ignore="MissingPrefix,RtlHardcoded,RtlSymmetry" />
 
     </LinearLayout>

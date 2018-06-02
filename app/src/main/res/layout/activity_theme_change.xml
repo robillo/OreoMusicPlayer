@@ -92,6 +92,11 @@
             android:layout_gravity="center_horizontal"
             android:id="@+id/rescan_device"/>
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1sp"
+            android:background="@color/colorRecyclerRowDivider"
+            tools:ignore="ContentDescription,SmallSp" />
 
     </LinearLayout>
 
