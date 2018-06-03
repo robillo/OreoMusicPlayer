@@ -317,8 +317,10 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
             }
 
             //set album art
-            if(path!=null) Glide.with(getActivity()).load(path).into(currentSongAlbumArt);
-            else Glide.with(getActivity()).load(R.drawable.icon_drawable).into(currentSongAlbumArt);
+            if(path!=null)
+                Glide.with(getActivity()).load(path).into(currentSongAlbumArt);
+            else
+                Glide.with(getActivity()).load(R.drawable.icon_drawable).into(currentSongAlbumArt);
 
         }
 

@@ -16,6 +16,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -309,6 +310,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     protected void onDestroy() {
+        if(musicService!=null) musicService.onDestroy();
         if(playIntent!=null) {
             stopService(playIntent);
         }
