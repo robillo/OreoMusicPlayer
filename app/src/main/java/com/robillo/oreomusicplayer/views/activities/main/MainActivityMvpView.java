@@ -53,4 +53,6 @@ public interface MainActivityMvpView {
 
     void showSongOptionsOnBottomSheet(Song song);
 
+    void hideOrRemoveBottomSheet();
+
 }

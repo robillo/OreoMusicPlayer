@@ -68,6 +68,7 @@ import static com.robillo.oreomusicplayer.utils.AppConstants.YEAR;
 
 public class MainActivity extends AppCompatActivity implements MainActivityMvpView, MediaController.MediaPlayerControl {
 
+    BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
     private MusicService musicService;
     private Intent playIntent;
     private boolean musicBound = false;
@@ -202,26 +203,40 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void showSongOptionsOnBottomSheet(Song song) {
-        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
-        Bundle bundle = new Bundle();
-        bundle.putString(DATA, song.getData());
-        bundle.putString(TITLE, song.getTitle());
-        bundle.putString(TITLE_KEY, song.getTitleKey());
-        bundle.putString(ID, song.getId());
-        bundle.putString(DATE_ADDED, song.getDateAdded());
-        bundle.putString(DATE_MODIFIED, song.getDateModified());
-        bundle.putString(DURATION, song.getDuration());
-        bundle.putString(COMPOSER, song.getComposer());
-        bundle.putString(ALBUM, song.getAlbum());
-        bundle.putString(ALBUM_ID, song.getAlbumId());
-        bundle.putString(ALBUM_KEY, song.getAlbumKey());
-        bundle.putString(ARTIST, song.getArtist());
-        bundle.putString(ARTIST_ID, song.getArtistId());
-        bundle.putString(ARTIST_KEY, song.getArtistKey());
-        bundle.putString(SIZE, song.getSize());
-        bundle.putString(YEAR, song.getYear());
-        bottomSheetFragment.setArguments(bundle);
-        bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
+        if (bottomSheetFragment != null) {
+            Bundle bundle = new Bundle();
+            bundle.putString(DATA, song.getData());
+            bundle.putString(TITLE, song.getTitle());
+            bundle.putString(TITLE_KEY, song.getTitleKey());
+            bundle.putString(ID, song.getId());
+            bundle.putString(DATE_ADDED, song.getDateAdded());
+            bundle.putString(DATE_MODIFIED, song.getDateModified());
+            bundle.putString(DURATION, song.getDuration());
+            bundle.putString(COMPOSER, song.getComposer());
+            bundle.putString(ALBUM, song.getAlbum());
+            bundle.putString(ALBUM_ID, song.getAlbumId());
+            bundle.putString(ALBUM_KEY, song.getAlbumKey());
+            bundle.putString(ARTIST, song.getArtist());
+            bundle.putString(ARTIST_ID, song.getArtistId());
+            bundle.putString(ARTIST_KEY, song.getArtistKey());
+            bundle.putString(SIZE, song.getSize());
+            bundle.putString(YEAR, song.getYear());
+            bottomSheetFragment.setArguments(bundle);
+            bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
+        }
+        else {
+            bottomSheetFragment = new BottomSheetFragment();
+            showSongOptionsOnBottomSheet(song);
+        }
+    }
+
+    @Override
+    public void hideOrRemoveBottomSheet() {
+        if(bottomSheetFragment != null) {
+            if(!bottomSheetFragment.isHidden()) {
+                bottomSheetFragment.dismiss();
+            }
+        }
     }
 
     @Override

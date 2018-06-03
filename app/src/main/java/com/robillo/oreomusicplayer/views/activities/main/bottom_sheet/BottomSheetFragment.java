@@ -144,8 +144,8 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
             getActivity().getContentResolver().delete(uri, null, null);
             Toast.makeText(getActivity(), "song deleted", Toast.LENGTH_SHORT).show();
             ((MainActivity) getActivity()).rescanDevice();
+            ((MainActivity) getActivity()).hideOrRemoveBottomSheet();
         }
-
     }
 
     @OnClick(R.id.share_song)
