@@ -9,9 +9,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_impression"
-        android:id="@+id/linear_layout">
+        android:layout_height="wrap_content">
 
         <ImageView
             android:layout_width="match_parent"
@@ -20,37 +18,66 @@
             tools:ignore="SmallSp"
             android:contentDescription="@string/nothing" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="10sp"
-            android:paddingTop="10sp"
-            android:textColor="@color/colorTitle"
-            android:textSize="20sp"
-            android:paddingBottom="10sp"
-            tools:text="I'll be your reason"
-            android:id="@+id/title"
-            android:scrollHorizontally="true"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:singleLine="true"
-            android:ellipsize="marquee"
-            tools:ignore="MissingPrefix,RtlHardcoded,RtlSymmetry" />
+            android:orientation="horizontal">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="10sp"
-            android:paddingBottom="10sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorArtist"
-            android:textSize="15sp"
-            tools:text="Illenium (3:40)"
-            android:id="@+id/artist_duration"
-            android:scrollHorizontally="true"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:singleLine="true"
-            android:ellipsize="marquee"
-            tools:ignore="MissingPrefix,RtlHardcoded,RtlSymmetry" />
+            <LinearLayout
+                android:layout_width="0sp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:id="@+id/linear_layout"
+                android:background="@drawable/button_impression">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10sp"
+                    android:paddingTop="10sp"
+                    android:textColor="@color/colorTitle"
+                    android:textSize="20sp"
+                    android:paddingBottom="10sp"
+                    tools:text="I'll be your reason"
+                    android:id="@+id/title"
+                    android:scrollHorizontally="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    tools:ignore="MissingPrefix,RtlHardcoded,RtlSymmetry" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="10sp"
+                    android:paddingBottom="10sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorArtist"
+                    android:textSize="15sp"
+                    tools:text="Illenium (3:40)"
+                    android:id="@+id/artist_duration"
+                    android:scrollHorizontally="true"
+                    android:marqueeRepeatLimit="marquee_forever"
+                    android:singleLine="true"
+                    android:ellipsize="marquee"
+                    tools:ignore="MissingPrefix,RtlHardcoded,RtlSymmetry" />
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/more"
+                android:paddingRight="15sp"
+                android:paddingLeft="15sp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:tint="@color/colorTextThree"
+                android:layout_gravity="center_vertical"
+                android:background="@drawable/button_impression"
+                android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
+                tools:ignore="ContentDescription" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

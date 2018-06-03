@@ -1,5 +1,6 @@
 package com.robillo.oreomusicplayer.views.activities.main.song_list_frag.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
@@ -7,9 +8,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.models.Song;
@@ -40,13 +41,14 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SongHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull SongHolder holder, @SuppressLint("RecyclerView") final int position) {
 
         if(list.get(position).getTitle() == null) {
             String empty = " ";
             holder.title.setText(empty);
             holder.artistDuration.setText(empty);
             holder.itemView.setClickable(false);
+            holder.moreButton.setVisibility(View.GONE);
             return;
         }
 
@@ -57,6 +59,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
         String temp = list.get(position).getArtist() + " ( " + String.valueOf(mins) + ":" + String.valueOf(seconds) + " )";
         holder.artistDuration.setText(temp);
 
+        //noinspection UnnecessaryLocalVariable
         final int _pos = position;
 
         holder.linearLayout.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +76,13 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
             public boolean onLongClick(View view) {
                 ((MainActivity) context).showSongOptionsOnBottomSheet(list.get(position));
                 return true;
+            }
+        });
+
+        holder.moreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity) context).showSongOptionsOnBottomSheet(list.get(position));
             }
         });
     }
@@ -92,6 +102,8 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
         CardView songCard;
         @BindView(R.id.linear_layout)
         LinearLayout linearLayout;
+        @BindView(R.id.more)
+        ImageButton moreButton;
 
         SongHolder(View itemView) {
             super(itemView);
