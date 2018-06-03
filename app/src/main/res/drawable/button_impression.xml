@@ -3,9 +3,9 @@
     <item
         android:state_pressed="true"
         android:state_enabled="true"
-        android:drawable="@drawable/button_pressed_settings" />
+        android:drawable="@drawable/button_pressed_impression" />
     <item
         android:state_focused="true"
-        android:drawable="@drawable/button_normal_settings" />
-    <item android:drawable="@drawable/button_normal_settings"/>
+        android:drawable="@drawable/button_normal_impression" />
+    <item android:drawable="@drawable/button_normal_impression"/>
 </selector>

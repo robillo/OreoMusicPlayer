@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.robillo.oreomusicplayer.R;
@@ -57,10 +58,9 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
 
         final int _pos = position;
 
-        holder.songCard.setOnClickListener(new View.OnClickListener() {
+        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 if(context!=null){
                     ((MainActivity) context).playSong(_pos);
                 }
@@ -81,6 +81,8 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
         TextView artistDuration;
         @BindView(R.id.song_card)
         CardView songCard;
+        @BindView(R.id.linear_layout)
+        LinearLayout linearLayout;
 
         SongHolder(View itemView) {
             super(itemView);

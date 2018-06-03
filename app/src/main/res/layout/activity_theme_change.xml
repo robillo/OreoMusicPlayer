@@ -87,7 +87,7 @@
             android:textSize="20sp"
             android:paddingTop="10sp"
             android:paddingBottom="10sp"
-            android:background="@drawable/button_settings"
+            android:background="@drawable/button_impression"
             android:gravity="center"
             android:layout_gravity="center_horizontal"
             android:id="@+id/rescan_device"/>
