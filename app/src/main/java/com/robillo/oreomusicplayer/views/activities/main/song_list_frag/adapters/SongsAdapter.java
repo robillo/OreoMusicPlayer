@@ -43,7 +43,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
     @Override
     public void onBindViewHolder(@NonNull SongHolder holder, @SuppressLint("RecyclerView") final int position) {
 
-        if(list.get(position).getTitle() == null) {
+        if(list.get(position) == null || list.get(position).getTitle() == null) {
             String empty = " ";
             holder.title.setText(empty);
             holder.artistDuration.setText(empty);
