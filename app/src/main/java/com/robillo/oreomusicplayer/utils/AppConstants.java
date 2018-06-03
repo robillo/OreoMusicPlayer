@@ -9,6 +9,23 @@ import java.util.HashMap;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class AppConstants {
 
+    public static final String DATA = "data";
+    public static final String TITLE = "title";
+    public static final String TITLE_KEY = "title_key";
+    public static final String ID = "id";
+    public static final String DATE_ADDED = "date_added";
+    public static final String DATE_MODIFIED = "date_modified";
+    public static final String DURATION = "duration";
+    public static final String COMPOSER = "composer";
+    public static final String ALBUM = "album";
+    public static final String ALBUM_ID = "album_id";
+    public static final String ALBUM_KEY = "album_key";
+    public static final String ARTIST = "artist";
+    public static final String ARTIST_ID = "artist_id";
+    public static final String ARTIST_KEY = "artist_key";
+    public static final String SIZE = "size";
+    public static final String YEAR = "year";
+
     //IntentExtra
     public static final String LAUNCHED_FROM_NOTIFICATION = "launched_from_notification";
 
@@ -53,8 +70,8 @@ public class AppConstants {
     public static final int FROM_FRAGMENT = 1;
 
     //SongListFragment SortOrder
-    private static final String ASCENDING = "ASC";
-    private static final String DESCENDING = "DESC";
+    public static final String ASCENDING = "ASC";
+    public static final String DESCENDING = "DESC";
 
     public static final String SIZE_ASCENDING = MediaStore.Audio.Media.SIZE + " " + ASCENDING;
     public static final String SIZE_DESCENDING = MediaStore.Audio.Media.SIZE + " " + DESCENDING;

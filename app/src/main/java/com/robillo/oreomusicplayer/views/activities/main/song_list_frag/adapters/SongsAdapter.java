@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.models.Song;
@@ -39,7 +40,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SongHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SongHolder holder, final int position) {
 
         if(list.get(position).getTitle() == null) {
             String empty = " ";
@@ -64,6 +65,14 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
                 if(context!=null){
                     ((MainActivity) context).playSong(_pos);
                 }
+            }
+        });
+
+        holder.linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                ((MainActivity) context).showSongOptionsOnBottomSheet(list.get(position));
+                return true;
             }
         });
     }

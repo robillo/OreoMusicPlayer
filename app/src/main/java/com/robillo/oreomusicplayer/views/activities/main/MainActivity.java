@@ -16,7 +16,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
@@ -31,6 +30,7 @@ import com.robillo.oreomusicplayer.models.ThemeColors;
 import com.robillo.oreomusicplayer.preferences.AppPreferencesHelper;
 import com.robillo.oreomusicplayer.services.MusicService;
 import com.robillo.oreomusicplayer.utils.AppConstants;
+import com.robillo.oreomusicplayer.views.activities.main.bottom_sheet.BottomSheetFragment;
 import com.robillo.oreomusicplayer.views.activities.main.song_list_frag.SongsListFragment;
 import com.robillo.oreomusicplayer.views.activities.main.song_play_frag.SongPlayFragment;
 import com.robillo.oreomusicplayer.views.activities.main.songs_sort_frag.SongsSortFragment;
@@ -46,9 +46,25 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
+import static com.robillo.oreomusicplayer.utils.AppConstants.ALBUM;
+import static com.robillo.oreomusicplayer.utils.AppConstants.ALBUM_ID;
+import static com.robillo.oreomusicplayer.utils.AppConstants.ALBUM_KEY;
+import static com.robillo.oreomusicplayer.utils.AppConstants.ARTIST;
+import static com.robillo.oreomusicplayer.utils.AppConstants.ARTIST_ID;
+import static com.robillo.oreomusicplayer.utils.AppConstants.ARTIST_KEY;
+import static com.robillo.oreomusicplayer.utils.AppConstants.COMPOSER;
+import static com.robillo.oreomusicplayer.utils.AppConstants.DATA;
+import static com.robillo.oreomusicplayer.utils.AppConstants.DATE_ADDED;
+import static com.robillo.oreomusicplayer.utils.AppConstants.DATE_MODIFIED;
+import static com.robillo.oreomusicplayer.utils.AppConstants.DURATION;
 import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_ACTIVITY;
 import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_FRAGMENT;
+import static com.robillo.oreomusicplayer.utils.AppConstants.ID;
 import static com.robillo.oreomusicplayer.utils.AppConstants.REQUEST_CODE;
+import static com.robillo.oreomusicplayer.utils.AppConstants.SIZE;
+import static com.robillo.oreomusicplayer.utils.AppConstants.TITLE;
+import static com.robillo.oreomusicplayer.utils.AppConstants.TITLE_KEY;
+import static com.robillo.oreomusicplayer.utils.AppConstants.YEAR;
 
 public class MainActivity extends AppCompatActivity implements MainActivityMvpView, MediaController.MediaPlayerControl {
 
@@ -182,6 +198,30 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
             fragment.fetchSongs(FROM_ACTIVITY);
         }
+    }
+
+    @Override
+    public void showSongOptionsOnBottomSheet(Song song) {
+        BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(DATA, song.getData());
+        bundle.putString(TITLE, song.getTitle());
+        bundle.putString(TITLE_KEY, song.getTitleKey());
+        bundle.putString(ID, song.getId());
+        bundle.putString(DATE_ADDED, song.getDateAdded());
+        bundle.putString(DATE_MODIFIED, song.getDateModified());
+        bundle.putString(DURATION, song.getDuration());
+        bundle.putString(COMPOSER, song.getComposer());
+        bundle.putString(ALBUM, song.getAlbum());
+        bundle.putString(ALBUM_ID, song.getAlbumId());
+        bundle.putString(ALBUM_KEY, song.getAlbumKey());
+        bundle.putString(ARTIST, song.getArtist());
+        bundle.putString(ARTIST_ID, song.getArtistId());
+        bundle.putString(ARTIST_KEY, song.getArtistKey());
+        bundle.putString(SIZE, song.getSize());
+        bundle.putString(YEAR, song.getYear());
+        bottomSheetFragment.setArguments(bundle);
+        bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
     }
 
     @Override

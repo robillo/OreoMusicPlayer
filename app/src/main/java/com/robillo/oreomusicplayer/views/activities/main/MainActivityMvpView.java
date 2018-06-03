@@ -51,4 +51,6 @@ public interface MainActivityMvpView {
 
     void rescanDevice();
 
+    void showSongOptionsOnBottomSheet(Song song);
+
 }
