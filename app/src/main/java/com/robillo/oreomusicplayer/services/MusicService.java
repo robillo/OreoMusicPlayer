@@ -427,7 +427,8 @@ public class MusicService extends Service implements
                 .setContentText(songs.get(songPosition).getArtist())
                 .setContentInfo(songs.get(songPosition).getAlbum())
                 .setContentTitle(songs.get(songPosition).getTitle())
-                .setContentIntent(setupNotificationPendingIntent());
+                .setContentIntent(setupNotificationPendingIntent())
+                .setOngoing(play_or_pause);
 
         notificationManager.notify(CONTROLLER_NOTIFICATION_ID, builder.build());
     }
