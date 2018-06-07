@@ -301,6 +301,7 @@ public class MusicService extends Service implements
         }
         else {
             currentSong = null;
+            cancelNotification();
             EventBus.getDefault().postSticky(new PlayerStateNoSongPlayingEvent());
             Toast toast = Toast.makeText(this, "End Of List", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 10);
