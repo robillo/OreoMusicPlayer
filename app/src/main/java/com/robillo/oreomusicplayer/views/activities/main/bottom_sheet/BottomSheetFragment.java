@@ -138,10 +138,17 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
                 MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, Long.valueOf(song.getId())
         );
         if(getActivity()!=null) {
-            getActivity().getContentResolver().delete(uri, null, null);
-            Toast.makeText(getActivity(), "song deleted", Toast.LENGTH_SHORT).show();
-            ((MainActivity) getActivity()).rescanDevice();
-            ((MainActivity) getActivity()).hideOrRemoveBottomSheet();
+            MainActivity act = (MainActivity) getActivity();
+            Song mSong = act.getMusicService().getSong();
+            if(mSong != null && mSong.getId().equals(song.getId())) {
+                act.playNextSong();
+                act.getMusicService().cancelNotification();
+                //and remove song with song id as song.getId() from list in music service
+            }
+            act.getContentResolver().delete(uri, null, null);
+            Toast.makeText(act, "Song Deleted", Toast.LENGTH_SHORT).show();
+            act.rescanDevice();
+            act.hideOrRemoveBottomSheet();
         }
     }
 

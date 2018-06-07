@@ -36,4 +36,6 @@ public interface SongListMvpView {
 
     void startThemeChangeActivity();
 
+    void makeControllerInvisible();
+
 }

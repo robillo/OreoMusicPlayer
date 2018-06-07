@@ -240,6 +240,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @Override
+    public void removeSongFromListInMusicService(Song song) {
+        MusicService service = getMusicService();
+        if(service != null) {
+            service.removeSongFromList(song);
+        }
+    }
+
+    @Override
     public void setSongListFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(mFragmentContainer.getId(), new SongsListFragment(), getString(R.string.songs_list));

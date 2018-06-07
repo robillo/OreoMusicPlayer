@@ -55,4 +55,6 @@ public interface MainActivityMvpView {
 
     void hideOrRemoveBottomSheet();
 
+    void removeSongFromListInMusicService(Song song);
+
 }

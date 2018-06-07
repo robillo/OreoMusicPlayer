@@ -29,6 +29,8 @@ public interface MusicServiceInterface {
 
     void pausePlayer();
 
+    Song getSong();
+
     void seekPlayer(int position);
 
     void playPlayer();
@@ -54,6 +56,8 @@ public interface MusicServiceInterface {
     void updateAudioList(ArrayList<Song> songs);
 
     void callStateListener();
+
+    void removeSongFromList(Song song);
 
     void audioFocusChangeListenerPrelims();
 

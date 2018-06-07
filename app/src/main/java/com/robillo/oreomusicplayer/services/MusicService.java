@@ -362,6 +362,11 @@ public class MusicService extends Service implements
     }
 
     @Override
+    public Song getSong() {
+        return currentSong;
+    }
+
+    @Override
     public void playPrevious() {
 
         if(isShuffleModeOn()) {
@@ -568,6 +573,12 @@ public class MusicService extends Service implements
         // Listen for changes to the device call state.
         telephonyManager.listen(phoneStateListener,
                 PhoneStateListener.LISTEN_CALL_STATE);
+    }
+
+    @Override
+    public void removeSongFromList(Song song) {
+        if(songs != null && songs.contains(song))
+            songs.remove(song);
     }
 
     @Override

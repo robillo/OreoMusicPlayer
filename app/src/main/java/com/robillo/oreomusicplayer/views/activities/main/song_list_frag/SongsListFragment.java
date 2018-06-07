@@ -183,6 +183,11 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     @Override
+    public void makeControllerInvisible() {
+        bottomController.setVisibility(View.GONE);
+    }
+
+    @Override
     public void fetchSongs(int from) {
         this.from = from;
         if(getActivity()!=null) {
