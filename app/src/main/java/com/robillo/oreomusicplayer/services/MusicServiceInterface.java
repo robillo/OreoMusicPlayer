@@ -57,6 +57,8 @@ public interface MusicServiceInterface {
 
     void callStateListener();
 
+    void setPlayerStateToNoSongPlaying();
+
     void removeSongFromList(Song song);
 
     void audioFocusChangeListenerPrelims();

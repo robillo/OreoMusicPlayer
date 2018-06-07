@@ -1,6 +1,5 @@
 package com.robillo.oreomusicplayer.services;
 
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -36,6 +35,7 @@ import android.view.Gravity;
 import android.widget.Toast;
 
 import com.robillo.oreomusicplayer.R;
+import com.robillo.oreomusicplayer.events.PlayerStateNoSongPlayingEvent;
 import com.robillo.oreomusicplayer.events.SongChangeEvent;
 import com.robillo.oreomusicplayer.models.SetSeekBarEvent;
 import com.robillo.oreomusicplayer.models.Song;
@@ -300,6 +300,8 @@ public class MusicService extends Service implements
             setSong(1);
         }
         else {
+            currentSong = null;
+            EventBus.getDefault().postSticky(new PlayerStateNoSongPlayingEvent());
             Toast toast = Toast.makeText(this, "End Of List", Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 10);
             toast.show();
@@ -576,6 +578,11 @@ public class MusicService extends Service implements
     }
 
     @Override
+    public void setPlayerStateToNoSongPlaying() {
+
+    }
+
+    @Override
     public void removeSongFromList(Song song) {
         if(songs != null && songs.contains(song))
             songs.remove(song);
@@ -665,7 +672,7 @@ public class MusicService extends Service implements
         if(songPosition < songs.size() - AppConstants.EMPTY_CELLS_COUNT){
 
             if(!isRepeatModeOn().equals(AppConstants.REPEAT_MODE_VALUE_REPEAT)) {
-                //if repeat mode is off, update songPosition for next song to be played
+                //if repeat mode is off, update songPosition for setPlayerStateToNoSongPlaying song to be played
 
                 if(isShuffleModeOn()) {
                     // nextInt is normally exclusive of the top value

@@ -12,16 +12,19 @@ import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.MediaController;
 
 import com.robillo.oreomusicplayer.R;
+import com.robillo.oreomusicplayer.events.PlayerStateNoSongPlayingEvent;
 import com.robillo.oreomusicplayer.events.SongChangeEvent;
 import com.robillo.oreomusicplayer.models.SetSeekBarEvent;
 import com.robillo.oreomusicplayer.models.Song;
@@ -240,6 +243,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @Override
+    public void setPlayerStateToNoSongPlaying() {
+
+    }
+
+    @Override
     public void removeSongFromListInMusicService(Song song) {
         MusicService service = getMusicService();
         if(service != null) {
@@ -442,6 +450,29 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         if(fragment != null) {
             fragment.setDurationValues(event.getCurrentDuration(), event.getTotalDuration()/1000);
         }
+    }
+
+    @SuppressWarnings("unused")
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(PlayerStateNoSongPlayingEvent event) {
+
+        Log.e("tag", "event player no song playing");
+
+        FragmentManager manager = getSupportFragmentManager();
+
+        SongPlayFragment playFragment = (SongPlayFragment) manager.findFragmentByTag(getString(R.string.song_play));
+        SongsListFragment listFragment = (SongsListFragment) manager.findFragmentByTag(getString(R.string.songs_list));
+//        SongsSortFragment sortFragment = (SongsSortFragment) manager.findFragmentByTag(getString(R.string.songs_sort));
+
+        if(playFragment != null) onBackPressed();
+
+        if(listFragment != null) {
+            listFragment.setCurrentSong(null);
+            listFragment.fadeOutController();
+        }
+
+//        if(sortFragment != null) onBackPressed();
+
     }
 
     @Override

@@ -184,6 +184,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void makeControllerInvisible() {
+        Log.e("make invisible", "invisible");
         bottomController.setVisibility(View.GONE);
     }
 

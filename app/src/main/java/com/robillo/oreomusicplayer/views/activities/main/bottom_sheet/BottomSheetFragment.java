@@ -143,6 +143,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
             if(mSong != null && mSong.getId().equals(song.getId())) {
                 act.playNextSong();
                 act.getMusicService().cancelNotification();
+                act.removeSongFromListInMusicService(song);
                 //and remove song with song id as song.getId() from list in music service
             }
             act.getContentResolver().delete(uri, null, null);
