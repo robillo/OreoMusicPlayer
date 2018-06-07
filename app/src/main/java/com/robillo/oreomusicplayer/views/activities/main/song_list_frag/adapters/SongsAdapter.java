@@ -43,48 +43,51 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
     @Override
     public void onBindViewHolder(@NonNull SongHolder holder, @SuppressLint("RecyclerView") final int position) {
 
-        if(list.get(position) == null || list.get(position).getTitle() == null) {
-            String empty = " ";
-            holder.title.setText(empty);
-            holder.artistDuration.setText(empty);
-            holder.itemView.setClickable(false);
-            holder.moreButton.setVisibility(View.GONE);
-            return;
-        }
-
-        holder.title.setText(list.get(position).getTitle());
-        long duration = Integer.valueOf(list.get(position).getDuration())/1000;
-        long mins = duration/60;
-        long seconds = duration%60;
-        String temp = list.get(position).getArtist() + " ( " + String.valueOf(mins) + ":" + String.valueOf(seconds) + " )";
-        holder.artistDuration.setText(temp);
-
         //noinspection UnnecessaryLocalVariable
         final int _pos = position;
 
-        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(context!=null){
-                    ((MainActivity) context).playSong(_pos);
+        if(list.get(_pos) == null || (list.get(_pos).getTitle() == null && list.get(_pos).getArtist() == null)) {
+            holder.moreButton.setVisibility(View.GONE);
+
+            String empty = "";
+            holder.title.setText(empty);
+            holder.artistDuration.setText(empty);
+            holder.itemView.setClickable(false);
+        }
+        else {
+            holder.moreButton.setVisibility(View.VISIBLE);
+
+            holder.title.setText(list.get(_pos).getTitle());
+            long duration = Integer.valueOf(list.get(_pos).getDuration())/1000;
+            long mins = duration/60;
+            long seconds = duration%60;
+            String temp = list.get(_pos).getArtist() + " ( " + String.valueOf(mins) + ":" + String.valueOf(seconds) + " )";
+            holder.artistDuration.setText(temp);
+
+            holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(context!=null){
+                        ((MainActivity) context).playSong(_pos);
+                    }
                 }
-            }
-        });
+            });
 
-        holder.linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                ((MainActivity) context).showSongOptionsOnBottomSheet(list.get(position));
-                return true;
-            }
-        });
+            holder.linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    ((MainActivity) context).showSongOptionsOnBottomSheet(list.get(_pos));
+                    return true;
+                }
+            });
 
-        holder.moreButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((MainActivity) context).showSongOptionsOnBottomSheet(list.get(position));
-            }
-        });
+            holder.moreButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ((MainActivity) context).showSongOptionsOnBottomSheet(list.get(_pos));
+                }
+            });
+        }
     }
 
     @Override
@@ -108,7 +111,6 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
         SongHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            title.setSelected(true);
         }
     }
 }

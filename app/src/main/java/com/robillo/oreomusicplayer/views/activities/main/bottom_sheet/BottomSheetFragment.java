@@ -71,9 +71,6 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
     @BindView(R.id.delete_song)
     LinearLayout deleteSong;
 
-    @BindView(R.id.share_song)
-    LinearLayout shareSong;
-
     @BindView(R.id.rate_app)
     LinearLayout rateApp;
 
@@ -146,11 +143,6 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
             ((MainActivity) getActivity()).rescanDevice();
             ((MainActivity) getActivity()).hideOrRemoveBottomSheet();
         }
-    }
-
-    @OnClick(R.id.share_song)
-    public void setShareSong() {
-
     }
 
     @OnClick(R.id.rate_app)
