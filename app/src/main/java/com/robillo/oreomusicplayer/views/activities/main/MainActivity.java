@@ -18,10 +18,13 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
 import android.widget.MediaController;
+import android.widget.Toast;
 
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.events.PlayerStateNoSongPlayingEvent;
@@ -341,15 +344,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
 
         if(fragment != null) {
-            if(currentSong != null)
+            if(currentSong != null) {
                 fragment.setCurrentSong(currentSong);
+                Log.e("song", "change on resume");
 
-            AppPreferencesHelper helper = new AppPreferencesHelper(this);
+                AppPreferencesHelper helper = new AppPreferencesHelper(this);
 
-            if(helper.isPlayEvent())
-                fragment.playPlayer(FROM_ACTIVITY);
-            else
-                fragment.pausePlayer(FROM_ACTIVITY);
+                if(helper.isPlayEvent())
+                    fragment.playPlayer(FROM_ACTIVITY);
+                else
+                    fragment.pausePlayer(FROM_ACTIVITY);
+            }
         }
     }
 
@@ -409,35 +414,40 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onMessageEvent(SongChangeEvent event) {
 
-        currentSong = event.getSong();
+        Log.e("song", "change");
 
-        SongsListFragment songListFragment =
-                (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
+        if(event.getSong() != null) {
+            currentSong = event.getSong();
 
-        if(songListFragment != null) {
-            songListFragment.setCurrentSong(currentSong);
+            SongsListFragment songListFragment =
+                    (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
 
-            AppPreferencesHelper helper = new AppPreferencesHelper(this);
+            if(songListFragment != null) {
+                songListFragment.setCurrentSong(currentSong);
 
-            if(helper.isPlayEvent())
-                songListFragment.playPlayer(FROM_ACTIVITY);
-            else
-                songListFragment.pausePlayer(FROM_ACTIVITY);
+                AppPreferencesHelper helper = new AppPreferencesHelper(this);
+
+                if(helper.isPlayEvent())
+                    songListFragment.playPlayer(FROM_ACTIVITY);
+                else
+                    songListFragment.pausePlayer(FROM_ACTIVITY);
+            }
+
+            SongPlayFragment songPlayFragment =
+                    (SongPlayFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play));
+
+            if(songPlayFragment != null) {
+                songPlayFragment.setCurrentSong(currentSong);
+
+                AppPreferencesHelper helper = new AppPreferencesHelper(this);
+
+                if(helper.isPlayEvent())
+                    songPlayFragment.playPlayer(FROM_ACTIVITY);
+                else
+                    songPlayFragment.pausePlayer(FROM_ACTIVITY);
+            }
         }
-
-        SongPlayFragment songPlayFragment =
-                (SongPlayFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play));
-
-        if(songPlayFragment != null) {
-            songPlayFragment.setCurrentSong(currentSong);
-
-            AppPreferencesHelper helper = new AppPreferencesHelper(this);
-
-            if(helper.isPlayEvent())
-                songPlayFragment.playPlayer(FROM_ACTIVITY);
-            else
-                songPlayFragment.pausePlayer(FROM_ACTIVITY);
-        }
+        EventBus.getDefault().removeStickyEvent(event);
     }
 
     @SuppressWarnings("unused")
@@ -450,29 +460,34 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         if(fragment != null) {
             fragment.setDurationValues(event.getCurrentDuration(), event.getTotalDuration()/1000);
         }
+
+        EventBus.getDefault().removeStickyEvent(event);
     }
 
     @SuppressWarnings("unused")
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onMessageEvent(PlayerStateNoSongPlayingEvent event) {
 
-        Log.e("tag", "event player no song playing");
+        if(currentSong != null) {
+            Log.e("tag", "event player no song playing");
 
-        FragmentManager manager = getSupportFragmentManager();
+            FragmentManager manager = getSupportFragmentManager();
 
-        SongPlayFragment playFragment = (SongPlayFragment) manager.findFragmentByTag(getString(R.string.song_play));
-        SongsListFragment listFragment = (SongsListFragment) manager.findFragmentByTag(getString(R.string.songs_list));
-//        SongsSortFragment sortFragment = (SongsSortFragment) manager.findFragmentByTag(getString(R.string.songs_sort));
+            SongPlayFragment playFragment = (SongPlayFragment) manager.findFragmentByTag(getString(R.string.song_play));
+            SongsListFragment listFragment = (SongsListFragment) manager.findFragmentByTag(getString(R.string.songs_list));
+            if(playFragment != null) onBackPressed();
 
-        if(playFragment != null) onBackPressed();
+            if(listFragment != null) {
+                currentSong = null;
+                listFragment.setCurrentSong(null);
+                if(listFragment.getControllerVisibility() == View.VISIBLE) listFragment.fadeOutController();
 
-        if(listFragment != null) {
-            listFragment.setCurrentSong(null);
-            listFragment.fadeOutController();
+                Toast toast = Toast.makeText(this, "End Of List", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 10);
+                toast.show();
+            }
         }
-
-//        if(sortFragment != null) onBackPressed();
-
+        EventBus.getDefault().removeStickyEvent(event);
     }
 
     @Override

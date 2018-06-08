@@ -31,8 +31,6 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.Gravity;
-import android.widget.Toast;
 
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.events.PlayerStateNoSongPlayingEvent;
@@ -201,7 +199,6 @@ public class MusicService extends Service implements
 
     @Override
     public void onAudioFocusChange(int focusChange) {
-        Log.e("changed to ", focusChange + " focus change");
         switch (focusChange) {
             case AudioManager.AUDIOFOCUS_GAIN:
                 if (mPlayOnAudioFocus && !isPlaying()) {
@@ -300,12 +297,11 @@ public class MusicService extends Service implements
             setSong(1);
         }
         else {
+            if(isPlaying()) pausePlayer();
             currentSong = null;
             cancelNotification();
             EventBus.getDefault().postSticky(new PlayerStateNoSongPlayingEvent());
-            Toast toast = Toast.makeText(this, "End Of List", Toast.LENGTH_SHORT);
-            toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 10);
-            toast.show();
+            EventBus.getDefault().postSticky(new SongChangeEvent(null));
         }
     }
 
@@ -351,7 +347,6 @@ public class MusicService extends Service implements
     public void pausePlayer() {
         if(currentSong != null) {
             if (!mPlayOnAudioFocus) {
-                Log.e("abandon", "from pause");
                 abandonAudioFocus();
             }
 
@@ -618,9 +613,9 @@ public class MusicService extends Service implements
                 AudioManager.AUDIOFOCUS_GAIN);
 
 
+        //noinspection StatementWithEmptyBody
         if (audioFocus == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
             // other app had stopped playing song now , so u can do u stuff now .
-            Log.e("audio focus", "granted");
         }
 
         int focusRequest = -10;
@@ -691,7 +686,6 @@ public class MusicService extends Service implements
         }
 
         if(isRepeatModeOn().equals(REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE) && songPosition == songs.size() - EMPTY_CELLS_COUNT) {
-            Log.e("completion", "end");
             pausePlayer();
         }
     }

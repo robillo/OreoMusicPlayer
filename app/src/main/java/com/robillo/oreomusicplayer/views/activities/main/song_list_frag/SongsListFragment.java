@@ -161,6 +161,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
                         fadeInUpper();
                     }
                     if(bottomController.getVisibility() == View.GONE && !isAnimatingController && currentSong != null) {
+                        Log.e("fade in rv", "fade currentsong " + currentSong.getTitle());
                         fadeInController();
                     }
                 }
@@ -183,9 +184,8 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     @Override
-    public void makeControllerInvisible() {
-        Log.e("make invisible", "invisible");
-        bottomController.setVisibility(View.GONE);
+    public int getControllerVisibility() {
+        return bottomController.getVisibility();
     }
 
     @Override
