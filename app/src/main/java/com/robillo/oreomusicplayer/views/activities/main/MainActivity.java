@@ -39,6 +39,8 @@ import com.robillo.oreomusicplayer.utils.AppConstants;
 import com.robillo.oreomusicplayer.views.activities.main.bottom_sheet.BottomSheetFragment;
 import com.robillo.oreomusicplayer.views.activities.main.song_list_frag.SongsListFragment;
 import com.robillo.oreomusicplayer.views.activities.main.song_play_frag.SongPlayFragment;
+import com.robillo.oreomusicplayer.views.activities.main.song_play_frag.SongPlayFragmentBottomSheet;
+import com.robillo.oreomusicplayer.views.activities.main.song_play_frag.SongPlayFragmentSheet;
 import com.robillo.oreomusicplayer.views.activities.main.songs_sort_frag.SongsSortFragment;
 import com.robillo.oreomusicplayer.views.activities.theme_change.ThemeChangeActivity;
 
@@ -259,6 +261,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @Override
+    public void hideSongPlayFragment(SongPlayFragmentSheet fragmentSheet) {
+        fragmentSheet.dismiss();
+    }
+
+    @Override
     public void setSongListFragment() {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(mFragmentContainer.getId(), new SongsListFragment(), getString(R.string.songs_list));
@@ -267,12 +274,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void setSongPlayFragment() {
-        if(getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play)) == null){
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.setCustomAnimations(R.anim.bottom_up_song_play, 0, 0, R.anim.top_down_song_play);
-            transaction.add(mFragmentContainer.getId(), new SongPlayFragment(), getString(R.string.song_play));
-            transaction.addToBackStack(getString(R.string.song_play));
-            transaction.commit();
+
+        SongPlayFragmentSheet fragmentSheet =
+                (SongPlayFragmentSheet) getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play));
+
+        if(fragmentSheet == null)
+            new SongPlayFragmentSheet().show(getSupportFragmentManager(), getString(R.string.song_play));
+        else {
+            fragmentSheet.show(getSupportFragmentManager(), getString(R.string.song_play));
         }
     }
 
@@ -433,8 +442,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
                     songListFragment.pausePlayer(FROM_ACTIVITY);
             }
 
-            SongPlayFragment songPlayFragment =
-                    (SongPlayFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play));
+            SongPlayFragmentSheet songPlayFragment =
+                    (SongPlayFragmentSheet) getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play));
 
             if(songPlayFragment != null) {
                 songPlayFragment.setCurrentSong(currentSong);
@@ -454,8 +463,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onMessageEvent(SetSeekBarEvent event) {
 
-        SongPlayFragment fragment =
-                (SongPlayFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play));
+        SongPlayFragmentSheet fragment =
+                (SongPlayFragmentSheet) getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play));
 
         if(fragment != null) {
             fragment.setDurationValues(event.getCurrentDuration(), event.getTotalDuration()/1000);
@@ -473,9 +482,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
             FragmentManager manager = getSupportFragmentManager();
 
-            SongPlayFragment playFragment = (SongPlayFragment) manager.findFragmentByTag(getString(R.string.song_play));
+            SongPlayFragmentSheet playFragment = (SongPlayFragmentSheet) manager.findFragmentByTag(getString(R.string.song_play));
             SongsListFragment listFragment = (SongsListFragment) manager.findFragmentByTag(getString(R.string.songs_list));
-            if(playFragment != null) onBackPressed();
+            if(playFragment != null) playFragment.dismiss();
 
             if(listFragment != null) {
                 currentSong = null;

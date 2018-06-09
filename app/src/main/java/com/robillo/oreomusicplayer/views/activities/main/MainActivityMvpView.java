@@ -2,6 +2,7 @@ package com.robillo.oreomusicplayer.views.activities.main;
 
 import com.robillo.oreomusicplayer.models.Song;
 import com.robillo.oreomusicplayer.services.MusicService;
+import com.robillo.oreomusicplayer.views.activities.main.song_play_frag.SongPlayFragmentSheet;
 
 import java.util.ArrayList;
 
@@ -58,5 +59,7 @@ public interface MainActivityMvpView {
     void setPlayerStateToNoSongPlaying();
 
     void removeSongFromListInMusicService(Song song);
+
+    void hideSongPlayFragment(SongPlayFragmentSheet fragmentSheet);
 
 }
