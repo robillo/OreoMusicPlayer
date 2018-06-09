@@ -56,8 +56,6 @@ public interface MainActivityMvpView {
 
     void hideOrRemoveBottomSheet();
 
-    void setPlayerStateToNoSongPlaying();
-
     void removeSongFromListInMusicService(Song song);
 
     void hideSongPlayFragment(SongPlayFragmentSheet fragmentSheet);

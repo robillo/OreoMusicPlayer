@@ -3,7 +3,6 @@ package com.robillo.oreomusicplayer.views.activities.main.song_play_frag;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,22 +10,16 @@ import android.os.CountDownTimer;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
-import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
@@ -40,7 +33,6 @@ import com.robillo.oreomusicplayer.preferences.AppPreferencesHelper;
 import com.robillo.oreomusicplayer.utils.AppConstants;
 import com.robillo.oreomusicplayer.utils.ApplicationUtils;
 import com.robillo.oreomusicplayer.views.activities.main.MainActivity;
-import com.robillo.oreomusicplayer.views.activities.main.bottom_sheet.BottomSheetFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -63,7 +55,6 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
     private ThemeColors currentUserThemeColors = null;
     private Animation rotatingAlbumAnim;
     private int currentDurationProgress, totalDurationProgress;
-    private BottomSheetBehavior sheetBehavior;
 
     @BindView(R.id.bottom_controller)
     LinearLayout bottomController;
@@ -112,8 +103,6 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
 
     @BindView(R.id.coordinator_layout)
     CoordinatorLayout coordinatorLayout;
-
-    private BottomSheetBehavior mBehavior;
 
     public SongPlayFragmentSheet() {
         // Required empty public constructor
@@ -467,7 +456,7 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
     @OnClick(R.id.back_to_song_list)
     void setBackToSongList() {
         MainActivity activity = (MainActivity) getActivity();
-        if(activity != null) activity.hideSongPlayFragment(((SongPlayFragmentSheet) this));
+        if(activity != null) activity.hideSongPlayFragment(this);
     }
 
     @OnClick(R.id.song_menu_options)

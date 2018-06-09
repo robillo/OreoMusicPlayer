@@ -38,8 +38,6 @@ import com.robillo.oreomusicplayer.services.MusicService;
 import com.robillo.oreomusicplayer.utils.AppConstants;
 import com.robillo.oreomusicplayer.views.activities.main.bottom_sheet.BottomSheetFragment;
 import com.robillo.oreomusicplayer.views.activities.main.song_list_frag.SongsListFragment;
-import com.robillo.oreomusicplayer.views.activities.main.song_play_frag.SongPlayFragment;
-import com.robillo.oreomusicplayer.views.activities.main.song_play_frag.SongPlayFragmentBottomSheet;
 import com.robillo.oreomusicplayer.views.activities.main.song_play_frag.SongPlayFragmentSheet;
 import com.robillo.oreomusicplayer.views.activities.main.songs_sort_frag.SongsSortFragment;
 import com.robillo.oreomusicplayer.views.activities.theme_change.ThemeChangeActivity;
@@ -245,11 +243,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
                 bottomSheetFragment.dismiss();
             }
         }
-    }
-
-    @Override
-    public void setPlayerStateToNoSongPlaying() {
-
     }
 
     @Override
