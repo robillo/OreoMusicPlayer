@@ -189,6 +189,13 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     @Override
+    public void refreshSongListFragmentForSongDelete(Song song, int index) {
+        mAdapter.updateSongsList(song);
+        mAdapter.notifyItemRemoved(index);
+        mAdapter.notifyItemRangeChanged(index, mAdapter.getItemCount());
+    }
+
+    @Override
     public void fetchSongs(int from) {
         this.from = from;
         if(getActivity()!=null) {

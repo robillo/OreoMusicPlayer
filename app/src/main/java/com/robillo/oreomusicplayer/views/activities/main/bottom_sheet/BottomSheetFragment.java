@@ -37,6 +37,7 @@ import static com.robillo.oreomusicplayer.utils.AppConstants.DATE_ADDED;
 import static com.robillo.oreomusicplayer.utils.AppConstants.DATE_MODIFIED;
 import static com.robillo.oreomusicplayer.utils.AppConstants.DURATION;
 import static com.robillo.oreomusicplayer.utils.AppConstants.ID;
+import static com.robillo.oreomusicplayer.utils.AppConstants.INDEX;
 import static com.robillo.oreomusicplayer.utils.AppConstants.SIZE;
 import static com.robillo.oreomusicplayer.utils.AppConstants.TITLE;
 import static com.robillo.oreomusicplayer.utils.AppConstants.TITLE_KEY;
@@ -45,6 +46,7 @@ import static com.robillo.oreomusicplayer.utils.AppConstants.YEAR;
 public class BottomSheetFragment extends BottomSheetDialogFragment implements BottomSheetMvpView {
 
     Song song = new Song();
+    int index = -1;
 
     AppPreferencesHelper helper = null;
     @SuppressWarnings("FieldCanBeLocal")
@@ -102,6 +104,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
 
         if (bundle != null) {
 
+            index = bundle.getInt(INDEX);
             song.setData(bundle.getString(DATA));
             song.setTitle(bundle.getString(TITLE));
             song.setTitleKey(bundle.getString(TITLE_KEY));
@@ -142,7 +145,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
             }
             act.getContentResolver().delete(uri, null, null);
             Toast.makeText(act, "Song Deleted", Toast.LENGTH_SHORT).show();
-            act.rescanDevice();
+            act.refreshSongListFragmentForSongDelete(song, index);
             act.hideOrRemoveBottomSheet();
         }
     }

@@ -38,4 +38,6 @@ public interface SongListMvpView {
 
     int getControllerVisibility();
 
+    void refreshSongListFragmentForSongDelete(Song song, int index);
+
 }

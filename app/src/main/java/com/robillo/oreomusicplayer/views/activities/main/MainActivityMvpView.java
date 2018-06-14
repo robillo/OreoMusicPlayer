@@ -52,12 +52,14 @@ public interface MainActivityMvpView {
 
     void rescanDevice();
 
-    void showSongOptionsOnBottomSheet(Song song);
+    void showSongOptionsOnBottomSheet(Song song, int index);
 
     void hideOrRemoveBottomSheet();
 
     void removeSongFromListInMusicService(Song song);
 
     void hideSongPlayFragment(SongPlayFragmentSheet fragmentSheet);
+
+    void refreshSongListFragmentForSongDelete(Song song, int index);
 
 }

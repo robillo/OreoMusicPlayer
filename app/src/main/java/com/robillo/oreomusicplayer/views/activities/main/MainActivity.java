@@ -66,6 +66,7 @@ import static com.robillo.oreomusicplayer.utils.AppConstants.DURATION;
 import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_ACTIVITY;
 import static com.robillo.oreomusicplayer.utils.AppConstants.FROM_FRAGMENT;
 import static com.robillo.oreomusicplayer.utils.AppConstants.ID;
+import static com.robillo.oreomusicplayer.utils.AppConstants.INDEX;
 import static com.robillo.oreomusicplayer.utils.AppConstants.REQUEST_CODE;
 import static com.robillo.oreomusicplayer.utils.AppConstants.SIZE;
 import static com.robillo.oreomusicplayer.utils.AppConstants.TITLE;
@@ -208,9 +209,18 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @Override
-    public void showSongOptionsOnBottomSheet(Song song) {
+    public void refreshSongListFragmentForSongDelete(Song song, int index) {
+        SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
+        if(fragment != null){
+            fragment.refreshSongListFragmentForSongDelete(song, index);
+        }
+    }
+
+    @Override
+    public void showSongOptionsOnBottomSheet(Song song, int index) {
         if (bottomSheetFragment != null) {
             Bundle bundle = new Bundle();
+            bundle.putInt(INDEX, index);
             bundle.putString(DATA, song.getData());
             bundle.putString(TITLE, song.getTitle());
             bundle.putString(TITLE_KEY, song.getTitleKey());
@@ -232,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         }
         else {
             bottomSheetFragment = new BottomSheetFragment();
-            showSongOptionsOnBottomSheet(song);
+            showSongOptionsOnBottomSheet(song, index);
         }
     }
 

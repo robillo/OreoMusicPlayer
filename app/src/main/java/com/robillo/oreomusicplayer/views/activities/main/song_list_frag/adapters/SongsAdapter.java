@@ -21,7 +21,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> {
+public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> implements SongsAdapterMvpView {
 
     private List<Song> list;
     private Context context;
@@ -64,35 +64,29 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
             String temp = list.get(_pos).getArtist() + " ( " + String.valueOf(mins) + ":" + String.valueOf(seconds) + " )";
             holder.artistDuration.setText(temp);
 
-            holder.linearLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(context!=null){
-                        ((MainActivity) context).playSong(_pos);
-                    }
+            holder.linearLayout.setOnClickListener(v -> {
+                if(context!=null){
+                    ((MainActivity) context).playSong(_pos);
                 }
             });
 
-            holder.linearLayout.setOnLongClickListener(new View.OnLongClickListener() {
-                @Override
-                public boolean onLongClick(View view) {
-                    ((MainActivity) context).showSongOptionsOnBottomSheet(list.get(_pos));
-                    return true;
-                }
+            holder.linearLayout.setOnLongClickListener(view -> {
+                ((MainActivity) context).showSongOptionsOnBottomSheet(list.get(_pos), _pos);
+                return true;
             });
 
-            holder.moreButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    ((MainActivity) context).showSongOptionsOnBottomSheet(list.get(_pos));
-                }
-            });
+            holder.moreButton.setOnClickListener(view -> ((MainActivity) context).showSongOptionsOnBottomSheet(list.get(_pos), _pos));
         }
     }
 
     @Override
     public int getItemCount() {
         return list!=null ? list.size() : 0;
+    }
+
+    @Override
+    public void updateSongsList(Song song) {
+        list.remove(song);
     }
 
     class SongHolder extends RecyclerView.ViewHolder{

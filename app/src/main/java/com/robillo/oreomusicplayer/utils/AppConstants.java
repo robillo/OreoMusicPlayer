@@ -9,6 +9,8 @@ import java.util.HashMap;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class AppConstants {
 
+    public static final String INDEX = "index_number";
+
     public static final String DATA = "data";
     public static final String TITLE = "title";
     public static final String TITLE_KEY = "title_key";
