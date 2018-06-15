@@ -161,7 +161,6 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
                         fadeInUpper();
                     }
                     if(bottomController.getVisibility() == View.GONE && !isAnimatingController && currentSong != null) {
-                        Log.e("fade in rv", "fade currentsong " + currentSong.getTitle());
                         fadeInController();
                     }
                 }
