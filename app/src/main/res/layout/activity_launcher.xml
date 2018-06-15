@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".views.activities.launcher.LauncherActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0sp"
+            android:layout_weight="3"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorTextOne"
+                android:textSize="25sp"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="40sp"
+                android:layout_marginBottom="15sp"
+                android:layout_marginLeft="10sp"
+                android:layout_marginRight="10sp"
+                android:text="@string/please_give_us_access_to_your_songs_library"/>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/deep_orange_primary"
+                android:textColor="@color/white"
+                android:text="@string/allow_access"
+                android:textSize="30sp"
+                android:layout_marginTop="10sp"
+                android:layout_marginLeft="10sp"
+                android:layout_marginRight="10sp"
+                android:padding="20sp"
+                android:gravity="center"
+                fontPath="fonts/GeorgiaBelle.ttf"
+                tools:ignore="MissingPrefix" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="120sp"
+                    android:layout_height="120sp"
+                    android:src="@drawable/up_left"
+                    android:layout_marginStart="20sp"
+                    android:contentDescription="@string/upwards_pointing" />
+
+                <View
+                    android:layout_width="0sp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"/>
+
+                <ImageView
+                    android:layout_width="120sp"
+                    android:layout_height="120sp"
+                    android:src="@drawable/up_right"
+                    android:layout_marginEnd="20sp"
+                    android:contentDescription="@string/upwards_pointing" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0sp"
+            android:layout_weight="1">
+
+            <me.itangqi.waveloadingview.WaveLoadingView
+                android:id="@+id/wave_loading_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:wlv_progressValue="60"
+                app:wlv_shapeType="rectangle"
+                app:wlv_triangle_direction="north"
+                app:wlv_waveAmplitude="60"
+                app:wlv_waveColor="@color/colorAccent"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="bottom|center_horizontal"
+                android:id="@+id/app_name"
+                android:layout_marginBottom="20sp"
+                android:text="@string/app_name"
+                android:textColor="@color/white"
+                android:textSize="35sp"
+                fontPath="fonts/Rounded_Elegance.ttf"
+                tools:ignore="MissingPrefix" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</android.support.design.widget.CoordinatorLayout>

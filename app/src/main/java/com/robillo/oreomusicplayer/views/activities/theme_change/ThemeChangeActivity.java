@@ -19,7 +19,6 @@ import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.models.ThemeColors;
 import com.robillo.oreomusicplayer.preferences.AppPreferencesHelper;
 import com.robillo.oreomusicplayer.utils.AppConstants;
-import com.robillo.oreomusicplayer.views.activities.main.MainActivity;
 import com.robillo.oreomusicplayer.views.activities.theme_change.adapters.ThemeChoicesAdapter;
 
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
+import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 
 public class ThemeChangeActivity extends AppCompatActivity implements ThemeChangeMvpView {
 
@@ -97,7 +96,7 @@ public class ThemeChangeActivity extends AppCompatActivity implements ThemeChang
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase));
     }
 
     @Override

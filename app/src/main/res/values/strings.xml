@@ -37,4 +37,7 @@
     <string name="back_pressed">Back Pressed</string>
     <string name="rescan_device">Rescan Device</string>
     <string name="rescanned">Device Rescanned</string>
+    <string name="allow_access">Allow Access</string>
+    <string name="please_give_us_access_to_your_songs_library">Please Give Us Access To Your Songs Library:</string>
+    <string name="upwards_pointing">upwards pointing</string>
 </resources>

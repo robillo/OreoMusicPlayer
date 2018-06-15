@@ -27,6 +27,7 @@ android {
 
 dependencies {
     implementation "com.android.support:support-v4:$rootProject.ext.supportLibraryVersion"
+    implementation 'com.android.support.constraint:constraint-layout:1.1.1'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -39,8 +40,13 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.1.1'
     compile 'de.hdodenhof:circleimageview:2.2.0'
     implementation 'com.github.bumptech.glide:glide:4.6.1'
+    implementation 'me.itangqi.waveloadingview:library:0.3.5'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
     compile 'uk.co.chrisjenx:calligraphy:2.3.0'
+
+    compile 'io.github.inflationx:calligraphy3:3.0.0'
+    compile 'io.github.inflationx:viewpump:1.0.0'
+
     compile 'com.jakewharton:butterknife:8.8.1'
     testCompile 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
