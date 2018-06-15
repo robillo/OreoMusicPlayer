@@ -4,6 +4,6 @@ import com.robillo.oreomusicplayer.models.Song;
 
 public interface SongsAdapterMvpView {
 
-    void updateSongsList(Song song);
+    void updateSongsList(int index);
 
 }
