@@ -184,7 +184,8 @@
                             android:max="100"
                             android:progress="50"
                             android:progressBackgroundTint="@android:color/darker_gray"
-                            android:progressTint="@color/white" />
+                            android:progressTint="@color/white"
+                            android:visibility="invisible"/>
 
                         <TextView
                             android:id="@+id/current_song_title"

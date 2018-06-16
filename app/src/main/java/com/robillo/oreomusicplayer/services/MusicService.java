@@ -426,7 +426,7 @@ public class MusicService extends Service implements
                         .setShowActionsInCompactView(0, 1, 2))
                 .setColor(getResources().getColor(R.color.black))
                 .setLargeIcon(getBitmapAlbumArt())
-                .setSmallIcon(R.drawable.oval_shape)
+                .setSmallIcon(R.drawable.icon_drawable)
                 .setContentText(songs.get(songPosition).getArtist())
                 .setContentInfo(songs.get(songPosition).getAlbum())
                 .setContentTitle(songs.get(songPosition).getTitle())

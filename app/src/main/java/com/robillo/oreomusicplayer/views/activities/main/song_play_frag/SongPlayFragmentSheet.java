@@ -174,7 +174,7 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
     @Override
     public void refreshForUserThemeColors(ThemeColors currentUserThemeColors) {
         bottomController.setBackgroundColor(getResources().getColor(currentUserThemeColors.getColorPrimary()));
-        currentSongAlbumArt.setBorderColor(getResources().getColor(currentUserThemeColors.getColorMat()));
+        currentSongAlbumArt.setBorderColor(getResources().getColor(currentUserThemeColors.getColorPrimaryDark()));
     }
 
     @Override

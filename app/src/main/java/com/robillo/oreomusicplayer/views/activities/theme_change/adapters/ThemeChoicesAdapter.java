@@ -64,25 +64,22 @@ public class ThemeChoicesAdapter extends RecyclerView.Adapter<ThemeChoicesAdapte
 
         holder.gradientImageView.setBackground(createGradientDrawable(
                 themeColors.get(position).getColorPrimaryDark(),
-                themeColors.get(position).getColorPrimary(),
-                themeColors.get(position).getColorAccent()
+                themeColors.get(position).getColorPrimaryDark(),
+                themeColors.get(position).getColorPrimaryDark()
         ));
 
         //noinspection UnnecessaryLocalVariable
         final int pos = position;
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                currentUserThemeColorsIndex = pos;
-                notifyDataSetChanged();
+        holder.itemView.setOnClickListener(v -> {
+            currentUserThemeColorsIndex = pos;
+            notifyDataSetChanged();
 
-                AppPreferencesHelper helper = new AppPreferencesHelper(context);
-                helper.setUserThemeName(themeColors.get(pos).getColorName());
+            AppPreferencesHelper helper = new AppPreferencesHelper(context);
+            helper.setUserThemeName(themeColors.get(pos).getColorName());
 
-                ((ThemeChangeActivity) context).showSnackBarThemeSet(themeColors.get(pos).getColorName());
+            ((ThemeChangeActivity) context).showSnackBarThemeSet(themeColors.get(pos).getColorName());
 
-                EventBus.getDefault().postSticky(new ThemeChangeEvent());
-            }
+            EventBus.getDefault().postSticky(new ThemeChangeEvent());
         });
     }
 

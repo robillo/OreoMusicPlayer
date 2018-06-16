@@ -41,4 +41,8 @@
     <string name="please_give_us_access_to_your_songs_library">Please Give Us Access To Your Songs Library:</string>
     <string name="upwards_pointing">upwards pointing</string>
     <string name="optional_permissions_allow"><![CDATA[ Optionally go to : \n\nSettings -> Apps / Application Manager ->\nDancing Player ->  Permissions -> Allow Permissions]]></string>
+    <string name="bottom_image">bottom image</string>
+    <string name="app_icon">app icon</string>
+    <string name="delete_song">Delete Song</string>
+    <string name="rate_this_app">Rate This App</string>
 </resources>

@@ -60,7 +60,7 @@
             app:civ_border_width="8sp"
             android:src="@color/white"
             android:layout_gravity="center_horizontal"
-            app:civ_border_color="@color/colorPrimary"
+            app:civ_border_color="@color/colorPrimaryDark"
             android:id="@+id/current_song_album_art"/>
 
         <LinearLayout
@@ -95,7 +95,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Comfortable (Lyrics / Lyric Video)"
-            android:textSize="35sp"
+            android:textSize="45sp"
             android:layout_marginTop="5sp"
             android:textColor="@color/colorTextOne"
             android:gravity="center"
@@ -112,7 +112,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Steve Void"
-            android:textSize="30sp"
+            android:textSize="35sp"
             android:textColor="@color/colorTextTwo"
             android:gravity="center"
             tools:ignore="HardcodedText"
