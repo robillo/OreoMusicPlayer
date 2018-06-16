@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.models.Song;
+import com.robillo.oreomusicplayer.utils.ApplicationUtils;
 import com.robillo.oreomusicplayer.views.activities.main.MainActivity;
 
 import java.util.List;
@@ -60,9 +61,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
 
             holder.title.setText(list.get(_pos).getTitle());
             long duration = Integer.valueOf(list.get(_pos).getDuration())/1000;
-            long mins = duration/60;
-            long seconds = duration%60;
-            String temp = list.get(_pos).getArtist() + " (" + String.valueOf(mins) + " : " + String.valueOf(seconds) + ")";
+            String temp = list.get(_pos).getArtist() + " (" + new ApplicationUtils().formatStringOutOfSeconds((int) duration) + ")";
             holder.artistDuration.setText(temp);
 
             holder.linearLayout.setOnClickListener(v -> {

@@ -54,7 +54,7 @@
                     android:paddingBottom="10sp"
                     android:textStyle="bold"
                     android:textColor="@color/colorArtist"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     tools:text="Illenium (3:40)"
                     android:id="@+id/artist_duration"
                     android:scrollHorizontally="true"
