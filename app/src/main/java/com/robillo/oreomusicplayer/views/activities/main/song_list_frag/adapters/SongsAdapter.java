@@ -62,7 +62,7 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
             long duration = Integer.valueOf(list.get(_pos).getDuration())/1000;
             long mins = duration/60;
             long seconds = duration%60;
-            String temp = list.get(_pos).getArtist() + " ( " + String.valueOf(mins) + ":" + String.valueOf(seconds) + " )";
+            String temp = list.get(_pos).getArtist() + " (" + String.valueOf(mins) + " : " + String.valueOf(seconds) + ")";
             holder.artistDuration.setText(temp);
 
             holder.linearLayout.setOnClickListener(v -> {

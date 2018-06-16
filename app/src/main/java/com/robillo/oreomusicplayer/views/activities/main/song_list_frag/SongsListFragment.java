@@ -310,7 +310,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         long seconds = duration%60;
         String temp = song.getArtist();
         currentSongArtist.setText(temp);
-        temp = " ( " + String.valueOf(mins) + ":" + String.valueOf(seconds) + " )";
+        temp = " ( " + String.valueOf(mins) + " : " + String.valueOf(seconds) + " )";
         currentSongDuration.setText(temp);
 
         String path = null;

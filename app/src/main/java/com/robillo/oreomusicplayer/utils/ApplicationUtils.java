@@ -17,6 +17,6 @@ public class ApplicationUtils {
         if(seconds < 10) rhs = "0" + String.valueOf(seconds);
         else rhs = String.valueOf(seconds);
 
-        return lhs + ":" + rhs;
+        return lhs + " : " + rhs;
     }
 }
