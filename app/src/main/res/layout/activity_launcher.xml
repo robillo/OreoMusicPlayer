@@ -43,7 +43,8 @@
                 android:padding="20sp"
                 android:gravity="center"
                 fontPath="fonts/GeorgiaBelle.ttf"
-                tools:ignore="MissingPrefix" />
+                tools:ignore="MissingPrefix"
+                android:id="@+id/allow_access"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -59,7 +60,7 @@
 
                 <View
                     android:layout_width="0sp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="120sp"
                     android:layout_weight="1"/>
 
                 <ImageView
@@ -70,6 +71,20 @@
                     android:contentDescription="@string/upwards_pointing" />
 
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/optional_permissions_set"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textColor="@color/colorTextOne"
+                android:textSize="19sp"
+                android:gravity="bottom"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="10sp"
+                fontPath="fonts/GeorgiaBelle.ttf"
+                tools:ignore="MissingPrefix"
+                android:visibility="invisible"
+                android:text="@string/optional_permissions_allow"/>
 
         </LinearLayout>
 

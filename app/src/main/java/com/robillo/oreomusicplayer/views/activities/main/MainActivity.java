@@ -1,15 +1,11 @@
 package com.robillo.oreomusicplayer.views.activities.main;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -87,9 +83,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @SuppressWarnings("FieldCanBeLocal")
     private Song currentSong = null;
 
-    @SuppressWarnings("FieldCanBeLocal")
-    private final int PERMISSION_REQUEST_CODE = 0;
-
     @BindView(R.id.fragment_container)
     FrameLayout mFragmentContainer;
 
@@ -137,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Override
     public void setUp() {
         refreshForUserThemeColors();
-        askForDevicePermissions();
+        setSongListFragment();
     }
 
     @Override
@@ -297,44 +290,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             transaction.add(mFragmentContainer.getId(), new SongsSortFragment(), getString(R.string.songs_sort));
             transaction.addToBackStack(getString(R.string.songs_sort));
             transaction.commit();
-        }
-    }
-
-    @Override
-    public void askForDevicePermissions() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED
-                    || checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE)!= PackageManager.PERMISSION_GRANTED
-                    || checkSelfPermission(Manifest.permission.READ_PHONE_STATE)!= PackageManager.PERMISSION_GRANTED){
-                requestPermissions(
-                        new String[]{
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                            Manifest.permission.READ_EXTERNAL_STORAGE,
-                            Manifest.permission.READ_PHONE_STATE
-                        },
-                        PERMISSION_REQUEST_CODE
-                );
-            }
-            else {
-                setSongListFragment();
-            }
-        }
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case PERMISSION_REQUEST_CODE :
-                if(grantResults.length == 3
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED
-                        && grantResults[1] == PackageManager.PERMISSION_GRANTED
-                        && grantResults[2] == PackageManager.PERMISSION_GRANTED) {
-                    setSongListFragment();
-                }
-                else {
-                    askForDevicePermissions();
-                }
-                break;
         }
     }
 
