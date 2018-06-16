@@ -42,8 +42,6 @@
                 android:layout_marginRight="10sp"
                 android:padding="20sp"
                 android:gravity="center"
-                fontPath="fonts/GeorgiaBelle.ttf"
-                tools:ignore="MissingPrefix"
                 android:id="@+id/allow_access"/>
 
             <LinearLayout
@@ -81,8 +79,6 @@
                 android:gravity="bottom"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="10sp"
-                fontPath="fonts/GeorgiaBelle.ttf"
-                tools:ignore="MissingPrefix"
                 android:visibility="invisible"
                 android:text="@string/optional_permissions_allow"/>
 
@@ -111,9 +107,7 @@
                 android:layout_marginBottom="20sp"
                 android:text="@string/app_name"
                 android:textColor="@color/white"
-                android:textSize="35sp"
-                fontPath="fonts/Rounded_Elegance.ttf"
-                tools:ignore="MissingPrefix" />
+                android:textSize="40sp" />
 
         </FrameLayout>
 

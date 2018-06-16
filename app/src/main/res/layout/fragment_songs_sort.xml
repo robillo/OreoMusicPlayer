@@ -33,7 +33,7 @@
                 android:text="@string/sort_songs_by"
                 android:textColor="@color/white"
                 tools:background="@color/black"
-                android:textSize="20sp"
+                android:textSize="25sp"
                 android:textStyle="bold"
                 android:id="@+id/header"/>
 

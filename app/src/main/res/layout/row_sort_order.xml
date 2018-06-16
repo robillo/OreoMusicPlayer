@@ -13,8 +13,9 @@
         android:padding="10sp"
         tools:text="@string/title"
         android:textColor="@color/colorTextTwo"
-        android:textSize="18sp"
-        android:id="@+id/text"/>
+        android:textSize="20sp"
+        android:id="@+id/text"
+        android:textStyle="bold"/>
 
     <ImageView
         android:layout_width="match_parent"

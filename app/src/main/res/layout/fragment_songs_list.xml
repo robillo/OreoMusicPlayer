@@ -55,11 +55,9 @@
                     android:layout_weight="1"
                     android:text="@string/string_player_name"
                     android:textColor="@color/white"
-                    android:textSize="30sp"
+                    android:textSize="40sp"
                     android:layout_gravity="center"
-                    android:gravity="center_horizontal"
-                    fontPath="fonts/Rounded_Elegance.ttf"
-                    tools:ignore="MissingPrefix,NestedWeights,RtlHardcoded,RtlSymmetry"/>
+                    android:gravity="center_horizontal"/>
 
                 <ImageButton
                     android:id="@+id/app_menu_options"
@@ -161,6 +159,7 @@
                             android:layout_gravity="bottom"
                             android:layout_marginLeft="20sp"
                             android:layout_marginRight="10sp"
+                            android:layout_marginBottom="5sp"
                             android:gravity="center"
                             android:maxLines="1"
                             android:textColor="@color/white"
@@ -192,7 +191,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
-                            android:textSize="20sp"
+                            android:textSize="23sp"
                             tools:ignore="HardcodedText,MissingPrefix,RtlHardcoded,RtlSymmetry"
                             tools:text="I'll be your reason"
                             android:scrollHorizontally="true"
@@ -205,7 +204,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
-                            android:textSize="15sp"
+                            android:textSize="18sp"
                             android:textStyle="bold"
                             tools:ignore="HardcodedText,MissingPrefix,RtlHardcoded,RtlSymmetry"
                             tools:text="Illenium"
