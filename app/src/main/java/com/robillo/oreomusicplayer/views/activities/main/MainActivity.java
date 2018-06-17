@@ -313,7 +313,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         if(fragment != null) {
             if(currentSong != null) {
                 fragment.setCurrentSong(currentSong);
-                Log.e("song", "change on resume");
 
                 AppPreferencesHelper helper = new AppPreferencesHelper(this);
 
@@ -371,17 +370,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             refreshForUserThemeColors();
             songListFragment.refreshForUserThemeColors(currentUserThemeColors);
         }
-
-//        if(musicService != null) {
-//            musicService.refreshNotificationForThemeChange();
-//        }
     }
 
     @SuppressWarnings("unused")
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onMessageEvent(SongChangeEvent event) {
-
-        Log.e("song", "change");
 
         if(event.getSong() != null) {
             currentSong = event.getSong();
@@ -436,7 +429,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     public void onMessageEvent(PlayerStateNoSongPlayingEvent event) {
 
         if(currentSong != null) {
-            Log.e("tag", "event player no song playing");
 
             FragmentManager manager = getSupportFragmentManager();
 

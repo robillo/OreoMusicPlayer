@@ -1,5 +1,7 @@
 package com.robillo.oreomusicplayer.utils;
 
+import java.util.Locale;
+
 public class ApplicationUtils {
 
     public ApplicationUtils() {
@@ -18,5 +20,10 @@ public class ApplicationUtils {
         else rhs = String.valueOf(seconds);
 
         return lhs + " : " + rhs;
+    }
+
+    public String formatSizeKBtoMB(float size) {
+
+        return String.format("%s MB", String.format(Locale.ENGLISH, "%.2f", size/ 1024));
     }
 }

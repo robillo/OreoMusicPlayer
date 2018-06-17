@@ -45,8 +45,8 @@
             android:id="@+id/app_name"
             android:text="@string/app_name"
             android:textColor="@color/white"
-            android:textSize="40sp"
-            android:padding="10sp"
+            android:textSize="30sp"
+            android:padding="20sp"
             android:background="@color/black"/>
 
     </FrameLayout>
@@ -60,12 +60,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:gravity="center"
+            android:gravity="bottom|center_horizontal"
             android:id="@+id/fade_in_subtitle"
-            android:text="Music Player For All"
-            android:textColor="@color/black"
-            android:textSize="25sp"
-            android:padding="10sp"/>
+            android:text="@string/music_player_for_all"
+            android:textColor="@color/transparency_black"
+            android:textSize="20sp"
+            android:padding="10sp" />
 
     </FrameLayout>
 

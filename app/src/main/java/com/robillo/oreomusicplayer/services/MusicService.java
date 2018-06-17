@@ -12,6 +12,7 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
@@ -37,6 +38,7 @@ import com.robillo.oreomusicplayer.events.PlayerStateNoSongPlayingEvent;
 import com.robillo.oreomusicplayer.events.SongChangeEvent;
 import com.robillo.oreomusicplayer.models.SetSeekBarEvent;
 import com.robillo.oreomusicplayer.models.Song;
+import com.robillo.oreomusicplayer.models.ThemeColors;
 import com.robillo.oreomusicplayer.preferences.AppPreferencesHelper;
 import com.robillo.oreomusicplayer.utils.AppConstants;
 import com.robillo.oreomusicplayer.views.activities.main.MainActivity;
@@ -91,6 +93,7 @@ public class MusicService extends Service implements
     private static String IS_REPEAT_MODE_ON = AppConstants.REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE;
     private static boolean IS_SHUFFLE_MODE_ON = false;
 
+    private AppPreferencesHelper helper;
     private MediaPlayer player;
     private ArrayList<Song> songs;
     private Song currentSong;
@@ -130,7 +133,7 @@ public class MusicService extends Service implements
     @Override
     public void initMusicPlayer() {
 
-        AppPreferencesHelper helper = new AppPreferencesHelper(this);
+        helper = new AppPreferencesHelper(this);
         IS_REPEAT_MODE_ON = helper.isRepeatModeOn();
         IS_SHUFFLE_MODE_ON = helper.isShuffleModeOn();
 
@@ -474,9 +477,12 @@ public class MusicService extends Service implements
             imgFile = new File(path);
         }
 
-        Bitmap bitmap = null;
+        Bitmap bitmap;
         if(imgFile != null && imgFile.exists()) {
             bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+        }
+        else {
+            bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.icon_drawable)).getBitmap();
         }
         return bitmap;
     }

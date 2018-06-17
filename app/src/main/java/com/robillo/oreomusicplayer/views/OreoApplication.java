@@ -17,7 +17,7 @@ public class OreoApplication extends Application {
         ViewPump.init(ViewPump.builder()
                 .addInterceptor(new CalligraphyInterceptor(
                         new CalligraphyConfig.Builder()
-                                .setDefaultFontPath("fonts/ll.ttf")
+                                .setDefaultFontPath("fonts/spr.otf")
                                 .setFontAttrId(R.attr.fontPath)
                                 .build()))
                 .build());

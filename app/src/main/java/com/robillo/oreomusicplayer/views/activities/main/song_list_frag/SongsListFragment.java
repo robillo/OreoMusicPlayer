@@ -30,6 +30,7 @@ import com.bumptech.glide.Glide;
 import com.robillo.oreomusicplayer.R;
 import com.robillo.oreomusicplayer.models.ThemeColors;
 import com.robillo.oreomusicplayer.utils.AppConstants;
+import com.robillo.oreomusicplayer.utils.ApplicationUtils;
 import com.robillo.oreomusicplayer.views.activities.main.song_list_frag.adapters.SongsAdapter;
 import com.robillo.oreomusicplayer.models.Song;
 import com.robillo.oreomusicplayer.preferences.AppPreferencesHelper;
@@ -306,12 +307,8 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         songDurationForCountDownTimer = Long.valueOf(song.getDuration());
 
         long duration = Long.valueOf(song.getDuration())/1000;
-        long mins = duration/60;
-        long seconds = duration%60;
-        String temp = song.getArtist();
-        currentSongArtist.setText(temp);
-        temp = " ( " + String.valueOf(mins) + " : " + String.valueOf(seconds) + " )";
-        currentSongDuration.setText(temp);
+        currentSongArtist.setText(song.getArtist());
+        currentSongDuration.setText(new ApplicationUtils().formatStringOutOfSeconds((int) duration));
 
         String path = null;
         if(getActivity()!=null) {

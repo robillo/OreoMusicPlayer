@@ -40,7 +40,7 @@
                 android:textStyle="bold"
                 android:textColor="@color/colorTextOne"
                 android:text="@string/your_settings"
-                android:textSize="30sp"
+                android:textSize="25sp"
                 android:gravity="center"/>
 
             <ImageButton
@@ -62,7 +62,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/colorTextOne"
             android:text="@string/select_player_theme"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:padding="10sp"
             android:gravity="start|center_vertical"/>
 
@@ -84,7 +84,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/transparency_black"
             android:text="@string/rescan_device"
-            android:textSize="25sp"
+            android:textSize="20sp"
             android:paddingTop="10sp"
             android:paddingBottom="10sp"
             android:background="@drawable/button_impression"

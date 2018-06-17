@@ -45,4 +45,6 @@
     <string name="app_icon">app icon</string>
     <string name="delete_song">Delete Song</string>
     <string name="rate_this_app">Rate This App</string>
+    <string name="music_player_for_all">Music Player For All</string>
+    <string name="rate_song">rate song</string>
 </resources>

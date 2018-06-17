@@ -30,7 +30,7 @@
             android:layout_weight="1"
             tools:text="VIOLET - LIGHT"
             android:gravity="center"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:id="@+id/color_name"
             android:padding="5sp"/>
 

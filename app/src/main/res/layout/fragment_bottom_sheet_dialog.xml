@@ -14,7 +14,7 @@
         android:paddingTop="10sp"
         android:paddingBottom="5sp"
         android:textColor="@color/colorTextOne"
-        android:textSize="25sp"
+        android:textSize="20sp"
         tools:text="I'll be your reason"
         android:id="@+id/title"
         android:scrollHorizontally="true"
@@ -39,7 +39,7 @@
         android:padding="5sp"
         android:textStyle="bold"
         android:textColor="@color/colorTextOne"
-        android:textSize="20sp"
+        android:textSize="18sp"
         tools:text="Illenium"
         android:id="@+id/artist_size"
         android:scrollHorizontally="true"
@@ -68,9 +68,10 @@
         <ImageView
             android:layout_width="24dp"
             android:layout_height="24dp"
-            android:layout_marginRight="32dp"
+            android:layout_marginEnd="32dp"
             android:src="@drawable/baseline_delete_black_48"
-            android:tint="#737373" />
+            android:tint="#737373"
+            android:contentDescription="@string/delete_song" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -78,7 +79,7 @@
             android:layout_gravity="center_vertical"
             android:text="@string/delete_song"
             android:textColor="@color/colorTextOne"
-            android:textSize="19sp" />
+            android:textSize="17sp" />
 
     </LinearLayout>
 
@@ -102,7 +103,8 @@
             android:layout_height="24dp"
             android:layout_marginEnd="32dp"
             android:src="@drawable/baseline_rate_review_black_48"
-            android:tint="#737373" />
+            android:tint="#737373"
+            android:contentDescription="@string/rate_song" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -110,7 +112,7 @@
             android:layout_gravity="center_vertical"
             android:text="@string/rate_this_app"
             android:textColor="@color/colorTextOne"
-            android:textSize="19sp" />
+            android:textSize="17sp" />
 
     </LinearLayout>
 

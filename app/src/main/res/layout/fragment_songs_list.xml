@@ -51,13 +51,12 @@
 
                 <TextView
                     android:layout_width="0sp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:text="@string/string_player_name"
                     android:textColor="@color/white"
-                    android:textSize="40sp"
-                    android:layout_gravity="center"
-                    android:gravity="center_horizontal"/>
+                    android:textSize="30sp"
+                    android:gravity="center"/>
 
                 <ImageButton
                     android:id="@+id/app_menu_options"
@@ -192,13 +191,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
-                            android:textSize="23sp"
+                            android:textSize="20sp"
                             tools:ignore="HardcodedText,MissingPrefix,RtlHardcoded,RtlSymmetry"
                             tools:text="I'll be your reason"
                             android:scrollHorizontally="true"
                             android:marqueeRepeatLimit="marquee_forever"
                             android:singleLine="true"
-                            android:ellipsize="marquee"/>
+                            android:ellipsize="marquee"
+                            android:layout_marginBottom="5sp"/>
 
                         <TextView
                             android:id="@+id/current_song_artist"

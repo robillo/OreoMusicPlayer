@@ -19,6 +19,7 @@ import com.robillo.oreomusicplayer.models.Song;
 import com.robillo.oreomusicplayer.models.ThemeColors;
 import com.robillo.oreomusicplayer.preferences.AppPreferencesHelper;
 import com.robillo.oreomusicplayer.utils.AppConstants;
+import com.robillo.oreomusicplayer.utils.ApplicationUtils;
 import com.robillo.oreomusicplayer.views.activities.main.MainActivity;
 
 import butterknife.BindView;
@@ -124,7 +125,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
 
             title.setText(song.getTitle());
             int size = Integer.valueOf(song.getSize())/1024;
-            String artistSize = song.getArtist() + " (" + size + ")";
+            String artistSize = song.getArtist() + " (" + new ApplicationUtils().formatSizeKBtoMB(size) + ")";
             artistAndSize.setText(artistSize);
         }
     }
