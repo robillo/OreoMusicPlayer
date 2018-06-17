@@ -27,7 +27,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="0sp"
-        android:layout_weight="2">
+        android:layout_weight="1">
 
     </FrameLayout>
 
@@ -48,6 +48,24 @@
             android:textSize="40sp"
             android:padding="10sp"
             android:background="@color/black"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0sp"
+        android:layout_weight="1">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:id="@+id/fade_in_subtitle"
+            android:text="Music Player For All"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:padding="10sp"/>
 
     </FrameLayout>
 
