@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/transparency_black"
-    tools:context="com.robillo.oreomusicplayer.views.activities.main.songs_sort_frag.SongsSortFragment">
+    tools:context="com.robillo.dancingplayer.views.activities.main.songs_sort_frag.SongsSortFragment">
 
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"

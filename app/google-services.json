@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "214422392626",
+    "firebase_url": "https://dancing-player.firebaseio.com",
+    "project_id": "dancing-player",
+    "storage_bucket": "dancing-player.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:214422392626:android:03a4e43ed2893163",
+        "android_client_info": {
+          "package_name": "com.robillo.dancingmusicplayer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "214422392626-1icldr9otj2qdfp6287ob6p9kvn03igo.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "214422392626-1icldr9otj2qdfp6287ob6p9kvn03igo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqDwJZEpBBt1YTbhQkjBc-BzxP-twbJPA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
