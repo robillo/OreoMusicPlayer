@@ -182,51 +182,53 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
 
         currentSong = song;
 
-        currentSongTitle.setText(song.getTitle());
-        currentSongAlbumName.setText(song.getAlbum());
+        if(song != null) {
+            currentSongTitle.setText(song.getTitle());
+            currentSongAlbumName.setText(song.getAlbum());
 
-        currentSongArtist.setText(song.getArtist());
+            currentSongArtist.setText(song.getArtist());
 
-        currentSongMaxProgress
-                .setText(
-                        new ApplicationUtils()
-                                .formatStringOutOfSeconds(
-                                        Integer.valueOf(song.getDuration())/1000
-                                )
-                );
+            currentSongMaxProgress
+                    .setText(
+                            new ApplicationUtils()
+                                    .formatStringOutOfSeconds(
+                                            Integer.valueOf(song.getDuration())/1000
+                                    )
+                    );
 
-        currentSongCurrentProgress
-                .setText(
-                        new ApplicationUtils()
-                                .formatStringOutOfSeconds(
-                                        currentDurationProgress
-                                )
-                );
+            currentSongCurrentProgress
+                    .setText(
+                            new ApplicationUtils()
+                                    .formatStringOutOfSeconds(
+                                            currentDurationProgress
+                                    )
+                    );
 
-        String path = null;
-        if(getActivity()!=null) {
+            String path = null;
+            if(getActivity()!=null) {
 
-            //get path for the album art for this song
-            Cursor cursor = getActivity().getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
-                    new String[] {MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
-                    MediaStore.Audio.Albums._ID+ "=?",
-                    new String[] {String.valueOf(song.getAlbumId())},
-                    null);
-            if(cursor!=null && cursor.moveToFirst()) {
-                path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
-                // do whatever you need to do
-                cursor.close();
+                //get path for the album art for this song
+                Cursor cursor = getActivity().getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+                        new String[] {MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
+                        MediaStore.Audio.Albums._ID+ "=?",
+                        new String[] {String.valueOf(song.getAlbumId())},
+                        null);
+                if(cursor!=null && cursor.moveToFirst()) {
+                    path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
+                    // do whatever you need to do
+                    cursor.close();
+                }
+
+                //set album art
+                if(path != null) Glide.with(getActivity()).load(path).into(currentSongAlbumArt);
+                else Glide.with(getActivity()).load(R.drawable.icon_drawable).into(currentSongAlbumArt);
+
             }
 
-            //set album art
-            if(path != null) Glide.with(getActivity()).load(path).into(currentSongAlbumArt);
-            else Glide.with(getActivity()).load(R.drawable.icon_drawable).into(currentSongAlbumArt);
-
-        }
-
-        if(getActivity()!=null) {                                                   //play or pause
-            if(((MainActivity) getActivity()).isPlaying()) playPlayer(FROM_ACTIVITY);
-            else pausePlayer(FROM_ACTIVITY);
+            if(getActivity()!=null) {                                                   //play or pause
+                if(((MainActivity) getActivity()).isPlaying()) playPlayer(FROM_ACTIVITY);
+                else pausePlayer(FROM_ACTIVITY);
+            }
         }
     }
 

@@ -190,7 +190,6 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void refreshSongListFragmentForSongDelete(Song song, int index) {
-        mAdapter.updateSongsList(index);
         mAdapter.notifyItemRemoved(index);
         mAdapter.notifyItemRangeChanged(index, mAdapter.getItemCount());
     }

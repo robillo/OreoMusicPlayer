@@ -23,7 +23,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> implements SongsAdapterMvpView {
+public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> {
 
     private List<Song> list;
     private Context context;
@@ -60,7 +60,13 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
             holder.moreButton.setVisibility(View.VISIBLE);
 
             holder.title.setText(list.get(_pos).getTitle());
-            long duration = Integer.valueOf(list.get(_pos).getDuration())/1000;
+            long duration = 0;
+            try {
+                duration = Integer.valueOf(list.get(_pos).getDuration())/1000;
+            }
+            catch (NumberFormatException e) {
+                Log.e("exception", "number format exception");
+            }
             String temp = list.get(_pos).getArtist() + " (" + new ApplicationUtils().formatStringOutOfSeconds((int) duration) + ")";
             holder.artistDuration.setText(temp);
 
@@ -82,11 +88,6 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
     @Override
     public int getItemCount() {
         return list!=null ? list.size() : 0;
-    }
-
-    @Override
-    public void updateSongsList(int index) {
-        Song val = list.remove(index);
     }
 
     class SongHolder extends RecyclerView.ViewHolder{

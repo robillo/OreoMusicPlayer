@@ -38,7 +38,6 @@ import com.robillo.dancingplayer.events.PlayerStateNoSongPlayingEvent;
 import com.robillo.dancingplayer.events.SongChangeEvent;
 import com.robillo.dancingplayer.models.SetSeekBarEvent;
 import com.robillo.dancingplayer.models.Song;
-import com.robillo.dancingplayer.models.ThemeColors;
 import com.robillo.dancingplayer.preferences.AppPreferencesHelper;
 import com.robillo.dancingplayer.utils.AppConstants;
 import com.robillo.dancingplayer.views.activities.main.MainActivity;
@@ -93,7 +92,6 @@ public class MusicService extends Service implements
     private static String IS_REPEAT_MODE_ON = AppConstants.REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE;
     private static boolean IS_SHUFFLE_MODE_ON = false;
 
-    private AppPreferencesHelper helper;
     private MediaPlayer player;
     private ArrayList<Song> songs;
     private Song currentSong;
@@ -129,11 +127,23 @@ public class MusicService extends Service implements
         initMusicPlayer();
     }
 
+    @Override
+    public void onDestroy() {
+
+        player = null;
+        cancelNotification();
+        if(mNoisyReceiver != null)
+            try { unregisterReceiver(mNoisyReceiver); }
+            catch (IllegalArgumentException e) { Log.e("music serv 137", "already unregistered"); }
+            catch (Exception e) { Log.e("musix serv 138", "other exception for receiver"); }
+        super.onDestroy();
+    }
+
     //____________________________________INITIAL SETUP CALL______________________________________//
     @Override
     public void initMusicPlayer() {
 
-        helper = new AppPreferencesHelper(this);
+        AppPreferencesHelper helper = new AppPreferencesHelper(this);
         IS_REPEAT_MODE_ON = helper.isRepeatModeOn();
         IS_SHUFFLE_MODE_ON = helper.isShuffleModeOn();
 
@@ -250,8 +260,8 @@ public class MusicService extends Service implements
 
     @Override
     public boolean onUnbind(Intent intent){
-        player.stop();
-        player.release();
+        if(player != null) player.stop();
+        if(player != null) player.release();
         return false;
     }
 
@@ -348,6 +358,9 @@ public class MusicService extends Service implements
 
     @Override
     public void pausePlayer() {
+
+        if(songs == null) return;
+
         if(currentSong != null) {
             if (!mPlayOnAudioFocus) {
                 abandonAudioFocus();
@@ -370,6 +383,8 @@ public class MusicService extends Service implements
     @Override
     public void playPrevious() {
 
+        if(songs == null) return;
+
         if(isShuffleModeOn()) {
             // nextInt is normally exclusive of the top value
             // so add 1 to make it inclusive
@@ -386,6 +401,8 @@ public class MusicService extends Service implements
 
     @Override
     public void playNext() {
+
+        if(songs == null) return;
 
         if(isShuffleModeOn()) {
             // nextInt is normally exclusive of the top value
@@ -770,15 +787,5 @@ public class MusicService extends Service implements
                 controls.play();
             }
         }
-    }
-
-    @Override
-    public void onDestroy() {
-
-        player = null;
-        cancelNotification();
-        unregisterReceiver(mNoisyReceiver);
-
-        super.onDestroy();
     }
 }
