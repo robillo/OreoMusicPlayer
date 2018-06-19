@@ -54,7 +54,7 @@ public class AppPreferencesHelper implements PreferencesHelper {
 
     @Override
     public String getSortOrderForSongs() {
-        return prefs.getString(KEY_SORT_ORDER_FOR_SONGS, AppConstants.DATE_ADDED_ASCENDING);
+        return prefs.getString(KEY_SORT_ORDER_FOR_SONGS, AppConstants.TITLE_ASCENDING);
     }
 
     @Override

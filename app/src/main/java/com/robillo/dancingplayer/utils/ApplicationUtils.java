@@ -24,6 +24,6 @@ public class ApplicationUtils {
 
     public String formatSizeKBtoMB(float size) {
 
-        return String.format("%s MB", String.format(Locale.ENGLISH, "%.2f", size/ 1024));
+        return String.format("%s MB", String.format(Locale.ENGLISH, "%.2f", size/1024));
     }
 }

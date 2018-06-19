@@ -11,7 +11,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -35,6 +34,7 @@ import com.robillo.dancingplayer.views.activities.main.song_list_frag.adapters.S
 import com.robillo.dancingplayer.models.Song;
 import com.robillo.dancingplayer.preferences.AppPreferencesHelper;
 import com.robillo.dancingplayer.views.activities.main.MainActivity;
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.util.ArrayList;
 
@@ -79,7 +79,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     ImageButton playPauseSong;
 
     @BindView(R.id.recycler_view)
-    RecyclerView mRecyclerView;
+    FastScrollRecyclerView mRecyclerView;
 
     @BindView(R.id.progress_current_song)
     ProgressBar progressBarCurrentSong;
@@ -175,6 +175,9 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         hideOrShowUpper.setBackgroundColor(getResources().getColor(userThemeColors.getColorPrimary()));
         launchPlayFragmentTwo.setBackgroundColor(getResources().getColor(userThemeColors.getColorPrimary()));
         currentSongAlbumArt.setBorderColor(getResources().getColor(userThemeColors.getColorPrimaryDark()));
+
+        mRecyclerView.setPopupBgColor(getResources().getColor(userThemeColors.getColorPrimaryDark()));
+//        mRecyclerView.setTrackColor(getResources().getColor(userThemeColors.getColorMat()));
     }
 
     @Override

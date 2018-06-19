@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,15 +16,35 @@ import android.widget.TextView;
 
 import com.robillo.dancingplayer.R;
 import com.robillo.dancingplayer.models.Song;
+import com.robillo.dancingplayer.preferences.AppPreferencesHelper;
 import com.robillo.dancingplayer.utils.ApplicationUtils;
 import com.robillo.dancingplayer.views.activities.main.MainActivity;
+import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
+import java.sql.Date;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> {
+import static com.robillo.dancingplayer.utils.AppConstants.ALBUM_ASCENDING;
+import static com.robillo.dancingplayer.utils.AppConstants.ALBUM_DESCENDING;
+import static com.robillo.dancingplayer.utils.AppConstants.ARTIST_ASCENDING;
+import static com.robillo.dancingplayer.utils.AppConstants.ARTIST_DESCENDING;
+import static com.robillo.dancingplayer.utils.AppConstants.DATE_ADDED_ASCENDING;
+import static com.robillo.dancingplayer.utils.AppConstants.DATE_ADDED_DESCENDING;
+import static com.robillo.dancingplayer.utils.AppConstants.DATE_MODIFIED_ASCENDING;
+import static com.robillo.dancingplayer.utils.AppConstants.DATE_MODIFIED_DESCENDING;
+import static com.robillo.dancingplayer.utils.AppConstants.SIZE_ASCENDING;
+import static com.robillo.dancingplayer.utils.AppConstants.SIZE_DESCENDING;
+import static com.robillo.dancingplayer.utils.AppConstants.TITLE_ASCENDING;
+import static com.robillo.dancingplayer.utils.AppConstants.TITLE_DESCENDING;
+import static com.robillo.dancingplayer.utils.AppConstants.YEAR_ASCENDING;
+import static com.robillo.dancingplayer.utils.AppConstants.YEAR_DESCENDING;
+
+public class SongsAdapter
+        extends RecyclerView.Adapter<SongsAdapter.SongHolder>
+        implements FastScrollRecyclerView.SectionedAdapter {
 
     private List<Song> list;
     private Context context;
@@ -88,6 +109,76 @@ public class SongsAdapter extends RecyclerView.Adapter<SongsAdapter.SongHolder> 
     @Override
     public int getItemCount() {
         return list!=null ? list.size() : 0;
+    }
+
+    @NonNull
+    @Override
+    public String getSectionName(int position) {
+        String sectionString = "";
+        if(parentContext != null && list != null) {
+            String SORT_ORDER = new AppPreferencesHelper(parentContext).getSortOrderForSongs();
+            switch (SORT_ORDER) {
+                case SIZE_ASCENDING:
+                case SIZE_DESCENDING:
+                    if (list.get(position).getSize() != null) {
+                        try {
+                            float size = Integer.valueOf(list.get(position).getSize())/1024;
+                            sectionString = new ApplicationUtils().formatSizeKBtoMB(size);
+                        }
+                        catch(IllegalArgumentException e) {
+                            Log.e("tag", "illegal argument adapter 129");
+                        }
+                    }
+                    break;
+                case YEAR_ASCENDING:
+                case YEAR_DESCENDING:
+                    if (list.get(position).getYear() != null)
+                        sectionString = list.get(position).getYear();
+                    break;
+                case ALBUM_ASCENDING:
+                case ALBUM_DESCENDING:
+                    if (list.get(position).getAlbum() != null)
+                        sectionString = list.get(position).getAlbum().substring(0, 1);
+                    break;
+                case TITLE_ASCENDING:
+                case TITLE_DESCENDING:
+                    if (list.get(position).getTitle() != null)
+                        sectionString = list.get(position).getTitle().substring(0, 1);
+                    break;
+                case ARTIST_ASCENDING:
+                case ARTIST_DESCENDING:
+                    if (list.get(position).getArtist() != null)
+                        sectionString = list.get(position).getArtist().substring(0, 1);
+                    break;
+                case DATE_ADDED_ASCENDING:
+                case DATE_ADDED_DESCENDING:
+                    if (list.get(position).getDateAdded() != null) {
+                        try {
+                            long date = Long.valueOf(list.get(position).getDateAdded());
+                            sectionString = DateFormat.format("MM/dd/yyyy",
+                                    new Date(date * 1000)).toString();
+                        }
+                        catch(IllegalArgumentException e) {
+                            Log.e("tag", "illegal argument adapter 163");
+                        }
+                    }
+                    break;
+                case DATE_MODIFIED_ASCENDING:
+                case DATE_MODIFIED_DESCENDING:
+                    if (list.get(position).getDateModified() != null) {
+                        try {
+                            long date = Long.valueOf(list.get(position).getDateModified());
+                            sectionString = DateFormat.format("MM/dd/yyyy",
+                                    new Date(date * 1000)).toString();
+                        }
+                        catch(IllegalArgumentException e) {
+                            Log.e("tag", "illegal argument adapter 163");
+                        }
+                    }
+                    break;
+            }
+        }
+        return sectionString;
     }
 
     class SongHolder extends RecyclerView.ViewHolder{
