@@ -11,6 +11,8 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.DragEvent;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -34,6 +36,7 @@ import com.robillo.dancingplayer.views.activities.main.song_list_frag.adapters.S
 import com.robillo.dancingplayer.models.Song;
 import com.robillo.dancingplayer.preferences.AppPreferencesHelper;
 import com.robillo.dancingplayer.views.activities.main.MainActivity;
+import com.simplecityapps.recyclerview_fastscroll.interfaces.OnFastScrollStateChangeListener;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.util.ArrayList;
@@ -53,6 +56,7 @@ import static com.robillo.dancingplayer.utils.AppConstants.LAUNCHED_FROM_NOTIFIC
 @SuppressWarnings("FieldCanBeLocal")
 public class SongsListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SongListMvpView, GestureDetector.OnGestureListener {
 
+    private boolean hideOnFastScroll = false;
     @SuppressWarnings("FieldCanBeLocal")
     private final int EMPTY_CELLS_COUNT = 2;
     @SuppressWarnings("FieldCanBeLocal")
@@ -145,24 +149,44 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        mRecyclerView.setOnFastScrollStateChangeListener(new OnFastScrollStateChangeListener() {
+            @Override
+            public void onFastScrollStart() {
+                hideOnFastScroll = true;
+                if(hideOrShowUpper.getVisibility() == View.VISIBLE && !isAnimatingUpper) {
+                    fadeOutUpper();
+                }
+                if(bottomController.getVisibility() == View.VISIBLE && !isAnimatingController) {
+                    fadeOutController();
+                }
+            }
+
+            @Override
+            public void onFastScrollStop() {
+                hideOnFastScroll = false;
+            }
+        });
+
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                if(dy > 0) {      //scrolled up
-                    if(hideOrShowUpper.getVisibility() == View.VISIBLE && !isAnimatingUpper) {
-                        fadeOutUpper();
+                if(!hideOnFastScroll) {
+                    if(dy > 0) {      //scrolled up
+                        if(hideOrShowUpper.getVisibility() == View.VISIBLE && !isAnimatingUpper) {
+                            fadeOutUpper();
+                        }
+                        if(bottomController.getVisibility() == View.VISIBLE && !isAnimatingController) {
+                            fadeOutController();
+                        }
                     }
-                    if(bottomController.getVisibility() == View.VISIBLE && !isAnimatingController) {
-                        fadeOutController();
-                    }
-                }
-                else {          //scrolled down
-                    if(hideOrShowUpper.getVisibility() == View.GONE && !isAnimatingUpper) {
-                        fadeInUpper();
-                    }
-                    if(bottomController.getVisibility() == View.GONE && !isAnimatingController && currentSong != null) {
-                        fadeInController();
+                    else {          //scrolled down
+                        if(hideOrShowUpper.getVisibility() == View.GONE && !isAnimatingUpper) {
+                            fadeInUpper();
+                        }
+                        if(bottomController.getVisibility() == View.GONE && !isAnimatingController && currentSong != null) {
+                            fadeInController();
+                        }
                     }
                 }
             }
