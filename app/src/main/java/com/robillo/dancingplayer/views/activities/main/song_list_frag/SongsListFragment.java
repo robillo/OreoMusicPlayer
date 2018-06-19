@@ -519,13 +519,11 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public boolean onScroll(MotionEvent eventOne, MotionEvent eventTwo, float dx, float dy) {
-        Log.e("log", "scrolling");
+        //noinspection StatementWithEmptyBody
         if(dy < 0) {      //scrolled down
-            Log.e("log", "scrolling down");
         }
-        else if(dy > 0) {          //scrolled up
-            Log.e("log", "scrolling up");
-            Toast.makeText(getActivity(), "UP " + bottomController.getVisibility(), Toast.LENGTH_SHORT).show();
+        else //noinspection StatementWithEmptyBody
+            if(dy > 0) {          //scrolled up
         }
         return false;
     }
