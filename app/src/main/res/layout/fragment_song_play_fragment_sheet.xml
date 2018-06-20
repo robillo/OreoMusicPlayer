@@ -153,12 +153,6 @@
                 android:layout_marginTop="5sp"
                 android:layout_marginBottom="10sp"/>
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="2sp"
-                android:background="@color/colorTextFive"
-                tools:ignore="ContentDescription,SmallSp" />
-
             <!--seekbar-->
 
             <!--bottom controller-->
@@ -177,7 +171,7 @@
                     android:layout_marginLeft="5sp"
                     android:layout_marginStart="5sp"
                     android:text="01:24"
-                    android:textSize="@dimen/tv_numbers_sp"
+                    android:textSize="@dimen/tv_numbers_spf"
                     android:textColor="@color/colorTextOne"
                     android:maxLines="1"
                     android:gravity="center"
@@ -199,7 +193,7 @@
                     android:layout_marginRight="5sp"
                     android:layout_marginEnd="5sp"
                     android:text="03:51"
-                    android:textSize="@dimen/tv_numbers_sp"
+                    android:textSize="@dimen/tv_numbers_spf"
                     android:textColor="@color/colorTextOne"
                     android:maxLines="1"
                     android:gravity="center"

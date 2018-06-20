@@ -1,6 +1,8 @@
 package com.robillo.dancingplayer.views.activities.main.bottom_sheet;
 
+import android.content.ActivityNotFoundException;
 import android.content.ContentUris;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -153,6 +155,20 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
 
     @OnClick(R.id.rate_app)
     public void setRateApp() {
-
+        if(getActivity() != null) {
+            Uri uri = Uri.parse("market://details?id=" + getActivity().getPackageName());
+            Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+            // To count with Play market backstack, After pressing back button,
+            // to taken back to our application, we need to add following flags to intent.
+            goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                    Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                    Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+            try {
+                startActivity(goToMarket);
+            } catch (ActivityNotFoundException e) {
+                startActivity(new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("http://play.google.com/store/apps/details?id=" + getActivity().getPackageName())));
+            }
+        }
     }
 }

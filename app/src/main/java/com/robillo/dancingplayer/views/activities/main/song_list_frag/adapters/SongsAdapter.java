@@ -111,6 +111,10 @@ public class SongsAdapter
         return list!=null ? list.size() : 0;
     }
 
+    public void removeListItem(int position) {
+        list.remove(position);
+    }
+
     @NonNull
     @Override
     public String getSectionName(int position) {
