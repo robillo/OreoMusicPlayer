@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--song play fragment-->
+    <dimen name="tv_header_spf">25sp</dimen>
+    <dimen name="civ_spf">160sp</dimen>
+    <dimen name="tv_title_spf">20sp</dimen>
+    <dimen name="tv_artist_spf">18sp</dimen>
+    <dimen name="tv_numbers_spf">13sp</dimen>
+    <dimen name="play_pause_botton_margin_spf">10sp</dimen>
+    <dimen name="play_pause_button_height">100sp</dimen>
+    <dimen name="prev_next_button_height">45sp</dimen>
+    <dimen name="forward_backward_button_height">35sp</dimen>
+
+</resources>

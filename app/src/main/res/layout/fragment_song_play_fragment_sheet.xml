@@ -34,7 +34,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:text="Steve Void"
-                android:textSize="25sp"
+                android:textSize="@dimen/tv_header_spf"
                 android:textColor="@color/colorTextOne"
                 android:gravity="center"
                 tools:ignore="HardcodedText"
@@ -54,23 +54,29 @@
 
         </LinearLayout>
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2sp"
+            android:background="@color/colorTextFive"
+            tools:ignore="ContentDescription,SmallSp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0sp"
             android:layout_weight="1"
             android:gravity="center"
-            android:orientation="vertical"
-            android:layout_marginBottom="5sp">
+            android:orientation="vertical">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="165sp"
-                android:layout_height="165sp"
-                android:layout_margin="10sp"
+                android:layout_width="@dimen/civ_spf"
+                android:layout_height="@dimen/civ_spf"
+                android:layout_marginTop="5sp"
                 app:civ_border_width="8sp"
                 android:src="@color/white"
                 android:layout_gravity="center_horizontal"
                 app:civ_border_color="@color/colorPrimary"
-                android:id="@+id/current_song_album_art"/>
+                android:id="@+id/current_song_album_art"
+                tools:src="@drawable/icon_drawable"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -100,6 +106,12 @@
 
         </LinearLayout>
 
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="2sp"
+            android:background="@color/colorTextFive"
+            tools:ignore="ContentDescription,SmallSp" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -111,8 +123,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Comfortable (Lyrics / Lyric Video)"
-                android:textSize="20sp"
-                android:layout_margin="5sp"
+                android:textSize="@dimen/tv_title_spf"
+                android:layout_marginTop="10sp"
+                android:layout_marginBottom="5sp"
                 android:textColor="@color/colorTextOne"
                 android:gravity="center"
                 tools:ignore="HardcodedText"
@@ -128,7 +141,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Steve Void"
-                android:textSize="18sp"
+                android:textSize="@dimen/tv_artist_spf"
                 android:textColor="@color/colorTextTwo"
                 android:gravity="center"
                 tools:ignore="HardcodedText"
@@ -137,7 +150,14 @@
                 android:marqueeRepeatLimit="marquee_forever"
                 android:singleLine="true"
                 android:ellipsize="marquee"
-                android:layout_margin="5sp"/>
+                android:layout_marginTop="5sp"
+                android:layout_marginBottom="10sp"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="2sp"
+                android:background="@color/colorTextFive"
+                tools:ignore="ContentDescription,SmallSp" />
 
             <!--seekbar-->
 
@@ -157,7 +177,7 @@
                     android:layout_marginLeft="5sp"
                     android:layout_marginStart="5sp"
                     android:text="01:24"
-                    android:textSize="13sp"
+                    android:textSize="@dimen/tv_numbers_sp"
                     android:textColor="@color/colorTextOne"
                     android:maxLines="1"
                     android:gravity="center"
@@ -179,7 +199,7 @@
                     android:layout_marginRight="5sp"
                     android:layout_marginEnd="5sp"
                     android:text="03:51"
-                    android:textSize="13sp"
+                    android:textSize="@dimen/tv_numbers_sp"
                     android:textColor="@color/colorTextOne"
                     android:maxLines="1"
                     android:gravity="center"
@@ -196,9 +216,7 @@
                 android:orientation="horizontal"
                 android:gravity="center"
                 android:background="@color/black"
-                android:id="@+id/bottom_controller"
-                android:paddingTop="30sp"
-                android:paddingBottom="30sp">
+                android:id="@+id/bottom_controller">
 
                 <ImageButton
                     android:layout_height="35sp"
@@ -224,7 +242,7 @@
                     android:id="@+id/play_previous_song"/>
 
                 <ImageButton
-                    android:layout_height="70sp"
+                    android:layout_height="@dimen/play_pause_button_height"
                     android:layout_width="0sp"
                     android:layout_weight="1"
                     android:scaleType="fitCenter"
@@ -232,10 +250,12 @@
                     android:background="@color/transparent"
                     android:contentDescription="@string/pause_song"
                     android:tint="@color/white"
+                    android:layout_marginTop="@dimen/play_pause_botton_margin_spf"
+                    android:layout_marginBottom="@dimen/play_pause_botton_margin_spf"
                     android:id="@+id/play_pause_song"/>
 
                 <ImageButton
-                    android:layout_height="45sp"
+                    android:layout_height="@dimen/prev_next_button_height"
                     android:layout_width="0sp"
                     android:layout_weight="1"
                     android:scaleType="fitCenter"
@@ -246,7 +266,7 @@
                     android:id="@+id/play_next_song"/>
 
                 <ImageButton
-                    android:layout_height="35sp"
+                    android:layout_height="@dimen/forward_backward_button_height"
                     android:layout_width="0sp"
                     android:layout_weight="1"
                     android:scaleType="fitCenter"

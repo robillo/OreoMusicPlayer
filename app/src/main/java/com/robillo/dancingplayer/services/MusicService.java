@@ -197,11 +197,12 @@ public class MusicService extends Service implements
 
         int importance = 0;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            importance = NotificationManager.IMPORTANCE_HIGH;
+            importance = NotificationManager.IMPORTANCE_DEFAULT;
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             mChannel = new NotificationChannel(CHANNEL_ID, AppConstants.CHANNEL_NAME, importance);
+            mChannel.setShowBadge(false);
             notificationManager.createNotificationChannel(mChannel);
         }
 
