@@ -62,4 +62,6 @@ public interface MainActivityMvpView {
 
     void togglePlaylistBottomSheet();
 
+    void setPlaylistBottomSheet();
+
 }

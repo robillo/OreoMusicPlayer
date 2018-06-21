@@ -19,7 +19,7 @@
             app:fastScrollPopupTextSize="18sp"
             app:fastScrollPopupBackgroundSize="40sp"
             app:fastScrollTrackColor="#1f000000"
-            android:paddingBottom="40sp"/>
+            android:paddingBottom="50sp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -55,7 +55,8 @@
                     android:text="@string/string_player_name"
                     android:textColor="@color/white"
                     android:textSize="30sp"
-                    android:gravity="center"/>
+                    android:gravity="center"
+                    android:id="@+id/app_name"/>
 
                 <ImageButton
                     android:id="@+id/app_menu_options"
@@ -83,7 +84,7 @@
             android:id="@+id/bottom_controller"
             android:visibility="gone"
             tools:visibility="visible"
-            android:layout_marginBottom="40sp">
+            android:layout_marginBottom="50sp">
 
             <LinearLayout
                 android:layout_width="match_parent"

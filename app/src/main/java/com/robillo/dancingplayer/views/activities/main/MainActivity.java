@@ -22,8 +22,10 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.MediaController;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.robillo.dancingplayer.R;
@@ -50,6 +52,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 
 import static com.robillo.dancingplayer.utils.AppConstants.ALBUM;
@@ -140,53 +143,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     public void setUp() {
         refreshForUserThemeColors();
         setSongListFragment();
-
-        playlistSheetBehavior = BottomSheetBehavior.from(layoutPlaylistBottomSheet);
-
-        playlistSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
-            @Override
-            public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                switch (newState) {
-                    case BottomSheetBehavior.STATE_HIDDEN:
-                        break;
-                    case BottomSheetBehavior.STATE_EXPANDED: {
-//                        btnBottomSheet.setText("Close Sheet");
-                    }
-                    break;
-                    case BottomSheetBehavior.STATE_COLLAPSED: {
-//                        btnBottomSheet.setText("Expand Sheet");
-                    }
-                    break;
-                    case BottomSheetBehavior.STATE_DRAGGING:
-                        break;
-                    case BottomSheetBehavior.STATE_SETTLING:
-                        break;
-                }
-            }
-
-            @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-
-            }
-        });
-    }
-
-
-    @Override
-    public void togglePlaylistBottomSheet() {
-        if (playlistSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-            playlistSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-//            btnBottomSheet.setText("Close sheet");
-        } else {
-            playlistSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-//            playlistSheetBehavior.setText("Expand sheet");
-        }        if (playlistSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
-            playlistSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-//            btnBottomSheet.setText("Close sheet");
-        } else {
-            playlistSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-//            playlistSheetBehavior.setText("Expand sheet");
-        }
+        setPlaylistBottomSheet();
     }
 
     @Override
@@ -196,13 +153,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         currentUserThemeColors = AppConstants.themeMap.get(helper.getUserThemeName());
 
         Window window = getWindow();
-        // clear FLAG_TRANSLUCENT_STATUS flag:
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-
-        // add FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS flag to the window
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-
-        // finally change the color
         window.setStatusBarColor(ContextCompat.getColor(this, currentUserThemeColors.getColorPrimaryDark()));
     }
 
@@ -244,7 +196,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public int getCurrentSongDuration() {
-//        if(musicService!=null && musicBound && musicService.isPlaying()) return musicService.getPosition();
         if(musicService!=null && musicBound) return musicService.getPosition();
         else return 0;
     }
@@ -617,5 +568,64 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Override
     public int getAudioSessionId() {
         return 0;
+    }
+
+    //code for playlist bottom sheet
+
+    @BindView(R.id.selected_playlist)
+    TextView selectedPlaylistTv;
+
+    @BindView(R.id.up_down_fragment_playlist)
+    ImageView imageUpDownPlaylist;
+
+    @BindView(R.id.layout_lift_burrow_playlists)
+    LinearLayout liftBurrowPlaylists;
+
+    @OnClick(R.id.layout_lift_burrow_playlists)
+    public void setLiftBurrowPlaylists() {
+        togglePlaylistBottomSheet();
+    }
+
+    @Override
+    public void setPlaylistBottomSheet() {
+        playlistSheetBehavior = BottomSheetBehavior.from(layoutPlaylistBottomSheet);
+
+        playlistSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED: {
+
+                    }
+                    break;
+                    case BottomSheetBehavior.STATE_COLLAPSED: {
+
+                    }
+                    break;
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        break;
+                    case BottomSheetBehavior.STATE_SETTLING:
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+    }
+
+    @Override
+    public void togglePlaylistBottomSheet() {
+        if (playlistSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+            playlistSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+            imageUpDownPlaylist.animate().rotation(180).start();
+        } else {
+            playlistSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            imageUpDownPlaylist.animate().rotation(0).start();
+        }
     }
 }

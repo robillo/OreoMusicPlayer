@@ -112,6 +112,9 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @BindView(R.id.app_menu_options)
     ImageButton appMenuOptions;
 
+    @BindView(R.id.app_name)
+    TextView appName;
+
     public SongsListFragment() {
         // Required empty public constructor
     }
@@ -375,6 +378,11 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
                 playPlayer(FROM_FRAGMENT);
             }
         }
+    }
+
+    @OnClick(R.id.app_name)
+    public void setAppName() {
+
     }
 
     @OnClick(R.id.sort_options)
