@@ -597,11 +597,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
                     case BottomSheetBehavior.STATE_HIDDEN:
                         break;
                     case BottomSheetBehavior.STATE_EXPANDED: {
-
+                        imageUpDownPlaylist.animate().rotation(180).start();
                     }
                     break;
                     case BottomSheetBehavior.STATE_COLLAPSED: {
-
+                        imageUpDownPlaylist.animate().rotation(0).start();
                     }
                     break;
                     case BottomSheetBehavior.STATE_DRAGGING:
