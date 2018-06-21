@@ -49,4 +49,6 @@
     <string name="rate_song">rate song</string>
     <string name="show_playlists">Show Playlists</string>
     <string name="up_down_playlist_fragment">Up Down Playlist Fragment</string>
+    <string name="create_new">CREATE NEW</string>
+    <string name="edit">edit</string>
 </resources>
