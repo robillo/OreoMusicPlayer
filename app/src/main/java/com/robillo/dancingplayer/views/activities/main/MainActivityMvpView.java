@@ -60,4 +60,6 @@ public interface MainActivityMvpView {
 
     void refreshSongListFragmentForSongDelete(Song song, int index);
 
+    void togglePlaylistBottomSheet();
+
 }

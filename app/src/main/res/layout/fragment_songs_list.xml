@@ -18,7 +18,8 @@
             android:layout_height="match_parent"
             app:fastScrollPopupTextSize="18sp"
             app:fastScrollPopupBackgroundSize="40sp"
-            app:fastScrollTrackColor="#1f000000" />
+            app:fastScrollTrackColor="#1f000000"
+            android:paddingBottom="40sp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -34,15 +35,15 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
+                android:layout_height="?android:attr/actionBarSize"
                 android:orientation="horizontal"
                 tools:background="@color/black">
 
                 <ImageButton
                     android:id="@+id/sort_options"
-                    android:layout_width="?attr/actionBarSize"
+                    android:layout_width="?android:attr/actionBarSize"
                     android:layout_height="match_parent"
-                    android:background="?attr/selectableItemBackground"
+                    android:background="?android:attr/selectableItemBackground"
                     android:tint="@color/white"
                     android:src="@drawable/ic_sort_black_24dp"
                     android:contentDescription="@string/app_menu_options" />
@@ -58,9 +59,9 @@
 
                 <ImageButton
                     android:id="@+id/app_menu_options"
-                    android:layout_width="?attr/actionBarSize"
+                    android:layout_width="?android:attr/actionBarSize"
                     android:layout_height="match_parent"
-                    android:background="?attr/selectableItemBackground"
+                    android:background="?android:attr/selectableItemBackground"
                     android:tint="@color/white"
                     android:src="@drawable/ic_keyboard_arrow_left_black_24dp"
                     android:contentDescription="@string/app_menu_options" />
@@ -81,7 +82,8 @@
             android:layout_gravity="bottom"
             android:id="@+id/bottom_controller"
             android:visibility="gone"
-            tools:visibility="visible">
+            tools:visibility="visible"
+            android:layout_marginBottom="40sp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -114,7 +116,7 @@
                         android:layout_width="0sp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="?attr/selectableItemBackground"
+                        android:background="?android:attr/selectableItemBackground"
                         android:contentDescription="@string/play_previous_song"
                         android:src="@drawable/ic_skip_previous_black_24dp" />
 
@@ -123,7 +125,7 @@
                         android:layout_width="0sp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="?attr/selectableItemBackground"
+                        android:background="?android:attr/selectableItemBackground"
                         android:contentDescription="@string/play_song"
                         android:src="@drawable/ic_play_arrow_black_24dp" />
 
@@ -132,7 +134,7 @@
                         android:layout_width="0sp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:background="?attr/selectableItemBackground"
+                        android:background="?android:attr/selectableItemBackground"
                         android:contentDescription="@string/play_next_song"
                         android:src="@drawable/ic_skip_next_black_24dp" />
 
@@ -171,18 +173,19 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
+                        android:gravity="center_vertical"
                         tools:ignore="RtlHardcoded,RtlSymmetry">
 
-                        <ProgressBar
-                            android:id="@+id/progress_current_song"
-                            style="?android:attr/progressBarStyleHorizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:max="100"
-                            android:progress="50"
-                            android:progressBackgroundTint="@android:color/darker_gray"
-                            android:progressTint="@color/white"
-                            android:visibility="invisible"/>
+                        <!--<ProgressBar-->
+                            <!--android:id="@+id/progress_current_song"-->
+                            <!--style="?android:attr/progressBarStyleHorizontal"-->
+                            <!--android:layout_width="match_parent"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:max="100"-->
+                            <!--android:progress="50"-->
+                            <!--android:progressBackgroundTint="@android:color/darker_gray"-->
+                            <!--android:progressTint="@color/white"-->
+                            <!--android:visibility="invisible"/>-->
 
                         <TextView
                             android:id="@+id/current_song_title"
@@ -196,7 +199,8 @@
                             android:marqueeRepeatLimit="marquee_forever"
                             android:singleLine="true"
                             android:ellipsize="marquee"
-                            android:layout_marginBottom="5sp"/>
+                            android:layout_marginBottom="5sp"
+                            android:gravity="center"/>
 
                         <TextView
                             android:id="@+id/current_song_artist"
@@ -207,7 +211,8 @@
                             android:textStyle="bold"
                             tools:ignore="HardcodedText,MissingPrefix,RtlHardcoded,RtlSymmetry"
                             tools:text="Illenium"
-                            android:singleLine="true"/>
+                            android:singleLine="true"
+                            android:gravity="center"/>
 
                     </LinearLayout>
 
@@ -225,7 +230,8 @@
                 android:src="@color/white"
                 app:civ_border_color="@color/white"
                 app:civ_border_width="5sp"
-                tools:ignore="RtlHardcoded"/>
+                tools:ignore="RtlHardcoded"
+                tools:src="@drawable/icon_drawable"/>
 
         </FrameLayout>
 

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:id="@+id/bottom_sheet"
+    app:behavior_hideable="false"
+    app:behavior_peekHeight="40sp"
+    android:background="@color/white"
+    app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="All Songs"
+        android:textSize="20sp"
+        android:paddingTop="10sp"
+        android:paddingBottom="10sp"
+        android:textColor="@color/white"
+        android:gravity="center"
+        tools:ignore="HardcodedText"
+        android:id="@+id/album_name"
+        android:scrollHorizontally="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:ellipsize="marquee"
+        android:background="@color/black"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Recently Played"
+        android:textSize="18sp"
+        android:padding="8sp"
+        android:textColor="@color/colorTextOne"
+        android:gravity="start|center_vertical"
+        tools:ignore="HardcodedText"
+        android:scrollHorizontally="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:ellipsize="marquee"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="2sp"
+        android:background="@color/colorTextFour"
+        tools:ignore="ContentDescription,SmallSp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="All Songs"
+        android:textSize="18sp"
+        android:padding="8sp"
+        android:textColor="@color/colorTextOne"
+        android:gravity="start|center_vertical"
+        tools:ignore="HardcodedText"
+        android:scrollHorizontally="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:ellipsize="marquee"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="2sp"
+        android:background="@color/colorTextFour"
+        tools:ignore="ContentDescription,SmallSp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Most Played"
+        android:textSize="18sp"
+        android:padding="8sp"
+        android:textColor="@color/colorTextOne"
+        android:gravity="start|center_vertical"
+        tools:ignore="HardcodedText"
+        android:scrollHorizontally="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:ellipsize="marquee"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="2sp"
+        android:background="@color/colorTextFour"
+        tools:ignore="ContentDescription,SmallSp" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="EDM"
+        android:textSize="18sp"
+        android:padding="8sp"
+        android:textColor="@color/colorTextOne"
+        android:gravity="start|center_vertical"
+        tools:ignore="HardcodedText"
+        android:scrollHorizontally="true"
+        android:marqueeRepeatLimit="marquee_forever"
+        android:singleLine="true"
+        android:ellipsize="marquee"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="2sp"
+        android:background="@color/colorTextFour"
+        tools:ignore="ContentDescription,SmallSp" />
+
+</LinearLayout>

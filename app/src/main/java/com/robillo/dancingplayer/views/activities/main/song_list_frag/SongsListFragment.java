@@ -11,8 +11,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.DragEvent;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -23,7 +21,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -85,8 +82,8 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @BindView(R.id.recycler_view)
     FastScrollRecyclerView mRecyclerView;
 
-    @BindView(R.id.progress_current_song)
-    ProgressBar progressBarCurrentSong;
+//    @BindView(R.id.progress_current_song)
+//    ProgressBar progressBarCurrentSong;
 
     @BindView(R.id.current_song_album_art)
     CircleImageView currentSongAlbumArt;
@@ -141,9 +138,10 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         fadeInAnimationUpper = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
         fadeInAnimationController = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in_controller);
         fadeOutAnimationController = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out_controller);
+
         rotatingAlbumAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
 
-        //marqueue
+        //marque
         currentSongTitle.setSelected(true);
         currentSongArtist.setSelected(true);
 
@@ -201,7 +199,6 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         currentSongAlbumArt.setBorderColor(getResources().getColor(userThemeColors.getColorPrimaryDark()));
 
         mRecyclerView.setPopupBgColor(getResources().getColor(userThemeColors.getColorPrimaryDark()));
-//        mRecyclerView.setTrackColor(getResources().getColor(userThemeColors.getColorMat()));
     }
 
     @Override

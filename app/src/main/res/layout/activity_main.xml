@@ -19,4 +19,7 @@
 
     </LinearLayout>
 
+    <!-- Adding bottom sheet after main content -->
+    <include layout="@layout/playlist_bottom_sheet" />
+
 </android.support.design.widget.CoordinatorLayout>

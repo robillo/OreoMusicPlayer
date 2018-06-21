@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -15,10 +17,12 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.MediaController;
 import android.widget.Toast;
 
@@ -71,6 +75,8 @@ import static com.robillo.dancingplayer.utils.AppConstants.YEAR;
 
 public class MainActivity extends AppCompatActivity implements MainActivityMvpView, MediaController.MediaPlayerControl {
 
+    BottomSheetBehavior playlistSheetBehavior;
+
     BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
     private MusicService musicService;
     private Intent playIntent;
@@ -85,6 +91,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @BindView(R.id.fragment_container)
     FrameLayout mFragmentContainer;
+
+    @BindView(R.id.bottom_sheet)
+    LinearLayout layoutPlaylistBottomSheet;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +140,53 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     public void setUp() {
         refreshForUserThemeColors();
         setSongListFragment();
+
+        playlistSheetBehavior = BottomSheetBehavior.from(layoutPlaylistBottomSheet);
+
+        playlistSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED: {
+//                        btnBottomSheet.setText("Close Sheet");
+                    }
+                    break;
+                    case BottomSheetBehavior.STATE_COLLAPSED: {
+//                        btnBottomSheet.setText("Expand Sheet");
+                    }
+                    break;
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                        break;
+                    case BottomSheetBehavior.STATE_SETTLING:
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+    }
+
+
+    @Override
+    public void togglePlaylistBottomSheet() {
+        if (playlistSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+            playlistSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+//            btnBottomSheet.setText("Close sheet");
+        } else {
+            playlistSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+//            playlistSheetBehavior.setText("Expand sheet");
+        }        if (playlistSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
+            playlistSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+//            btnBottomSheet.setText("Close sheet");
+        } else {
+            playlistSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+//            playlistSheetBehavior.setText("Expand sheet");
+        }
     }
 
     @Override
