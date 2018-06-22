@@ -79,6 +79,10 @@ public class AppConstants {
     public static final int FROM_ACTIVITY = 0;
     public static final int FROM_FRAGMENT = 1;
 
+    //PlaylistBottomSheet
+    public static final int FROM_SONGS_LIST = 0;
+    public static final int FROM_BOTTOM_CONTROLLER = 1;
+
     //SongListFragment SortOrder
     public static final String ASCENDING = "ASC";
     public static final String DESCENDING = "DESC";

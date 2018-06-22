@@ -76,7 +76,9 @@ import static com.robillo.dancingplayer.utils.AppConstants.DATE_MODIFIED;
 import static com.robillo.dancingplayer.utils.AppConstants.DEFAULT_PLAYLIST_TITLE;
 import static com.robillo.dancingplayer.utils.AppConstants.DURATION;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_ACTIVITY;
+import static com.robillo.dancingplayer.utils.AppConstants.FROM_BOTTOM_CONTROLLER;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_FRAGMENT;
+import static com.robillo.dancingplayer.utils.AppConstants.FROM_SONGS_LIST;
 import static com.robillo.dancingplayer.utils.AppConstants.ID;
 import static com.robillo.dancingplayer.utils.AppConstants.INDEX;
 import static com.robillo.dancingplayer.utils.AppConstants.MOST_PLAYED;
@@ -733,6 +735,24 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         if (playlistSheetBehavior != null && playlistSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
             playlistSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             imageUpDownPlaylist.animate().rotation(0).start();
+        }
+    }
+
+    @Override
+    public void showPlaylistBottomSheet(int from) {
+        if(from == FROM_BOTTOM_CONTROLLER) {
+            if (playlistSheetBehavior != null && playlistSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+                playlistSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                imageUpDownPlaylist.animate().rotation(180).start();
+            }
+        }
+        else if(from == FROM_SONGS_LIST) {
+            if (playlistSheetBehavior != null && playlistSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+                new Handler().postDelayed(() -> {
+                    playlistSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    imageUpDownPlaylist.animate().rotation(180).start();
+                }, 100);
+            }
         }
     }
 

@@ -80,4 +80,6 @@ public interface MainActivityMvpView {
 
     void hidePlaylistBottomSheet();
 
+    void showPlaylistBottomSheet(int from);
+
 }

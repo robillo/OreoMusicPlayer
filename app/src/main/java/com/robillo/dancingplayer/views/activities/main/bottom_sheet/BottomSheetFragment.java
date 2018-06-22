@@ -39,6 +39,7 @@ import static com.robillo.dancingplayer.utils.AppConstants.DATA;
 import static com.robillo.dancingplayer.utils.AppConstants.DATE_ADDED;
 import static com.robillo.dancingplayer.utils.AppConstants.DATE_MODIFIED;
 import static com.robillo.dancingplayer.utils.AppConstants.DURATION;
+import static com.robillo.dancingplayer.utils.AppConstants.FROM_SONGS_LIST;
 import static com.robillo.dancingplayer.utils.AppConstants.ID;
 import static com.robillo.dancingplayer.utils.AppConstants.INDEX;
 import static com.robillo.dancingplayer.utils.AppConstants.SIZE;
@@ -177,6 +178,10 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
 
     @OnClick(R.id.add_to_playlist)
     public void addToPlaylist() {
-        Toast.makeText(getActivity(), "Add To Playlist", Toast.LENGTH_SHORT).show();
+        MainActivity activity = (MainActivity) getActivity();
+        if(activity != null) {
+            activity.hideOrRemoveBottomSheet();
+            activity.showPlaylistBottomSheet(FROM_SONGS_LIST);
+        }
     }
 }
