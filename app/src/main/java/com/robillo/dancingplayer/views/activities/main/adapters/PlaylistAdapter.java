@@ -78,14 +78,14 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         holder.playlist_title.setOnClickListener(v -> {
             MainActivity activity = (MainActivity) pContext;
             if(activity != null) {
-                if(from != AppConstants.FROM_SONGS_LIST) {
-                    activity.updatePlaylistListForSelectedItem(list.get(position), position);
-                }
-                else {
-                    if(list.get(position).isPersistent()) {
-                        Toast.makeText(pContext, "You can only modify playlists that you created", Toast.LENGTH_SHORT).show();
-                    }
-                }
+                handlePlaylistClick(activity, from, position);
+            }
+        });
+
+        holder.blank_view.setOnClickListener(v -> {
+            MainActivity activity = (MainActivity) pContext;
+            if(activity != null) {
+                handlePlaylistClick(activity, from, position);
             }
         });
 
@@ -98,10 +98,22 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         });
 
         holder.add_to_this_playlist.setOnClickListener(v -> {
+            MainActivity activity = (MainActivity) pContext;
+            if(activity != null) {
+                handlePlaylistClick(activity, from, position);
+            }
+        });
+    }
+
+    private void handlePlaylistClick(MainActivity activity, int from, int position) {
+        if(from != AppConstants.FROM_SONGS_LIST) {
+            activity.updatePlaylistListForSelectedItem(list.get(position), position);
+        }
+        else {
             if(list.get(position).isPersistent()) {
                 Toast.makeText(pContext, "You can only modify playlists that you created", Toast.LENGTH_SHORT).show();
             }
-        });
+        }
     }
 
     @Override

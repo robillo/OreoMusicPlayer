@@ -189,12 +189,16 @@ public class SongsAdapter
 
         @BindView(R.id.title)
         TextView title;
+
         @BindView(R.id.artist_duration)
         TextView artistDuration;
+
         @BindView(R.id.song_card)
         CardView songCard;
+
         @BindView(R.id.linear_layout)
         LinearLayout linearLayout;
+
         @BindView(R.id.more)
         ImageButton moreButton;
 
