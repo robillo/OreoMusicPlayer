@@ -18,7 +18,8 @@
     <color name="colorTextThree">#D3D3D3</color>
     <color name="colorTextFour">#E8E8E8</color>
     <color name="colorTextFive">#F5F5F5</color>
-    <color name="colorBackground">#F5F7FA</color>
+    <color name="colorBackground">#f0f5fc</color>
+    <color name="colorNearWhite">#5ff7f7f9</color>
 
     <array name="colors">
         <item>#4990E2</item>
@@ -127,6 +128,7 @@
     <color name="on_board_three">#FFFFFF</color>
     <color name="on_board_four">#FFFFFF</color>
 
+    <color name="redButton">#fc4a4a</color>
     <color name="darkDarkRed">#7e000a</color>
     <color name="darkRed">#a6000d</color>
     <color name="rushRed">#cc0000</color>

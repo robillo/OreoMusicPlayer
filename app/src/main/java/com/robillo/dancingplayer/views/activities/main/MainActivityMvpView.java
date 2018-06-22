@@ -1,10 +1,12 @@
 package com.robillo.dancingplayer.views.activities.main;
 
+import com.robillo.dancingplayer.models.PlaylistRowItem;
 import com.robillo.dancingplayer.models.Song;
 import com.robillo.dancingplayer.services.MusicService;
 import com.robillo.dancingplayer.views.activities.main.song_play_frag.SongPlayFragmentSheet;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public interface MainActivityMvpView {
 
@@ -60,8 +62,18 @@ public interface MainActivityMvpView {
 
     void refreshSongListFragmentForSongDelete(Song song, int index);
 
+    //playlist bottom sheet calls
+
     void togglePlaylistBottomSheet();
 
     void setPlaylistBottomSheet();
+
+    void  setCurrentPlaylistAsHeader();
+
+    void loadPlaylistsIntoRecyclerView();
+
+    void setBehaviorCallbacks();
+
+    List<PlaylistRowItem> fetchPlaylistItems();
 
 }

@@ -20,4 +20,7 @@ interface PreferencesHelper {
     boolean isSongPlaying();
     void setIsSongPlaying(boolean isSongPlaying);
 
+    String getCurrentPlaylistTitle();
+    void setCurrentPlaylistTitle(String title);
+
 }

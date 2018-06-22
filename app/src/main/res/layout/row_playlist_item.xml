@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:layout_width="40sp"
+            android:layout_height="35sp"
+            android:padding="5sp"
+            android:src="@drawable/baseline_edit_black_48"
+            android:contentDescription="@string/edit"
+            android:tint="@color/colorTextOne"
+            android:id="@+id/edit_name"/>
+
+        <ImageView
+            android:layout_width="2sp"
+            android:layout_height="match_parent"
+            android:background="@color/colorNearWhite"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:layout_width="0sp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="My Favourites"
+            android:textSize="20sp"
+            android:padding="8sp"
+            android:textColor="@color/colorTextOne"
+            android:gravity="center"
+            tools:ignore="HardcodedText"
+            android:scrollHorizontally="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:singleLine="true"
+            android:ellipsize="marquee"
+            android:id="@+id/playlist_title"/>
+
+        <ImageView
+            android:layout_width="2sp"
+            android:layout_height="match_parent"
+            android:background="@color/colorNearWhite"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:layout_width="40sp"
+            android:layout_height="35sp"
+            android:padding="5sp"
+            android:src="@drawable/baseline_delete_forever_black_48"
+            android:contentDescription="@string/edit"
+            android:tint="@color/red2"
+            android:id="@+id/delete_playlist"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="2sp"
+        android:background="@color/colorBackground"
+        tools:ignore="ContentDescription,SmallSp" />
+
+</LinearLayout>

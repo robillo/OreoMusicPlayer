@@ -15,9 +15,10 @@ import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -31,6 +32,7 @@ import android.widget.Toast;
 import com.robillo.dancingplayer.R;
 import com.robillo.dancingplayer.events.PlayerStateNoSongPlayingEvent;
 import com.robillo.dancingplayer.events.SongChangeEvent;
+import com.robillo.dancingplayer.models.PlaylistRowItem;
 import com.robillo.dancingplayer.models.SetSeekBarEvent;
 import com.robillo.dancingplayer.models.Song;
 import com.robillo.dancingplayer.models.ThemeChangeEvent;
@@ -38,6 +40,8 @@ import com.robillo.dancingplayer.models.ThemeColors;
 import com.robillo.dancingplayer.preferences.AppPreferencesHelper;
 import com.robillo.dancingplayer.services.MusicService;
 import com.robillo.dancingplayer.utils.AppConstants;
+import com.robillo.dancingplayer.utils.ApplicationUtils;
+import com.robillo.dancingplayer.views.activities.main.adapters.PlaylistAdapter;
 import com.robillo.dancingplayer.views.activities.main.bottom_sheet.BottomSheetFragment;
 import com.robillo.dancingplayer.views.activities.main.song_list_frag.SongsListFragment;
 import com.robillo.dancingplayer.views.activities.main.song_play_frag.SongPlayFragmentSheet;
@@ -49,6 +53,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -65,11 +70,15 @@ import static com.robillo.dancingplayer.utils.AppConstants.COMPOSER;
 import static com.robillo.dancingplayer.utils.AppConstants.DATA;
 import static com.robillo.dancingplayer.utils.AppConstants.DATE_ADDED;
 import static com.robillo.dancingplayer.utils.AppConstants.DATE_MODIFIED;
+import static com.robillo.dancingplayer.utils.AppConstants.DEFAULT_PLAYLIST_TITLE;
 import static com.robillo.dancingplayer.utils.AppConstants.DURATION;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_ACTIVITY;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_FRAGMENT;
 import static com.robillo.dancingplayer.utils.AppConstants.ID;
 import static com.robillo.dancingplayer.utils.AppConstants.INDEX;
+import static com.robillo.dancingplayer.utils.AppConstants.MOST_PLAYED;
+import static com.robillo.dancingplayer.utils.AppConstants.RECENTLY_ADDED;
+import static com.robillo.dancingplayer.utils.AppConstants.RECENTLY_PLAYED;
 import static com.robillo.dancingplayer.utils.AppConstants.REQUEST_CODE;
 import static com.robillo.dancingplayer.utils.AppConstants.SIZE;
 import static com.robillo.dancingplayer.utils.AppConstants.TITLE;
@@ -88,6 +97,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     private ThemeColors currentUserThemeColors = null;
     @SuppressWarnings("FieldCanBeLocal")
     private AppPreferencesHelper helper = null;
+    private PlaylistAdapter playlistAdapter;
+    private List<PlaylistRowItem> playlistRowItems = new ArrayList<>();
 
     @SuppressWarnings("FieldCanBeLocal")
     private Song currentSong = null;
@@ -349,6 +360,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         else if(songsSortFragment != null) {
             super.onBackPressed();
         }
+        else if(playlistSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            playlistSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        }
         else {                                                          //don't remove song list fragment from activity
             Intent homeIntent = new Intent(Intent.ACTION_MAIN);
             homeIntent.addCategory(Intent.CATEGORY_HOME);
@@ -572,6 +586,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     //code for playlist bottom sheet
 
+    private String selectedPlaylist = null;
+
     @BindView(R.id.selected_playlist)
     TextView selectedPlaylistTv;
 
@@ -581,6 +597,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @BindView(R.id.layout_lift_burrow_playlists)
     LinearLayout liftBurrowPlaylists;
 
+    @BindView(R.id.playlist_recycler_view)
+    RecyclerView playlistRecyclerView;
+
     @OnClick(R.id.layout_lift_burrow_playlists)
     public void setLiftBurrowPlaylists() {
         togglePlaylistBottomSheet();
@@ -588,6 +607,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void setPlaylistBottomSheet() {
+        setBehaviorCallbacks();
+        setCurrentPlaylistAsHeader();
+        loadPlaylistsIntoRecyclerView();
+    }
+
+    @Override
+    public void setBehaviorCallbacks() {
         playlistSheetBehavior = BottomSheetBehavior.from(layoutPlaylistBottomSheet);
 
         playlistSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
@@ -616,6 +642,42 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
             }
         });
+    }
+
+    @Override
+    public void setCurrentPlaylistAsHeader() {
+        if(selectedPlaylist == null) {
+            selectedPlaylist = helper.getCurrentPlaylistTitle();
+        }
+        selectedPlaylistTv.setText(selectedPlaylist);
+    }
+
+    @Override
+    public void loadPlaylistsIntoRecyclerView() {
+        playlistRowItems = fetchPlaylistItems();
+        playlistAdapter = new PlaylistAdapter(playlistRowItems, this);
+        playlistRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        playlistRecyclerView.setAdapter(playlistAdapter);
+    }
+
+    @Override
+    public List<PlaylistRowItem> fetchPlaylistItems() {
+        List<PlaylistRowItem> list = new ArrayList<>();
+        list.add(new PlaylistRowItem(DEFAULT_PLAYLIST_TITLE, true));
+        list.add(new PlaylistRowItem(RECENTLY_ADDED, true));
+        list.add(new PlaylistRowItem(MOST_PLAYED, true));
+        list.add(new PlaylistRowItem(RECENTLY_PLAYED, true));
+        list.add(new PlaylistRowItem("My Favourites", false));
+        list.add(new PlaylistRowItem("Robillo Personal Songs", false));
+        list.add(new PlaylistRowItem("EDM", false));
+
+        PlaylistRowItem itemToDelete = null;
+
+        for(PlaylistRowItem item : list) if(item.getTitle().equals(selectedPlaylist)) { itemToDelete = item; break; }
+
+        list.remove(itemToDelete);
+
+        return list;
     }
 
     @Override

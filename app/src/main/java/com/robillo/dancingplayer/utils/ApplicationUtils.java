@@ -1,5 +1,7 @@
 package com.robillo.dancingplayer.utils;
 
+import com.robillo.dancingplayer.models.PlaylistRowItem;
+
 import java.util.Locale;
 
 public class ApplicationUtils {
@@ -23,7 +25,17 @@ public class ApplicationUtils {
     }
 
     public String formatSizeKBtoMB(float size) {
-
         return String.format("%s MB", String.format(Locale.ENGLISH, "%.2f", size/1024));
+    }
+
+    public PlaylistRowItem convertStringToPlaylistRowItem(String title) {
+        boolean isPersistent = false;
+
+        if(title.equals(AppConstants.DEFAULT_PLAYLIST_TITLE) || title.equals(AppConstants.MOST_PLAYED) ||
+                        title.equals(AppConstants.RECENTLY_ADDED) || title.equals(AppConstants.RECENTLY_PLAYED)) {
+            isPersistent = true;
+        }
+
+        return new PlaylistRowItem(title, isPersistent);
     }
 }
