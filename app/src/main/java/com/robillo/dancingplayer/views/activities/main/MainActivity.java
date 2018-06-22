@@ -75,9 +75,11 @@ import static com.robillo.dancingplayer.utils.AppConstants.DATE_ADDED;
 import static com.robillo.dancingplayer.utils.AppConstants.DATE_MODIFIED;
 import static com.robillo.dancingplayer.utils.AppConstants.DEFAULT_PLAYLIST_TITLE;
 import static com.robillo.dancingplayer.utils.AppConstants.DURATION;
+import static com.robillo.dancingplayer.utils.AppConstants.FIRST_LOAD;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_ACTIVITY;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_BOTTOM_CONTROLLER;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_FRAGMENT;
+import static com.robillo.dancingplayer.utils.AppConstants.FROM_PLAYLIST;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_SONGS_LIST;
 import static com.robillo.dancingplayer.utils.AppConstants.ID;
 import static com.robillo.dancingplayer.utils.AppConstants.INDEX;
@@ -624,7 +626,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     public void setPlaylistBottomSheet() {
         setBehaviorCallbacks();
         setCurrentPlaylistAsHeader();
-        loadPlaylistsIntoRecyclerView();
+        loadPlaylistsIntoRecyclerView(FROM_BOTTOM_CONTROLLER);
     }
 
     @Override
@@ -686,12 +688,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @Override
-    public void loadPlaylistsIntoRecyclerView() {
+    public void loadPlaylistsIntoRecyclerView(int from) {
         playlistRowItems = fetchPlaylistItems();
-        playlistAdapter = new PlaylistAdapter(playlistRowItems, this);
+        playlistAdapter = new PlaylistAdapter(playlistRowItems, this, from);
         playlistRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        hidePlaylistBottomSheet();
+        if(from == FIRST_LOAD) hidePlaylistBottomSheet();
 
         playlistRecyclerView.setAdapter(playlistAdapter);
     }
@@ -726,8 +728,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
         playlistRowItems.add(selectedPlaylist);
 
-        loadPlaylistsIntoRecyclerView();
-
+        loadPlaylistsIntoRecyclerView(FROM_PLAYLIST);
     }
 
     @Override
@@ -754,6 +755,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
                 }, 100);
             }
         }
+
+        loadPlaylistsIntoRecyclerView(from);
     }
 
     @Override

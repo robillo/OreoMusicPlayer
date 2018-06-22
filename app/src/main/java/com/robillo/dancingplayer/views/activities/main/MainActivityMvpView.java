@@ -70,7 +70,7 @@ public interface MainActivityMvpView {
 
     void  setCurrentPlaylistAsHeader();
 
-    void loadPlaylistsIntoRecyclerView();
+    void loadPlaylistsIntoRecyclerView(int from);
 
     void setBehaviorCallbacks();
 

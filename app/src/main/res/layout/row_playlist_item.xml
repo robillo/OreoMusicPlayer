@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:id="@+id/background_view">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,14 +12,26 @@
         android:orientation="horizontal"
         android:gravity="center_vertical">
 
-        <ImageView
+        <FrameLayout
             android:layout_width="40sp"
-            android:layout_height="35sp"
-            android:padding="5sp"
-            android:src="@drawable/baseline_edit_black_48"
-            android:contentDescription="@string/edit"
-            android:tint="@color/app1"
-            android:id="@+id/edit_name"/>
+            android:layout_height="35sp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/blank_view"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="5sp"
+                android:src="@drawable/baseline_edit_black_48"
+                android:contentDescription="@string/edit"
+                android:tint="@color/app1"
+                android:id="@+id/edit_name"/>
+
+        </FrameLayout>
 
         <ImageView
             android:layout_width="2sp"
@@ -48,14 +61,30 @@
             android:background="@color/colorNearWhite"
             tools:ignore="ContentDescription" />
 
-        <ImageView
+        <FrameLayout
             android:layout_width="40sp"
-            android:layout_height="35sp"
-            android:padding="5sp"
-            android:src="@drawable/baseline_delete_forever_black_48"
-            android:contentDescription="@string/edit"
-            android:tint="@color/red2"
-            android:id="@+id/delete_playlist"/>
+            android:layout_height="35sp">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="5sp"
+                android:src="@drawable/baseline_add_black_48"
+                android:contentDescription="@string/edit"
+                android:tint="@color/green_primary"
+                android:id="@+id/add_to_this_playlist"
+                android:visibility="gone"/>
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="5sp"
+                android:src="@drawable/baseline_delete_forever_black_48"
+                android:contentDescription="@string/edit"
+                android:tint="@color/red2"
+                android:id="@+id/delete_playlist"/>
+
+        </FrameLayout>
 
     </LinearLayout>
 

@@ -77,6 +77,9 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
     @BindView(R.id.add_to_playlist)
     LinearLayout addToPlaylist;
 
+    @BindView(R.id.remove_from_playlist)
+    LinearLayout removeFromPlaylist;
+
     public BottomSheetFragment() {
         // Required empty public constructor
     }
@@ -183,5 +186,10 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
             activity.hideOrRemoveBottomSheet();
             activity.showPlaylistBottomSheet(FROM_SONGS_LIST);
         }
+    }
+
+    @OnClick(R.id.remove_from_playlist)
+    public void removeFromPlaylist() {
+
     }
 }

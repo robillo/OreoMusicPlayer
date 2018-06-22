@@ -29,18 +29,23 @@
             android:contentDescription="@string/up_down_playlist_fragment" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="0sp"
             android:layout_height="50sp"
+            android:layout_weight="1"
             android:text="All Songs"
             android:textSize="20sp"
             android:textColor="@color/colorBackground"
-            android:gravity="start|center_vertical"
+            android:gravity="center"
             tools:ignore="HardcodedText,RtlHardcoded"
             android:id="@+id/selected_playlist"
             android:scrollHorizontally="true"
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
             android:ellipsize="marquee"/>
+
+        <View
+            android:layout_width="50sp"
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 

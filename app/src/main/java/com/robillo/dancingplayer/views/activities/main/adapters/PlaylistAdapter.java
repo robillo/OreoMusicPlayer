@@ -8,11 +8,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.robillo.dancingplayer.R;
 import com.robillo.dancingplayer.models.PlaylistRowItem;
+import com.robillo.dancingplayer.utils.AppConstants;
 import com.robillo.dancingplayer.views.activities.main.MainActivity;
 
 import java.util.List;
@@ -26,10 +28,12 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
 
     private List<PlaylistRowItem> list;
     private Context pContext;
+    private int from;
 
-    public PlaylistAdapter(List<PlaylistRowItem> list, Context pContext) {
+    public PlaylistAdapter(List<PlaylistRowItem> list, Context pContext, int from) {
         this.list = list;
         this.pContext = pContext;
+        this.from = from;
     }
 
     @NonNull
@@ -44,18 +48,45 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
     @Override
     public void onBindViewHolder(@NonNull PlaylistHolder holder, int position) {
         holder.playlist_title.setText(list.get(position).getTitle());
-        if(list.get(position).isPersistent()) {
-            holder.delete_playlist.setVisibility(View.GONE);
-            holder.edit_name.setVisibility(View.GONE);
+
+        if(from != AppConstants.FROM_SONGS_LIST) {
+            if(list.get(position).isPersistent()) {
+                holder.delete_playlist.setVisibility(View.GONE);
+                holder.edit_name.setVisibility(View.GONE);
+            }
+            else {
+                holder.delete_playlist.setVisibility(View.VISIBLE);
+                holder.edit_name.setVisibility(View.VISIBLE);
+            }
         }
         else {
-            holder.delete_playlist.setVisibility(View.VISIBLE);
-            holder.edit_name.setVisibility(View.VISIBLE);
+            holder.delete_playlist.setVisibility(View.GONE);
+            holder.edit_name.setVisibility(View.GONE);
+
+            if(list.get(position).isPersistent()) {
+                holder.blank_view.setVisibility(View.GONE);
+                holder.add_to_this_playlist.setVisibility(View.GONE);
+                holder.playlist_title.setTextColor(pContext.getResources().getColor(R.color.colorTextThree));
+            }
+            else {
+                holder.blank_view.setVisibility(View.VISIBLE);
+                holder.add_to_this_playlist.setVisibility(View.VISIBLE);
+                holder.playlist_title.setTextColor(pContext.getResources().getColor(R.color.colorTextOne));
+            }
         }
 
         holder.playlist_title.setOnClickListener(v -> {
             MainActivity activity = (MainActivity) pContext;
-            if(activity != null) activity.updatePlaylistListForSelectedItem(list.get(position), position);
+            if(activity != null) {
+                if(from != AppConstants.FROM_SONGS_LIST) {
+                    activity.updatePlaylistListForSelectedItem(list.get(position), position);
+                }
+                else {
+                    if(list.get(position).isPersistent()) {
+                        Toast.makeText(pContext, "You can only modify playlists that you created", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
         });
 
         holder.edit_name.setOnClickListener(v -> {
@@ -65,6 +96,12 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         holder.delete_playlist.setOnClickListener(v -> {
             Toast.makeText(pContext, "delete playlist", Toast.LENGTH_SHORT).show();
         });
+
+        holder.add_to_this_playlist.setOnClickListener(v -> {
+            if(list.get(position).isPersistent()) {
+                Toast.makeText(pContext, "You can only modify playlists that you created", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -73,6 +110,15 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
     }
 
     class PlaylistHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.background_view)
+        LinearLayout background_view;
+
+        @BindView(R.id.add_to_this_playlist)
+        ImageView add_to_this_playlist;
+
+        @BindView(R.id.blank_view)
+        View blank_view;
 
         @BindView(R.id.edit_name)
         ImageView edit_name;
