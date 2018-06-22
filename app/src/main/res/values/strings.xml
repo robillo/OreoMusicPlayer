@@ -51,4 +51,5 @@
     <string name="up_down_playlist_fragment">Up Down Playlist Fragment</string>
     <string name="create_new">CREATE NEW</string>
     <string name="edit">edit</string>
+    <string name="add_to_playlist">Add To Playlist</string>
 </resources>

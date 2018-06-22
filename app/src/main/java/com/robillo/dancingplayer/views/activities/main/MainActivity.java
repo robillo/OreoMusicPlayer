@@ -5,6 +5,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
@@ -17,11 +18,13 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -97,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     private ThemeColors currentUserThemeColors = null;
     @SuppressWarnings("FieldCanBeLocal")
     private AppPreferencesHelper helper = null;
+    @SuppressWarnings("FieldCanBeLocal")
     private PlaylistAdapter playlistAdapter;
     private List<PlaylistRowItem> playlistRowItems = new ArrayList<>();
 
@@ -249,7 +253,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             bundle.putString(SIZE, song.getSize());
             bundle.putString(YEAR, song.getYear());
             bottomSheetFragment.setArguments(bundle);
-            bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
+
+            if(playlistSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                hidePlaylistBottomSheet();
+                new Handler().postDelayed(() -> bottomSheetFragment
+                        .show(getSupportFragmentManager(), bottomSheetFragment.getTag()), 350);
+            }
+            else
+                bottomSheetFragment
+                        .show(getSupportFragmentManager(), bottomSheetFragment.getTag());
+
         }
         else {
             bottomSheetFragment = new BottomSheetFragment();
@@ -350,7 +363,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void onBackPressed() {
-
         Fragment songPlayFragment = getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play));
         Fragment songsSortFragment = getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_sort));
 
@@ -361,7 +373,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             super.onBackPressed();
         }
         else if(playlistSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
-            playlistSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            hidePlaylistBottomSheet();
         }
         else {                                                          //don't remove song list fragment from activity
             Intent homeIntent = new Intent(Intent.ACTION_MAIN);
@@ -537,14 +549,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public int getDuration() {
-//        if(musicService!=null && musicBound && musicService.isPlaying()) return musicService.getDuration();
         if(musicService!=null && musicBound) return musicService.getDuration();
         else return 0;
     }
 
     @Override
     public int getCurrentPosition() {
-//        if(musicService!=null && musicBound && musicService.isPlaying()) return musicService.getPosition();
         if(musicService!=null && musicBound) return musicService.getPosition();
         else return 0;
     }
@@ -586,7 +596,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     //code for playlist bottom sheet
 
-    private String selectedPlaylist = null;
+    private PlaylistRowItem selectedPlaylist = null;
+
+    @BindView(R.id.create_new_playlist)
+    Button createNewPlaylist;
 
     @BindView(R.id.selected_playlist)
     TextView selectedPlaylistTv;
@@ -647,9 +660,27 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Override
     public void setCurrentPlaylistAsHeader() {
         if(selectedPlaylist == null) {
-            selectedPlaylist = helper.getCurrentPlaylistTitle();
+            selectedPlaylist = new ApplicationUtils().convertStringToPlaylistRowItem(helper.getCurrentPlaylistTitle());
         }
-        selectedPlaylistTv.setText(selectedPlaylist);
+
+        Animation animation = AnimationUtils.loadAnimation(this, R.anim.item_animation_fall_down);
+        animation.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+                selectedPlaylistTv.setText(selectedPlaylist.getTitle());
+            }
+
+            @Override
+            public void onAnimationEnd(Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationRepeat(Animation animation) {
+
+            }
+        });
+        selectedPlaylistTv.startAnimation(animation);
     }
 
     @Override
@@ -657,6 +688,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         playlistRowItems = fetchPlaylistItems();
         playlistAdapter = new PlaylistAdapter(playlistRowItems, this);
         playlistRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        hidePlaylistBottomSheet();
+
         playlistRecyclerView.setAdapter(playlistAdapter);
     }
 
@@ -673,11 +707,33 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
         PlaylistRowItem itemToDelete = null;
 
-        for(PlaylistRowItem item : list) if(item.getTitle().equals(selectedPlaylist)) { itemToDelete = item; break; }
+        for(PlaylistRowItem item : list) if(item.getTitle().equals(selectedPlaylist.getTitle())) { selectedPlaylist = item;itemToDelete = item; break; }
 
         list.remove(itemToDelete);
 
         return list;
+    }
+
+    @Override
+    public void updatePlaylistListForSelectedItem(PlaylistRowItem playlistRowItem, int position) {
+        playlistRowItems.remove(selectedPlaylist);
+
+        selectedPlaylist = playlistRowItem;
+        helper.setCurrentPlaylistTitle(selectedPlaylist.getTitle());
+        setCurrentPlaylistAsHeader();
+
+        playlistRowItems.add(selectedPlaylist);
+
+        loadPlaylistsIntoRecyclerView();
+
+    }
+
+    @Override
+    public void hidePlaylistBottomSheet() {
+        if (playlistSheetBehavior != null && playlistSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+            playlistSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+            imageUpDownPlaylist.animate().rotation(0).start();
+        }
     }
 
     @Override
@@ -689,5 +745,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             playlistSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
             imageUpDownPlaylist.animate().rotation(0).start();
         }
+    }
+
+    @OnClick(R.id.create_new_playlist)
+    public void createNewPlaylist() {
+        Toast.makeText(this, "Create New Playlist", Toast.LENGTH_SHORT).show();
     }
 }

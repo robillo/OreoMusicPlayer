@@ -73,6 +73,9 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
     @BindView(R.id.rate_app)
     LinearLayout rateApp;
 
+    @BindView(R.id.add_to_playlist)
+    LinearLayout addToPlaylist;
+
     public BottomSheetFragment() {
         // Required empty public constructor
     }
@@ -170,5 +173,10 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
                         Uri.parse("http://play.google.com/store/apps/details?id=" + getActivity().getPackageName())));
             }
         }
+    }
+
+    @OnClick(R.id.add_to_playlist)
+    public void addToPlaylist() {
+        Toast.makeText(getActivity(), "Add To Playlist", Toast.LENGTH_SHORT).show();
     }
 }

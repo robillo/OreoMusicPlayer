@@ -17,7 +17,7 @@
             android:padding="5sp"
             android:src="@drawable/baseline_edit_black_48"
             android:contentDescription="@string/edit"
-            android:tint="@color/colorTextOne"
+            android:tint="@color/app1"
             android:id="@+id/edit_name"/>
 
         <ImageView

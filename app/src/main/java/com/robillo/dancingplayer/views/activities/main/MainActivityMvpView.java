@@ -76,4 +76,8 @@ public interface MainActivityMvpView {
 
     List<PlaylistRowItem> fetchPlaylistItems();
 
+    void updatePlaylistListForSelectedItem(PlaylistRowItem playlistRowItem, int position);
+
+    void hidePlaylistBottomSheet();
+
 }
