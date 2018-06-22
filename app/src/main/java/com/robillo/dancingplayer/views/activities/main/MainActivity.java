@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void playSong(int songIndex) {
-        musicService.setSong(songIndex);
+        if(musicService != null) musicService.setSong(songIndex);
     }
 
     @Override
@@ -645,6 +645,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
                     break;
                     case BottomSheetBehavior.STATE_COLLAPSED: {
                         imageUpDownPlaylist.animate().rotation(0).start();
+                        loadPlaylistsIntoRecyclerView(FROM_BOTTOM_CONTROLLER);
                     }
                     break;
                     case BottomSheetBehavior.STATE_DRAGGING:
@@ -728,7 +729,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
         playlistRowItems.add(selectedPlaylist);
 
-        loadPlaylistsIntoRecyclerView(FROM_PLAYLIST);
+        loadPlaylistsIntoRecyclerView(FIRST_LOAD);
     }
 
     @Override

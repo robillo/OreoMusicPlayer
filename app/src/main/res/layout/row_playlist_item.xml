@@ -29,7 +29,8 @@
                 android:src="@drawable/baseline_edit_black_48"
                 android:contentDescription="@string/edit"
                 android:tint="@color/app1"
-                android:id="@+id/edit_name"/>
+                android:id="@+id/edit_name"
+                android:background="@drawable/button_impression"/>
 
         </FrameLayout>
 
@@ -47,13 +48,14 @@
             android:textSize="20sp"
             android:padding="8sp"
             android:textColor="@color/colorTextOne"
-            android:gravity="center"
+            android:gravity="start"
             tools:ignore="HardcodedText"
             android:scrollHorizontally="true"
             android:marqueeRepeatLimit="marquee_forever"
             android:singleLine="true"
             android:ellipsize="marquee"
-            android:id="@+id/playlist_title"/>
+            android:id="@+id/playlist_title"
+            android:background="@drawable/button_impression"/>
 
         <ImageView
             android:layout_width="2sp"
@@ -73,7 +75,8 @@
                 android:contentDescription="@string/edit"
                 android:tint="@color/green_primary"
                 android:id="@+id/add_to_this_playlist"
-                android:visibility="gone"/>
+                android:visibility="gone"
+                android:background="@drawable/button_impression"/>
 
             <ImageView
                 android:layout_width="match_parent"
@@ -82,7 +85,8 @@
                 android:src="@drawable/baseline_delete_forever_black_48"
                 android:contentDescription="@string/edit"
                 android:tint="@color/red2"
-                android:id="@+id/delete_playlist"/>
+                android:id="@+id/delete_playlist"
+                android:background="@drawable/button_impression"/>
 
         </FrameLayout>
 
