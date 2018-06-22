@@ -90,7 +90,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         });
 
         holder.edit_name.setOnClickListener(v -> {
-            ((MainActivity) pContext).showEditCreateDialogFragment(AppConstants.EDIT_PLAYLIST_NAME);
+            ((MainActivity) pContext).showEditCreateDialogFragment(AppConstants.EDIT_PLAYLIST_NAME, position);
         });
 
         holder.delete_playlist.setOnClickListener(v -> {
@@ -114,6 +114,10 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
                 Toast.makeText(pContext, "You can only modify playlists that you created", Toast.LENGTH_SHORT).show();
             }
         }
+    }
+
+    public void addItem(PlaylistRowItem item) {
+        list.add(item);
     }
 
     @Override

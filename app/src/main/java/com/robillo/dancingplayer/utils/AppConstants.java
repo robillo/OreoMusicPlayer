@@ -84,6 +84,7 @@ public class AppConstants {
     public static final int FROM_BOTTOM_CONTROLLER = 1;
     public static final int FROM_PLAYLIST = 1;
     public static final int FIRST_LOAD = 2;
+    public static final int MODIFY = 3;
 
     //EditDialogFragment
     public static final int CREATE_NEW_PLAYLIST = 0;
@@ -92,6 +93,7 @@ public class AppConstants {
     public static final String EDIT_PLAYLIST_NAME_STRING = "Edit Playlist Name";
     //bundle constant param
     public static final String FROM = "FROM";
+    public static final String POSITION = "POSITION";
 
     //SongListFragment SortOrder
     public static final String ASCENDING = "ASC";

@@ -2,6 +2,7 @@ package com.robillo.dancingplayer.views.activities.main.EditDialogFragment;
 
 import android.app.DialogFragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.robillo.dancingplayer.R;
+import com.robillo.dancingplayer.views.activities.main.MainActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,12 +22,14 @@ import static com.robillo.dancingplayer.utils.AppConstants.CREATE_NEW_PLAYLIST_S
 import static com.robillo.dancingplayer.utils.AppConstants.EDIT_PLAYLIST_NAME;
 import static com.robillo.dancingplayer.utils.AppConstants.EDIT_PLAYLIST_NAME_STRING;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM;
+import static com.robillo.dancingplayer.utils.AppConstants.POSITION;
 
 public class EditDialogFragment extends DialogFragment implements EditDialogMvpView {
 
     @SuppressWarnings("FieldCanBeLocal")
     private Bundle args;
     private int from;
+    private int position = -1;
 
     @BindView(R.id.done)
     TextView done;
@@ -54,11 +58,15 @@ public class EditDialogFragment extends DialogFragment implements EditDialogMvpV
             Toast.makeText(getActivity(), R.string.enter_playlist_name, Toast.LENGTH_SHORT).show();
         }
         else {
+            MainActivity activity = (MainActivity) getActivity();
+
             if(from == EDIT_PLAYLIST_NAME) {
-                //change playlist name in activity list as well as recycler list and re-render recycler
+                Log.e("tag", editText.getText().toString());
+                if(activity != null) activity.handleEditPlaylistName(editText.getText().toString(), position);
+
             }
             else if(from == CREATE_NEW_PLAYLIST) {
-                //create new playlist, add playlist item in activity list as well as recycler list and re-render recycler
+                if(activity != null) activity.handleCreateNewPlaylist(editText.getText().toString());
             }
             this.dismiss();
         }
@@ -85,6 +93,7 @@ public class EditDialogFragment extends DialogFragment implements EditDialogMvpV
         args = getArguments();
         if(args != null) {
             from = args.getInt(FROM);
+            position = args.getInt(POSITION);
 
             if(from == EDIT_PLAYLIST_NAME) {
                 header.setText(EDIT_PLAYLIST_NAME_STRING);

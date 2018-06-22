@@ -82,6 +82,14 @@ public interface MainActivityMvpView {
 
     void showPlaylistBottomSheet(int from);
 
-    void showEditCreateDialogFragment(int from);
+    void showEditCreateDialogFragment(int from, int position);
+
+    void handleCreateNewPlaylist(String text);
+
+    void handleEditPlaylistName(String text, int position);
+
+    void createTablePlaylist(String playlistName);
+
+    void modifyPlaylistNameInDb(String playlistName);
 
 }
