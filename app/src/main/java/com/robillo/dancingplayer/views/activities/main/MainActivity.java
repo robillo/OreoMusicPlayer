@@ -44,6 +44,7 @@ import com.robillo.dancingplayer.preferences.AppPreferencesHelper;
 import com.robillo.dancingplayer.services.MusicService;
 import com.robillo.dancingplayer.utils.AppConstants;
 import com.robillo.dancingplayer.utils.ApplicationUtils;
+import com.robillo.dancingplayer.views.activities.main.EditDialogFragment.EditDialogFragment;
 import com.robillo.dancingplayer.views.activities.main.adapters.PlaylistAdapter;
 import com.robillo.dancingplayer.views.activities.main.bottom_sheet.BottomSheetFragment;
 import com.robillo.dancingplayer.views.activities.main.song_list_frag.SongsListFragment;
@@ -70,12 +71,14 @@ import static com.robillo.dancingplayer.utils.AppConstants.ARTIST;
 import static com.robillo.dancingplayer.utils.AppConstants.ARTIST_ID;
 import static com.robillo.dancingplayer.utils.AppConstants.ARTIST_KEY;
 import static com.robillo.dancingplayer.utils.AppConstants.COMPOSER;
+import static com.robillo.dancingplayer.utils.AppConstants.CREATE_NEW_PLAYLIST;
 import static com.robillo.dancingplayer.utils.AppConstants.DATA;
 import static com.robillo.dancingplayer.utils.AppConstants.DATE_ADDED;
 import static com.robillo.dancingplayer.utils.AppConstants.DATE_MODIFIED;
 import static com.robillo.dancingplayer.utils.AppConstants.DEFAULT_PLAYLIST_TITLE;
 import static com.robillo.dancingplayer.utils.AppConstants.DURATION;
 import static com.robillo.dancingplayer.utils.AppConstants.FIRST_LOAD;
+import static com.robillo.dancingplayer.utils.AppConstants.FROM;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_ACTIVITY;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_BOTTOM_CONTROLLER;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_FRAGMENT;
@@ -761,6 +764,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @Override
+    public void showEditCreateDialogFragment(int from) {
+        EditDialogFragment fragment = new EditDialogFragment();
+        Bundle args = new Bundle();
+        args.putInt(FROM, from);
+        fragment.setArguments(args);
+        fragment.show(getFragmentManager(), getString(R.string.edit_dialog_fragment));
+    }
+
+    @Override
     public void togglePlaylistBottomSheet() {
         if (playlistSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
             playlistSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -773,6 +785,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @OnClick(R.id.create_new_playlist)
     public void createNewPlaylist() {
-        Toast.makeText(this, "Create New Playlist", Toast.LENGTH_SHORT).show();
+        showEditCreateDialogFragment(CREATE_NEW_PLAYLIST);
     }
 }

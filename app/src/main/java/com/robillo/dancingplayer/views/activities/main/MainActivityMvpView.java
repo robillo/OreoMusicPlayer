@@ -82,4 +82,6 @@ public interface MainActivityMvpView {
 
     void showPlaylistBottomSheet(int from);
 
+    void showEditCreateDialogFragment(int from);
+
 }
