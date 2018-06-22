@@ -648,6 +648,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
                     break;
                     case BottomSheetBehavior.STATE_COLLAPSED: {
                         imageUpDownPlaylist.animate().rotation(0).start();
+                        createNewPlaylist.setVisibility(View.VISIBLE);
                         loadPlaylistsIntoRecyclerView(FROM_BOTTOM_CONTROLLER);
                     }
                     break;
@@ -752,6 +753,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             }
         }
         else if(from == FROM_SONGS_LIST) {
+            createNewPlaylist.setVisibility(View.GONE);
             if (playlistSheetBehavior != null && playlistSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
                 new Handler().postDelayed(() -> {
                     playlistSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
