@@ -11,7 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.robillo.dancingplayer.R;
-import com.robillo.dancingplayer.models.ThemeChangeEvent;
+import com.robillo.dancingplayer.events.ThemeChangeEvent;
 import com.robillo.dancingplayer.models.ThemeColors;
 import com.robillo.dancingplayer.preferences.AppPreferencesHelper;
 import com.robillo.dancingplayer.views.activities.theme_change.ThemeChangeActivity;

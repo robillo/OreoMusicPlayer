@@ -1,4 +1,4 @@
-package com.robillo.dancingplayer.models;
+package com.robillo.dancingplayer.events;
 
 public class ThemeChangeEvent {
 

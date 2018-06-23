@@ -9,6 +9,9 @@ import java.util.HashMap;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class AppConstants {
 
+    //DATABASE STUFF
+    public static final String SONGS_DATABASE_NAME = "songs_database.db";
+
     public static final String INDEX = "index_number";
 
     public static final String DATA = "data";

@@ -1,8 +1,5 @@
 package com.robillo.dancingplayer.models;
 
-import android.graphics.Color;
-
-@SuppressWarnings("unused")
 public class ThemeColors {
 
     private int colorPrimary, colorPrimaryDark, colorAccent, colorMat;

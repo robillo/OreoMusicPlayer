@@ -38,7 +38,7 @@ import com.robillo.dancingplayer.events.SongChangeEvent;
 import com.robillo.dancingplayer.models.PlaylistRowItem;
 import com.robillo.dancingplayer.models.SetSeekBarEvent;
 import com.robillo.dancingplayer.models.Song;
-import com.robillo.dancingplayer.models.ThemeChangeEvent;
+import com.robillo.dancingplayer.events.ThemeChangeEvent;
 import com.robillo.dancingplayer.models.ThemeColors;
 import com.robillo.dancingplayer.preferences.AppPreferencesHelper;
 import com.robillo.dancingplayer.services.MusicService;
