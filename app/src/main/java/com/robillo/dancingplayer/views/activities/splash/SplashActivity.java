@@ -20,6 +20,9 @@ import com.robillo.dancingplayer.utils.AppConstants;
 import com.robillo.dancingplayer.views.activities.launcher.LauncherActivity;
 import com.robillo.dancingplayer.views.activities.main.MainActivity;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -48,6 +51,7 @@ public class SplashActivity extends AppCompatActivity implements SplashMvpView {
     @Override
     public void setup() {
         checkForPermissions();
+        setupFirstLoadUserPlaylistItems();
 
         ThemeColors colors = AppConstants
                 .themeMap
@@ -78,6 +82,21 @@ public class SplashActivity extends AppCompatActivity implements SplashMvpView {
                         checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                                 && checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                                 && checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+    @Override
+    public void setupFirstLoadUserPlaylistItems() {
+        AppPreferencesHelper helper = new AppPreferencesHelper(this);
+        Set<String> playlistSet = helper.getPlaylistSet();
+        if(playlistSet == null) {
+            playlistSet = new HashSet<>();
+            playlistSet.add(AppConstants.DEFAULT_PLAYLIST_TITLE);
+            playlistSet.add(AppConstants.MOST_PLAYED);
+            playlistSet.add(AppConstants.RECENTLY_ADDED);
+            playlistSet.add(AppConstants.RECENTLY_PLAYED);
+            helper.setPlaylistSet(playlistSet);
+        }
+
     }
 
     @Override

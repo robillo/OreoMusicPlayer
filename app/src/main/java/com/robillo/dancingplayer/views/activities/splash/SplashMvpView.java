@@ -5,4 +5,7 @@ public interface SplashMvpView {
     void setup();
 
     void checkForPermissions();
+
+    void setupFirstLoadUserPlaylistItems();
+
 }

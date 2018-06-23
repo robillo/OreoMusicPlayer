@@ -40,6 +40,7 @@ public class AppConstants {
     public static final String KEY_USER_THEME_NAME = "theme_name";
     public static final String KEY_IS_SONG_PLAYING = "is_song_playing";
     public static final String KEY_CURRENT_PLAYLIST_TITLE = "current_playlist_title";
+    public static final String KEY_PLAYLIST_STRING_SET = "playlist_string_set";
 
     //default playlist title
     public static final String DEFAULT_PLAYLIST_TITLE = "All Songs";
@@ -94,6 +95,7 @@ public class AppConstants {
     //bundle constant param
     public static final String FROM = "FROM";
     public static final String POSITION = "POSITION";
+    public static final String OLD_PLAYLIST_NAME = "OLD_PLAYLIST_NAME";
 
     //SongListFragment SortOrder
     public static final String ASCENDING = "ASC";

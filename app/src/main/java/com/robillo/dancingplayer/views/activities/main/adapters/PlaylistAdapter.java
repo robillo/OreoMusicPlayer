@@ -90,11 +90,13 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         });
 
         holder.edit_name.setOnClickListener(v -> {
-            ((MainActivity) pContext).showEditCreateDialogFragment(AppConstants.EDIT_PLAYLIST_NAME, position);
+            ((MainActivity) pContext)
+                    .showEditCreateDialogFragment(AppConstants.EDIT_PLAYLIST_NAME, position, list.get(position).getTitle());
         });
 
         holder.delete_playlist.setOnClickListener(v -> {
-            Toast.makeText(pContext, "delete playlist", Toast.LENGTH_SHORT).show();
+            ((MainActivity) pContext)
+                    .handleDeletePlaylist(list.get(position).getTitle());
         });
 
         holder.add_to_this_playlist.setOnClickListener(v -> {

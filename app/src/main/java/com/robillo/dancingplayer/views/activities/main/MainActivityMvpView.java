@@ -64,6 +64,8 @@ public interface MainActivityMvpView {
 
     //playlist bottom sheet calls
 
+    void loadPlaylistItems();
+
     void togglePlaylistBottomSheet();
 
     void setPlaylistBottomSheet();
@@ -74,19 +76,21 @@ public interface MainActivityMvpView {
 
     void setBehaviorCallbacks();
 
-    List<PlaylistRowItem> fetchPlaylistItems();
-
     void updatePlaylistListForSelectedItem(PlaylistRowItem playlistRowItem, int position);
 
     void hidePlaylistBottomSheet();
 
     void showPlaylistBottomSheet(int from);
 
-    void showEditCreateDialogFragment(int from, int position);
+    void showEditCreateDialogFragment(int from, int position, String oldPlaylistName);
 
-    void handleCreateNewPlaylist(String text);
+    void handleCreateNewPlaylist(String playlistName);
 
-    void handleEditPlaylistName(String text, int position);
+    void handleEditPlaylistName(String newPlaylistName, int position, String oldPlaylistName);
+
+    void handleDeletePlaylist(String playlistName);
+
+    void deletePlaylistInDb(String playlistName);
 
     void createTablePlaylist(String playlistName);
 

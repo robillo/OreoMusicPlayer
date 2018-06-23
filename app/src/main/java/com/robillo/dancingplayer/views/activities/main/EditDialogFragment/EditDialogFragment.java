@@ -22,6 +22,7 @@ import static com.robillo.dancingplayer.utils.AppConstants.CREATE_NEW_PLAYLIST_S
 import static com.robillo.dancingplayer.utils.AppConstants.EDIT_PLAYLIST_NAME;
 import static com.robillo.dancingplayer.utils.AppConstants.EDIT_PLAYLIST_NAME_STRING;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM;
+import static com.robillo.dancingplayer.utils.AppConstants.OLD_PLAYLIST_NAME;
 import static com.robillo.dancingplayer.utils.AppConstants.POSITION;
 
 public class EditDialogFragment extends DialogFragment implements EditDialogMvpView {
@@ -29,6 +30,7 @@ public class EditDialogFragment extends DialogFragment implements EditDialogMvpV
     @SuppressWarnings("FieldCanBeLocal")
     private Bundle args;
     private int from;
+    private String oldPlaylistName;
     private int position = -1;
 
     @BindView(R.id.done)
@@ -62,7 +64,7 @@ public class EditDialogFragment extends DialogFragment implements EditDialogMvpV
 
             if(from == EDIT_PLAYLIST_NAME) {
                 Log.e("tag", editText.getText().toString());
-                if(activity != null) activity.handleEditPlaylistName(editText.getText().toString(), position);
+                if(activity != null) activity.handleEditPlaylistName(editText.getText().toString(), position, oldPlaylistName);
 
             }
             else if(from == CREATE_NEW_PLAYLIST) {
@@ -94,6 +96,7 @@ public class EditDialogFragment extends DialogFragment implements EditDialogMvpV
         if(args != null) {
             from = args.getInt(FROM);
             position = args.getInt(POSITION);
+            oldPlaylistName = args.getString(OLD_PLAYLIST_NAME);
 
             if(from == EDIT_PLAYLIST_NAME) {
                 header.setText(EDIT_PLAYLIST_NAME_STRING);

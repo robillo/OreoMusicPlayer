@@ -18,7 +18,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -76,23 +75,18 @@ import static com.robillo.dancingplayer.utils.AppConstants.CREATE_NEW_PLAYLIST;
 import static com.robillo.dancingplayer.utils.AppConstants.DATA;
 import static com.robillo.dancingplayer.utils.AppConstants.DATE_ADDED;
 import static com.robillo.dancingplayer.utils.AppConstants.DATE_MODIFIED;
-import static com.robillo.dancingplayer.utils.AppConstants.DEFAULT_PLAYLIST_TITLE;
 import static com.robillo.dancingplayer.utils.AppConstants.DURATION;
-import static com.robillo.dancingplayer.utils.AppConstants.EDIT_PLAYLIST_NAME;
 import static com.robillo.dancingplayer.utils.AppConstants.FIRST_LOAD;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_ACTIVITY;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_BOTTOM_CONTROLLER;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_FRAGMENT;
-import static com.robillo.dancingplayer.utils.AppConstants.FROM_PLAYLIST;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_SONGS_LIST;
 import static com.robillo.dancingplayer.utils.AppConstants.ID;
 import static com.robillo.dancingplayer.utils.AppConstants.INDEX;
 import static com.robillo.dancingplayer.utils.AppConstants.MODIFY;
-import static com.robillo.dancingplayer.utils.AppConstants.MOST_PLAYED;
+import static com.robillo.dancingplayer.utils.AppConstants.OLD_PLAYLIST_NAME;
 import static com.robillo.dancingplayer.utils.AppConstants.POSITION;
-import static com.robillo.dancingplayer.utils.AppConstants.RECENTLY_ADDED;
-import static com.robillo.dancingplayer.utils.AppConstants.RECENTLY_PLAYED;
 import static com.robillo.dancingplayer.utils.AppConstants.REQUEST_CODE;
 import static com.robillo.dancingplayer.utils.AppConstants.SIZE;
 import static com.robillo.dancingplayer.utils.AppConstants.TITLE;
@@ -631,9 +625,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void setPlaylistBottomSheet() {
+        loadPlaylistItems();
         setBehaviorCallbacks();
         setCurrentPlaylistAsHeader();
         loadPlaylistsIntoRecyclerView(FROM_BOTTOM_CONTROLLER);
+    }
+
+
+    @Override
+    public void loadPlaylistItems() {
+        playlistRowItems = new ApplicationUtils().getPlaylistItemsFromContext(this);
     }
 
     @Override
@@ -698,8 +699,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void loadPlaylistsIntoRecyclerView(int from) {
-        if(from != MODIFY) playlistRowItems = fetchPlaylistItems();     //else playlistRowItems are most probably already there
-        playlistAdapter = new PlaylistAdapter(playlistRowItems, this, from);
+        loadPlaylistItems();
+
+        List<PlaylistRowItem> itemsToDisplay = new ArrayList<>();
+
+        for(PlaylistRowItem item : playlistRowItems)  {
+            if(!item.getTitle().equals(selectedPlaylist.getTitle())) {
+                itemsToDisplay.add(item);
+            }
+        }
+
+        playlistAdapter = new PlaylistAdapter(itemsToDisplay, this, from);
         playlistRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         if(from == FIRST_LOAD) hidePlaylistBottomSheet();
@@ -708,34 +718,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @Override
-    public List<PlaylistRowItem> fetchPlaylistItems() {
-        List<PlaylistRowItem> list = new ArrayList<>();
-        list.add(new PlaylistRowItem(DEFAULT_PLAYLIST_TITLE, true));
-        list.add(new PlaylistRowItem(RECENTLY_ADDED, true));
-        list.add(new PlaylistRowItem(MOST_PLAYED, true));
-        list.add(new PlaylistRowItem(RECENTLY_PLAYED, true));
-        list.add(new PlaylistRowItem("My Favourites", false));
-        list.add(new PlaylistRowItem("Robin Personal Songs", false));
-        list.add(new PlaylistRowItem("EDM", false));
-
-        PlaylistRowItem itemToDelete = null;
-
-        for(PlaylistRowItem item : list) if(item.getTitle().equals(selectedPlaylist.getTitle())) { selectedPlaylist = item;itemToDelete = item; break; }
-
-        list.remove(itemToDelete);
-
-        return list;
-    }
-
-    @Override
     public void updatePlaylistListForSelectedItem(PlaylistRowItem playlistRowItem, int position) {
-        playlistRowItems.remove(selectedPlaylist);
 
         selectedPlaylist = playlistRowItem;
         helper.setCurrentPlaylistTitle(selectedPlaylist.getTitle());
         setCurrentPlaylistAsHeader();
-
-        playlistRowItems.add(selectedPlaylist);
 
         loadPlaylistsIntoRecyclerView(FIRST_LOAD);
     }
@@ -770,11 +757,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @Override
-    public void showEditCreateDialogFragment(int from, int position) {
+    public void showEditCreateDialogFragment(int from, int position, String oldPlaylistName) {
         EditDialogFragment fragment = new EditDialogFragment();
         Bundle args = new Bundle();
         args.putInt(FROM, from);
         args.putInt(POSITION, position);
+        args.putString(OLD_PLAYLIST_NAME, oldPlaylistName);
         fragment.setArguments(args);
         fragment.show(getFragmentManager(), getString(R.string.edit_dialog_fragment));
     }
@@ -785,8 +773,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
         createTablePlaylist(playlistName);
 
-        PlaylistRowItem item = new ApplicationUtils().convertStringToPlaylistRowItem(playlistName);
-        playlistRowItems.add(item);
+        new ApplicationUtils().createNewPlaylistInPreferences(playlistName, this);
 
         loadPlaylistsIntoRecyclerView(MODIFY);
 
@@ -794,17 +781,34 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @Override
-    public void handleEditPlaylistName(String text, int position) {
+    public void handleEditPlaylistName(String newPlaylistName, int position, String oldPlaylistName) {
         //change playlist name in activity list as well as recycler list and re-render recycler
         //position will be accounted for in later app releases
 
-        modifyPlaylistNameInDb(text);
+        modifyPlaylistNameInDb(newPlaylistName);
 
-        playlistRowItems.get(position).setTitle(text);
+        new ApplicationUtils().changePlaylistInPreferences(newPlaylistName, this, oldPlaylistName);
 
         loadPlaylistsIntoRecyclerView(MODIFY);
 
         Toast.makeText(this, "Playlist Modified Successfully", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void handleDeletePlaylist(String playlistName) {
+
+        deletePlaylistInDb(playlistName);
+
+        new ApplicationUtils().removePlaylistInPreferences(this, playlistName);
+
+        loadPlaylistsIntoRecyclerView(MODIFY);
+
+        Toast.makeText(this, "Playlist Deleted Successfully", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void deletePlaylistInDb(String playlistName) {
+
     }
 
     @Override
@@ -830,6 +834,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @OnClick(R.id.create_new_playlist)
     public void createNewPlaylist() {
-        showEditCreateDialogFragment(CREATE_NEW_PLAYLIST, -1);
+        showEditCreateDialogFragment(CREATE_NEW_PLAYLIST, -1, "");
     }
 }

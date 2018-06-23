@@ -1,5 +1,7 @@
 package com.robillo.dancingplayer.preferences;
 
+import java.util.Set;
+
 interface PreferencesHelper {
 
     String isRepeatModeOn();
@@ -22,5 +24,8 @@ interface PreferencesHelper {
 
     String getCurrentPlaylistTitle();
     void setCurrentPlaylistTitle(String title);
+
+    Set<String> getPlaylistSet();
+    void setPlaylistSet(Set<String> playlistSet);
 
 }
