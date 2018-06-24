@@ -2,7 +2,6 @@ package com.robillo.dancingplayer.views.activities.main;
 
 import android.app.Activity;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -38,9 +36,7 @@ import android.widget.Toast;
 
 import com.robillo.dancingplayer.R;
 import com.robillo.dancingplayer.databases.AllSongsDatabase.SongDatabase;
-import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_playlists.PlaylistDao;
 import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_playlists.PlaylistRepository;
-import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_songs.SongDao;
 import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_songs.SongRepository;
 import com.robillo.dancingplayer.events.PlayerStateNoSongPlayingEvent;
 import com.robillo.dancingplayer.events.SongChangeEvent;
@@ -142,6 +138,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void startServiceForAudioList(final ArrayList<Song> songList) {
+
         //connect to the service
         ServiceConnection musicConnection = new ServiceConnection(){
             @Override
@@ -189,26 +186,26 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
         songRepository.insertSongs(audioList.toArray(new Song[audioList.size()]));
 
+        loadSongsForSelectedPlaylistFromDb();
+    }
+
+    @Override
+    public void loadSongsForSelectedPlaylistFromDb() {
+        Log.e("tag", "load songs for selected playlist from db");
+
+        LiveData<List<Song>> listLiveData;
+
         if (selectedPlaylist.getTitle().equals(AppConstants.DEFAULT_PLAYLIST_TITLE)) {
             Log.e("tag", selectedPlaylist.getTitle());
-            updateRecyclerViewForLoadedPlaylist(audioList);
-            startMusicServiceForCurrentPlaylist(audioList);
+            listLiveData = songRepository.getAllSongs();
         } else {
-            LiveData<List<Song>> listLiveData = songRepository.getSongsByPlaylistName(selectedPlaylist.getTitle());
-            listLiveData.observe(this, songs -> {
-                Log.e("tag", "livedata observe");
-                if (songs != null) {
-                    for(Song song : songs) {
-                        Log.e("tag", song.getTitle());
-                    }
-                }
-                else {
-                    Log.e("tag", "null");
-                }
-                updateRecyclerViewForLoadedPlaylist(songs);
-                startMusicServiceForCurrentPlaylist(songs);
-            });
+            listLiveData = songRepository.getSongsByPlaylistName(selectedPlaylist.getTitle());
         }
+
+        listLiveData.observe(this, songs -> {
+            updateRecyclerViewForLoadedPlaylist(songs);
+            startMusicServiceForCurrentPlaylist(songs);
+        });
     }
 
     @Override
@@ -222,12 +219,29 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @Override
+    public void addSongToPlaylist(String songId, String playlist) {
+        if(songDatabase == null) songDatabase = SongDatabase.getInstance(this);
+
+        if(playlistRepository == null) getPlaylistRepository();
+
+        getPlaylistRepository().insertPlaylistItem(new Playlist(songId, playlist));
+
+        Log.e("added pl", "id " + songId + " playlist " + playlist);
+
+        Toast.makeText(this, "Item Added To Playlist", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void startMusicServiceForCurrentPlaylist(List<Song> audioList) {
+        audioList.add(0, new Song());
+        audioList.add(new Song());
+        audioList.add(new Song());
+
         if(getMusicService() == null) {
-            startServiceForAudioList((ArrayList<Song>) audioList);
+            startServiceForAudioList(new ArrayList<>(audioList));
         }
         else {
-            updateServiceList((ArrayList<Song>) audioList);
+            updateServiceList(new ArrayList<>(audioList));
         }
     }
 
@@ -245,72 +259,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             songDatabase = SongDatabase.getInstance(this);
 
         return new PlaylistRepository(songDatabase.getPlaylistDao());
-    }
-
-    @Override
-    public void getSongsDatabaseInstance() {
-
-        //testing database working
-        SongDao songDao = songDatabase.getSongDao();
-        PlaylistDao playlistDao = songDatabase.getPlaylistDao();
-
-        SongRepository songRepository = new SongRepository(songDao);
-        PlaylistRepository playlistRepository = new PlaylistRepository(playlistDao);
-
-        songRepository.insertSongs(new Song("1", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a"));
-
-        songRepository.insertSongs(new Song("2", "b", "b", "b", "b", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a"));
-
-        songRepository.insertSongs(new Song("3", "c", "c", "c", "c", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a"));
-
-        LiveData<List<Song>> listLiveData = songRepository.getAllSongs();
-        listLiveData.observe(this, songs -> {
-            if(songs != null) {
-                for(Song song : songs) {
-                    Log.e("tag", "\n" + song.getTitle() + " " + song.getId());
-                }
-                startEnteringInsidePlaylistRepo(songRepository, playlistRepository);
-            }
-        });
-
-    }
-
-    void startEnteringInsidePlaylistRepo(SongRepository songRepository, PlaylistRepository playlistRepository) {
-        playlistRepository.insertPlaylistItem(new Playlist("a", "most played"));
-        playlistRepository.insertPlaylistItem(new Playlist("a", "recently played"));
-        playlistRepository.insertPlaylistItem(new Playlist("a", "recently added"));
-        playlistRepository.insertPlaylistItem(new Playlist("b", "most played"));
-        playlistRepository.insertPlaylistItem(new Playlist("c", "recently played"));
-        playlistRepository.insertPlaylistItem(new Playlist("b", "recently added"));
-
-        LiveData<List<Playlist>> listLiveDataPl = playlistRepository.getAllPlaylistItems();
-        listLiveDataPl.observe(this, playlists -> {
-            if(playlists != null) {
-                for(Playlist playlistItem : playlists) {
-                    Log.e("tag", "\n" + playlistItem.getPlaylist() + " " + playlistItem.getId());
-                }
-                findSongsFromPlaylistName(songRepository, playlistRepository);
-            }
-        });
-    }
-
-    void findSongsFromPlaylistName(SongRepository songRepository, PlaylistRepository playlistRepository) {
-        String playlistName1 = "most played"; //answer should be a, b
-        String playlistName2 = "recently played"; //answer should be a, c
-        String playlistName3 = "recently added"; //answer should be a, b
-
-        LiveData<List<Song>> listLiveData = songRepository.getSongsByPlaylistName(playlistName1);
-
-        listLiveData.observe(this, songs -> {
-            if(songs != null) {
-                for(Song song : songs) {
-                    Log.e("tag", "\n" + song.getTitle() + " " + song.getId());
-                }
-            }
-            else {
-                Log.e("tag", "null");
-            }
-        });
     }
 
     @Override
@@ -779,7 +727,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         loadPlaylistItems();
         setBehaviorCallbacks();
         setCurrentPlaylistAsHeader();
-        loadPlaylistsIntoRecyclerView(FROM_BOTTOM_CONTROLLER);
+        loadPlaylistsIntoRecyclerView(FROM_BOTTOM_CONTROLLER, null);
     }
 
 
@@ -805,7 +753,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
                     case BottomSheetBehavior.STATE_COLLAPSED: {
                         imageUpDownPlaylist.animate().rotation(0).start();
                         createNewPlaylist.setVisibility(View.VISIBLE);
-                        loadPlaylistsIntoRecyclerView(FROM_BOTTOM_CONTROLLER);
+                        loadPlaylistsIntoRecyclerView(FROM_BOTTOM_CONTROLLER, null);
                     }
                     break;
                     case BottomSheetBehavior.STATE_DRAGGING:
@@ -848,7 +796,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @Override
-    public void loadPlaylistsIntoRecyclerView(int from) {
+    public void loadPlaylistsIntoRecyclerView(int from, String songId) {
         loadPlaylistItems();
 
         List<PlaylistRowItem> itemsToDisplay = new ArrayList<>();
@@ -859,7 +807,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             }
         }
 
-        playlistAdapter = new PlaylistAdapter(itemsToDisplay, this, from);
+        playlistAdapter = new PlaylistAdapter(itemsToDisplay, this, from, songId);
         playlistRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         if(from == FIRST_LOAD) hidePlaylistBottomSheet();
@@ -874,7 +822,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         helper.setCurrentPlaylistTitle(selectedPlaylist.getTitle());
         setCurrentPlaylistAsHeader();
 
-        loadPlaylistsIntoRecyclerView(FIRST_LOAD);
+        loadPlaylistsIntoRecyclerView(FIRST_LOAD, null);
+
+        loadSongsForSelectedPlaylistFromDb();
     }
 
     @Override
@@ -886,7 +836,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @Override
-    public void showPlaylistBottomSheet(int from) {
+    public void showPlaylistBottomSheet(int from, String songId) {
         if(from == FROM_BOTTOM_CONTROLLER) {
             if (playlistSheetBehavior != null && playlistSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
                 playlistSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
@@ -903,7 +853,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             }
         }
 
-        loadPlaylistsIntoRecyclerView(from);
+        loadPlaylistsIntoRecyclerView(from, songId);
     }
 
     @Override
@@ -919,27 +869,18 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void handleCreateNewPlaylist(String playlistName) {
-        //create new playlist in db, add playlist item in activity list as well as recycler list and re-render recycler
-
-        createTablePlaylist(playlistName);
 
         new ApplicationUtils().createNewPlaylistInPreferences(playlistName, this);
-
-        loadPlaylistsIntoRecyclerView(MODIFY);
+        loadPlaylistsIntoRecyclerView(MODIFY, null);
 
         Toast.makeText(this, "New Playlist Created", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void handleEditPlaylistName(String newPlaylistName, int position, String oldPlaylistName) {
-        //change playlist name in activity list as well as recycler list and re-render recycler
-        //position will be accounted for in later app releases
-
-        modifyPlaylistNameInDb(newPlaylistName);
 
         new ApplicationUtils().changePlaylistInPreferences(newPlaylistName, this, oldPlaylistName);
-
-        loadPlaylistsIntoRecyclerView(MODIFY);
+        loadPlaylistsIntoRecyclerView(MODIFY, null);
 
         Toast.makeText(this, "Playlist Modified Successfully", Toast.LENGTH_SHORT).show();
     }
@@ -951,24 +892,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
         new ApplicationUtils().removePlaylistInPreferences(this, playlistName);
 
-        loadPlaylistsIntoRecyclerView(MODIFY);
+        loadPlaylistsIntoRecyclerView(MODIFY, null);
 
         Toast.makeText(this, "Playlist Deleted Successfully", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void deletePlaylistInDb(String playlistName) {
+        if(playlistRepository == null)
+            playlistRepository = getPlaylistRepository();
 
-    }
-
-    @Override
-    public void createTablePlaylist(String playlistName) {
-        //to be handled by room
-    }
-
-    @Override
-    public void modifyPlaylistNameInDb(String playlistName) {
-        //to be handled by room
+        playlistRepository.deleteAllInstancesOfPlaylist(playlistName);
     }
 
     @Override

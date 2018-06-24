@@ -29,11 +29,13 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
     private List<PlaylistRowItem> list;
     private Context pContext;
     private int from;
+    private String songId;
 
-    public PlaylistAdapter(List<PlaylistRowItem> list, Context pContext, int from) {
+    public PlaylistAdapter(List<PlaylistRowItem> list, Context pContext, int from, String songId) {
         this.list = list;
         this.pContext = pContext;
         this.from = from;
+        this.songId = songId;
     }
 
     @NonNull
@@ -78,14 +80,14 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         holder.playlist_title.setOnClickListener(v -> {
             MainActivity activity = (MainActivity) pContext;
             if(activity != null) {
-                handlePlaylistClick(activity, from, position);
+                handlePlaylistClick(activity, from, position, songId);
             }
         });
 
         holder.blank_view.setOnClickListener(v -> {
             MainActivity activity = (MainActivity) pContext;
             if(activity != null) {
-                handlePlaylistClick(activity, from, position);
+                handlePlaylistClick(activity, from, position, songId);
             }
         });
 
@@ -102,18 +104,21 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         holder.add_to_this_playlist.setOnClickListener(v -> {
             MainActivity activity = (MainActivity) pContext;
             if(activity != null) {
-                handlePlaylistClick(activity, from, position);
+                handlePlaylistClick(activity, from, position, songId);
             }
         });
     }
 
-    private void handlePlaylistClick(MainActivity activity, int from, int position) {
+    private void handlePlaylistClick(MainActivity activity, int from, int position, String songId) {
         if(from != AppConstants.FROM_SONGS_LIST) {
             activity.updatePlaylistListForSelectedItem(list.get(position), position);
         }
         else {
             if(list.get(position).isPersistent()) {
                 Toast.makeText(pContext, "You can only modify playlists that you created", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                activity.addSongToPlaylist(songId, list.get(position).getTitle());
             }
         }
     }

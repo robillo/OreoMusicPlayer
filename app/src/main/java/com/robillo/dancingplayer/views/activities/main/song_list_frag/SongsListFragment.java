@@ -299,15 +299,14 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void renderRecyclerViewForAudioList(List<Song> list) {
 
-        SongsListFragment.audioList = null;
-        SongsListFragment.audioList = new ArrayList<>();
+        Log.e("render count", "count");
 
-        //first item in RV has to be blank
-        list.add(0, new Song());
+        audioList = null;
+        audioList = new ArrayList<>();
 
+        audioList.add(0, new Song());
         audioList.addAll(list);
 
-        //last two must also be blank
         for(int i=0; i<EMPTY_CELLS_COUNT; i++){
             audioList.add(new Song());
         }

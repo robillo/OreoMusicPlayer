@@ -45,7 +45,27 @@ public class SongRepository {
         songDao.deleteSongById(id);
     }
 
+    public void deleteAllSongs() {
+        new deleteAsyncTask(songDao).execute();
+    }
+
     //AsyncTasks
+
+    static class deleteAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private SongDao mAsyncTaskDao;
+
+        deleteAsyncTask(SongDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            mAsyncTaskDao.deleteAllSongs();
+            return null;
+        }
+    }
 
     static class insertAsyncTask extends AsyncTask<Song, Void, Void> {
 

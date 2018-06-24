@@ -184,7 +184,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
         MainActivity activity = (MainActivity) getActivity();
         if(activity != null) {
             activity.hideOrRemoveBottomSheet();
-            activity.showPlaylistBottomSheet(FROM_SONGS_LIST);
+            activity.showPlaylistBottomSheet(FROM_SONGS_LIST, song.getId());
         }
     }
 

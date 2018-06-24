@@ -16,6 +16,12 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 @Dao
 public interface PlaylistDao {
 
+    @Query("DELETE FROM Playlist WHERE playlist = :playlistName")
+    void deletePlaylistByPlaylistName(String playlistName);
+
+    @Query("DELETE FROM Playlist WHERE song_id = :id")
+    void deleteSongById(String id);
+
     @Query("SELECT * FROM Playlist")
     LiveData<List<Playlist>> getAllPlaylistItems();
 

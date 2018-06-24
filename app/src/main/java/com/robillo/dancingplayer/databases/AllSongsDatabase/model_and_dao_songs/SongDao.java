@@ -16,6 +16,9 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 @Dao
 public interface SongDao {
 
+    @Query("DELETE FROM Song")
+    void deleteAllSongs();
+
     @Query("SELECT * FROM Song")
     LiveData<List<Song>> getAllSongs();
 

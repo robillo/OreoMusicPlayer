@@ -69,15 +69,17 @@ public class SongsAdapter
         //noinspection UnnecessaryLocalVariable
         final int _pos = position;
 
-        if(list.get(_pos) == null || (list.get(_pos).getTitle() == null && list.get(_pos).getArtist() == null)) {
+        if(list.get(_pos) == null || list.get(_pos).getId() == null) {
             holder.moreButton.setVisibility(View.GONE);
 
+            holder.itemView.setVisibility(View.INVISIBLE);
             String empty = "";
             holder.title.setText(empty);
             holder.artistDuration.setText(empty);
             holder.itemView.setClickable(false);
         }
         else {
+            holder.itemView.setVisibility(View.VISIBLE);
             holder.moreButton.setVisibility(View.VISIBLE);
 
             holder.title.setText(list.get(_pos).getTitle());
@@ -93,6 +95,7 @@ public class SongsAdapter
 
             holder.linearLayout.setOnClickListener(v -> {
                 if(context!=null){
+                    Log.e("song id", "id " + list.get(position).getId() + " " + list.get(position).getTitle());
                     ((MainActivity) context).playSong(_pos);
                 }
             });

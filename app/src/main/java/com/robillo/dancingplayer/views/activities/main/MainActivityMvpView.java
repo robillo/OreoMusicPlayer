@@ -74,7 +74,7 @@ public interface MainActivityMvpView {
 
     void  setCurrentPlaylistAsHeader();
 
-    void loadPlaylistsIntoRecyclerView(int from);
+    void loadPlaylistsIntoRecyclerView(int from, String songId);
 
     void setBehaviorCallbacks();
 
@@ -82,7 +82,7 @@ public interface MainActivityMvpView {
 
     void hidePlaylistBottomSheet();
 
-    void showPlaylistBottomSheet(int from);
+    void showPlaylistBottomSheet(int from, String songId);
 
     void showEditCreateDialogFragment(int from, int position, String oldPlaylistName);
 
@@ -94,13 +94,7 @@ public interface MainActivityMvpView {
 
     void deletePlaylistInDb(String playlistName);
 
-    void createTablePlaylist(String playlistName);
-
-    void modifyPlaylistNameInDb(String playlistName);
-
     //database handling
-
-    void getSongsDatabaseInstance();
 
     void putSongsListIntoDatabase(List<Song> audioList);
 
@@ -111,5 +105,9 @@ public interface MainActivityMvpView {
     PlaylistRepository getPlaylistRepository();
 
     void updateRecyclerViewForLoadedPlaylist(List<Song> audioList);
+
+    void addSongToPlaylist(String songId, String playlist);
+
+    void loadSongsForSelectedPlaylistFromDb();
 
 }
