@@ -22,6 +22,10 @@ public class PlaylistRepository {
         new insertAsyncTask(playlistDao).execute(playlists);
     }
 
+    public LiveData<List<Song>> getSongsByPlaylistName(String playlist) {
+        return playlistDao.getSongsByPlaylistName(playlist);
+    }
+
     public void deleteSongById(String id) {
         playlistDao.deleteSongById(id);
     }

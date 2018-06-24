@@ -112,12 +112,14 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
     private void handlePlaylistClick(MainActivity activity, int from, int position, String songId) {
         if(from != AppConstants.FROM_SONGS_LIST) {
             activity.updatePlaylistListForSelectedItem(list.get(position), position);
+            Log.e("tag", "update playlist");
         }
         else {
             if(list.get(position).isPersistent()) {
                 Toast.makeText(pContext, "You can only modify playlists that you created", Toast.LENGTH_SHORT).show();
             }
             else {
+                Log.e("tag", "add song");
                 activity.addSongToPlaylist(songId, list.get(position).getTitle());
             }
         }

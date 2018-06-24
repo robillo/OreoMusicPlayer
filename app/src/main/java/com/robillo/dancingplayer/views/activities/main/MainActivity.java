@@ -2,6 +2,7 @@ package com.robillo.dancingplayer.views.activities.main;
 
 import android.app.Activity;
 import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -116,6 +118,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     private SongDatabase songDatabase;
     private SongRepository songRepository;
     private PlaylistRepository playlistRepository;
+    private LiveData<List<Song>> listLiveData;
+    private Observer<List<Song>> listLiveObserver;
 
     @SuppressWarnings("FieldCanBeLocal")
     private Song currentSong = null;
@@ -183,6 +187,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Override
     public void putSongsListIntoDatabase(List<Song> audioList) {
         if (songRepository == null) songRepository = getSongRepository();
+        if (playlistRepository == null) playlistRepository = getPlaylistRepository();
 
         songRepository.insertSongs(audioList.toArray(new Song[audioList.size()]));
 
@@ -191,31 +196,30 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void loadSongsForSelectedPlaylistFromDb() {
-        Log.e("tag", "load songs for selected playlist from db");
-
-        LiveData<List<Song>> listLiveData;
 
         if (selectedPlaylist.getTitle().equals(AppConstants.DEFAULT_PLAYLIST_TITLE)) {
-            Log.e("tag", selectedPlaylist.getTitle());
             listLiveData = songRepository.getAllSongs();
         } else {
             listLiveData = songRepository.getSongsByPlaylistName(selectedPlaylist.getTitle());
         }
 
         listLiveData.observe(this, songs -> {
+            Log.e("observe", "reload songs from db");
             updateRecyclerViewForLoadedPlaylist(songs);
             startMusicServiceForCurrentPlaylist(songs);
         });
     }
 
     @Override
+    public void removeObservers() {
+        if(listLiveData != null)
+            listLiveData.removeObservers(this);
+    }
+
+    @Override
     public void updateRecyclerViewForLoadedPlaylist(List<Song> audioList) {
-        //update fragment recyclerview based on this currently-selected playlist
         SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
-        if(fragment != null) {
-            Log.e("tag", "fragment not null");
-            fragment.renderRecyclerViewForAudioList(audioList);
-        }
+        if(fragment != null) fragment.renderRecyclerViewForAudioList(audioList);
     }
 
     @Override
@@ -225,8 +229,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         if(playlistRepository == null) getPlaylistRepository();
 
         getPlaylistRepository().insertPlaylistItem(new Playlist(songId, playlist));
-
-        Log.e("added pl", "id " + songId + " playlist " + playlist);
 
         Toast.makeText(this, "Item Added To Playlist", Toast.LENGTH_SHORT).show();
     }
@@ -817,6 +819,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void updatePlaylistListForSelectedItem(PlaylistRowItem playlistRowItem, int position) {
+
+        Log.e("tag", "playlist update for selected playlist" + playlistRowItem.getTitle());
 
         selectedPlaylist = playlistRowItem;
         helper.setCurrentPlaylistTitle(selectedPlaylist.getTitle());

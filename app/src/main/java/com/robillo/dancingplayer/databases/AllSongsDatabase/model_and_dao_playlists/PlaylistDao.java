@@ -34,4 +34,7 @@ public interface PlaylistDao {
     @Query("SELECT Playlist.playlist FROM Song INNER JOIN Playlist ON Song.id = Playlist.song_id WHERE Song.id = :id")
     LiveData<List<String>> getAllPlaylistsForSongById(String id);
 
+    @Query("SELECT Song.* FROM Song INNER JOIN Playlist ON Song.id = Playlist.song_id WHERE Playlist.playlist = :playlist")
+    LiveData<List<Song>> getSongsByPlaylistName(String playlist);
+
 }

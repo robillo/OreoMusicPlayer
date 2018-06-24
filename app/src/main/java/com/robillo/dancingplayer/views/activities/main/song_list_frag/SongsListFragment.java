@@ -62,7 +62,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     private final int LOADER_ID = 0;
     @SuppressWarnings("FieldCanBeLocal")
     private SongsAdapter mAdapter;
-    private static ArrayList<Song> audioList = null;
+    private ArrayList<Song> audioList = null;
     Animation rotatingAlbumAnim,
             fadeInAnimationUpper,
             fadeOutAnimationUpper,
@@ -299,12 +299,15 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void renderRecyclerViewForAudioList(List<Song> list) {
 
-        Log.e("render count", "count");
+        MainActivity activity = (MainActivity) getActivity();
+        if(activity != null)
+            activity.removeObservers();
 
         audioList = null;
         audioList = new ArrayList<>();
 
         audioList.add(0, new Song());
+
         audioList.addAll(list);
 
         for(int i=0; i<EMPTY_CELLS_COUNT; i++){

@@ -110,4 +110,6 @@ public interface MainActivityMvpView {
 
     void loadSongsForSelectedPlaylistFromDb();
 
+    void removeObservers();
+
 }

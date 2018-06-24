@@ -10,11 +10,9 @@ import java.util.List;
 public class SongRepository {
 
     private SongDao songDao;
-    private LiveData<List<Song>> allSongs;
 
     public SongRepository(SongDao songDao) {
         this.songDao = songDao;
-        allSongs = this.songDao.getAllSongs();
     }
 
     public LiveData<List<Song>> getSongsByPlaylistName(String playlist) {
@@ -22,7 +20,7 @@ public class SongRepository {
     }
 
     public LiveData<List<Song>> getAllSongs() {
-        return allSongs;
+        return songDao.getAllSongs();
     }
 
     public void insertSongs(Song... songs) {
