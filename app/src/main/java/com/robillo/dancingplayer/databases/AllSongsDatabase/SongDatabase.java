@@ -5,28 +5,28 @@ import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
 import android.content.Context;
 
-import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao.Song;
 import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao.SongDao;
+import com.robillo.dancingplayer.models.Song;
 import com.robillo.dancingplayer.utils.AppConstants;
 
 @SuppressWarnings("unused")
-@Database(entities = {Song.class}, version = 1)
-public abstract class SongsDatabase extends RoomDatabase {
+@Database(entities = {Song.class}, version = 1, exportSchema = false)
+public abstract class SongDatabase extends RoomDatabase {
 
-    private static volatile SongsDatabase instance;
+    private static volatile SongDatabase instance;
 
-    static synchronized SongsDatabase getInstance(Context context) {
+    public static synchronized SongDatabase getInstance(Context context) {
         if (instance == null) {
             instance = create(context);
         }
         return instance;
     }
 
-    private static SongsDatabase create(final Context context) {
+    private static SongDatabase create(final Context context) {
         return Room.databaseBuilder(
                 context,
-                SongsDatabase.class,
-                AppConstants.SONGS_DATABASE_NAME).build();
+                SongDatabase.class,
+                AppConstants.SONG_DATABASE_NAME).build();
     }
 
     public abstract SongDao getSongDao();

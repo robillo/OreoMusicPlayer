@@ -10,7 +10,7 @@ import java.util.HashMap;
 public class AppConstants {
 
     //DATABASE STUFF
-    public static final String SONGS_DATABASE_NAME = "songs_database.db";
+    public static final String SONG_DATABASE_NAME = "song_database.db";
 
     public static final String INDEX = "index_number";
 

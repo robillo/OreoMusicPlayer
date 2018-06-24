@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.robillo.dancingplayer.R;
+import com.robillo.dancingplayer.databases.AllSongsDatabase.SongDatabase;
 import com.robillo.dancingplayer.events.PlayerStateNoSongPlayingEvent;
 import com.robillo.dancingplayer.events.SongChangeEvent;
 import com.robillo.dancingplayer.models.PlaylistRowItem;
@@ -96,7 +97,6 @@ import static com.robillo.dancingplayer.utils.AppConstants.YEAR;
 public class MainActivity extends AppCompatActivity implements MainActivityMvpView, MediaController.MediaPlayerControl {
 
     BottomSheetBehavior playlistSheetBehavior;
-
     BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
     private MusicService musicService;
     private Intent playIntent;
@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @SuppressWarnings("FieldCanBeLocal")
     private PlaylistAdapter playlistAdapter;
     private List<PlaylistRowItem> playlistRowItems = new ArrayList<>();
+    SongDatabase songDatabase;
 
     @SuppressWarnings("FieldCanBeLocal")
     private Song currentSong = null;
@@ -162,8 +163,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Override
     public void setUp() {
         refreshForUserThemeColors();
+        getSongsDatabaseInstance();
+
         setSongListFragment();
         setPlaylistBottomSheet();
+    }
+
+    @Override
+    public void getSongsDatabaseInstance() {
+        songDatabase = SongDatabase.getInstance(this);
     }
 
     @Override

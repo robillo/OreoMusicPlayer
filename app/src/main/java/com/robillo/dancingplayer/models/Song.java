@@ -1,13 +1,21 @@
 package com.robillo.dancingplayer.models;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
+import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 
-public class Song implements Parcelable {
+@Entity
+public class Song{
 
     private String data;
     private String title;
     private String titleKey;
+
+    @NonNull
+    @PrimaryKey
     private String id;
     private String dateAdded;
     private String dateModified;
@@ -22,11 +30,12 @@ public class Song implements Parcelable {
     private String size;
     private String year;
 
+    @Ignore
     public Song() {
 
     }
 
-    public Song(String data, String title, String titleKey, String id, String dateAdded, String dateModified, String duration, String composer, String album, String albumId, String albumKey, String artist, String artistId, String artistKey, String size, String year) {
+    public Song(String data, String title, String titleKey, @NonNull String id, String dateAdded, String dateModified, String duration, String composer, String album, String albumId, String albumKey, String artist, String artistId, String artistKey, String size, String year) {
         this.data = data;
         this.title = title;
         this.titleKey = titleKey;
@@ -44,82 +53,82 @@ public class Song implements Parcelable {
         this.size = size;
         this.year = year;
     }
-
-    /**
-     * Interface that must be implemented and provided as a public CREATOR field
-     * that generates instances of your Parcelable class from a Parcel.
-     */
-    public static final Creator<Song> CREATOR = new Creator<Song>() {
-        /**
-         * Creates a new USer object from the Parcel. This is the reason why
-         * the constructor that takes a Parcel is needed.
-         */
-        @Override
-        public Song createFromParcel(Parcel in) {
-            return new Song(in);
-        }
-
-        /**
-         * Create a new array of the Parcelable class.
-         * @return an array of the Parcelable class,
-         * with every entry initialized to null.
-         */
-        @Override
-        public Song[] newArray(int size) {
-            return new Song[size];
-        }
-    };
-
-    /**
-     * Parcel overloaded constructor required for
-     * Parcelable implementation used in the CREATOR
-     */
-    private Song(Parcel in) {
-        data = in.readString();
-        title = in.readString();
-        titleKey = in.readString();
-        id = in.readString();
-        dateAdded = in.readString();
-        dateModified = in.readString();
-        duration = in.readString();
-        composer = in.readString();
-        album = in.readString();
-        albumId = in.readString();
-        albumKey = in.readString();
-        artist = in.readString();
-        artistId = in.readString();
-        artistKey = in.readString();
-        size = in.readString();
-        year = in.readString();
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    /**
-     * This is where the parcel is performed.
-     */
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(data);
-        parcel.writeString(title);
-        parcel.writeString(titleKey);
-        parcel.writeString(id);
-        parcel.writeString(dateAdded);
-        parcel.writeString(dateModified);
-        parcel.writeString(duration);
-        parcel.writeString(composer);
-        parcel.writeString(album);
-        parcel.writeString(albumId);
-        parcel.writeString(albumKey);
-        parcel.writeString(artist);
-        parcel.writeString(artistId);
-        parcel.writeString(artistKey);
-        parcel.writeString(size);
-        parcel.writeString(year);
-    }
+//
+//    /**
+//     * Interface that must be implemented and provided as a public CREATOR field
+//     * that generates instances of your Parcelable class from a Parcel.
+//     */
+//    public static final Creator<Song> CREATOR = new Creator<Song>() {
+//        /**
+//         * Creates a new USer object from the Parcel. This is the reason why
+//         * the constructor that takes a Parcel is needed.
+//         */
+//        @Override
+//        public Song createFromParcel(Parcel in) {
+//            return new Song(in);
+//        }
+//
+//        /**
+//         * Create a new array of the Parcelable class.
+//         * @return an array of the Parcelable class,
+//         * with every entry initialized to null.
+//         */
+//        @Override
+//        public Song[] newArray(int size) {
+//            return new Song[size];
+//        }
+//    };
+//
+//    /**
+//     * Parcel overloaded constructor required for
+//     * Parcelable implementation used in the CREATOR
+//     */
+//    private Song(Parcel in) {
+//        data = in.readString();
+//        title = in.readString();
+//        titleKey = in.readString();
+//        id = in.readString();
+//        dateAdded = in.readString();
+//        dateModified = in.readString();
+//        duration = in.readString();
+//        composer = in.readString();
+//        album = in.readString();
+//        albumId = in.readString();
+//        albumKey = in.readString();
+//        artist = in.readString();
+//        artistId = in.readString();
+//        artistKey = in.readString();
+//        size = in.readString();
+//        year = in.readString();
+//    }
+//
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    /**
+//     * This is where the parcel is performed.
+//     */
+//    @Override
+//    public void writeToParcel(Parcel parcel, int i) {
+//        parcel.writeString(data);
+//        parcel.writeString(title);
+//        parcel.writeString(titleKey);
+//        parcel.writeString(id);
+//        parcel.writeString(dateAdded);
+//        parcel.writeString(dateModified);
+//        parcel.writeString(duration);
+//        parcel.writeString(composer);
+//        parcel.writeString(album);
+//        parcel.writeString(albumId);
+//        parcel.writeString(albumKey);
+//        parcel.writeString(artist);
+//        parcel.writeString(artistId);
+//        parcel.writeString(artistKey);
+//        parcel.writeString(size);
+//        parcel.writeString(year);
+//    }
 
     public String getTitleKey() {
         return titleKey;

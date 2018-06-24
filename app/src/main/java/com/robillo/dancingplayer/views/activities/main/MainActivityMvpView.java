@@ -96,4 +96,6 @@ public interface MainActivityMvpView {
 
     void modifyPlaylistNameInDb(String playlistName);
 
+    void getSongsDatabaseInstance();
+
 }
