@@ -340,12 +340,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
             if(playlistSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
                 hidePlaylistBottomSheet();
-                new Handler().postDelayed(() -> bottomSheetFragment
-                        .show(getSupportFragmentManager(), bottomSheetFragment.getTag()), 350);
+                new Handler().postDelayed(() ->  {
+                    hideOrRemoveBottomSheet();
+                    bottomSheetFragment
+                            .show(getSupportFragmentManager(), bottomSheetFragment.getTag());
+                }, 350);
             }
-            else
+            else {
                 bottomSheetFragment
                         .show(getSupportFragmentManager(), bottomSheetFragment.getTag());
+            }
 
         }
         else {
