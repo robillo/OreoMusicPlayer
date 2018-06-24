@@ -1,4 +1,4 @@
-package com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao;
+package com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_songs;
 
 import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
@@ -33,4 +33,10 @@ public interface SongDao {
 
     @Query("DELETE FROM Song WHERE id = :id")
     void deleteSongById(String id);
+
+    @Query("SELECT Song.* FROM Song INNER JOIN Playlist ON Song.id = Playlist.song_id WHERE Playlist.playlist = :playlist")
+    LiveData<List<Song>> getSongsByPlaylistName(String playlist);
+
+    @Query("SELECT Playlist.playlist FROM Song INNER JOIN Playlist ON Song.id = Playlist.song_id WHERE Song.id = id")
+    LiveData<List<String>> getAllPlaylistsForSongById(String id);
 }

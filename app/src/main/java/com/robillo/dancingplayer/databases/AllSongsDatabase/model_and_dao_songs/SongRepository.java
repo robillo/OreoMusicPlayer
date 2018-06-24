@@ -1,11 +1,10 @@
-package com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao;
+package com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_songs;
 
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
 import com.robillo.dancingplayer.models.Song;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SongRepository {
