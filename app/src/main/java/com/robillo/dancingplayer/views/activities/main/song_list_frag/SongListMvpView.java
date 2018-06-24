@@ -6,6 +6,8 @@ import android.view.View;
 import com.robillo.dancingplayer.models.Song;
 import com.robillo.dancingplayer.models.ThemeColors;
 
+import java.util.List;
+
 public interface SongListMvpView {
 
     void setUp(View v);
@@ -39,5 +41,7 @@ public interface SongListMvpView {
     int getControllerVisibility();
 
     void refreshSongListFragmentForSongDelete(Song song, int index);
+
+    void renderRecyclerViewForAudioList(List<Song> audioList);
 
 }

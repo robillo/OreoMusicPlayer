@@ -1,5 +1,7 @@
 package com.robillo.dancingplayer.views.activities.main;
 
+import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_playlists.PlaylistRepository;
+import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_songs.SongRepository;
 import com.robillo.dancingplayer.models.PlaylistRowItem;
 import com.robillo.dancingplayer.models.Song;
 import com.robillo.dancingplayer.services.MusicService;
@@ -96,6 +98,18 @@ public interface MainActivityMvpView {
 
     void modifyPlaylistNameInDb(String playlistName);
 
+    //database handling
+
     void getSongsDatabaseInstance();
+
+    void putSongsListIntoDatabase(List<Song> audioList);
+
+    void startMusicServiceForCurrentPlaylist(List<Song> audioList);
+
+    SongRepository getSongRepository();
+
+    PlaylistRepository getPlaylistRepository();
+
+    void updateRecyclerViewForLoadedPlaylist(List<Song> audioList);
 
 }

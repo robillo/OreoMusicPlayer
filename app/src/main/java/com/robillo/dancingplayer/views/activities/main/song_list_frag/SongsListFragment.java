@@ -11,6 +11,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -37,6 +38,7 @@ import com.simplecityapps.recyclerview_fastscroll.interfaces.OnFastScrollStateCh
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -81,9 +83,6 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
     @BindView(R.id.recycler_view)
     FastScrollRecyclerView mRecyclerView;
-
-//    @BindView(R.id.progress_current_song)
-//    ProgressBar progressBarCurrentSong;
 
     @BindView(R.id.current_song_album_art)
     CircleImageView currentSongAlbumArt;
@@ -194,7 +193,6 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         });
     }
 
-
     @Override
     public void refreshForUserThemeColors(ThemeColors userThemeColors) {
         hideOrShowUpper.setBackgroundColor(getResources().getColor(userThemeColors.getColorPrimary()));
@@ -260,10 +258,11 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
 
+        List<Song> list = new ArrayList<>();
+
         if (cursor != null && cursor.getCount() > 0) {
-            audioList.add(new Song());
             while (cursor.moveToNext()) {
-                audioList.add(new Song(
+                list.add(new Song(
                         returnCursorElement(cursor, MediaStore.Audio.Media.DATA),
                         returnCursorElement(cursor, MediaStore.Audio.Media.TITLE),
                         returnCursorElement(cursor, MediaStore.Audio.Media.TITLE_KEY),
@@ -282,22 +281,12 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
                         returnCursorElement(cursor, MediaStore.Audio.Media.YEAR)
                 ));
             }
-            for(int i=0; i<EMPTY_CELLS_COUNT; i++){
-                audioList.add(new Song());
-            }
         }
-        mAdapter = new SongsAdapter(audioList, getActivity());
-        mRecyclerView.setAdapter(mAdapter);
 
         MainActivity activity = (MainActivity) getActivity();
-
         if (activity != null) {
-            if(activity.getMusicService() == null) {
-                activity.startServiceForAudioList(audioList);
-            }
-            else {
-                activity.updateServiceList(audioList);
-            }
+            Log.e("put", "songs list in db");
+            activity.putSongsListIntoDatabase(list);
         }
 
         if(from == FROM_ACTIVITY) {
@@ -305,6 +294,26 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
             from = FROM_FRAGMENT;
         }
         getActivity().getSupportLoaderManager().destroyLoader(LOADER_ID);
+    }
+
+    @Override
+    public void renderRecyclerViewForAudioList(List<Song> list) {
+
+        SongsListFragment.audioList = null;
+        SongsListFragment.audioList = new ArrayList<>();
+
+        //first item in RV has to be blank
+        list.add(0, new Song());
+
+        audioList.addAll(list);
+
+        //last two must also be blank
+        for(int i=0; i<EMPTY_CELLS_COUNT; i++){
+            audioList.add(new Song());
+        }
+
+        mAdapter = new SongsAdapter(audioList, getActivity());
+        mRecyclerView.setAdapter(mAdapter);
     }
 
     @Override

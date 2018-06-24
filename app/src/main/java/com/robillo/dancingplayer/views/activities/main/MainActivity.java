@@ -117,7 +117,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @SuppressWarnings("FieldCanBeLocal")
     private PlaylistAdapter playlistAdapter;
     private List<PlaylistRowItem> playlistRowItems = new ArrayList<>();
-    SongDatabase songDatabase;
+    private SongDatabase songDatabase;
+    private SongRepository songRepository;
+    private PlaylistRepository playlistRepository;
 
     @SuppressWarnings("FieldCanBeLocal")
     private Song currentSong = null;
@@ -171,16 +173,82 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void setUp() {
-        refreshForUserThemeColors();
-        getSongsDatabaseInstance();
+        songDatabase = SongDatabase.getInstance(this);
+        if(helper == null) helper = new AppPreferencesHelper(this);
+        selectedPlaylist = new ApplicationUtils().convertStringToPlaylistRowItem(helper.getCurrentPlaylistTitle());
 
+        refreshForUserThemeColors();
         setSongListFragment();
         setPlaylistBottomSheet();
     }
 
+
+    @Override
+    public void putSongsListIntoDatabase(List<Song> audioList) {
+        if (songRepository == null) songRepository = getSongRepository();
+
+        songRepository.insertSongs(audioList.toArray(new Song[audioList.size()]));
+
+        if (selectedPlaylist.getTitle().equals(AppConstants.DEFAULT_PLAYLIST_TITLE)) {
+            Log.e("tag", selectedPlaylist.getTitle());
+            updateRecyclerViewForLoadedPlaylist(audioList);
+            startMusicServiceForCurrentPlaylist(audioList);
+        } else {
+            LiveData<List<Song>> listLiveData = songRepository.getSongsByPlaylistName(selectedPlaylist.getTitle());
+            listLiveData.observe(this, songs -> {
+                Log.e("tag", "livedata observe");
+                if (songs != null) {
+                    for(Song song : songs) {
+                        Log.e("tag", song.getTitle());
+                    }
+                }
+                else {
+                    Log.e("tag", "null");
+                }
+                updateRecyclerViewForLoadedPlaylist(songs);
+                startMusicServiceForCurrentPlaylist(songs);
+            });
+        }
+    }
+
+    @Override
+    public void updateRecyclerViewForLoadedPlaylist(List<Song> audioList) {
+        //update fragment recyclerview based on this currently-selected playlist
+        SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
+        if(fragment != null) {
+            Log.e("tag", "fragment not null");
+            fragment.renderRecyclerViewForAudioList(audioList);
+        }
+    }
+
+    @Override
+    public void startMusicServiceForCurrentPlaylist(List<Song> audioList) {
+        if(getMusicService() == null) {
+            startServiceForAudioList((ArrayList<Song>) audioList);
+        }
+        else {
+            updateServiceList((ArrayList<Song>) audioList);
+        }
+    }
+
+    @Override
+    public SongRepository getSongRepository() {
+        if(songDatabase == null)
+            songDatabase = SongDatabase.getInstance(this);
+
+        return new SongRepository(songDatabase.getSongDao());
+    }
+
+    @Override
+    public PlaylistRepository getPlaylistRepository() {
+        if(songDatabase == null)
+            songDatabase = SongDatabase.getInstance(this);
+
+        return new PlaylistRepository(songDatabase.getPlaylistDao());
+    }
+
     @Override
     public void getSongsDatabaseInstance() {
-        songDatabase = SongDatabase.getInstance(this);
 
         //testing database working
         SongDao songDao = songDatabase.getSongDao();
@@ -756,9 +824,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void setCurrentPlaylistAsHeader() {
-        if(selectedPlaylist == null) {
+        if(selectedPlaylist == null)
             selectedPlaylist = new ApplicationUtils().convertStringToPlaylistRowItem(helper.getCurrentPlaylistTitle());
-        }
 
         Animation animation = AnimationUtils.loadAnimation(this, R.anim.item_animation_fall_down);
         animation.setAnimationListener(new Animation.AnimationListener() {
