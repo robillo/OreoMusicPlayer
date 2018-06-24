@@ -17,7 +17,11 @@ public class SongRepository {
         allSongs = this.songDao.getAllSongs();
     }
 
-    LiveData<List<Song>> getAllSongs() {
+    public LiveData<List<Song>> getSongsByPlaylistName(String playlist) {
+        return songDao.getSongsByPlaylistName(playlist);
+    }
+
+    public LiveData<List<Song>> getAllSongs() {
         return allSongs;
     }
 

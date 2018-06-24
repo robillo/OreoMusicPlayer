@@ -22,7 +22,7 @@ public class Playlist {
     private String id;
     private String playlist;
 
-    public Playlist(@NonNull String id, @NonNull String playlist) {
+    public Playlist(String id, String playlist) {
         this.id = id;
         this.playlist = playlist;
     }

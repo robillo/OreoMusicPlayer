@@ -1,6 +1,8 @@
 package com.robillo.dancingplayer.views.activities.main;
 
 import android.app.Activity;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -8,6 +10,7 @@ import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -18,6 +21,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -34,8 +38,13 @@ import android.widget.Toast;
 
 import com.robillo.dancingplayer.R;
 import com.robillo.dancingplayer.databases.AllSongsDatabase.SongDatabase;
+import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_playlists.PlaylistDao;
+import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_playlists.PlaylistRepository;
+import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_songs.SongDao;
+import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_songs.SongRepository;
 import com.robillo.dancingplayer.events.PlayerStateNoSongPlayingEvent;
 import com.robillo.dancingplayer.events.SongChangeEvent;
+import com.robillo.dancingplayer.models.Playlist;
 import com.robillo.dancingplayer.models.PlaylistRowItem;
 import com.robillo.dancingplayer.models.SetSeekBarEvent;
 import com.robillo.dancingplayer.models.Song;
@@ -172,6 +181,68 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Override
     public void getSongsDatabaseInstance() {
         songDatabase = SongDatabase.getInstance(this);
+
+        //testing database working
+        SongDao songDao = songDatabase.getSongDao();
+        PlaylistDao playlistDao = songDatabase.getPlaylistDao();
+
+        SongRepository songRepository = new SongRepository(songDao);
+        PlaylistRepository playlistRepository = new PlaylistRepository(playlistDao);
+
+        songRepository.insertSongs(new Song("1", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a"));
+
+        songRepository.insertSongs(new Song("2", "b", "b", "b", "b", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a"));
+
+        songRepository.insertSongs(new Song("3", "c", "c", "c", "c", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a", "a"));
+
+        LiveData<List<Song>> listLiveData = songRepository.getAllSongs();
+        listLiveData.observe(this, songs -> {
+            if(songs != null) {
+                for(Song song : songs) {
+                    Log.e("tag", "\n" + song.getTitle() + " " + song.getId());
+                }
+                startEnteringInsidePlaylistRepo(songRepository, playlistRepository);
+            }
+        });
+
+    }
+
+    void startEnteringInsidePlaylistRepo(SongRepository songRepository, PlaylistRepository playlistRepository) {
+        playlistRepository.insertPlaylistItem(new Playlist("a", "most played"));
+        playlistRepository.insertPlaylistItem(new Playlist("a", "recently played"));
+        playlistRepository.insertPlaylistItem(new Playlist("a", "recently added"));
+        playlistRepository.insertPlaylistItem(new Playlist("b", "most played"));
+        playlistRepository.insertPlaylistItem(new Playlist("c", "recently played"));
+        playlistRepository.insertPlaylistItem(new Playlist("b", "recently added"));
+
+        LiveData<List<Playlist>> listLiveDataPl = playlistRepository.getAllPlaylistItems();
+        listLiveDataPl.observe(this, playlists -> {
+            if(playlists != null) {
+                for(Playlist playlistItem : playlists) {
+                    Log.e("tag", "\n" + playlistItem.getPlaylist() + " " + playlistItem.getId());
+                }
+                findSongsFromPlaylistName(songRepository, playlistRepository);
+            }
+        });
+    }
+
+    void findSongsFromPlaylistName(SongRepository songRepository, PlaylistRepository playlistRepository) {
+        String playlistName1 = "most played"; //answer should be a, b
+        String playlistName2 = "recently played"; //answer should be a, c
+        String playlistName3 = "recently added"; //answer should be a, b
+
+        LiveData<List<Song>> listLiveData = songRepository.getSongsByPlaylistName(playlistName1);
+
+        listLiveData.observe(this, songs -> {
+            if(songs != null) {
+                for(Song song : songs) {
+                    Log.e("tag", "\n" + song.getTitle() + " " + song.getId());
+                }
+            }
+            else {
+                Log.e("tag", "null");
+            }
+        });
     }
 
     @Override

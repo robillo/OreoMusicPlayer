@@ -7,6 +7,7 @@ import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
 
 import com.robillo.dancingplayer.models.Playlist;
+import com.robillo.dancingplayer.models.Song;
 
 import java.util.List;
 
@@ -15,13 +16,16 @@ import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 @Dao
 public interface PlaylistDao {
 
+    @Query("SELECT * FROM Playlist")
+    LiveData<List<Playlist>> getAllPlaylistItems();
+
     @Insert(onConflict = REPLACE)
     void insertPlaylistItem(Playlist... playlistItem);
 
     @Delete
     void deletePlaylistItem(Playlist... playlistItem);
 
-    @Query("SELECT Playlist.playlist FROM Song INNER JOIN Playlist ON Song.id = Playlist.song_id WHERE Song.id = id")
+    @Query("SELECT Playlist.playlist FROM Song INNER JOIN Playlist ON Song.id = Playlist.song_id WHERE Song.id = :id")
     LiveData<List<String>> getAllPlaylistsForSongById(String id);
 
 }
