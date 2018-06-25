@@ -228,9 +228,25 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
         if(playlistRepository == null) getPlaylistRepository();
 
-        getPlaylistRepository().insertPlaylistItem(new Playlist(songId, playlist));
+        LiveData<List<Song>> listLiveData = getPlaylistRepository().getSongsByPlaylistName(playlist);
 
-        Toast.makeText(this, "Item Added To Playlist", Toast.LENGTH_SHORT).show();
+        listLiveData.observe(this, songs -> {
+            boolean isAlreadyPresent = false;
+            if(songs != null) {
+                for(Song s : songs) {
+                    if(s.getId().equals(songId)) {
+                        isAlreadyPresent = true;
+                        Toast.makeText(this, "Song Already In Playlist", Toast.LENGTH_SHORT).show();
+                        break;
+                    }
+                }
+            }
+            if(!isAlreadyPresent) {
+                getPlaylistRepository().insertPlaylistItem(new Playlist(songId, playlist));
+                Toast.makeText(this, "Item Added To Playlist", Toast.LENGTH_SHORT).show();
+            }
+            listLiveData.removeObservers(this);
+        });
     }
 
     @Override
