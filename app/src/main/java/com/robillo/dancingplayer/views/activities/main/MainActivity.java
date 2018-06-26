@@ -187,7 +187,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Override
     public void putSongsListIntoDatabase(List<Song> audioList) {
         if (songRepository == null) songRepository = getSongRepository();
-        if (playlistRepository == null) playlistRepository = getPlaylistRepository();
 
         songRepository.insertSongs(audioList.toArray(new Song[audioList.size()]));
 
@@ -196,11 +195,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void loadSongsForSelectedPlaylistFromDb() {
-        if(helper == null) helper = new AppPreferencesHelper(this);
 
-        listLiveData = songRepository.getAllSongs(selectedPlaylist.getTitle(), helper.getSortOrderForSongs());
+        listLiveData = songRepository.getAllSongs(selectedPlaylist.getTitle(), new AppPreferencesHelper(this).getSortOrderForSongs());
 
         listLiveData.observe(this, songs -> {
+            Log.e("tag", "update");
             updateRecyclerViewForLoadedPlaylist(songs);
             startMusicServiceForCurrentPlaylist(songs);
         });
@@ -412,9 +411,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void setSongListFragment() {
+        SongsListFragment fragment = new SongsListFragment();
+
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(mFragmentContainer.getId(), new SongsListFragment(), getString(R.string.songs_list));
+        transaction.replace(mFragmentContainer.getId(), fragment, getString(R.string.songs_list));
         transaction.commitAllowingStateLoss();
+
+        fragment.fetchSongs(FROM_FRAGMENT);
     }
 
     @Override
@@ -463,9 +466,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             if(currentSong != null) {
                 fragment.setCurrentSong(currentSong);
 
-                AppPreferencesHelper helper = new AppPreferencesHelper(this);
-
-                if(helper.isPlayEvent())
+                if(new AppPreferencesHelper(this).isPlayEvent())
                     fragment.playPlayer(FROM_ACTIVITY);
                 else
                     fragment.pausePlayer(FROM_ACTIVITY);

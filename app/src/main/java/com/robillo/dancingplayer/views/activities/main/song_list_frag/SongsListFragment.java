@@ -73,8 +73,6 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     private static boolean isAnimatingController = false;
     @SuppressWarnings({"FieldCanBeLocal", "unused"})
     private static long songDurationForCountDownTimer = 0;
-    AppPreferencesHelper helper = null;
-    private static String SORT_ORDER = null;
     private ThemeColors currentUserThemeColors = null;
     private int from = FROM_FRAGMENT;
 
@@ -132,8 +130,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void setUp(View v) {
         //noinspection ConstantConditions
-        helper = new AppPreferencesHelper(getActivity());
-        currentUserThemeColors = AppConstants.themeMap.get(helper.getUserThemeName());
+        currentUserThemeColors = AppConstants.themeMap.get(new AppPreferencesHelper(getActivity()).getUserThemeName());
         refreshForUserThemeColors(currentUserThemeColors);
 
         fadeOutAnimationUpper = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
@@ -245,14 +242,6 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         Uri uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI;
-
-        audioList = null;
-        audioList = new ArrayList<>();
-
-        SORT_ORDER = helper.getSortOrderForSongs();
-
-        //noinspection ConstantConditions
-//        return new CursorLoader(getActivity(), uri, null, null, null, SORT_ORDER);
 
         //noinspection ConstantConditions
         return new CursorLoader(getActivity(), uri, null, null, null, null);
