@@ -196,15 +196,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void loadSongsForSelectedPlaylistFromDb() {
+        if(helper == null) helper = new AppPreferencesHelper(this);
 
-        if (selectedPlaylist.getTitle().equals(AppConstants.DEFAULT_PLAYLIST_TITLE)) {
-            listLiveData = songRepository.getAllSongs();
-        } else {
-            listLiveData = songRepository.getSongsByPlaylistName(selectedPlaylist.getTitle());
-        }
+        listLiveData = songRepository.getAllSongs(selectedPlaylist.getTitle(), helper.getSortOrderForSongs());
 
         listLiveData.observe(this, songs -> {
-            Log.e("observe", "reload songs from db");
             updateRecyclerViewForLoadedPlaylist(songs);
             startMusicServiceForCurrentPlaylist(songs);
         });
@@ -243,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             }
             if(!isAlreadyPresent) {
                 getPlaylistRepository().insertPlaylistItem(new Playlist(songId, playlist));
-                Toast.makeText(this, "Item Added To Playlist", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Song Added To Playlist", Toast.LENGTH_SHORT).show();
             }
             listLiveData.removeObservers(this);
         });

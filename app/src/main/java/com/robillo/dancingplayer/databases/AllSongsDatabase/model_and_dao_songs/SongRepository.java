@@ -4,6 +4,7 @@ import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
 
 import com.robillo.dancingplayer.models.Song;
+import com.robillo.dancingplayer.utils.AppConstants;
 
 import java.util.List;
 
@@ -15,12 +16,82 @@ public class SongRepository {
         this.songDao = songDao;
     }
 
-    public LiveData<List<Song>> getSongsByPlaylistName(String playlist) {
-        return songDao.getSongsByPlaylistName(playlist);
+    public LiveData<List<Song>> getSongsByPlaylistName(String playlist, String sortOrder) {
+        return songDao.getSongsPlaylist(playlist);
     }
 
-    public LiveData<List<Song>> getAllSongs() {
+    public LiveData<List<Song>> getAllSongs(String playlist, String sortOrder) {
+        switch (sortOrder) {
+            case AppConstants.SIZE_ASCENDING: {
+                if(isDefault(playlist)) return songDao.getAllSongsSizeA();
+                else return songDao.getSongsPlaylistSizeA(playlist);
+            }
+            case AppConstants.SIZE_DESCENDING: {
+                if(isDefault(playlist)) return songDao.getAllSongsSizeD();
+                else return songDao.getSongsPlaylistSizeD(playlist);
+            }
+            case AppConstants.YEAR_ASCENDING: {
+                if(isDefault(playlist)) return songDao.getAllSongsYearA();
+                else return songDao.getSongsPlaylistYearA(playlist);
+            }
+            case AppConstants.YEAR_DESCENDING: {
+                if(isDefault(playlist)) return songDao.getAllSongsYearD();
+                else return songDao.getSongsPlaylistYearD(playlist);
+            }
+            case AppConstants.ALBUM_ASCENDING: {
+                if(isDefault(playlist)) return songDao.getAllSongsAlbumA();
+                else return songDao.getSongsPlaylistAlbumA(playlist);
+            }
+            case AppConstants.ALBUM_DESCENDING: {
+                if(isDefault(playlist)) return songDao.getAllSongsAlbumD();
+                else return songDao.getSongsPlaylistAlbumD(playlist);
+            }
+            case AppConstants.TITLE_ASCENDING: {
+                if(isDefault(playlist)) return songDao.getAllSongsTitleA();
+                else return songDao.getSongsPlaylistTitleA(playlist);
+            }
+            case AppConstants.TITLE_DESCENDING: {
+                if(isDefault(playlist)) return songDao.getAllSongsTitleD();
+                else return songDao.getSongsPlaylistTitleD(playlist);
+            }
+            case AppConstants.ARTIST_ASCENDING: {
+                if(isDefault(playlist)) return songDao.getAllSongsArtistA();
+                else return songDao.getSongsPlaylistArtistA(playlist);
+            }
+            case AppConstants.ARTIST_DESCENDING: {
+                if(isDefault(playlist)) return songDao.getAllSongsArtistD();
+                else return songDao.getSongsPlaylistArtistD(playlist);
+            }
+            case AppConstants.DURATION_ASCENDING: {
+                if(isDefault(playlist)) return songDao.getAllSongsDurationA();
+                else return songDao.getSongsPlaylistDurationA(playlist);
+            }
+            case AppConstants.DURATION_DESCENDING: {
+                if(isDefault(playlist)) return songDao.getAllSongsDurationD();
+                else return songDao.getSongsPlaylistDurationD(playlist);
+            }
+            case AppConstants.DATE_ADDED_ASCENDING: {
+                if(isDefault(playlist)) return songDao.getAllSongsDateAddedD();
+                else return songDao.getSongsPlaylistDateAddedD(playlist);
+            }
+            case AppConstants.DATE_ADDED_DESCENDING: {
+                if(isDefault(playlist)) return songDao.getAllSongsDateAddedD();
+                else return songDao.getSongsPlaylistDateAddedD(playlist);
+            }
+            case AppConstants.DATE_MODIFIED_ASCENDING: {
+                if(isDefault(playlist)) return songDao.getAllSongsDateModifiedA();
+                else return songDao.getSongsPlaylistDateModifiedA(playlist);
+            }
+            case AppConstants.DATE_MODIFIED_DESCENDING: {
+                if(isDefault(playlist)) return songDao.getAllSongsDateModifiedD();
+                else return songDao.getSongsPlaylistDateModifiedD(playlist);
+            }
+        }
         return songDao.getAllSongs();
+    }
+
+    private boolean isDefault(String title) {
+        return title.equals(AppConstants.DEFAULT_PLAYLIST_TITLE);
     }
 
     public void insertSongs(Song... songs) {
@@ -36,11 +107,11 @@ public class SongRepository {
     }
 
     public LiveData<Song> getSongById(String id) {
-        return songDao.getSongById(id);
+        return songDao.getSongId(id);
     }
 
     public void deleteSongById(String id) {
-        songDao.deleteSongById(id);
+        songDao.deleteSongId(id);
     }
 
     public void deleteAllSongs() {

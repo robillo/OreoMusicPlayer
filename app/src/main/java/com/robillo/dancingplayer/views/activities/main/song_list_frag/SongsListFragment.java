@@ -252,7 +252,10 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         SORT_ORDER = helper.getSortOrderForSongs();
 
         //noinspection ConstantConditions
-        return new CursorLoader(getActivity(), uri, null, null, null, SORT_ORDER);
+//        return new CursorLoader(getActivity(), uri, null, null, null, SORT_ORDER);
+
+        //noinspection ConstantConditions
+        return new CursorLoader(getActivity(), uri, null, null, null, null);
     }
 
     @Override
