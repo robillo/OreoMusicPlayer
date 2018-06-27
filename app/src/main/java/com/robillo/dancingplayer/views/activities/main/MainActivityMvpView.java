@@ -66,7 +66,7 @@ public interface MainActivityMvpView {
 
     //playlist bottom sheet calls
 
-    void loadPlaylistItems();
+    void loadPlaylistItems(int from, String songId);
 
     void togglePlaylistBottomSheet();
 
@@ -113,4 +113,8 @@ public interface MainActivityMvpView {
     void removeObservers();
 
     void removeSongCurrentPlaylist(String songId, int index);
+
+    void removeSongFromDb(String songId);
+
+    void loadSongsInRvAfterRowItemsLoaded(int from, String songId);
 }

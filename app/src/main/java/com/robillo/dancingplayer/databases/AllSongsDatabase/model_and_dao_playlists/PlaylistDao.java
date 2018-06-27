@@ -39,4 +39,10 @@ public interface PlaylistDao {
 
     @Query("DELETE FROM Playlist WHERE song_id = :songId AND playlist = :currentPlaylistTitle")
     void removeSongFromPlaylist(String songId, String currentPlaylistTitle);
+
+    @Query("SELECT DISTINCT playlist FROM Playlist")
+    LiveData<List<String>> getDistinctPlaylistNames();
+
+    @Query("UPDATE Playlist SET playlist = :newPlaylist WHERE playlist = :oldPlaylist")
+    void changePlaylistName(String oldPlaylist, String newPlaylist);
 }

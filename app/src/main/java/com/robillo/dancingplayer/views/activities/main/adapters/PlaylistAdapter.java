@@ -99,6 +99,7 @@ public class PlaylistAdapter extends RecyclerView.Adapter<PlaylistAdapter.Playli
         holder.delete_playlist.setOnClickListener(v -> {
             ((MainActivity) pContext)
                     .handleDeletePlaylist(list.get(position).getTitle());
+            Log.e("tag", "onclick " + list.get(position).getTitle());
         });
 
         holder.add_to_this_playlist.setOnClickListener(v -> {

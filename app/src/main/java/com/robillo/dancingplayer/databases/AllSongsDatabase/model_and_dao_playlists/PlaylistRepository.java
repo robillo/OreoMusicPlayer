@@ -26,8 +26,12 @@ public class PlaylistRepository {
         return playlistDao.getSongsByPlaylistName(playlist);
     }
 
+    public LiveData<List<String>> getDistinctPlaylistNames() {
+        return playlistDao.getDistinctPlaylistNames();
+    }
+
     public void deleteSongById(String id) {
-        playlistDao.deleteSongById(id);
+        new deleteByIdAsyncTask(playlistDao).execute(id);
     }
 
     public void deleteAllInstancesOfPlaylist(String playlistName) {
@@ -42,7 +46,41 @@ public class PlaylistRepository {
         new removeFromPlaylistAsyncTask(playlistDao).execute(songId, currentPlaylistTitle);
     }
 
+    public void changePlaylistName(String oldPlaylistName, String newPlaylistName) {
+        new updateAsyncTask(playlistDao).execute(oldPlaylistName, newPlaylistName);
+    }
+
     //AsyncTasks
+
+    static class updateAsyncTask extends AsyncTask<String, Void, Void> {
+
+        private PlaylistDao mAsyncTaskDao;
+
+        updateAsyncTask(PlaylistDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final String... params) {
+            mAsyncTaskDao.changePlaylistName(params[0], params[1]);
+            return null;
+        }
+    }
+
+    static class deleteByIdAsyncTask extends AsyncTask<String, Void, Void> {
+
+        private PlaylistDao mAsyncTaskDao;
+
+        deleteByIdAsyncTask(PlaylistDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final String... params) {
+            mAsyncTaskDao.deleteSongById(params[0]);
+            return null;
+        }
+    }
 
     static class insertAsyncTask extends AsyncTask<Playlist, Void, Void> {
 
