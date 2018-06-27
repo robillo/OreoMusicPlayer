@@ -242,6 +242,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         }
 
         loadSongsForSelectedPlaylistFromDb();
+        loadSongsForSelectedPlaylistFromDb();
 
 //        SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
 //        if(fragment != null) fragment.notifyDataSetChanged(index);
@@ -946,6 +947,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         deletePlaylistInDb(playlistName);
 
         new ApplicationUtils().removePlaylistInPreferences(this, playlistName);
+
+        if(playlistRepository == null) playlistRepository = getPlaylistRepository();
+        playlistRepository.deleteAllInstancesOfPlaylist(playlistName);
 
         loadPlaylistsIntoRecyclerView(MODIFY, null);
 

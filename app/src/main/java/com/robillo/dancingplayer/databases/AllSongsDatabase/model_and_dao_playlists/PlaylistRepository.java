@@ -31,7 +31,7 @@ public class PlaylistRepository {
     }
 
     public void deleteAllInstancesOfPlaylist(String playlistName) {
-        playlistDao.deletePlaylistByPlaylistName(playlistName);
+        new removePlaylistAsyncTask(playlistDao).execute(playlistName);
     }
 
     public LiveData<List<Playlist>> getAllPlaylistItems() {
@@ -55,6 +55,21 @@ public class PlaylistRepository {
         @Override
         protected Void doInBackground(final Playlist... params) {
             mAsyncTaskDao.insertPlaylistItem(params);
+            return null;
+        }
+    }
+
+    static class removePlaylistAsyncTask extends AsyncTask<String, Void, Void> {
+
+        private PlaylistDao mAsyncTaskDao;
+
+        removePlaylistAsyncTask(PlaylistDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            mAsyncTaskDao.deletePlaylistByPlaylistName(strings[0]);
             return null;
         }
     }
