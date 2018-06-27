@@ -37,4 +37,6 @@ public interface PlaylistDao {
     @Query("SELECT Song.* FROM Song INNER JOIN Playlist ON Song.id = Playlist.song_id WHERE Playlist.playlist = :playlist")
     LiveData<List<Song>> getSongsByPlaylistName(String playlist);
 
+    @Query("DELETE FROM Playlist WHERE song_id = :songId AND playlist = :currentPlaylistTitle")
+    void removeSongFromPlaylist(String songId, String currentPlaylistTitle);
 }

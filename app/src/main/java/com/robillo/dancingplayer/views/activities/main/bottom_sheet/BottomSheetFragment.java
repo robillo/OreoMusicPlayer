@@ -115,6 +115,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
         if (bundle != null) {
 
             index = bundle.getInt(INDEX);
+
             song.setData(bundle.getString(DATA));
             song.setTitle(bundle.getString(TITLE));
             song.setTitleKey(bundle.getString(TITLE_KEY));
@@ -154,7 +155,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
                 //and remove song with song id as song.getId() from list in music service
             }
             act.getContentResolver().delete(uri, null, null);
-            Toast.makeText(act, "Song Deleted", Toast.LENGTH_SHORT).show();
+            Toast.makeText(act, "Song Deleted From Device", Toast.LENGTH_SHORT).show();
             act.refreshSongListFragmentForSongDelete(song, index);
             act.hideOrRemoveBottomSheet();
         }
@@ -190,6 +191,10 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
 
     @OnClick(R.id.remove_from_playlist)
     public void removeFromPlaylist() {
-
+        MainActivity activity = (MainActivity) getActivity();
+        if(activity != null) {
+            activity.hideOrRemoveBottomSheet();
+            activity.removeSongCurrentPlaylist(song.getId(), index);
+        }
     }
 }

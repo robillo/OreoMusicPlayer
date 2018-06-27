@@ -68,4 +68,6 @@ public interface MusicServiceInterface {
     PendingIntent setupNotificationPendingIntent();
 
     NotificationCompat.Action returnAction(int id, String title, int which);
+
+    void removeSongFromListInMusicServiceById(String songId);
 }

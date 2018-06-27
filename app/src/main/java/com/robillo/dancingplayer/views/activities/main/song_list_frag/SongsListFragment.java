@@ -321,6 +321,15 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     @Override
+    public void notifyDataSetChanged(int position) {
+        if(mAdapter != null) {
+            mAdapter.notifyItemRemoved(position);
+            mAdapter.notifyItemRangeChanged(position, mAdapter.getItemCount());
+            mAdapter.removeListItem(position);
+        }
+    }
+
+    @Override
     public void setCurrentSong(Song song) {
 
         currentSong = song;

@@ -38,6 +38,10 @@ public class PlaylistRepository {
         return playlistItems;
     }
 
+    public void removeSongFromPlaylist(String songId, String currentPlaylistTitle) {
+        new removeFromPlaylistAsyncTask(playlistDao).execute(songId, currentPlaylistTitle);
+    }
+
     //AsyncTasks
 
     static class insertAsyncTask extends AsyncTask<Playlist, Void, Void> {
@@ -51,6 +55,21 @@ public class PlaylistRepository {
         @Override
         protected Void doInBackground(final Playlist... params) {
             mAsyncTaskDao.insertPlaylistItem(params);
+            return null;
+        }
+    }
+
+    static class removeFromPlaylistAsyncTask extends AsyncTask<String, Void, Void> {
+
+        private PlaylistDao mAsyncTaskDao;
+
+        removeFromPlaylistAsyncTask(PlaylistDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            mAsyncTaskDao.removeSongFromPlaylist(strings[0], strings[1]);
             return null;
         }
     }

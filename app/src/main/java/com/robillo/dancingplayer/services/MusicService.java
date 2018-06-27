@@ -288,11 +288,11 @@ public class MusicService extends Service implements
                 currSong);
         try{
             player.setDataSource(getApplicationContext(), trackUri);
+            player.prepareAsync();
         }
         catch(Exception e){
             Log.e("MUSIC SERVICE", "Error setting data source", e);
         }
-        player.prepareAsync();
     }
 
     @Override
@@ -464,6 +464,19 @@ public class MusicService extends Service implements
     }
 
     @Override
+    public void removeSongFromListInMusicServiceById(String songId) {
+        if(songs != null && songId != null) {
+            for(Song s : songs) {
+                if(s != null && s.getId() != null && s.getId().equals(songId)) {
+                    boolean b = songs.remove(s);
+                    Log.e("tag", "song actually deleted? " + b);
+                    break;
+                }
+            }
+        }
+    }
+
+    @Override
     public void cancelNotification() {
         if(notificationManager != null) {
             notificationManager.cancel(CONTROLLER_NOTIFICATION_ID);
@@ -604,8 +617,10 @@ public class MusicService extends Service implements
 
     @Override
     public void removeSongFromList(Song song) {
-        if(songs != null && songs.contains(song))
-            songs.remove(song);
+        if(songs != null && songs.contains(song)) {
+            boolean b = songs.remove(song);
+            Log.e("tag", "song actually deleted? " + b);
+        }
     }
 
     @Override

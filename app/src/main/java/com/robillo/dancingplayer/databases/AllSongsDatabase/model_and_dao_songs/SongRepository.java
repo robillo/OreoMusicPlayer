@@ -111,7 +111,7 @@ public class SongRepository {
     }
 
     public void deleteSongById(String id) {
-        songDao.deleteSongId(id);
+        new deleteByIdAsyncTask(songDao).execute(id);
     }
 
     public void deleteAllSongs() {
@@ -162,6 +162,21 @@ public class SongRepository {
         @Override
         protected Void doInBackground(final Song... params) {
             mAsyncTaskDao.updateSong(params);
+            return null;
+        }
+    }
+
+    static class deleteByIdAsyncTask extends AsyncTask<String, Void, Void> {
+
+        private SongDao mAsyncTaskDao;
+
+        deleteByIdAsyncTask(SongDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(final String... params) {
+            mAsyncTaskDao.deleteSongId(params[0]);
             return null;
         }
     }

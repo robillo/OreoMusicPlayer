@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.Observer;
 import android.content.ComponentName;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
@@ -212,6 +215,39 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @Override
+    public void removeSongCurrentPlaylist(String songId, int index) {
+        if(songRepository == null) songRepository = getSongRepository();
+        if(playlistRepository == null) playlistRepository = getPlaylistRepository();
+
+        Song mSong = getMusicService().getSong();
+        if(mSong != null && mSong.getId().equals(songId)) {
+            playNextSong();
+            getMusicService().cancelNotification();
+            getMusicService().removeSongFromListInMusicServiceById(songId);
+        }
+
+        String currentPlaylist = new AppPreferencesHelper(this).getCurrentPlaylistTitle();
+        if(currentPlaylist.equals(AppConstants.DEFAULT_PLAYLIST_TITLE)) {
+            songRepository.deleteSongById(songId);
+
+            Uri uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, Long.valueOf(songId));
+
+            getContentResolver().delete(uri, null, null);
+
+            Toast.makeText(this, "Song Removed From Device", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            playlistRepository.removeSongFromPlaylist(songId, currentPlaylist);
+            Toast.makeText(this, "Song Removed From Playlist", Toast.LENGTH_SHORT).show();
+        }
+
+        loadSongsForSelectedPlaylistFromDb();
+
+//        SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
+//        if(fragment != null) fragment.notifyDataSetChanged(index);
+    }
+
+    @Override
     public void updateRecyclerViewForLoadedPlaylist(List<Song> audioList) {
         SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
         if(fragment != null) fragment.renderRecyclerViewForAudioList(audioList);
@@ -349,6 +385,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         if (bottomSheetFragment != null) {
             Bundle bundle = new Bundle();
             bundle.putInt(INDEX, index);
+
             bundle.putString(DATA, song.getData());
             bundle.putString(TITLE, song.getTitle());
             bundle.putString(TITLE_KEY, song.getTitleKey());
@@ -391,7 +428,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     public void hideOrRemoveBottomSheet() {
         if(bottomSheetFragment != null) {
             if(!bottomSheetFragment.isHidden()) {
-                bottomSheetFragment.dismiss();
+                //noinspection ConstantConditions
+                if(bottomSheetFragment != null) bottomSheetFragment.dismiss();
             }
         }
     }

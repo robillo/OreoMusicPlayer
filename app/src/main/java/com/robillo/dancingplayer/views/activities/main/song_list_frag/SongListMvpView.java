@@ -44,4 +44,5 @@ public interface SongListMvpView {
 
     void renderRecyclerViewForAudioList(List<Song> audioList);
 
+    void notifyDataSetChanged(int position);
 }
