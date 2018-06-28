@@ -28,4 +28,13 @@ interface PreferencesHelper {
     Set<String> getPlaylistSet();
     void setPlaylistSet(Set<String> playlistSet);
 
+    int getMostPlayedCount();
+    void setMostPlayedCount(int count);
+
+    int getRecentlyPlayedCount();
+    void setRecentlyPlayedCount(int count);
+
+    int getRecentlyAddedCount();
+    void setRecentlyAddedCount(int count);
+
 }

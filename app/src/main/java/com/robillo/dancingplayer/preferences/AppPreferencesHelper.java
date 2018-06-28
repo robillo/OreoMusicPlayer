@@ -7,13 +7,17 @@ import com.robillo.dancingplayer.utils.AppConstants;
 
 import java.util.Set;
 
+import static com.robillo.dancingplayer.utils.AppConstants.DEFAULT_PLAYLIST_SONGS_COUNT;
 import static com.robillo.dancingplayer.utils.AppConstants.DEFAULT_PLAYLIST_TITLE;
 import static com.robillo.dancingplayer.utils.AppConstants.KEY_CURRENT_PLAYLIST_TITLE;
 import static com.robillo.dancingplayer.utils.AppConstants.KEY_IS_PLAY_EVENT;
 import static com.robillo.dancingplayer.utils.AppConstants.KEY_IS_REPEAT_MODE_ON;
 import static com.robillo.dancingplayer.utils.AppConstants.KEY_IS_SHUFFLE_MODE_ON;
 import static com.robillo.dancingplayer.utils.AppConstants.KEY_IS_SONG_PLAYING;
+import static com.robillo.dancingplayer.utils.AppConstants.KEY_MOST_PLAYED_COUNT;
 import static com.robillo.dancingplayer.utils.AppConstants.KEY_PLAYLIST_STRING_SET;
+import static com.robillo.dancingplayer.utils.AppConstants.KEY_RECENTLY_ADDED_COUNT;
+import static com.robillo.dancingplayer.utils.AppConstants.KEY_RECENTLY_PLAYED_COUNT;
 import static com.robillo.dancingplayer.utils.AppConstants.KEY_SORT_ORDER_FOR_SONGS;
 import static com.robillo.dancingplayer.utils.AppConstants.KEY_USER_THEME_NAME;
 import static com.robillo.dancingplayer.utils.AppConstants.PREF_FILE_NAME;
@@ -92,6 +96,36 @@ public class AppPreferencesHelper implements PreferencesHelper {
     @Override
     public void setPlaylistSet(Set<String> playlistSet) {
         prefs.edit().putStringSet(KEY_PLAYLIST_STRING_SET, playlistSet).apply();
+    }
+
+    @Override
+    public int getMostPlayedCount() {
+        return prefs.getInt(KEY_MOST_PLAYED_COUNT, DEFAULT_PLAYLIST_SONGS_COUNT);
+    }
+
+    @Override
+    public void setMostPlayedCount(int count) {
+        prefs.edit().putInt(KEY_MOST_PLAYED_COUNT, count).apply();
+    }
+
+    @Override
+    public int getRecentlyPlayedCount() {
+        return prefs.getInt(KEY_RECENTLY_PLAYED_COUNT, DEFAULT_PLAYLIST_SONGS_COUNT);
+    }
+
+    @Override
+    public void setRecentlyPlayedCount(int count) {
+        prefs.edit().putInt(KEY_RECENTLY_PLAYED_COUNT, count).apply();
+    }
+
+    @Override
+    public int getRecentlyAddedCount() {
+        return prefs.getInt(KEY_RECENTLY_ADDED_COUNT, DEFAULT_PLAYLIST_SONGS_COUNT);
+    }
+
+    @Override
+    public void setRecentlyAddedCount(int count) {
+        prefs.edit().putInt(KEY_RECENTLY_ADDED_COUNT, count).apply();
     }
 
 

@@ -44,6 +44,9 @@ public class AppConstants {
     public static final String KEY_IS_SONG_PLAYING = "is_song_playing";
     public static final String KEY_CURRENT_PLAYLIST_TITLE = "current_playlist_title";
     public static final String KEY_PLAYLIST_STRING_SET = "playlist_string_set";
+    public static final String KEY_MOST_PLAYED_COUNT = "key_most_played_count";
+    public static final String KEY_RECENTLY_PLAYED_COUNT = "key_recently_played_count";
+    public static final String KEY_RECENTLY_ADDED_COUNT = "key_recently_added_count";
 
     //default playlist title
     public static final String DEFAULT_PLAYLIST_TITLE = "All Songs";
@@ -57,6 +60,7 @@ public class AppConstants {
     public static final String REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE = "linearly_traversing_once";
 
     //MusicService
+    public static final int DEFAULT_PLAYLIST_SONGS_COUNT = 50;
     public static final int EMPTY_CELLS_COUNT = 2;
     public static final String CHANNEL_ID = "channelId";
     public static final String CHANNEL_NAME = "Player Notifications";

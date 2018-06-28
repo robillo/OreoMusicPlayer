@@ -14,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.robillo.dancingplayer.R;
 import com.robillo.dancingplayer.models.ThemeColors;
@@ -32,6 +33,34 @@ import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 public class ThemeChangeActivity extends AppCompatActivity implements ThemeChangeMvpView {
 
     private List<ThemeColors> themeColorsList = new ArrayList<>();
+    private AppPreferencesHelper helper = null;
+
+    @BindView(R.id.ten_mp)
+    TextView ten_mp;
+
+    @BindView(R.id.ten_rp)
+    TextView ten_rp;
+
+    @BindView(R.id.ten_ra)
+    TextView ten_ra;
+
+    @BindView(R.id.fifty_mp)
+    TextView fifty_mp;
+
+    @BindView(R.id.fifty_rp)
+    TextView fifty_rp;
+
+    @BindView(R.id.fifty_ra)
+    TextView fifty_ra;
+
+    @BindView(R.id.hundred_mp)
+    TextView hundred_mp;
+
+    @BindView(R.id.hundred_rp)
+    TextView hundred_rp;
+
+    @BindView(R.id.hundred_ra)
+    TextView hundred_ra;
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -65,10 +94,12 @@ public class ThemeChangeActivity extends AppCompatActivity implements ThemeChang
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.white));
 
-        AppPreferencesHelper helper = new AppPreferencesHelper(this);
+        initialisePreferenceHelper();
         ThemeColors currentUserThemeColors = AppConstants.themeMap.get(helper.getUserThemeName());
 
         inflateThemeColors();
+
+        setInitialStatePlaylistSongsCount();
 
         ThemeChoicesAdapter choicesAdapter = new ThemeChoicesAdapter(this, themeColorsList, currentUserThemeColors);
         recyclerView.setAdapter(choicesAdapter);
@@ -95,6 +126,63 @@ public class ThemeChangeActivity extends AppCompatActivity implements ThemeChang
     }
 
     @Override
+    public void setInitialStatePlaylistSongsCount() {
+        initialisePreferenceHelper();
+
+        int mpCount = helper.getMostPlayedCount();
+        int rpCount = helper.getRecentlyPlayedCount();
+        int raCount = helper.getRecentlyAddedCount();
+
+        setColorsToViews(ten_mp, fifty_mp, hundred_mp, mpCount);
+        setColorsToViews(ten_ra, fifty_ra, hundred_ra, raCount);
+        setColorsToViews(ten_rp, fifty_rp, hundred_rp, rpCount);
+    }
+
+    @Override
+    public void setColorsToViews(TextView tenView, TextView fiftyView, TextView hundredView, int count) {
+        switch (count) {
+            case 10: {
+                tenView.setTextColor(getResources().getColor(R.color.white));
+                tenView.setBackgroundColor(getResources().getColor(R.color.green_primary_dark));
+
+                fiftyView.setTextColor(getResources().getColor(R.color.colorTextOne));
+                fiftyView.setBackgroundColor(getResources().getColor(R.color.white));
+
+                hundredView.setTextColor(getResources().getColor(R.color.colorTextOne));
+                hundredView.setBackgroundColor(getResources().getColor(R.color.white));
+                break;
+            }
+            case 50: {
+                tenView.setTextColor(getResources().getColor(R.color.colorTextOne));
+                tenView.setBackgroundColor(getResources().getColor(R.color.white));
+
+                fiftyView.setTextColor(getResources().getColor(R.color.white));
+                fiftyView.setBackgroundColor(getResources().getColor(R.color.green_primary_dark));
+
+                hundredView.setTextColor(getResources().getColor(R.color.colorTextOne));
+                hundredView.setBackgroundColor(getResources().getColor(R.color.white));
+                break;
+            }
+            case 100: {
+                tenView.setTextColor(getResources().getColor(R.color.colorTextOne));
+                tenView.setBackgroundColor(getResources().getColor(R.color.white));
+
+                fiftyView.setTextColor(getResources().getColor(R.color.colorTextOne));
+                fiftyView.setBackgroundColor(getResources().getColor(R.color.white));
+
+                hundredView.setTextColor(getResources().getColor(R.color.white));
+                hundredView.setBackgroundColor(getResources().getColor(R.color.green_primary_dark));
+                break;
+            }
+        }
+    }
+
+    @Override
+    public void initialisePreferenceHelper() {
+        if(helper == null) helper = new AppPreferencesHelper(this);
+    }
+
+    @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase));
     }
@@ -116,4 +204,68 @@ public class ThemeChangeActivity extends AppCompatActivity implements ThemeChang
         setResult(Activity.RESULT_OK, new Intent());
         onBackPressed();
     }
+
+    @OnClick(R.id.ten_mp)
+    public void setTen_mp() {
+        initialisePreferenceHelper();
+        helper.setMostPlayedCount(10);
+        setColorsToViews(ten_mp, fifty_mp, hundred_mp, 10);
+    }
+
+    @OnClick(R.id.ten_rp)
+    public void setTen_rp() {
+        initialisePreferenceHelper();
+        helper.setRecentlyPlayedCount(10);
+        setColorsToViews(ten_rp, fifty_rp, hundred_rp, 10);
+    }
+
+    @OnClick(R.id.ten_ra)
+    public void setTen_ra() {
+        initialisePreferenceHelper();
+        helper.setRecentlyAddedCount(10);
+        setColorsToViews(ten_ra, fifty_ra, hundred_ra, 10);
+    }
+
+    @OnClick(R.id.fifty_mp)
+    public void setFifty_mp() {
+        initialisePreferenceHelper();
+        helper.setMostPlayedCount(50);
+        setColorsToViews(ten_mp, fifty_mp, hundred_mp, 50);
+    }
+
+    @OnClick(R.id.fifty_rp)
+    public void setFifty_rp() {
+        initialisePreferenceHelper();
+        helper.setRecentlyPlayedCount(50);
+        setColorsToViews(ten_rp, fifty_rp, hundred_rp, 50);
+    }
+
+    @OnClick(R.id.fifty_ra)
+    public void setFifty_ra() {
+        initialisePreferenceHelper();
+        helper.setRecentlyAddedCount(50);
+        setColorsToViews(ten_ra, fifty_ra, hundred_ra, 50);
+    }
+
+    @OnClick(R.id.hundred_mp)
+    public void setHundred_mp() {
+        initialisePreferenceHelper();
+        helper.setMostPlayedCount(100);
+        setColorsToViews(ten_mp, fifty_mp, hundred_mp, 100);
+    }
+
+    @OnClick(R.id.hundred_rp)
+    public void setHundred_rp() {
+        initialisePreferenceHelper();
+        helper.setRecentlyPlayedCount(100);
+        setColorsToViews(ten_rp, fifty_rp, hundred_rp, 100);
+    }
+
+    @OnClick(R.id.hundred_ra)
+    public void setHundred_ra() {
+        initialisePreferenceHelper();
+        helper.setRecentlyAddedCount(100);
+        setColorsToViews(ten_ra, fifty_ra, hundred_ra, 100);
+    }
+
 }
