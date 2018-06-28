@@ -181,6 +181,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         if(helper == null) helper = new AppPreferencesHelper(this);
         selectedPlaylist = new ApplicationUtils().convertStringToPlaylistRowItem(helper.getCurrentPlaylistTitle());
 
+        songRepository = getSongRepository();
+        songRepository.deleteAllSongs();
+
         refreshForUserThemeColors();
         setSongListFragment();
         setPlaylistBottomSheet();
@@ -202,16 +205,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         listLiveData = songRepository.getAllSongs(selectedPlaylist.getTitle(), new AppPreferencesHelper(this).getSortOrderForSongs());
 
         listLiveData.observe(this, songs -> {
-            Log.e("tag", "update");
-            updateRecyclerViewForLoadedPlaylist(songs);
-            startMusicServiceForCurrentPlaylist(songs);
+            if(songs != null) {
+                updateRecyclerViewForLoadedPlaylist(songs);
+                startMusicServiceForCurrentPlaylist(songs);
+            }
         });
     }
 
     @Override
     public void removeObservers() {
-        if(listLiveData != null)
-            listLiveData.removeObservers(this);
+        if(listLiveData != null) listLiveData.removeObservers(this);
     }
 
     @Override
@@ -241,8 +244,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             Toast.makeText(this, "Song Removed From Playlist", Toast.LENGTH_SHORT).show();
         }
 
-        loadSongsForSelectedPlaylistFromDb();
-        loadSongsForSelectedPlaylistFromDb();
+        LiveData<Integer> liveData = songRepository.getNumRows();
+        liveData.observe(this, integer -> {
+                loadSongsForSelectedPlaylistFromDb();
+                liveData.removeObservers(this);
+        });
 
 //        SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
 //        if(fragment != null) fragment.notifyDataSetChanged(index);
@@ -251,6 +257,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Override
     public void updateRecyclerViewForLoadedPlaylist(List<Song> audioList) {
         SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
+
         if(fragment != null) fragment.renderRecyclerViewForAudioList(audioList);
     }
 
@@ -447,9 +454,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Override
     public void removeSongFromListInMusicService(Song song) {
         MusicService service = getMusicService();
-        if(service != null) {
-            service.removeSongFromList(song);
-        }
+        if(service != null) service.removeSongFromList(song);
     }
 
     @Override
@@ -912,6 +917,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         setCurrentPlaylistAsHeader();
 
         loadPlaylistsIntoRecyclerView(FIRST_LOAD, null);
+
+        if(songRepository == null) songRepository = getSongRepository();
 
         loadSongsForSelectedPlaylistFromDb();
     }

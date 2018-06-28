@@ -276,10 +276,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         }
 
         MainActivity activity = (MainActivity) getActivity();
-        if (activity != null) {
-            Log.e("put", "songs list in db");
-            activity.putSongsListIntoDatabase(list);
-        }
+        if (activity != null) activity.putSongsListIntoDatabase(list);
 
         if(from == FROM_ACTIVITY) {
             Toast.makeText(getActivity(), R.string.rescanned, Toast.LENGTH_SHORT).show();
@@ -292,8 +289,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     public void renderRecyclerViewForAudioList(List<Song> list) {
 
         MainActivity activity = (MainActivity) getActivity();
-        if(activity != null)
-            activity.removeObservers();
+        if(activity != null) activity.removeObservers();
 
         audioList = null;
         audioList = new ArrayList<>();

@@ -31,6 +31,8 @@ public interface MusicServiceInterface {
 
     Song getSong();
 
+    int songsListSize();
+
     void seekPlayer(int position);
 
     void playPlayer();

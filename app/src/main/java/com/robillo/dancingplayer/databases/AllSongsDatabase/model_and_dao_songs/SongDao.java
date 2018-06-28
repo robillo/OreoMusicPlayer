@@ -34,6 +34,9 @@ public interface SongDao {
     @Delete
     void deleteSong(Song... songs);
 
+    @Query("SELECT COUNT(id) FROM Song")
+    LiveData<Integer> getNumberOfRows();
+
     @Query("DELETE FROM Song WHERE id = :id")
     void deleteSongId(String id);
 

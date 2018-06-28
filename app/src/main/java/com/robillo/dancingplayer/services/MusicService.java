@@ -382,6 +382,11 @@ public class MusicService extends Service implements
     }
 
     @Override
+    public int songsListSize() {
+        return songs == null ? 0 : songs.size();
+    }
+
+    @Override
     public void playPrevious() {
 
         if(songs == null) return;
@@ -617,9 +622,10 @@ public class MusicService extends Service implements
 
     @Override
     public void removeSongFromList(Song song) {
-        if(songs != null && songs.contains(song)) {
-            boolean b = songs.remove(song);
-            Log.e("tag", "song actually deleted? " + b);
+        Song songToDelete = null;
+        if(songs != null) {
+            for (Song s : songs) if(s.getId() != null && s.getId().equals(song.getId())) songToDelete = s;
+            songs.remove(songToDelete);
         }
     }
 

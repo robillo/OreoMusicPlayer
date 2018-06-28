@@ -1,14 +1,19 @@
 package com.robillo.dancingplayer.utils;
 
 import android.arch.lifecycle.LiveData;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 
 import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_playlists.PlaylistRepository;
 import com.robillo.dancingplayer.models.PlaylistRowItem;
 import com.robillo.dancingplayer.preferences.AppPreferencesHelper;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -47,5 +52,31 @@ public class ApplicationUtils {
         }
 
         return new PlaylistRowItem(title, isPersistent);
+    }
+
+    public boolean deleteFile(Context context, File file) {
+        final String where = MediaStore.MediaColumns.DATA + "=?";
+        final String[] selectionArgs = new String[] {
+                file.getAbsolutePath()
+        };
+
+        Log.e("path?", " " + Arrays.toString(selectionArgs));
+
+        Log.e("exists?", " " + file.exists());
+
+//        context.getContentResolver().delete(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, where, selectionArgs);
+
+        int numRows = context.getContentResolver().delete(
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                MediaStore.MediaColumns.DATA + "='" + file.getAbsolutePath() + "'",
+                null);
+
+        Log.e("tag", "numrows " + numRows);
+
+        if (file.exists()) {
+            Log.e("exists?", "yea");
+            return file.delete();
+        }
+        return !file.exists();
     }
 }

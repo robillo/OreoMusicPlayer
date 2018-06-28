@@ -24,6 +24,8 @@ import com.robillo.dancingplayer.utils.AppConstants;
 import com.robillo.dancingplayer.utils.ApplicationUtils;
 import com.robillo.dancingplayer.views.activities.main.MainActivity;
 
+import java.io.File;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -145,17 +147,26 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
         Uri uri = ContentUris.withAppendedId(
                 MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, Long.valueOf(song.getId())
         );
-        if(getActivity()!=null) {
+
+        if(getActivity() != null) {
             MainActivity act = (MainActivity) getActivity();
             Song mSong = act.getMusicService().getSong();
             if(mSong != null && mSong.getId().equals(song.getId())) {
-                act.playNextSong();
                 act.getMusicService().cancelNotification();
-                act.removeSongFromListInMusicService(song);
-                //and remove song with song id as song.getId() from list in music service
+                act.playNextSong();
             }
-            act.getContentResolver().delete(uri, null, null);
-            Toast.makeText(act, "Song Deleted From Device", Toast.LENGTH_SHORT).show();
+            act.removeSongFromListInMusicService(song);
+
+            File file = new File(uri.getPath());
+            boolean isDeleted = new ApplicationUtils().deleteFile(getActivity(), file);
+
+//            act.getContentResolver().delete(uri, null, null);
+            if(isDeleted) {
+                Toast.makeText(act, "Song Deleted From Device", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Toast.makeText(act, "There was some error in deletion", Toast.LENGTH_SHORT).show();
+            }
             act.refreshSongListFragmentForSongDelete(song, index);
             act.hideOrRemoveBottomSheet();
         }
