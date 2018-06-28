@@ -112,7 +112,7 @@ public interface MainActivityMvpView {
 
     void removeObservers();
 
-    void removeSongCurrentPlaylist(String songId, int index);
+    void removeSongCurrentPlaylist(Song song, int index);
 
     void removeSongFromDb(String songId);
 

@@ -215,36 +215,24 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @Override
-    public void removeSongCurrentPlaylist(String songId, int index) {
+    public void removeSongCurrentPlaylist(Song song, int index) {
         if(songRepository == null) songRepository = getSongRepository();
         if(playlistRepository == null) playlistRepository = getPlaylistRepository();
 
-        Song mSong = getMusicService().getSong();
-        if(mSong != null && mSong.getId().equals(songId)) {
+        Song serviceSong = getMusicService().getSong();
+        if(serviceSong != null && serviceSong.getId().equals(song.getId())) {
             playNextSong();
             getMusicService().cancelNotification();
-            getMusicService().removeSongFromListInMusicServiceById(songId);
         }
+        getMusicService().removeSongFromListInMusicServiceById(song.getId());
 
-        String currentPlaylist = new AppPreferencesHelper(this).getCurrentPlaylistTitle();
-        if(currentPlaylist.equals(AppConstants.DEFAULT_PLAYLIST_TITLE)) {
-            songRepository.deleteSongById(songId);
-
-            Uri uri = ContentUris.withAppendedId(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, Long.valueOf(songId));
-
-            getContentResolver().delete(uri, null, null);
-
-            Toast.makeText(this, "Song Removed From Device", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            playlistRepository.removeSongFromPlaylist(songId, currentPlaylist);
-            Toast.makeText(this, "Song Removed From Playlist", Toast.LENGTH_SHORT).show();
-        }
+        playlistRepository.removeSongFromPlaylist(song.getId(), new AppPreferencesHelper(this).getCurrentPlaylistTitle());
 
         LiveData<Integer> liveData = songRepository.getNumRows();
         liveData.observe(this, integer -> {
-                loadSongsForSelectedPlaylistFromDb();
-                liveData.removeObservers(this);
+            refreshSongListFragmentForSongDelete(song, index);
+            Toast.makeText(this, "Song Removed From Playlist", Toast.LENGTH_SHORT).show();
+            liveData.removeObservers(this);
         });
 
 //        SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
