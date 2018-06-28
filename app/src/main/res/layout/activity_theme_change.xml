@@ -7,109 +7,53 @@
     android:id="@+id/coordinator_layout"
     tools:context="com.robillo.dancingplayer.views.activities.theme_change.ThemeChangeActivity">
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="1sp"
-            android:background="@color/colorTextThree"
-            tools:ignore="ContentDescription,SmallSp" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize"
-            android:orientation="horizontal"
-            android:background="@color/white">
-
-            <ImageButton
-                android:layout_width="?android:attr/actionBarSize"
-                android:layout_height="?android:attr/actionBarSize"
-                android:id="@+id/go_back_to_main"
-                android:src="@drawable/ic_keyboard_arrow_left_black_24dp"
-                android:contentDescription="@string/back_pressed"
-                android:background="?android:attr/selectableItemBackground"
-                android:tint="@color/colorTextOne"/>
-
-            <TextView
-                android:layout_width="0sp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:textStyle="bold"
-                android:textColor="@color/colorTextOne"
-                android:text="@string/your_settings"
-                android:textSize="25sp"
-                android:gravity="center"/>
-
-            <ImageButton
-                android:layout_width="?android:attr/actionBarSize"
-                android:layout_height="?android:attr/actionBarSize"
-                tools:ignore="ContentDescription"
-                android:background="?android:attr/selectableItemBackground"/>
-
-        </LinearLayout>
-
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="2sp"
-            android:background="@color/transparency_black"
-            tools:ignore="ContentDescription,SmallSp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorTextOne"
-            android:text="@string/select_player_theme"
-            android:textSize="20sp"
-            android:padding="10sp"
-            android:gravity="start|center_vertical"/>
-
-        <android.support.v7.widget.RecyclerView
-            android:paddingTop="10sp"
-            android:paddingBottom="10sp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/recycler_view"
-            android:background="@color/colorTextFour"
-            android:orientation="horizontal"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-            tools:listitem="@layout/row_theme_colors">
-
-        </android.support.v7.widget.RecyclerView>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/transparency_black"
-            android:text="@string/rescan_device"
-            android:textSize="20sp"
-            android:layout_margin="10sp"
-            android:paddingTop="10sp"
-            android:paddingBottom="10sp"
-            android:background="@drawable/bg_settings"
-            android:gravity="center"
-            android:layout_gravity="center_horizontal"
-            android:id="@+id/rescan_device"/>
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@drawable/bg_settings"
-            android:layout_margin="10sp"
-            android:clickable="false"
-            android:padding="2sp">
+            android:orientation="vertical">
 
-            <TextView
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorTextOne"
-                android:text="@string/number_of_songs_to_display_for_categories"
-                android:textSize="20sp"
-                android:padding="10sp"
-                android:gravity="start|center_vertical"/>
+                android:layout_height="1sp"
+                android:background="@color/colorTextThree"
+                tools:ignore="ContentDescription,SmallSp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/actionBarSize"
+                android:orientation="horizontal"
+                android:background="@color/white">
+
+                <ImageButton
+                    android:layout_width="?android:attr/actionBarSize"
+                    android:layout_height="?android:attr/actionBarSize"
+                    android:id="@+id/go_back_to_main"
+                    android:src="@drawable/ic_keyboard_arrow_left_black_24dp"
+                    android:contentDescription="@string/back_pressed"
+                    android:background="?android:attr/selectableItemBackground"
+                    android:tint="@color/colorTextOne"/>
+
+                <TextView
+                    android:layout_width="0sp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorTextOne"
+                    android:text="@string/your_settings"
+                    android:textSize="25sp"
+                    android:gravity="center"/>
+
+                <ImageButton
+                    android:layout_width="?android:attr/actionBarSize"
+                    android:layout_height="?android:attr/actionBarSize"
+                    tools:ignore="ContentDescription"
+                    android:background="?android:attr/selectableItemBackground"/>
+
+            </LinearLayout>
 
             <ImageView
                 android:layout_width="match_parent"
@@ -121,213 +65,272 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorTextOne"
-                android:text="@string/most_played"
+                android:text="@string/select_player_theme"
                 android:textSize="20sp"
                 android:padding="10sp"
                 android:gravity="start|center_vertical"/>
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="2sp"
-                android:background="@color/colorTextFive"
-                tools:ignore="ContentDescription,SmallSp" />
-
-            <LinearLayout
+            <android.support.v7.widget.RecyclerView
+                android:paddingTop="10sp"
+                android:paddingBottom="10sp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:id="@+id/recycler_view"
+                android:background="@color/colorTextFour"
+                android:orientation="horizontal"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                tools:listitem="@layout/row_theme_colors">
 
-                <TextView
-                    android:layout_width="0sp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/white"
-                    android:text="@string/first_10"
-                    android:textSize="18sp"
-                    android:padding="10sp"
-                    android:gravity="center"
-                    android:background="@color/grey_dark"/>
+            </android.support.v7.widget.RecyclerView>
 
-                <ImageView
-                    android:layout_width="2sp"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorTextFive"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:layout_width="0sp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/colorTextOne"
-                    android:text="@string/first_50"
-                    android:textSize="18sp"
-                    android:padding="10sp"
-                    android:gravity="center"/>
-
-                <ImageView
-                    android:layout_width="2sp"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorTextFive"
-                    tools:ignore="ContentDescription" />
-
-                <TextView
-                    android:layout_width="0sp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/colorTextOne"
-                    android:text="@string/first_100"
-                    android:textSize="18sp"
-                    android:padding="10sp"
-                    android:gravity="center"/>
-
-            </LinearLayout>
-
-            <ImageView
+            <Button
                 android:layout_width="match_parent"
-                android:layout_height="2sp"
-                android:background="@color/colorTextFive"
-                tools:ignore="ContentDescription,SmallSp" />
+                android:layout_height="wrap_content"
+                android:textColor="@color/transparency_black"
+                android:text="@string/rescan_device"
+                android:textSize="20sp"
+                android:layout_margin="10sp"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:paddingTop="10sp"
+                android:paddingBottom="10sp"
+                android:background="@drawable/bg_settings"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/rescan_device"/>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColor="@color/colorTextOne"
-                android:text="@string/recently_played"
+                android:text="@string/number_of_songs_to_display_for_categories"
                 android:textSize="20sp"
-                android:padding="10sp"
-                android:gravity="start|center_vertical"/>
+                android:gravity="center"
+                android:clickable="false"
+                android:paddingTop="5sp"
+                android:layout_margin="5sp"/>
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="2sp"
-                android:background="@color/colorTextFive"
-                tools:ignore="ContentDescription,SmallSp" />
-
-            <LinearLayout
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_margin="10sp"
+                app:cardCornerRadius="5sp">
 
-                <TextView
-                    android:layout_width="0sp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/colorTextOne"
-                    android:text="@string/first_10"
-                    android:textSize="18sp"
-                    android:padding="10sp"
-                    android:gravity="center"
-                    android:background="@color/white"/>
+                    android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="2sp"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorTextFive"
-                    tools:ignore="ContentDescription" />
+                    <TextView
+                        android:layout_width="0sp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:textColor="@color/colorTextOne"
+                        android:text="@string/most_played"
+                        android:textSize="20sp"
+                        android:gravity="center"
+                        android:clickable="false"
+                        android:paddingTop="10sp"
+                        android:paddingBottom="10sp"
+                        android:paddingLeft="5sp"
+                        android:paddingRight="5sp"
+                        android:background="@color/colorTextFour"/>
 
-                <TextView
-                    android:layout_width="0sp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/colorTextOne"
-                    android:text="@string/first_50"
-                    android:textSize="18sp"
-                    android:padding="10sp"
-                    android:gravity="center"/>
+                    <TextView
+                        android:layout_width="0sp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:textColor="@color/white"
+                        android:text="@string/first_10"
+                        android:textSize="18sp"
+                        android:padding="5sp"
+                        android:gravity="center"
+                        android:background="@color/green_primary_dark"/>
 
-                <ImageView
-                    android:layout_width="2sp"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorTextFive"
-                    tools:ignore="ContentDescription" />
+                    <ImageView
+                        android:layout_width="2sp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorTextThree"
+                        tools:ignore="ContentDescription" />
 
-                <TextView
-                    android:layout_width="0sp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/white"
-                    android:text="@string/first_100"
-                    android:textSize="18sp"
-                    android:padding="10sp"
-                    android:gravity="center"
-                    android:background="@color/grey_dark"/>
+                    <TextView
+                        android:layout_width="0sp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:textColor="@color/colorTextOne"
+                        android:text="@string/first_50"
+                        android:textSize="18sp"
+                        android:padding="5sp"
+                        android:gravity="center"/>
 
-            </LinearLayout>
+                    <ImageView
+                        android:layout_width="2sp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorTextThree"
+                        tools:ignore="ContentDescription" />
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="2sp"
-                android:background="@color/colorTextFive"
-                tools:ignore="ContentDescription,SmallSp" />
+                    <TextView
+                        android:layout_width="0sp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:textColor="@color/colorTextOne"
+                        android:text="@string/first_100"
+                        android:textSize="18sp"
+                        android:padding="5sp"
+                        android:gravity="center"/>
 
-            <TextView
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorTextOne"
-                android:text="@string/recently_added"
-                android:textSize="20sp"
-                android:padding="10sp"
-                android:gravity="start|center_vertical"/>
+                android:layout_margin="10sp"
+                app:cardCornerRadius="5sp">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="2sp"
-                android:background="@color/colorTextFive"
-                tools:ignore="ContentDescription,SmallSp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-            <LinearLayout
+                    <TextView
+                        android:layout_width="0sp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:textColor="@color/colorTextOne"
+                        android:text="@string/recently_played"
+                        android:textSize="20sp"
+                        android:gravity="center"
+                        android:clickable="false"
+                        android:paddingTop="10sp"
+                        android:paddingBottom="10sp"
+                        android:paddingLeft="5sp"
+                        android:paddingRight="5sp"
+                        android:background="@color/colorTextFour"/>
+
+                    <TextView
+                        android:layout_width="0sp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:textColor="@color/white"
+                        android:text="@string/first_10"
+                        android:textSize="18sp"
+                        android:padding="5sp"
+                        android:gravity="center"
+                        android:background="@color/green_primary_dark"/>
+
+                    <ImageView
+                        android:layout_width="2sp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorTextThree"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="0sp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:textColor="@color/colorTextOne"
+                        android:text="@string/first_50"
+                        android:textSize="18sp"
+                        android:padding="5sp"
+                        android:gravity="center"/>
+
+                    <ImageView
+                        android:layout_width="2sp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorTextThree"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="0sp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:textColor="@color/colorTextOne"
+                        android:text="@string/first_100"
+                        android:textSize="18sp"
+                        android:padding="5sp"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_margin="10sp"
+                app:cardCornerRadius="5sp">
 
-                <TextView
-                    android:layout_width="0sp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/colorTextOne"
-                    android:text="@string/first_10"
-                    android:textSize="18sp"
-                    android:padding="10sp"
-                    android:gravity="center"
-                    android:background="@color/white"/>
+                    android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="2sp"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorTextFive"
-                    tools:ignore="ContentDescription" />
+                    <TextView
+                        android:layout_width="0sp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="3"
+                        android:textColor="@color/colorTextOne"
+                        android:text="@string/recently_added"
+                        android:textSize="20sp"
+                        android:gravity="center"
+                        android:clickable="false"
+                        android:paddingTop="10sp"
+                        android:paddingBottom="10sp"
+                        android:paddingLeft="5sp"
+                        android:paddingRight="5sp"
+                        android:background="@color/colorTextFour"/>
 
-                <TextView
-                    android:layout_width="0sp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/white"
-                    android:text="@string/first_50"
-                    android:textSize="18sp"
-                    android:padding="10sp"
-                    android:gravity="center"
-                    android:background="@color/grey_dark"/>
+                    <TextView
+                        android:layout_width="0sp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:textColor="@color/white"
+                        android:text="@string/first_10"
+                        android:textSize="18sp"
+                        android:padding="5sp"
+                        android:gravity="center"
+                        android:background="@color/green_primary_dark"/>
 
-                <ImageView
-                    android:layout_width="2sp"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorTextFive"
-                    tools:ignore="ContentDescription" />
+                    <ImageView
+                        android:layout_width="2sp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorTextThree"
+                        tools:ignore="ContentDescription" />
 
-                <TextView
-                    android:layout_width="0sp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textColor="@color/colorTextOne"
-                    android:text="@string/first_100"
-                    android:textSize="18sp"
-                    android:padding="10sp"
-                    android:gravity="center"/>
+                    <TextView
+                        android:layout_width="0sp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:textColor="@color/colorTextOne"
+                        android:text="@string/first_50"
+                        android:textSize="18sp"
+                        android:padding="5sp"
+                        android:gravity="center"/>
 
-            </LinearLayout>
+                    <ImageView
+                        android:layout_width="2sp"
+                        android:layout_height="match_parent"
+                        android:background="@color/colorTextThree"
+                        tools:ignore="ContentDescription" />
+
+                    <TextView
+                        android:layout_width="0sp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:textColor="@color/colorTextOne"
+                        android:text="@string/first_100"
+                        android:textSize="18sp"
+                        android:padding="5sp"
+                        android:gravity="center"/>
+
+                </LinearLayout>
+
+            </android.support.v7.widget.CardView>
 
         </LinearLayout>
 
-    </LinearLayout>
+    </ScrollView>
 
 </android.support.design.widget.CoordinatorLayout>
