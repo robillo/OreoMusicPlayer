@@ -70,6 +70,12 @@
                 android:padding="10sp"
                 android:gravity="start|center_vertical"/>
 
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="1sp"
+                android:background="@color/colorTextTwo"
+                tools:ignore="ContentDescription,SmallSp" />
+
             <android.support.v7.widget.RecyclerView
                 android:paddingTop="10sp"
                 android:paddingBottom="10sp"
@@ -83,21 +89,11 @@
 
             </android.support.v7.widget.RecyclerView>
 
-            <Button
+            <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/transparency_black"
-                android:text="@string/rescan_device"
-                android:textSize="20sp"
-                android:layout_margin="10sp"
-                android:paddingLeft="20sp"
-                android:paddingRight="20sp"
-                android:paddingTop="10sp"
-                android:paddingBottom="10sp"
-                android:background="@drawable/bg_settings"
-                android:gravity="center"
-                android:layout_gravity="center_horizontal"
-                android:id="@+id/rescan_device"/>
+                android:layout_height="1sp"
+                android:background="@color/colorTextTwo"
+                tools:ignore="ContentDescription,SmallSp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -105,7 +101,7 @@
                 android:textColor="@color/colorTextOne"
                 android:text="@string/number_of_songs_to_display_for_categories"
                 android:textSize="20sp"
-                android:gravity="center"
+                android:gravity="start|center_vertical"
                 android:clickable="false"
                 android:paddingTop="5sp"
                 android:layout_margin="5sp"/>
@@ -328,6 +324,22 @@
                 </LinearLayout>
 
             </android.support.v7.widget.CardView>
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/transparency_black"
+                android:text="@string/rescan_device"
+                android:textSize="20sp"
+                android:layout_margin="10sp"
+                android:paddingLeft="20sp"
+                android:paddingRight="20sp"
+                android:paddingTop="10sp"
+                android:paddingBottom="10sp"
+                android:background="@drawable/bg_settings"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+                android:id="@+id/rescan_device"/>
 
         </LinearLayout>
 
