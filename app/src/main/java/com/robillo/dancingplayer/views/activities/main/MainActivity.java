@@ -3,14 +3,11 @@ package com.robillo.dancingplayer.views.activities.main;
 import android.app.Activity;
 import android.arch.lifecycle.LiveData;
 import android.content.ComponentName;
-import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.IBinder;
-import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
@@ -410,13 +407,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
                 hidePlaylistBottomSheet();
                 new Handler().postDelayed(() ->  {
                     hideOrRemoveBottomSheet();
-                    bottomSheetFragment
-                            .show(getSupportFragmentManager(), bottomSheetFragment.getTag());
+                    if(!bottomSheetFragment.isAdded())
+                        bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
                 }, 350);
             }
             else {
-                bottomSheetFragment
-                        .show(getSupportFragmentManager(), bottomSheetFragment.getTag());
+                if(!bottomSheetFragment.isAdded())
+                    bottomSheetFragment.show(getSupportFragmentManager(), bottomSheetFragment.getTag());
             }
 
         }
@@ -444,7 +441,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void hideSongPlayFragment(SongPlayFragmentSheet fragmentSheet) {
-        fragmentSheet.dismiss();
+        if(fragmentSheet != null && fragmentSheet.isAdded() && fragmentSheet.isVisible()) fragmentSheet.dismiss();
     }
 
     @Override
@@ -461,14 +458,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Override
     public void setSongPlayFragment() {
 
-        SongPlayFragmentSheet fragmentSheet =
-                (SongPlayFragmentSheet) getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play));
+        SongPlayFragmentSheet fragmentSheet = (SongPlayFragmentSheet) getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play));
 
-        if(fragmentSheet == null)
-            new SongPlayFragmentSheet().show(getSupportFragmentManager(), getString(R.string.song_play));
-        else {
-            fragmentSheet.show(getSupportFragmentManager(), getString(R.string.song_play));
-        }
+        if(fragmentSheet == null) new SongPlayFragmentSheet().show(getSupportFragmentManager(), getString(R.string.song_play));
+        else
+            if(!fragmentSheet.isAdded() && fragmentSheet.isHidden()) fragmentSheet.show(getSupportFragmentManager(), getString(R.string.song_play));
     }
 
     @Override
@@ -583,18 +577,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
                     songListFragment.pausePlayer(FROM_ACTIVITY);
             }
 
-            SongPlayFragmentSheet songPlayFragment =
-                    (SongPlayFragmentSheet) getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play));
+            SongPlayFragmentSheet songPlayFragment = (SongPlayFragmentSheet) getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play));
 
             if(songPlayFragment != null) {
                 songPlayFragment.setCurrentSong(currentSong);
 
                 AppPreferencesHelper helper = new AppPreferencesHelper(this);
 
-                if(helper.isPlayEvent())
-                    songPlayFragment.playPlayer(FROM_ACTIVITY);
-                else
-                    songPlayFragment.pausePlayer(FROM_ACTIVITY);
+                if(helper.isPlayEvent()) songPlayFragment.playPlayer(FROM_ACTIVITY);
+                else songPlayFragment.pausePlayer(FROM_ACTIVITY);
             }
         }
         EventBus.getDefault().removeStickyEvent(event);
@@ -604,8 +595,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
     public void onMessageEvent(SetSeekBarEvent event) {
 
-        SongPlayFragmentSheet fragment =
-                (SongPlayFragmentSheet) getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play));
+        SongPlayFragmentSheet fragment = (SongPlayFragmentSheet) getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play));
 
         if(fragment != null) {
             fragment.setDurationValues(event.getCurrentDuration(), event.getTotalDuration()/1000);
@@ -624,7 +614,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
             SongPlayFragmentSheet playFragment = (SongPlayFragmentSheet) manager.findFragmentByTag(getString(R.string.song_play));
             SongsListFragment listFragment = (SongsListFragment) manager.findFragmentByTag(getString(R.string.songs_list));
-            if(playFragment != null) playFragment.dismiss();
+            if(playFragment != null && playFragment.isVisible()) playFragment.dismiss();
 
             if(listFragment != null) {
                 currentSong = null;
