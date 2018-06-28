@@ -279,9 +279,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         audioList.add(new Song());
         audioList.add(new Song());
 
-        if(getMusicService() == null) {
+        if(getMusicService() == null)
             startServiceForAudioList(new ArrayList<>(audioList));
-        }
         else {
             updateServiceList(new ArrayList<>(audioList));
         }
@@ -348,6 +347,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void updateServiceList(ArrayList<Song> updatedAudioList) {
+        musicService.setSongPosn(0);
         musicService.updateAudioList(updatedAudioList);
     }
 

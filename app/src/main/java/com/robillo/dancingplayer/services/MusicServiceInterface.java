@@ -72,4 +72,6 @@ public interface MusicServiceInterface {
     NotificationCompat.Action returnAction(int id, String title, int which);
 
     void removeSongFromListInMusicServiceById(String songId);
+
+    void setSongPosn(int songPosn);
 }

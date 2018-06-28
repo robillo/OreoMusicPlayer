@@ -435,7 +435,7 @@ public class MusicService extends Service implements
         NotificationCompat.Action pause = returnAction(playOrPauseDrawable, PLAY_OR_PAUSE_NOT, 2);
         NotificationCompat.Action next = returnAction(R.drawable.ic_skip_next_black_24dp, NEXT_NOT, 3);
 
-        if(songs == null) {
+        if(songs == null || songPosition >= songs.size() - 1) {
             cancelNotification();
             return;
         }
@@ -479,6 +479,11 @@ public class MusicService extends Service implements
                 }
             }
         }
+    }
+
+    @Override
+    public void setSongPosn(int songPosn) {
+        songPosition = songPosn;
     }
 
     @Override
