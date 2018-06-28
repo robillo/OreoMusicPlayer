@@ -40,10 +40,14 @@ import static com.robillo.dancingplayer.utils.AppConstants.COMPOSER;
 import static com.robillo.dancingplayer.utils.AppConstants.DATA;
 import static com.robillo.dancingplayer.utils.AppConstants.DATE_ADDED;
 import static com.robillo.dancingplayer.utils.AppConstants.DATE_MODIFIED;
+import static com.robillo.dancingplayer.utils.AppConstants.DEFAULT_PLAYLIST_TITLE;
 import static com.robillo.dancingplayer.utils.AppConstants.DURATION;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_SONGS_LIST;
 import static com.robillo.dancingplayer.utils.AppConstants.ID;
 import static com.robillo.dancingplayer.utils.AppConstants.INDEX;
+import static com.robillo.dancingplayer.utils.AppConstants.MOST_PLAYED;
+import static com.robillo.dancingplayer.utils.AppConstants.RECENTLY_ADDED;
+import static com.robillo.dancingplayer.utils.AppConstants.RECENTLY_PLAYED;
 import static com.robillo.dancingplayer.utils.AppConstants.SIZE;
 import static com.robillo.dancingplayer.utils.AppConstants.TITLE;
 import static com.robillo.dancingplayer.utils.AppConstants.TITLE_KEY;
@@ -114,8 +118,9 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
         title.setSelected(true);
         artistAndSize.setSelected(true);
 
-        if (bundle != null) {
+        showRemoveFromPlaylistIfUserPlaylist(v);
 
+        if (bundle != null) {
             index = bundle.getInt(INDEX);
 
             song.setData(bundle.getString(DATA));
@@ -142,34 +147,20 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
         }
     }
 
+    @Override
+    public void showRemoveFromPlaylistIfUserPlaylist(View v) {
+        if(getActivity() != null)  {
+            String current = new AppPreferencesHelper(getActivity()).getCurrentPlaylistTitle();
+            if(current.equals(DEFAULT_PLAYLIST_TITLE) || current.equals(MOST_PLAYED) || current.equals(RECENTLY_ADDED) || current.equals(RECENTLY_PLAYED)) {
+                removeFromPlaylist.setVisibility(View.GONE);
+                v.findViewById(R.id.line_remove_from_playlist).setVisibility(View.GONE);
+            }
+        }
+    }
+
     @OnClick(R.id.delete_song)
     public void setDeleteSong() {
-        Uri uri = ContentUris.withAppendedId(
-                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, Long.valueOf(song.getId())
-        );
-
-        if(getActivity() != null) {
-            MainActivity act = (MainActivity) getActivity();
-            Song mSong = act.getMusicService().getSong();
-            if(mSong != null && mSong.getId().equals(song.getId())) {
-                act.getMusicService().cancelNotification();
-                act.playNextSong();
-            }
-            act.removeSongFromListInMusicService(song);
-
-            File file = new File(uri.getPath());
-            boolean isDeleted = new ApplicationUtils().deleteFile(getActivity(), file);
-
-//            act.getContentResolver().delete(uri, null, null);
-            if(isDeleted) {
-                Toast.makeText(act, "Song Deleted From Device", Toast.LENGTH_SHORT).show();
-            }
-            else {
-                Toast.makeText(act, "There was some error in deletion", Toast.LENGTH_SHORT).show();
-            }
-            act.refreshSongListFragmentForSongDelete(song, index);
-            act.hideOrRemoveBottomSheet();
-        }
+        if(getActivity() != null) new ApplicationUtils().deleteFile(getActivity(), index, song, song.getId());
     }
 
     @OnClick(R.id.rate_app)

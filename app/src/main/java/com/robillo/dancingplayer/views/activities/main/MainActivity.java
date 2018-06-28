@@ -2,7 +2,6 @@ package com.robillo.dancingplayer.views.activities.main;
 
 import android.app.Activity;
 import android.arch.lifecycle.LiveData;
-import android.arch.lifecycle.Observer;
 import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.Context;
@@ -13,7 +12,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -122,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     private SongRepository songRepository;
     private PlaylistRepository playlistRepository;
     private LiveData<List<Song>> listLiveData;
-    private Observer<List<Song>> listLiveObserver;
 
     @SuppressWarnings("FieldCanBeLocal")
     private Song currentSong = null;
