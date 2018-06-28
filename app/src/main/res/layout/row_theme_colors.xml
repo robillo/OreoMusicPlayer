@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="130sp"
-    android:layout_height="130sp"
+    android:layout_width="150sp"
+    android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="8sp"
     android:layout_marginBottom="8sp"
     android:layout_marginLeft="5sp"
     android:layout_marginRight="5sp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:cardCornerRadius="10sp"
+    app:cardCornerRadius="5sp"
     app:cardBackgroundColor="@color/white">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="UseCompoundDrawables">
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="0sp"
-            android:layout_weight="2"
+            android:layout_height="100sp"
             tools:background="@drawable/gradient"
             android:contentDescription="@string/gradient_colors"
             android:id="@+id/gradient_image_view"/>
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="0sp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             tools:text="VIOLET - LIGHT"
             android:gravity="center"
             android:textSize="18sp"

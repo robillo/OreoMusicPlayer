@@ -58,4 +58,11 @@
     <string name="edit_cancel">Playlist Edit Action Cancelled</string>
     <string name="creat_cancel">Please Creation Action Cancelled</string>
     <string name="enter_playlist_name">Please Enter A Playlist Name</string>
+    <string name="number_of_songs_to_display_for_categories">Number of songs to display for playlists:</string>
+    <string name="most_played">Most Played:</string>
+    <string name="recently_played">Recently Played:</string>
+    <string name="recently_added">Recently Added:</string>
+    <string name="first_10">First 10</string>
+    <string name="first_50">First 50</string>
+    <string name="first_100">First 100</string>
 </resources>

@@ -152,4 +152,6 @@
     <color name="transparency_grey">#70757575</color>
     <color name="colorCardDark">#e2e2e2</color>
     <color name="white_tx">#d6ffffff</color>
+
+    <color name="grey_dark">#3e3e3e</color>
 </resources>
