@@ -228,7 +228,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void onResume() {
         super.onResume();
-        if(audioList == null || audioList.size() == 0 && from != FROM_ACTIVITY) {
+        if(audioList == null && from != FROM_ACTIVITY) {
             Log.e("tag", "from fragment onresume");
             fetchSongs(FROM_FRAGMENT);
         }
@@ -300,9 +300,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
         audioList.addAll(list);
 
-        for(int i=0; i<EMPTY_CELLS_COUNT; i++){
-            audioList.add(new Song());
-        }
+        for(int i=0; i<EMPTY_CELLS_COUNT; i++) audioList.add(new Song());
 
         mAdapter = new SongsAdapter(audioList, getActivity());
         mRecyclerView.setAdapter(mAdapter);

@@ -201,9 +201,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
                 .getAllSongs(selectedPlaylist.getTitle(), new AppPreferencesHelper(this).getSortOrderForSongs());
 
         listLiveData.observe(this, songs -> {
-            if(songs != null) {
+            if(songs != null && songs.size() > 0) {
                 updateRecyclerViewForLoadedPlaylist(songs);
                 startMusicServiceForCurrentPlaylist(songs);
+            }
+            else {
+                updateRecyclerViewForLoadedPlaylist(songs);
+                Toast.makeText(this, "No Songs In This Playlist", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -233,9 +237,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             Toast.makeText(this, "Song Removed From Playlist", Toast.LENGTH_SHORT).show();
             liveData.removeObservers(this);
         });
-
-//        SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
-//        if(fragment != null) fragment.notifyDataSetChanged(index);
     }
 
     @Override
