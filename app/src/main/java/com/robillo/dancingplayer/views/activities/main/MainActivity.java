@@ -197,8 +197,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Override
     public void loadSongsForSelectedPlaylistFromDb() {
 
+        AppPreferencesHelper helper = new AppPreferencesHelper(this);
+
         listLiveData = songRepository
-                .getAllSongs(selectedPlaylist.getTitle(), new AppPreferencesHelper(this).getSortOrderForSongs());
+                .getAllSongs(
+                        selectedPlaylist.getTitle(),
+                        helper.getSortOrderForSongs(),
+                        helper.getRecentlyAddedCount(),
+                        helper.getRecentlyPlayedCount(),
+                        helper.getMostPlayedCount()
+                );
 
         listLiveData.observe(this, songs -> {
             if(songs != null && songs.size() > 0) {

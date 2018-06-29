@@ -145,4 +145,7 @@ public interface SongDao {
 
     @Query("SELECT Song.* FROM Song ORDER BY dateModified DESC")
     LiveData<List<Song>> getAllSongsDateModifiedD();
+
+    @Query("SELECT * FROM Song ORDER BY dateAdded DESC LIMIT :limit")
+    public LiveData<List<Song>> getRecentlyAddedSongs(int limit);
 }
