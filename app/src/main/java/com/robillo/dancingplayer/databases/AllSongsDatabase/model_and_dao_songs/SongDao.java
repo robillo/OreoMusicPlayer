@@ -148,4 +148,7 @@ public interface SongDao {
 
     @Query("SELECT * FROM Song ORDER BY dateAdded DESC LIMIT :limit")
     public LiveData<List<Song>> getRecentlyAddedSongs(int limit);
+
+    @Query("SELECT Song.* FROM Song INNER JOIN MostPlayed WHERE Song.id = MostPlayed.songId ORDER BY playCount DESC LIMIT :limit")
+    LiveData<List<Song>> getMostPlayedSongs(int limit);
 }

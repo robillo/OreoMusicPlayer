@@ -472,7 +472,7 @@ public class MusicService extends Service implements
     public void removeSongFromListInMusicServiceById(String songId) {
         if(songs != null && songId != null) {
             for(Song s : songs) {
-                if(s != null && s.getId() != null && s.getId().equals(songId)) {
+                if(s != null && s.getId().equals(songId)) {
                     boolean b = songs.remove(s);
                     Log.e("tag", "song actually deleted? " + b);
                     break;
@@ -629,7 +629,7 @@ public class MusicService extends Service implements
     public void removeSongFromList(Song song) {
         Song songToDelete = null;
         if(songs != null) {
-            for (Song s : songs) if(s.getId() != null && s.getId().equals(song.getId())) songToDelete = s;
+            for (Song s : songs) if(s.getId().equals(song.getId())) songToDelete = s;
             songs.remove(songToDelete);
         }
     }

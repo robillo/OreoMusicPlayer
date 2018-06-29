@@ -37,6 +37,7 @@ import android.widget.Toast;
 
 import com.robillo.dancingplayer.R;
 import com.robillo.dancingplayer.databases.AllSongsDatabase.SongDatabase;
+import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_most_played.MostPlayedRepository;
 import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_playlists.PlaylistRepository;
 import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_songs.SongRepository;
 import com.robillo.dancingplayer.events.PlayerStateNoSongPlayingEvent;
@@ -117,6 +118,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     private SongDatabase songDatabase;
     private SongRepository songRepository;
     private PlaylistRepository playlistRepository;
+    private MostPlayedRepository mostPlayedRepository;
     private LiveData<List<Song>> listLiveData;
 
     @SuppressWarnings("FieldCanBeLocal")
@@ -300,6 +302,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             songDatabase = SongDatabase.getInstance(this);
 
         return new SongRepository(songDatabase.getSongDao());
+    }
+
+    @Override
+    public MostPlayedRepository getMostPlayedRepository() {
+        if(songDatabase == null) songDatabase = SongDatabase.getInstance(this);
+
+        return new MostPlayedRepository(songDatabase.getMostPlayedDao());
     }
 
     @Override
@@ -572,6 +581,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     public void onMessageEvent(SongChangeEvent event) {
 
         if(event.getSong() != null) {
+
+            if(mostPlayedRepository == null) mostPlayedRepository = getMostPlayedRepository();
+            mostPlayedRepository.checkIfExistsAndInsert(this, event.getSong().getId());
+
             currentSong = event.getSong();
 
             SongsListFragment songListFragment =

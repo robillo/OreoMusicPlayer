@@ -2,6 +2,7 @@ package com.robillo.dancingplayer.views.activities.main;
 
 import android.support.v4.app.FragmentActivity;
 
+import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_most_played.MostPlayedRepository;
 import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_playlists.PlaylistRepository;
 import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_songs.SongRepository;
 import com.robillo.dancingplayer.models.PlaylistRowItem;
@@ -105,6 +106,8 @@ public interface MainActivityMvpView {
     SongRepository getSongRepository();
 
     PlaylistRepository getPlaylistRepository();
+
+    MostPlayedRepository getMostPlayedRepository();
 
     void updateRecyclerViewForLoadedPlaylist(List<Song> audioList);
 

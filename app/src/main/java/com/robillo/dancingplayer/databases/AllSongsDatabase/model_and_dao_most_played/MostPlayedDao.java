@@ -17,7 +17,7 @@ public interface MostPlayedDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertMostPlayed(MostPlayed... mostPlayed);
 
-    @Query("SELECT playCount FROM MostPlayed WHERE songId = :songId")
+    @Query("SELECT playCount FROM MostPlayed WHERE songId = :songId LIMIT 1")
     LiveData<Integer> checkIfSongExists(String songId);
 
     @Query("UPDATE MostPlayed SET playCount = :playCount WHERE songId = :songId")

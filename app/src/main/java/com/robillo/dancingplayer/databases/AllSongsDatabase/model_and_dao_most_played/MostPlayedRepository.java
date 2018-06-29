@@ -18,9 +18,10 @@ public class MostPlayedRepository {
         this.mostPlayedDao = mostPlayedDao;
     }
 
-    void checkIfExistsAndInsert(MainActivity activity, String songId) {
-        LiveData<Integer> integerLiveData = mostPlayedDao.checkIfSongExists(songId);
+    public void checkIfExistsAndInsert(MainActivity activity, String songId) {
+        if(songId == null) return;
 
+        LiveData<Integer> integerLiveData = mostPlayedDao.checkIfSongExists(songId);
         integerLiveData.observe(activity, integer -> {
             if(integer != null) {
                 updateMostPlayedCount(songId, integer + 1);
@@ -39,7 +40,7 @@ public class MostPlayedRepository {
         new insertMpAsyncTask(mostPlayedDao).execute(mostPlayed);
     }
 
-    private LiveData<List<Song>> getMostPlayedSongs(int limit) {
+    public LiveData<List<Song>> getMostPlayedSongs(String sortOrder, int limit) {
         return mostPlayedDao.getMostPlayedSongs(limit);
     }
 
