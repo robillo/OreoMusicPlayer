@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_playlists.PlaylistRepository;
+import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_songs.SongRepository;
 import com.robillo.dancingplayer.models.PlaylistRowItem;
 import com.robillo.dancingplayer.models.Song;
 import com.robillo.dancingplayer.preferences.AppPreferencesHelper;
@@ -58,7 +59,10 @@ public class ApplicationUtils {
         return new PlaylistRowItem(title, isPersistent);
     }
 
-    public void deleteFile(Context context, int index, Song song, String... songIds) {
+    public void deleteFile(SongRepository songRepository, PlaylistRepository playlistRepository, Context context, int index, Song song, String... songIds) {
+        songRepository.deleteSongById(songIds[0]);
+        playlistRepository.deleteSongById(songIds[0]);
+
         MainActivity act = (MainActivity) context;
         Song serviceSong = act.getMusicService().getSong();
         if(serviceSong != null && serviceSong.getId().equals(songIds[0])) {

@@ -160,7 +160,8 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
 
     @OnClick(R.id.delete_song)
     public void setDeleteSong() {
-        if(getActivity() != null) new ApplicationUtils().deleteFile(getActivity(), index, song, song.getId());
+        MainActivity activity = (MainActivity) getActivity();
+        if(activity != null) activity.deleteSong(getActivity(), index, song, song.getId());
     }
 
     @OnClick(R.id.rate_app)

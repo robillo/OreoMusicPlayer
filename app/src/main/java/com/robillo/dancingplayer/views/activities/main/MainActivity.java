@@ -12,6 +12,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
@@ -196,7 +197,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     @Override
     public void loadSongsForSelectedPlaylistFromDb() {
 
-        listLiveData = songRepository.getAllSongs(selectedPlaylist.getTitle(), new AppPreferencesHelper(this).getSortOrderForSongs());
+        listLiveData = songRepository
+                .getAllSongs(selectedPlaylist.getTitle(), new AppPreferencesHelper(this).getSortOrderForSongs());
 
         listLiveData.observe(this, songs -> {
             if(songs != null) {
@@ -816,6 +818,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         if(from == FIRST_LOAD) hidePlaylistBottomSheet();
 
         playlistRecyclerView.setAdapter(playlistAdapter);
+    }
+
+    @Override
+    public void deleteSong(FragmentActivity activity, int index, Song song, String id) {
+        if(songRepository == null) songRepository = getSongRepository();
+        if(playlistRepository == null) playlistRepository = getPlaylistRepository();
+        new ApplicationUtils().deleteFile(songRepository, playlistRepository, this, index, song, song.getId());
     }
 
     @Override

@@ -229,10 +229,12 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     public void onResume() {
         super.onResume();
         if(audioList == null || audioList.size() == 0 && from != FROM_ACTIVITY) {
+            Log.e("tag", "from fragment onresume");
             fetchSongs(FROM_FRAGMENT);
         }
         else if(getActivity() != null){
             if(getActivity().getIntent().getBooleanExtra(LAUNCHED_FROM_NOTIFICATION, false)) {
+                Log.e("tag", "from fragment notification");
                 fetchSongs(FROM_FRAGMENT);
             }
         }
