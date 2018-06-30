@@ -2,6 +2,7 @@ package com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_most_
 
 import android.arch.lifecycle.LiveData;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_playlists.PlaylistDao;
 import com.robillo.dancingplayer.models.MostPlayed;
@@ -23,12 +24,10 @@ public class MostPlayedRepository {
 
         LiveData<Integer> integerLiveData = mostPlayedDao.checkIfSongExists(songId);
         integerLiveData.observe(activity, integer -> {
-            if(integer != null) {
-                updateMostPlayedCount(songId, integer + 1);
-            }
-            else {
-                insertMostPlayed(new MostPlayed(songId, 1));
-            }
+            if(integer != null) updateMostPlayedCount(songId, integer + 1);
+            else insertMostPlayed(new MostPlayed(songId, 1));
+
+            integerLiveData.removeObservers(activity);
         });
     }
 
