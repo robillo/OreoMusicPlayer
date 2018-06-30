@@ -133,96 +133,112 @@ public class SongRepository {
                 if(isDefault(playlist)) return songDao.getAllSongsSizeA();
                 else if(isRecentlyAdded(playlist)) return getRecentlyAddedSongs(sortOrder, ra);
                 else if(isMostPlayed(playlist)) return getMostPlayedSongs(sortOrder, ra);
+                else if(isRecentlyPlayed(playlist)) return getRecentlyPlayedSongs(sortOrder, ra);
                 else return songDao.getSongsPlaylistSizeA(playlist);
             }
             case AppConstants.SIZE_DESCENDING: {
                 if(isDefault(playlist)) return songDao.getAllSongsSizeD();
                 else if(isRecentlyAdded(playlist)) return getRecentlyAddedSongs(sortOrder, ra);
                 else if(isMostPlayed(playlist)) return getMostPlayedSongs(sortOrder, ra);
+                else if(isRecentlyPlayed(playlist)) return getRecentlyPlayedSongs(sortOrder, ra);
                 else return songDao.getSongsPlaylistSizeD(playlist);
             }
             case AppConstants.YEAR_ASCENDING: {
                 if(isDefault(playlist)) return songDao.getAllSongsYearA();
                 else if(isRecentlyAdded(playlist)) return getRecentlyAddedSongs(sortOrder, ra);
                 else if(isMostPlayed(playlist)) return getMostPlayedSongs(sortOrder, ra);
+                else if(isRecentlyPlayed(playlist)) return getRecentlyPlayedSongs(sortOrder, ra);
                 else return songDao.getSongsPlaylistYearA(playlist);
             }
             case AppConstants.YEAR_DESCENDING: {
                 if(isDefault(playlist)) return songDao.getAllSongsYearD();
                 else if(isRecentlyAdded(playlist)) return getRecentlyAddedSongs(sortOrder, ra);
                 else if(isMostPlayed(playlist)) return getMostPlayedSongs(sortOrder, ra);
+                else if(isRecentlyPlayed(playlist)) return getRecentlyPlayedSongs(sortOrder, ra);
                 else return songDao.getSongsPlaylistYearD(playlist);
             }
             case AppConstants.ALBUM_ASCENDING: {
                 if(isDefault(playlist)) return songDao.getAllSongsAlbumA();
                 else if(isRecentlyAdded(playlist)) return getRecentlyAddedSongs(sortOrder, ra);
                 else if(isMostPlayed(playlist)) return getMostPlayedSongs(sortOrder, ra);
+                else if(isRecentlyPlayed(playlist)) return getRecentlyPlayedSongs(sortOrder, ra);
                 else return songDao.getSongsPlaylistAlbumA(playlist);
             }
             case AppConstants.ALBUM_DESCENDING: {
                 if(isDefault(playlist)) return songDao.getAllSongsAlbumD();
                 else if(isRecentlyAdded(playlist)) return getRecentlyAddedSongs(sortOrder, ra);
                 else if(isMostPlayed(playlist)) return getMostPlayedSongs(sortOrder, ra);
+                else if(isRecentlyPlayed(playlist)) return getRecentlyPlayedSongs(sortOrder, ra);
                 else return songDao.getSongsPlaylistAlbumD(playlist);
             }
             case AppConstants.TITLE_ASCENDING: {
                 if(isDefault(playlist)) return songDao.getAllSongsTitleA();
                 else if(isRecentlyAdded(playlist)) return getRecentlyAddedSongs(sortOrder, ra);
                 else if(isMostPlayed(playlist)) return getMostPlayedSongs(sortOrder, ra);
+                else if(isRecentlyPlayed(playlist)) return getRecentlyPlayedSongs(sortOrder, ra);
                 else return songDao.getSongsPlaylistTitleA(playlist);
             }
             case AppConstants.TITLE_DESCENDING: {
                 if(isDefault(playlist)) return songDao.getAllSongsTitleD();
                 else if(isRecentlyAdded(playlist)) return getRecentlyAddedSongs(sortOrder, ra);
                 else if(isMostPlayed(playlist)) return getMostPlayedSongs(sortOrder, ra);
+                else if(isRecentlyPlayed(playlist)) return getRecentlyPlayedSongs(sortOrder, ra);
                 else return songDao.getSongsPlaylistTitleD(playlist);
             }
             case AppConstants.ARTIST_ASCENDING: {
                 if(isDefault(playlist)) return songDao.getAllSongsArtistA();
                 else if(isRecentlyAdded(playlist)) return getRecentlyAddedSongs(sortOrder, ra);
                 else if(isMostPlayed(playlist)) return getMostPlayedSongs(sortOrder, ra);
+                else if(isRecentlyPlayed(playlist)) return getRecentlyPlayedSongs(sortOrder, ra);
                 else return songDao.getSongsPlaylistArtistA(playlist);
             }
             case AppConstants.ARTIST_DESCENDING: {
                 if(isDefault(playlist)) return songDao.getAllSongsArtistD();
                 else if(isRecentlyAdded(playlist)) return getRecentlyAddedSongs(sortOrder, ra);
                 else if(isMostPlayed(playlist)) return getMostPlayedSongs(sortOrder, ra);
+                else if(isRecentlyPlayed(playlist)) return getRecentlyPlayedSongs(sortOrder, ra);
                 else return songDao.getSongsPlaylistArtistD(playlist);
             }
             case AppConstants.DURATION_ASCENDING: {
                 if(isDefault(playlist)) return songDao.getAllSongsDurationA();
                 else if(isRecentlyAdded(playlist)) return getRecentlyAddedSongs(sortOrder, ra);
                 else if(isMostPlayed(playlist)) return getMostPlayedSongs(sortOrder, ra);
+                else if(isRecentlyPlayed(playlist)) return getRecentlyPlayedSongs(sortOrder, ra);
                 else return songDao.getSongsPlaylistDurationA(playlist);
             }
             case AppConstants.DURATION_DESCENDING: {
                 if(isDefault(playlist)) return songDao.getAllSongsDurationD();
                 else if(isRecentlyAdded(playlist)) return getRecentlyAddedSongs(sortOrder, ra);
                 else if(isMostPlayed(playlist)) return getMostPlayedSongs(sortOrder, ra);
+                else if(isRecentlyPlayed(playlist)) return getRecentlyPlayedSongs(sortOrder, ra);
                 else return songDao.getSongsPlaylistDurationD(playlist);
             }
             case AppConstants.DATE_ADDED_ASCENDING: {
                 if(isDefault(playlist)) return songDao.getAllSongsDateAddedD();
                 else if(isRecentlyAdded(playlist)) return getRecentlyAddedSongs(sortOrder, ra);
                 else if(isMostPlayed(playlist)) return getMostPlayedSongs(sortOrder, ra);
+                else if(isRecentlyPlayed(playlist)) return getRecentlyPlayedSongs(sortOrder, ra);
                 else return songDao.getSongsPlaylistDateAddedD(playlist);
             }
             case AppConstants.DATE_ADDED_DESCENDING: {
                 if(isDefault(playlist)) return songDao.getAllSongsDateAddedD();
                 else if(isRecentlyAdded(playlist)) return getRecentlyAddedSongs(sortOrder, ra);
                 else if(isMostPlayed(playlist)) return getMostPlayedSongs(sortOrder, ra);
+                else if(isRecentlyPlayed(playlist)) return getRecentlyPlayedSongs(sortOrder, ra);
                 else return songDao.getSongsPlaylistDateAddedD(playlist);
             }
             case AppConstants.DATE_MODIFIED_ASCENDING: {
                 if(isDefault(playlist)) return songDao.getAllSongsDateModifiedA();
                 else if(isRecentlyAdded(playlist)) return getRecentlyAddedSongs(sortOrder, ra);
                 else if(isMostPlayed(playlist)) return getMostPlayedSongs(sortOrder, ra);
+                else if(isRecentlyPlayed(playlist)) return getRecentlyPlayedSongs(sortOrder, ra);
                 else return songDao.getSongsPlaylistDateModifiedA(playlist);
             }
             case AppConstants.DATE_MODIFIED_DESCENDING: {
                 if(isDefault(playlist)) return songDao.getAllSongsDateModifiedD();
                 else if(isRecentlyAdded(playlist)) return getRecentlyAddedSongs(sortOrder, ra);
                 else if(isMostPlayed(playlist)) return getMostPlayedSongs(sortOrder, ra);
+                else if(isRecentlyPlayed(playlist)) return getRecentlyPlayedSongs(sortOrder, ra);
                 else return songDao.getSongsPlaylistDateModifiedD(playlist);
             }
         }
