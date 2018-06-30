@@ -9,6 +9,7 @@ import com.robillo.dancingplayer.models.MostPlayed;
 import com.robillo.dancingplayer.models.Song;
 import com.robillo.dancingplayer.views.activities.main.MainActivity;
 
+import java.util.Date;
 import java.util.List;
 
 public class MostPlayedRepository {
@@ -19,20 +20,36 @@ public class MostPlayedRepository {
         this.mostPlayedDao = mostPlayedDao;
     }
 
-    public void checkIfExistsAndInsert(MainActivity activity, String songId) {
+    public void checkIfExistsAndInsertMostPlayed(MainActivity activity, String songId) {
         if(songId == null) return;
 
         LiveData<Integer> integerLiveData = mostPlayedDao.checkIfSongExists(songId);
         integerLiveData.observe(activity, integer -> {
-            if(integer != null) updateMostPlayedCount(songId, integer + 1);
-            else insertMostPlayed(new MostPlayed(songId, 1));
+            if(integer != null) updateMostPlayedCount(songId, integer + 1, new Date().getTime());
+            else insertMostPlayed(new MostPlayed(songId, 1, new Date().getTime()));
 
             integerLiveData.removeObservers(activity);
         });
     }
 
-    private void updateMostPlayedCount(String songId, int playCount) {
-        new updateMpAsyncTask(mostPlayedDao).execute(songId, String.valueOf(playCount));
+    public void checkIfExistsAndInsertRecentlyPlayed(MainActivity activity, String songId) {
+        if(songId == null) return;
+
+        LiveData<Integer> integerLiveData = mostPlayedDao.checkIfSongExists(songId);
+        integerLiveData.observe(activity, integer -> {
+            if(integer != null) updateMostPlayedCount(songId, integer + 1, new Date().getTime());
+            else insertMostPlayed(new MostPlayed(songId, 1, new Date().getTime()));
+
+            integerLiveData.removeObservers(activity);
+        });
+    }
+
+    private void updateMostPlayedCount(String songId, int playCount, Long timeSince70) {
+        new updateMpAsyncTask(mostPlayedDao).execute(songId, String.valueOf(playCount), String.valueOf(timeSince70));
+    }
+
+    private void updateRecentlyPlayedCount(String songId, long timeSince70) {
+        new updateRpAsyncTask(mostPlayedDao).execute(songId, String.valueOf(timeSince70));
     }
 
     private void insertMostPlayed(MostPlayed mostPlayed) {
@@ -68,7 +85,22 @@ public class MostPlayedRepository {
 
         @Override
         protected Void doInBackground(String... strings) {
-            mAsyncTaskDao.updateMostPlayed(strings[0], Integer.valueOf(strings[1]));
+            mAsyncTaskDao.updateMostPlayed(strings[0], Integer.valueOf(strings[1]), Long.valueOf(strings[2]));
+            return null;
+        }
+    }
+
+    static class updateRpAsyncTask extends AsyncTask<String, Void, Void> {
+
+        private MostPlayedDao mAsyncTaskDao;
+
+        updateRpAsyncTask(MostPlayedDao dao) {
+            mAsyncTaskDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(String... strings) {
+            mAsyncTaskDao.updateRecentlyPlayed(strings[0], Long.valueOf(strings[1]));
             return null;
         }
     }

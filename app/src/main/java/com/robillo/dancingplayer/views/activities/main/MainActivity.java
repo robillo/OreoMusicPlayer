@@ -583,7 +583,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         if(event.getSong() != null) {
 
             if(mostPlayedRepository == null) mostPlayedRepository = getMostPlayedRepository();
-            mostPlayedRepository.checkIfExistsAndInsert(this, event.getSong().getId());
+            mostPlayedRepository.checkIfExistsAndInsertMostPlayed(this, event.getSong().getId());
 
             currentSong = event.getSong();
 

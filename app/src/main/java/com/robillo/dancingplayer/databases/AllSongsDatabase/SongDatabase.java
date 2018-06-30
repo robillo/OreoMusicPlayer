@@ -3,6 +3,7 @@ package com.robillo.dancingplayer.databases.AllSongsDatabase;
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
 import android.arch.persistence.room.RoomDatabase;
+import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 
 import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_most_played.MostPlayedDao;
@@ -15,6 +16,7 @@ import com.robillo.dancingplayer.utils.AppConstants;
 
 @SuppressWarnings("unused")
 @Database(entities = {Song.class, Playlist.class, MostPlayed.class}, version = 1, exportSchema = false)
+@TypeConverters({Converters.class})
 public abstract class SongDatabase extends RoomDatabase {
 
     private static volatile SongDatabase instance;

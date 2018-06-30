@@ -236,4 +236,8 @@ public class SongRepository {
     public LiveData<List<Song>> getMostPlayedSongs(String sortOrder, int limit) {
         return songDao.getMostPlayedSongs(limit);
     }
+
+    public LiveData<List<Song>> getRecentlyPlayedSongs(String sortOrder, int limit) {
+        return songDao.getRecentlyPlayedSongs(limit);
+    }
 }
