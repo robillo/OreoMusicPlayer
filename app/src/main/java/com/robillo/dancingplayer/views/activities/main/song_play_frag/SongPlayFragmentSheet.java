@@ -255,18 +255,19 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
             // Use generated instance
             int dominantColor = p.getDominantColor(getResources().getColor(R.color.colorTextFour));
             int darkMutedColor = p.getDarkMutedColor(getResources().getColor(R.color.colorTextFour));
-            int vibrantColor = p.getVibrantColor(getResources().getColor(R.color.colorTextFour));
+            int vibrantColor = p.getVibrantColor(getResources().getColor(R.color.colorTextTwo));
             int mutedColor = p.getMutedColor(getResources().getColor(R.color.colorTextFour));
             int lightMutedColor = p.getLightMutedColor(getResources().getColor(R.color.colorTextFour));
-            int darkVibrantColor = p.getDarkVibrantColor(getResources().getColor(R.color.colorTextThree));
+            int darkVibrantColor = p.getDarkVibrantColor(getResources().getColor(R.color.colorTextTwo));
             int lightVibrantColor = p.getLightVibrantColor(getResources().getColor(R.color.colorTextTwo));
 
             GradientDrawable drawable = new GradientDrawable(
                     GradientDrawable.Orientation.TOP_BOTTOM,
                     new int[] {
                             getResources().getColor(R.color.white),
-                            lightVibrantColor,
-                            getResources().getColor(R.color.white)
+                            getResources().getColor(R.color.white),
+                            getResources().getColor(R.color.white),
+                            darkMutedColor,
                     });
 
             drawable.setAlpha(100);
