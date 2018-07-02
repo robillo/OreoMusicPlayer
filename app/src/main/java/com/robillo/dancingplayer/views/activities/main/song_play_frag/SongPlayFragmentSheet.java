@@ -4,16 +4,24 @@ package com.robillo.dancingplayer.views.activities.main.song_play_frag;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.ColorSpace;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.MediaStore;
+import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.graphics.Palette;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +29,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -103,6 +112,9 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
 
     @BindView(R.id.coordinator_layout)
     CoordinatorLayout coordinatorLayout;
+
+    @BindView(R.id.art_background_color)
+    ImageView artBackgroundColor;
 
     public SongPlayFragmentSheet() {
         // Required empty public constructor
@@ -190,18 +202,12 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
 
             currentSongMaxProgress
                     .setText(
-                            new ApplicationUtils()
-                                    .formatStringOutOfSeconds(
-                                            Integer.valueOf(song.getDuration())/1000
-                                    )
+                            new ApplicationUtils().formatStringOutOfSeconds(Integer.valueOf(song.getDuration())/1000)
                     );
 
             currentSongCurrentProgress
                     .setText(
-                            new ApplicationUtils()
-                                    .formatStringOutOfSeconds(
-                                            currentDurationProgress
-                                    )
+                            new ApplicationUtils().formatStringOutOfSeconds(currentDurationProgress)
                     );
 
             String path = null;
@@ -219,10 +225,15 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
                     cursor.close();
                 }
 
-                //set album art
-                if(path != null) Glide.with(getActivity()).load(path).into(currentSongAlbumArt);
-                else Glide.with(getActivity()).load(R.drawable.icon_drawable).into(currentSongAlbumArt);
+                loadPaletteAndApply(path);
 
+                //set album art
+                if(path != null && !path.equals("null")) {
+                    Glide.with(getActivity()).load(path).into(currentSongAlbumArt);
+                }
+                else {
+                    Glide.with(getActivity()).load(R.drawable.icon_drawable).into(currentSongAlbumArt);
+                }
             }
 
             if(getActivity()!=null) {                                                   //play or pause
@@ -230,6 +241,37 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
                 else pausePlayer(FROM_ACTIVITY);
             }
         }
+    }
+
+    @Override
+    public void loadPaletteAndApply(String path) {
+        Bitmap bitmap;
+        if(path != null && !path.equals("null"))
+            bitmap = BitmapFactory.decodeFile(path);
+        else
+            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.icon_drawable);
+
+        Palette.from(bitmap).generate(p -> {
+            // Use generated instance
+            int dominantColor = p.getDominantColor(getResources().getColor(R.color.colorTextFour));
+            int darkMutedColor = p.getDarkMutedColor(getResources().getColor(R.color.colorTextFour));
+            int vibrantColor = p.getVibrantColor(getResources().getColor(R.color.colorTextFour));
+            int mutedColor = p.getMutedColor(getResources().getColor(R.color.colorTextFour));
+            int lightMutedColor = p.getLightMutedColor(getResources().getColor(R.color.colorTextFour));
+            int darkVibrantColor = p.getDarkVibrantColor(getResources().getColor(R.color.colorTextThree));
+            int lightVibrantColor = p.getLightVibrantColor(getResources().getColor(R.color.colorTextTwo));
+
+            GradientDrawable drawable = new GradientDrawable(
+                    GradientDrawable.Orientation.TOP_BOTTOM,
+                    new int[] {
+                            getResources().getColor(R.color.white),
+                            lightVibrantColor,
+                            getResources().getColor(R.color.white)
+                    });
+
+            drawable.setAlpha(100);
+            artBackgroundColor.setBackground(drawable);
+        });
     }
 
     @Override

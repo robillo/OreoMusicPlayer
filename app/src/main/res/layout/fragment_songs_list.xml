@@ -30,7 +30,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="1sp"
-                android:background="@color/transparency_black"
+                android:background="@color/colorTextFour"
                 tools:ignore="ContentDescription,SmallSp" />
 
             <LinearLayout
@@ -201,7 +201,8 @@
                             android:singleLine="true"
                             android:ellipsize="marquee"
                             android:layout_marginBottom="5sp"
-                            android:gravity="center"/>
+                            android:gravity="end|center_vertical"
+                            android:paddingRight="10sp"/>
 
                         <TextView
                             android:id="@+id/current_song_artist"
@@ -213,11 +214,18 @@
                             tools:ignore="HardcodedText,MissingPrefix,RtlHardcoded,RtlSymmetry"
                             tools:text="Illenium"
                             android:singleLine="true"
-                            android:gravity="center"/>
+                            android:gravity="end|center_vertical"
+                            android:paddingRight="10sp"/>
 
                     </LinearLayout>
 
                 </LinearLayout>
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="1sp"
+                    android:background="@color/colorTextFour"
+                    tools:ignore="ContentDescription,SmallSp" />
 
             </LinearLayout>
 
@@ -230,7 +238,6 @@
                 android:layout_marginLeft="20sp"
                 android:src="@color/white"
                 app:civ_border_color="@color/white"
-                app:civ_border_width="5sp"
                 tools:ignore="RtlHardcoded"
                 tools:src="@drawable/icon_drawable"/>
 

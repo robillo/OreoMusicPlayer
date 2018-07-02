@@ -29,6 +29,12 @@
 
     <!--________________________ THEME COLORS ______________________________-->
 
+    <!-- THEME : PITCH BLACK -->
+    <color name="pitch_black_primary">#000000</color>
+    <color name="pitch_black_primary_dark">#000000</color>
+    <color name="pitch_black_accent">#000000</color>
+    <color name="pitch_black_mat">#000000</color>
+
     <!-- THEME : BLUE GREY -->
     <color name="blue_grey_primary">#263238</color>
     <color name="blue_grey_primary_dark">#000a12</color>
@@ -142,6 +148,7 @@
     <color name="colorTwitter">#0084b4</color>
 
     <color name="white">#ffffff</color>
+    <color name="transparency_white">#96ffffff</color>
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
     <color name="transparency_black">#6e000000</color>

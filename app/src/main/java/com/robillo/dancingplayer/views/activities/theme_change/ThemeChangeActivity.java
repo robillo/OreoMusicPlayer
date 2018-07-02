@@ -107,6 +107,7 @@ public class ThemeChangeActivity extends AppCompatActivity implements ThemeChang
 
     @Override
     public void inflateThemeColors() {
+        themeColorsList.add(AppConstants.themeMap.get(AppConstants.PITCH_BLACK));
         themeColorsList.add(AppConstants.themeMap.get(AppConstants.BLUE_GREY));
         themeColorsList.add(AppConstants.themeMap.get(AppConstants.DEEP_BROWN));
         themeColorsList.add(AppConstants.themeMap.get(AppConstants.DEEP_BLUE));

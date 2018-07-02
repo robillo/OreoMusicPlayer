@@ -136,6 +136,7 @@ public class AppConstants {
     public static HashMap<String, ThemeColors> themeMap = new HashMap<>();
 
     //ThemeChange
+    public static final String PITCH_BLACK = "PITCH BLACK";
     public static final String ALL_BLACK = "ALL BLACK";
     public static final String RED_LIGHT = "RED - LIGHT";
     public static final String ORANGE_LIGHT = "ORANGE - LIGHT";
@@ -172,6 +173,17 @@ public class AppConstants {
         sortOrderMap.put(DATE_ADDED_DESCENDING, "Date Added Descending");
         sortOrderMap.put(DATE_MODIFIED_ASCENDING, "Date Modified Ascending");
         sortOrderMap.put(DATE_MODIFIED_DESCENDING, "Date Modified Descending");
+
+        themeMap.put(
+                PITCH_BLACK,
+                new ThemeColors(
+                        R.color.pitch_black_primary,
+                        R.color.pitch_black_primary_dark,
+                        R.color.pitch_black_accent,
+                        R.color.pitch_black_mat,
+                        PITCH_BLACK
+                )
+        );
 
         themeMap.put(
                 BLUE_GREY,

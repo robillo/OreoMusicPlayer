@@ -60,51 +60,62 @@
             android:background="@color/colorTextFive"
             tools:ignore="ContentDescription,SmallSp" />
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="0sp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:layout_weight="1">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="@dimen/civ_spf"
-                android:layout_height="@dimen/civ_spf"
-                android:layout_marginTop="5sp"
-                app:civ_border_width="8sp"
-                android:src="@color/white"
-                android:layout_gravity="center_horizontal"
-                app:civ_border_color="@color/colorPrimary"
-                android:id="@+id/current_song_album_art"
-                tools:src="@drawable/icon_drawable"/>
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/art_background_color"
+                tools:ignore="ContentDescription" />
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:orientation="horizontal"
-                android:gravity="center_horizontal">
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
 
-                <ImageButton
-                    android:layout_width="?attr/actionBarSize"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_repeat_black_24dp"
-                    android:background="@color/transparent"
-                    android:contentDescription="@string/repeat_song"
-                    android:tint="@color/colorTextOne"
-                    android:id="@+id/repeat_song"/>
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:layout_width="@dimen/civ_spf"
+                    android:layout_height="@dimen/civ_spf"
+                    android:layout_marginTop="5sp"
+                    android:src="@color/white"
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/current_song_album_art"
+                    tools:src="@drawable/icon_drawable"/>
 
-                <ImageButton
-                    android:layout_width="?attr/actionBarSize"
-                    android:layout_height="match_parent"
-                    android:src="@drawable/ic_shuffle_black_24dp"
-                    android:background="@color/transparent"
-                    android:contentDescription="@string/shoffle_song"
-                    android:tint="@color/colorTextOne"
-                    android:id="@+id/shuffle_songs"/>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:orientation="horizontal"
+                    android:gravity="center_horizontal"
+                    android:id="@+id/not_art_background_color">
+
+                    <ImageButton
+                        android:layout_width="?attr/actionBarSize"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_repeat_black_24dp"
+                        android:background="@color/transparent"
+                        android:contentDescription="@string/repeat_song"
+                        android:tint="@color/colorTextOne"
+                        android:id="@+id/repeat_song"/>
+
+                    <ImageButton
+                        android:layout_width="?attr/actionBarSize"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/ic_shuffle_black_24dp"
+                        android:background="@color/transparent"
+                        android:contentDescription="@string/shoffle_song"
+                        android:tint="@color/colorTextOne"
+                        android:id="@+id/shuffle_songs"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
-        </LinearLayout>
+        </FrameLayout>
 
         <ImageView
             android:layout_width="match_parent"
