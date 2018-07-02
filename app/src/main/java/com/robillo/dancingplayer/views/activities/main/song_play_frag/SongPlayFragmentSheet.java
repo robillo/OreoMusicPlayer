@@ -249,7 +249,7 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
         if(path != null && !path.equals("null"))
             bitmap = BitmapFactory.decodeFile(path);
         else
-            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.baseline_add_black_48);
+            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.baseline_edit_white_48);
 
         Palette.from(bitmap).generate(p -> {
             // Use generated instance
@@ -259,7 +259,7 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
             int mutedColor = p.getMutedColor(getResources().getColor(R.color.colorTextFour));
             int lightMutedColor = p.getLightMutedColor(getResources().getColor(R.color.colorTextFour));
             int darkVibrantColor = p.getDarkVibrantColor(getResources().getColor(R.color.colorTextTwo));
-            int lightVibrantColor = p.getLightVibrantColor(getResources().getColor(R.color.colorTextTwo));
+            int lightVibrantColor = p.getLightVibrantColor(getResources().getColor(R.color.white));
 
             GradientDrawable drawable = new GradientDrawable(
                     GradientDrawable.Orientation.TOP_BOTTOM,
