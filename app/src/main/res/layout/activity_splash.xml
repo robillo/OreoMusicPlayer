@@ -1,72 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".views.activities.splash.SplashActivity"
-    android:background="@color/white">
+    tools:context=".views.activities.splash.SplashActivity">
 
-    <FrameLayout
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="0sp"
-        android:layout_weight="2">
+        android:layout_height="match_parent"
+        android:id="@+id/gradient_image_view"
+        tools:ignore="ContentDescription"
+        tools:background="@color/blue_primary_dark"/>
 
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:layout_width="150sp"
-            android:layout_height="150sp"
-            app:civ_border_width="10sp"
-            android:src="@drawable/icon_drawable"
-            android:layout_gravity="center"
-            app:civ_border_color="@color/colorPrimaryDark"
-            android:id="@+id/app_icon" />
-
-    </FrameLayout>
-
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0sp"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    </FrameLayout>
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0sp"
-        android:layout_weight="1"
-        android:background="@color/colorTextFour">
-
-        <TextView
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:id="@+id/app_name"
-            android:text="@string/app_name"
-            android:textColor="@color/white"
-            android:textSize="30sp"
-            android:padding="20sp"
-            android:background="@color/black"/>
+            android:layout_height="0sp"
+            android:layout_weight="2">
 
-    </FrameLayout>
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:layout_width="150sp"
+                android:layout_height="150sp"
+                android:src="@drawable/icon_drawable"
+                android:layout_gravity="center"
+                android:id="@+id/app_icon" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="0sp"
-        android:layout_weight="1">
+        </FrameLayout>
 
-        <TextView
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="bottom|center_horizontal"
-            android:id="@+id/fade_in_subtitle"
-            android:text="@string/music_player_for_all"
-            android:textColor="@color/transparency_black"
-            android:textSize="20sp"
-            android:padding="10sp" />
+            android:layout_height="0sp"
+            android:layout_weight="1">
 
-    </FrameLayout>
+        </FrameLayout>
 
-</LinearLayout>
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0sp"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:id="@+id/app_name"
+                android:text="@string/app_name"
+                android:textColor="@color/white"
+                android:textSize="30sp"
+                android:padding="20sp"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0sp"
+            android:layout_weight="1">
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</FrameLayout>

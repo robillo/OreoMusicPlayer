@@ -12,26 +12,82 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
-            android:id="@+id/recycler_view"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:fastScrollPopupTextSize="18sp"
-            app:fastScrollPopupBackgroundSize="40sp"
-            app:fastScrollTrackColor="#1f000000"
-            android:paddingBottom="50sp"/>
+            android:id="@+id/rv_or_no_songs">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginBottom="?android:attr/actionBarSize">
+
+                <ImageView
+                    android:layout_width="110sp"
+                    android:layout_height="110sp"
+                    android:background="@drawable/sad_dog"
+                    tools:ignore="ContentDescription" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="No Songs In This Playlist"
+                    android:textSize="27sp"
+                    android:layout_marginTop="10sp"
+                    android:layout_marginBottom="5sp"
+                    android:textColor="@color/brown_error"
+                    android:gravity="center"
+                    tools:ignore="HardcodedText"
+                    android:id="@+id/oops"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Please Add Some Songs To This Playlist First"
+                    android:textSize="22sp"
+                    android:textColor="@color/brown_error_light"
+                    android:gravity="center"
+                    tools:ignore="HardcodedText"
+                    android:id="@+id/add_some_songs"
+                    android:layout_marginTop="5sp"
+                    android:layout_marginBottom="10sp"/>
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/transparency_black"
+                    android:text="@string/retry"
+                    android:textSize="20sp"
+                    android:layout_margin="10sp"
+                    android:paddingLeft="20sp"
+                    android:paddingRight="20sp"
+                    android:paddingTop="10sp"
+                    android:paddingBottom="10sp"
+                    android:background="@drawable/bg_settings"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:id="@+id/rescan_device"/>
+
+            </LinearLayout>
+
+            <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:fastScrollPopupTextSize="18sp"
+                app:fastScrollPopupBackgroundSize="40sp"
+                app:fastScrollTrackColor="#1f000000"
+                android:paddingBottom="50sp"/>
+
+        </FrameLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/hide_or_show_upper"
             android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="1sp"
-                android:background="@color/colorTextFour"
-                tools:ignore="ContentDescription,SmallSp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -224,7 +280,7 @@
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="1sp"
-                    android:background="@color/colorTextFour"
+                    android:background="@color/colorTextOne"
                     tools:ignore="ContentDescription,SmallSp" />
 
             </LinearLayout>

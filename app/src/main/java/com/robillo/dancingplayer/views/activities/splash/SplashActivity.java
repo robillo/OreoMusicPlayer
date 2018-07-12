@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
@@ -11,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.robillo.dancingplayer.R;
@@ -38,6 +40,9 @@ public class SplashActivity extends AppCompatActivity implements SplashMvpView {
     @BindView(R.id.app_icon)
     CircleImageView appIcon;
 
+    @BindView(R.id.gradient_image_view)
+    ImageView gradientImageView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -57,13 +62,21 @@ public class SplashActivity extends AppCompatActivity implements SplashMvpView {
                 .themeMap
                 .get(new AppPreferencesHelper(this).getUserThemeName());
 
-        appName.setBackgroundColor(getResources().getColor(colors.getColorPrimary()));
-        appIcon.setBorderColor(getResources().getColor(colors.getColorPrimary()));
-
         Window window = getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(ContextCompat.getColor(this, colors.getColorPrimaryDark()));
+        window.setStatusBarColor(ContextCompat.getColor(this, colors.getColorPrimary()));
+
+        gradientImageView.setBackground(
+                new GradientDrawable(
+                        GradientDrawable.Orientation.TOP_BOTTOM,
+                        new int[] {
+                                getResources().getColor(colors.getColorPrimary()),
+                                getResources().getColor(colors.getColorPrimaryDark()),
+                                getResources().getColor(colors.getColorPrimaryDark())
+                        }
+                )
+        );
 
         new Handler().postDelayed(() -> {
             if(permissionsAllowed) {

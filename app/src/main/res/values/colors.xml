@@ -147,6 +147,9 @@
     <color name="colorFacebook">#3b5998</color>
     <color name="colorTwitter">#0084b4</color>
 
+    <color name="brown_error">#7F5635</color>
+    <color name="brown_error_light">#BF814F</color>
+
     <color name="white">#ffffff</color>
     <color name="transparency_white">#96ffffff</color>
     <color name="black">#000000</color>

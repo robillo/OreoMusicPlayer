@@ -65,4 +65,5 @@
     <string name="first_10">10</string>
     <string name="first_50">50</string>
     <string name="first_100">100</string>
+    <string name="retry">Rescan</string>
 </resources>
