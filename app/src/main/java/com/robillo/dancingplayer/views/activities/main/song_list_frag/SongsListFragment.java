@@ -1,5 +1,7 @@
 package com.robillo.dancingplayer.views.activities.main.song_list_frag;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,6 +38,9 @@ import com.robillo.dancingplayer.preferences.AppPreferencesHelper;
 import com.robillo.dancingplayer.views.activities.main.MainActivity;
 import com.simplecityapps.recyclerview_fastscroll.interfaces.OnFastScrollStateChangeListener;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
+import com.willowtreeapps.spruce.Spruce;
+import com.willowtreeapps.spruce.animation.DefaultAnimations;
+import com.willowtreeapps.spruce.sort.DefaultSort;
 
 import java.util.ArrayList;
 import java.util.List;

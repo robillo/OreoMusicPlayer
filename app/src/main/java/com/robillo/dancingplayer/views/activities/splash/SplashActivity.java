@@ -58,9 +58,12 @@ public class SplashActivity extends AppCompatActivity implements SplashMvpView {
         checkForPermissions();
         setupFirstLoadUserPlaylistItems();
 
+        String themeName = new AppPreferencesHelper(this).getUserThemeName();
+        if(themeName.equals(AppConstants.PITCH_BLACK)) themeName = AppConstants.BLUE_GREY;
+
         ThemeColors colors = AppConstants
                 .themeMap
-                .get(new AppPreferencesHelper(this).getUserThemeName());
+                .get(themeName);
 
         Window window = getWindow();
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);

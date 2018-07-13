@@ -1,5 +1,7 @@
 package com.robillo.dancingplayer.views.activities.main.song_list_frag.adapters;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -20,6 +22,9 @@ import com.robillo.dancingplayer.preferences.AppPreferencesHelper;
 import com.robillo.dancingplayer.utils.ApplicationUtils;
 import com.robillo.dancingplayer.views.activities.main.MainActivity;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
+import com.willowtreeapps.spruce.Spruce;
+import com.willowtreeapps.spruce.animation.DefaultAnimations;
+import com.willowtreeapps.spruce.sort.DefaultSort;
 
 import java.sql.Date;
 import java.util.List;
@@ -69,6 +74,7 @@ public class SongsAdapter
         //noinspection UnnecessaryLocalVariable
         final int _pos = position;
 
+        //noinspection ConstantConditions
         if(list.get(_pos) == null || list.get(_pos).getId() == null) {
             holder.moreButton.setVisibility(View.GONE);
 
@@ -105,8 +111,18 @@ public class SongsAdapter
                 return true;
             });
 
+            animateCardUsingSpruce(holder.songCard);
+
             holder.moreButton.setOnClickListener(view -> ((MainActivity) context).showSongOptionsOnBottomSheet(list.get(_pos), _pos));
         }
+    }
+
+    private void animateCardUsingSpruce(ViewGroup parent) {
+        Animator spruceAnimator = new Spruce
+                .SpruceBuilder(parent)
+                .sortWith(new DefaultSort(/*interObjectDelay=*/40L))
+                .animateWith(new Animator[] {DefaultAnimations.shrinkAnimator(parent, /*duration=*/200)})
+                .start();
     }
 
     @Override
@@ -188,7 +204,7 @@ public class SongsAdapter
         return sectionString;
     }
 
-    class SongHolder extends RecyclerView.ViewHolder{
+    class SongHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.title)
         TextView title;
