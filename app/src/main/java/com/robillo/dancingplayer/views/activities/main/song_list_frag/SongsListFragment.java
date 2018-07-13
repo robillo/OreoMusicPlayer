@@ -3,6 +3,7 @@ package com.robillo.dancingplayer.views.activities.main.song_list_frag;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.database.Cursor;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -21,8 +22,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,7 +55,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_ACTIVITY;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_FRAGMENT;
+import static com.robillo.dancingplayer.utils.AppConstants.FROM_PLAYLIST;
 import static com.robillo.dancingplayer.utils.AppConstants.LAUNCHED_FROM_NOTIFICATION;
+import static com.robillo.dancingplayer.utils.AppConstants.PITCH_BLACK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -81,6 +86,18 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     private ThemeColors currentUserThemeColors = null;
     private int from = FROM_FRAGMENT;
 
+    @BindView(R.id.rescan_device)
+    Button rescanDevice;
+
+    @BindView(R.id.gradient_image_view)
+    ImageView gradientImageView;
+
+    @BindView(R.id.bottom_line)
+    ImageView bottomLine;
+
+    @BindView(R.id.top_line)
+    ImageView topLine;
+
     @BindView(R.id.play_pause_song)
     ImageButton playPauseSong;
 
@@ -108,6 +125,9 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @BindView(R.id.launch_play_frag_two)
     LinearLayout launchPlayFragmentTwo;
 
+    @BindView(R.id.launch_play_frag_one)
+    LinearLayout launchPlayFragmentOne;
+
     @BindView(R.id.sort_options)
     ImageButton sortOptions;
 
@@ -116,6 +136,9 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
     @BindView(R.id.app_name)
     TextView appName;
+
+    @BindView(R.id.error_layout)
+    LinearLayout errorLayout;
 
     public SongsListFragment() {
         // Required empty public constructor
@@ -135,8 +158,10 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void setUp(View v) {
         //noinspection ConstantConditions
-        currentUserThemeColors = AppConstants.themeMap.get(new AppPreferencesHelper(getActivity()).getUserThemeName());
-        refreshForUserThemeColors(currentUserThemeColors);
+        String themeName = new AppPreferencesHelper(getActivity()).getUserThemeName();
+
+        currentUserThemeColors = AppConstants.themeMap.get(themeName);
+        refreshForUserThemeColors(currentUserThemeColors, themeName);
 
         fadeOutAnimationUpper = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out);
         fadeInAnimationUpper = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in);
@@ -196,12 +221,40 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     }
 
     @Override
-    public void refreshForUserThemeColors(ThemeColors userThemeColors) {
+    public void refreshForUserThemeColors(ThemeColors userThemeColors, String themeName) {
         hideOrShowUpper.setBackgroundColor(getResources().getColor(userThemeColors.getColorPrimary()));
-        launchPlayFragmentTwo.setBackgroundColor(getResources().getColor(userThemeColors.getColorPrimary()));
         currentSongAlbumArt.setBorderColor(getResources().getColor(userThemeColors.getColorPrimaryDark()));
-
         mRecyclerView.setPopupBgColor(getResources().getColor(userThemeColors.getColorPrimaryDark()));
+
+        launchPlayFragmentTwo.setBackgroundColor(getResources().getColor(userThemeColors.getColorPrimary()));
+
+//        GradientDrawable drawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
+//                new int[] {
+//                        getResources().getColor(R.color.white),
+//                        getResources().getColor(R.color.white),
+//                        getResources().getColor(R.color.white),
+//                        getResources().getColor(R.color.white),
+//                        getResources().getColor(R.color.white),
+//                        getResources().getColor(R.color.white),
+//                        getResources().getColor(userThemeColors.getColorPrimary()),
+//                        getResources().getColor(userThemeColors.getColorPrimary()),
+//                        getResources().getColor(userThemeColors.getColorPrimary()),
+//                        getResources().getColor(userThemeColors.getColorPrimary()),
+//                        getResources().getColor(userThemeColors.getColorPrimary()),
+//                        getResources().getColor(userThemeColors.getColorPrimary())
+//                }
+//        );
+//
+//        gradientImageView.setBackground(drawable);
+
+        if(themeName.equals(PITCH_BLACK)) {
+            bottomLine.setBackgroundColor(getResources().getColor(R.color.readBlack));
+            topLine.setBackgroundColor(getResources().getColor(R.color.readBlack));
+        }
+        else {
+            bottomLine.setBackgroundColor(getResources().getColor(userThemeColors.getColorPrimary()));
+            topLine.setBackgroundColor(getResources().getColor(userThemeColors.getColorPrimary()));
+        }
     }
 
     @Override
@@ -220,6 +273,10 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         mAdapter.notifyItemRemoved(index);
         mAdapter.notifyItemRangeChanged(index, mAdapter.getItemCount());
         mAdapter.removeListItem(index);
+
+        //one empty set at top, two at bottom = three
+        if(mAdapter.getItemCount() <= 1 + AppConstants.EMPTY_CELLS_COUNT) showErrorLayout();
+        else hideErrorLayout();
     }
 
     @Override
@@ -582,5 +639,28 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public boolean onFling(MotionEvent motionEvent, MotionEvent motionEvent1, float v, float v1) {
         return false;
+    }
+
+    @Override
+    public void showErrorLayout() {
+        mRecyclerView.setVisibility(View.GONE);
+        errorLayout.setVisibility(View.VISIBLE);
+        new Spruce
+                .SpruceBuilder(errorLayout)
+                .sortWith(new DefaultSort(/*interObjectDelay=*/30L))
+                .animateWith(new Animator[] {DefaultAnimations.shrinkAnimator(errorLayout, /*duration=*/200)})
+                .start();
+    }
+
+    @Override
+    public void hideErrorLayout() {
+        mRecyclerView.setVisibility(View.VISIBLE);
+        errorLayout.setVisibility(View.GONE);
+    }
+
+    @OnClick(R.id.rescan_device)
+    public void setRescanDevice() {
+        errorLayout.setVisibility(View.GONE);
+        fetchSongs(FROM_FRAGMENT);
     }
 }

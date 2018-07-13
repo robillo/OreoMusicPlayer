@@ -118,10 +118,10 @@ public class SongsAdapter
     }
 
     private void animateCardUsingSpruce(ViewGroup parent) {
-        Animator spruceAnimator = new Spruce
+        new Spruce
                 .SpruceBuilder(parent)
-                .sortWith(new DefaultSort(/*interObjectDelay=*/40L))
-                .animateWith(new Animator[] {DefaultAnimations.shrinkAnimator(parent, /*duration=*/200)})
+                .sortWith(new DefaultSort(/*interObjectDelay=*/30L))
+                .animateWith(new Animator[] {DefaultAnimations.shrinkAnimator(parent, /*duration=*/175)})
                 .start();
     }
 

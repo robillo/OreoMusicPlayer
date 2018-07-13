@@ -472,7 +472,8 @@ public class MusicService extends Service implements
     public void removeSongFromListInMusicServiceById(String songId) {
         if(songs != null && songId != null) {
             for(Song s : songs) {
-                if(s != null && s.getId().equals(songId)) {
+                //noinspection ConstantConditions
+                if(s != null && s.getId() != null &&  s.getId().equals(songId)) {
                     boolean b = songs.remove(s);
                     Log.e("tag", "song actually deleted? " + b);
                     break;

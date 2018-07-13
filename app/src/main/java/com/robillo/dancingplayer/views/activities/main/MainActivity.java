@@ -212,11 +212,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
         listLiveData.observe(this, songs -> {
             if(songs != null && songs.size() > 0) {
-                updateRecyclerViewForLoadedPlaylist(songs);
+                updateRecyclerViewForLoadedPlaylist(songs, songs.size());
                 startMusicServiceForCurrentPlaylist(songs);
             }
             else {
-                updateRecyclerViewForLoadedPlaylist(songs);
+                updateRecyclerViewForLoadedPlaylist(songs, -1);
                 Toast.makeText(this, "No Songs In This Playlist", Toast.LENGTH_SHORT).show();
             }
         });
@@ -250,10 +250,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @Override
-    public void updateRecyclerViewForLoadedPlaylist(List<Song> audioList) {
+    public void updateRecyclerViewForLoadedPlaylist(List<Song> audioList, int size) {
         SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
 
-        if(fragment != null) fragment.renderRecyclerViewForAudioList(audioList);
+        if(fragment != null) {
+            fragment.renderRecyclerViewForAudioList(audioList);
+            if(size < 0) {
+                fragment.showErrorLayout();
+            }
+            else fragment.hideErrorLayout();
+        }
     }
 
     @Override
@@ -572,7 +578,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
         if(songListFragment != null) {
             refreshForUserThemeColors();
-            songListFragment.refreshForUserThemeColors(currentUserThemeColors);
+            songListFragment.refreshForUserThemeColors(
+                    currentUserThemeColors,
+                    new AppPreferencesHelper(this).getUserThemeName()
+            );
         }
     }
 

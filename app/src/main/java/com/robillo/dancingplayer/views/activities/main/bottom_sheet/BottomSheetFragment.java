@@ -126,6 +126,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
             song.setData(bundle.getString(DATA));
             song.setTitle(bundle.getString(TITLE));
             song.setTitleKey(bundle.getString(TITLE_KEY));
+            //noinspection ConstantConditions
             song.setId(bundle.getString(ID));
             song.setDateAdded(bundle.getString(DATE_ADDED));
             song.setDateModified(bundle.getString(DATE_MODIFIED));

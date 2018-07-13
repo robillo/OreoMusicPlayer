@@ -109,7 +109,7 @@ public interface MainActivityMvpView {
 
     MostPlayedRepository getMostPlayedRepository();
 
-    void updateRecyclerViewForLoadedPlaylist(List<Song> audioList);
+    void updateRecyclerViewForLoadedPlaylist(List<Song> audioList, int size);
 
     void addSongToPlaylist(String songId, String playlist);
 

@@ -34,7 +34,7 @@ public interface SongListMvpView {
 
     void fadeInController();
 
-    void refreshForUserThemeColors(ThemeColors currentUserThemeColors);
+    void refreshForUserThemeColors(ThemeColors currentUserThemeColors, String themeName);
 
     void startThemeChangeActivity();
 
@@ -45,4 +45,8 @@ public interface SongListMvpView {
     void renderRecyclerViewForAudioList(List<Song> audioList);
 
     void notifyDataSetChanged(int position);
+
+    void showErrorLayout();
+
+    void hideErrorLayout();
 }
