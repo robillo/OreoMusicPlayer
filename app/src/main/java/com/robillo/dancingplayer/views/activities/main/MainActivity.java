@@ -217,7 +217,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             }
             else {
                 updateRecyclerViewForLoadedPlaylist(songs, -1);
-                Toast.makeText(this, "No Songs In This Playlist", Toast.LENGTH_SHORT).show();
             }
         });
     }
