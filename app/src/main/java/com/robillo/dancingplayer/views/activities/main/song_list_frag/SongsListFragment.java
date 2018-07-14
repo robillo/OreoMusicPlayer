@@ -53,6 +53,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.robillo.dancingplayer.utils.AppConstants.BLUE_GREY;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_ACTIVITY;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_FRAGMENT;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_PLAYLIST;
@@ -222,32 +223,12 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void refreshForUserThemeColors(ThemeColors userThemeColors, String themeName) {
-        hideOrShowUpper.setBackgroundColor(getResources().getColor(userThemeColors.getColorPrimary()));
+        hideOrShowUpper.setBackgroundColor(getResources().getColor(userThemeColors.getColorPrimaryDark()));
         currentSongAlbumArt.setBorderColor(getResources().getColor(userThemeColors.getColorPrimaryDark()));
         mRecyclerView.setPopupBgColor(getResources().getColor(userThemeColors.getColorPrimaryDark()));
+        launchPlayFragmentTwo.setBackgroundColor(getResources().getColor(userThemeColors.getColorPrimaryDark()));
 
-        launchPlayFragmentTwo.setBackgroundColor(getResources().getColor(userThemeColors.getColorPrimary()));
-
-//        GradientDrawable drawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,
-//                new int[] {
-//                        getResources().getColor(R.color.white),
-//                        getResources().getColor(R.color.white),
-//                        getResources().getColor(R.color.white),
-//                        getResources().getColor(R.color.white),
-//                        getResources().getColor(R.color.white),
-//                        getResources().getColor(R.color.white),
-//                        getResources().getColor(userThemeColors.getColorPrimary()),
-//                        getResources().getColor(userThemeColors.getColorPrimary()),
-//                        getResources().getColor(userThemeColors.getColorPrimary()),
-//                        getResources().getColor(userThemeColors.getColorPrimary()),
-//                        getResources().getColor(userThemeColors.getColorPrimary()),
-//                        getResources().getColor(userThemeColors.getColorPrimary())
-//                }
-//        );
-//
-//        gradientImageView.setBackground(drawable);
-
-        if(themeName.equals(PITCH_BLACK)) {
+        if(themeName.equals(PITCH_BLACK) || themeName.equals(BLUE_GREY)) {
             bottomLine.setBackgroundColor(getResources().getColor(R.color.readBlack));
             topLine.setBackgroundColor(getResources().getColor(R.color.readBlack));
         }

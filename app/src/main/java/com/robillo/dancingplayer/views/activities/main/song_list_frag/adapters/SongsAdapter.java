@@ -4,6 +4,8 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.database.Cursor;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -13,9 +15,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.robillo.dancingplayer.R;
 import com.robillo.dancingplayer.models.Song;
 import com.robillo.dancingplayer.preferences.AppPreferencesHelper;
@@ -31,6 +36,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.robillo.dancingplayer.utils.AppConstants.ALBUM_ASCENDING;
 import static com.robillo.dancingplayer.utils.AppConstants.ALBUM_DESCENDING;
@@ -88,6 +94,8 @@ public class SongsAdapter
             holder.itemView.setVisibility(View.VISIBLE);
             holder.moreButton.setVisibility(View.VISIBLE);
 
+            setAlbumArt(holder.albumArt, context, list.get(position));
+
             holder.title.setText(list.get(_pos).getTitle());
             long duration = 0;
             try {
@@ -118,11 +126,37 @@ public class SongsAdapter
     }
 
     private void animateCardUsingSpruce(ViewGroup parent) {
-        new Spruce
-                .SpruceBuilder(parent)
-                .sortWith(new DefaultSort(/*interObjectDelay=*/30L))
-                .animateWith(new Animator[] {DefaultAnimations.shrinkAnimator(parent, /*duration=*/175)})
-                .start();
+//        new Spruce
+//                .SpruceBuilder(parent)
+//                .sortWith(new DefaultSort(/*interObjectDelay=*/30L))
+//                .animateWith(new Animator[] {DefaultAnimations.shrinkAnimator(parent, /*duration=*/175)})
+//                .start();
+    }
+
+    private void setAlbumArt(ImageView imageView, Context context, Song song) {
+        String path = null;
+        if(context!=null) {
+
+            //get path for the album art for this song
+            Cursor cursor = context.getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+                    new String[] {MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
+                    MediaStore.Audio.Albums._ID+ "=?",
+                    new String[] {String.valueOf(song.getAlbumId())},
+                    null);
+            if(cursor!=null && cursor.moveToFirst()) {
+                path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
+                // do whatever you need to do
+                cursor.close();
+            }
+
+            //set album art
+            Glide
+                    .with(context)
+                    .load(path)
+                    .apply(RequestOptions.centerCropTransform().placeholder(R.drawable.square_solid))
+                    .into(imageView);
+
+        }
     }
 
     @Override
@@ -132,6 +166,32 @@ public class SongsAdapter
 
     public void removeListItem(int position) {
         list.remove(position);
+    }
+
+    class SongHolder extends RecyclerView.ViewHolder {
+
+        @BindView(R.id.album_art)
+        ImageView albumArt;
+
+        @BindView(R.id.title)
+        TextView title;
+
+        @BindView(R.id.artist_duration)
+        TextView artistDuration;
+
+        @BindView(R.id.song_card)
+        CardView songCard;
+
+        @BindView(R.id.linear_layout)
+        LinearLayout linearLayout;
+
+        @BindView(R.id.more)
+        ImageButton moreButton;
+
+        SongHolder(View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+        }
     }
 
     @NonNull
@@ -202,28 +262,5 @@ public class SongsAdapter
             }
         }
         return sectionString;
-    }
-
-    class SongHolder extends RecyclerView.ViewHolder {
-
-        @BindView(R.id.title)
-        TextView title;
-
-        @BindView(R.id.artist_duration)
-        TextView artistDuration;
-
-        @BindView(R.id.song_card)
-        CardView songCard;
-
-        @BindView(R.id.linear_layout)
-        LinearLayout linearLayout;
-
-        @BindView(R.id.more)
-        ImageButton moreButton;
-
-        SongHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-        }
     }
 }
