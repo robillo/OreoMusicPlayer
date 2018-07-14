@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.robillo.dancingplayer.R;
 import com.robillo.dancingplayer.models.ThemeColors;
 import com.robillo.dancingplayer.utils.AppConstants;
@@ -90,9 +91,6 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @BindView(R.id.rescan_device)
     Button rescanDevice;
 
-    @BindView(R.id.gradient_image_view)
-    ImageView gradientImageView;
-
     @BindView(R.id.bottom_line)
     ImageView bottomLine;
 
@@ -106,7 +104,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     FastScrollRecyclerView mRecyclerView;
 
     @BindView(R.id.current_song_album_art)
-    CircleImageView currentSongAlbumArt;
+    ImageView currentSongAlbumArt;
 
     @BindView(R.id.current_song_title)
     TextView currentSongTitle;
@@ -169,7 +167,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         fadeInAnimationController = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in_controller);
         fadeOutAnimationController = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out_controller);
 
-        rotatingAlbumAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
+//        rotatingAlbumAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
 
         //marque
         currentSongTitle.setSelected(true);
@@ -224,7 +222,6 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     @Override
     public void refreshForUserThemeColors(ThemeColors userThemeColors, String themeName) {
         hideOrShowUpper.setBackgroundColor(getResources().getColor(userThemeColors.getColorPrimaryDark()));
-        currentSongAlbumArt.setBorderColor(getResources().getColor(userThemeColors.getColorPrimaryDark()));
         mRecyclerView.setPopupBgColor(getResources().getColor(userThemeColors.getColorPrimaryDark()));
         launchPlayFragmentTwo.setBackgroundColor(getResources().getColor(userThemeColors.getColorPrimaryDark()));
 
@@ -404,10 +401,11 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
             }
 
             //set album art
-            if(path!=null)
-                Glide.with(getActivity()).load(path).into(currentSongAlbumArt);
-            else
-                Glide.with(getActivity()).load(R.drawable.icon_drawable).into(currentSongAlbumArt);
+            Glide
+                    .with(getActivity())
+                    .load(path)
+                    .apply(RequestOptions.centerCropTransform().placeholder(R.drawable.square_solid))
+                    .into(currentSongAlbumArt);
 
         }
 
@@ -472,8 +470,8 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
             if(from == FROM_FRAGMENT) ((MainActivity) getActivity()).start();
 
         playPauseSong.setImageDrawable(getActivity().getDrawable(R.drawable.ic_pause_black_24dp));
-        resetAlbumArtAnimation();
-        currentSongAlbumArt.startAnimation(rotatingAlbumAnim);
+//        resetAlbumArtAnimation();
+//        currentSongAlbumArt.startAnimation(rotatingAlbumAnim);
     }
 
     @Override

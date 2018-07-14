@@ -152,12 +152,6 @@
             tools:visibility="visible"
             android:layout_marginBottom="50sp">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/gradient_image_view"
-                tools:ignore="ContentDescription" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -224,13 +218,21 @@
                         android:layout_width="120sp"
                         android:layout_height="match_parent">
 
+                        <ImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                            android:id="@+id/current_song_album_art"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="bottom"
+                            android:src="@color/white"
+                            tools:ignore="ContentDescription,RtlHardcoded"
+                            tools:src="@drawable/square_solid"/>
+
+
                         <TextView
                             android:id="@+id/current_song_duration"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
-                            android:layout_marginLeft="20sp"
-                            android:layout_marginRight="10sp"
                             android:layout_marginBottom="5sp"
                             android:gravity="center"
                             android:maxLines="1"
@@ -290,18 +292,6 @@
                     android:id="@+id/bottom_line"/>
 
             </LinearLayout>
-
-            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/current_song_album_art"
-                android:layout_width="90sp"
-                android:layout_height="90sp"
-                android:layout_gravity="bottom"
-                android:layout_marginBottom="25sp"
-                android:layout_marginLeft="20sp"
-                android:src="@color/white"
-                app:civ_border_color="@color/white"
-                tools:ignore="RtlHardcoded"
-                tools:src="@drawable/icon_drawable"/>
 
         </FrameLayout>
 

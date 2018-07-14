@@ -245,33 +245,33 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
 
     @Override
     public void loadPaletteAndApply(String path) {
-        Bitmap bitmap;
-        if(path != null && !path.equals("null"))
-            bitmap = BitmapFactory.decodeFile(path);
-        else
-            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.baseline_edit_white_48);
-
-        Palette.from(bitmap).generate(p -> {
-            // Use generated instance
-            int dominantColor = p.getDominantColor(getResources().getColor(R.color.colorTextFour));
-            int darkMutedColor = p.getDarkMutedColor(getResources().getColor(R.color.colorTextFour));
-            int vibrantColor = p.getVibrantColor(getResources().getColor(R.color.colorTextTwo));
-            int mutedColor = p.getMutedColor(getResources().getColor(R.color.colorTextFour));
-            int lightMutedColor = p.getLightMutedColor(getResources().getColor(R.color.colorTextFour));
-            int darkVibrantColor = p.getDarkVibrantColor(getResources().getColor(R.color.colorTextTwo));
-            int lightVibrantColor = p.getLightVibrantColor(getResources().getColor(R.color.white));
-
-            GradientDrawable drawable = new GradientDrawable(
-                    GradientDrawable.Orientation.TOP_BOTTOM,
-                    new int[] {
-                            getResources().getColor(R.color.white),
-                            lightVibrantColor,
-                            getResources().getColor(R.color.white)
-                    });
-
-            drawable.setAlpha(80);
-            artBackgroundColor.setBackground(drawable);
-        });
+//        Bitmap bitmap;
+//        if(path != null && !path.equals("null"))
+//            bitmap = BitmapFactory.decodeFile(path);
+//        else
+//            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.baseline_edit_white_48);
+//
+//        Palette.from(bitmap).generate(p -> {
+//            // Use generated instance
+//            int dominantColor = p.getDominantColor(getResources().getColor(R.color.colorTextFour));
+//            int darkMutedColor = p.getDarkMutedColor(getResources().getColor(R.color.colorTextFour));
+//            int vibrantColor = p.getVibrantColor(getResources().getColor(R.color.colorTextTwo));
+//            int mutedColor = p.getMutedColor(getResources().getColor(R.color.colorTextFour));
+//            int lightMutedColor = p.getLightMutedColor(getResources().getColor(R.color.colorTextFour));
+//            int darkVibrantColor = p.getDarkVibrantColor(getResources().getColor(R.color.colorTextTwo));
+//            int lightVibrantColor = p.getLightVibrantColor(getResources().getColor(R.color.white));
+//
+//            GradientDrawable drawable = new GradientDrawable(
+//                    GradientDrawable.Orientation.TOP_BOTTOM,
+//                    new int[] {
+//                            getResources().getColor(R.color.white),
+//                            lightVibrantColor,
+//                            getResources().getColor(R.color.white)
+//                    });
+//
+//            drawable.setAlpha(80);
+//            artBackgroundColor.setBackground(drawable);
+//        });
     }
 
     @Override
