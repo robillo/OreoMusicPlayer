@@ -1,9 +1,7 @@
 package com.robillo.dancingplayer.views.activities.main.song_list_frag;
 
 import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.database.Cursor;
-import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -12,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -52,8 +51,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.hdodenhof.circleimageview.CircleImageView;
-import jp.wasabeef.glide.transformations.gpu.BrightnessFilterTransformation;
 
 import static com.robillo.dancingplayer.utils.AppConstants.BLUE_GREY;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_ACTIVITY;
@@ -87,6 +84,9 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     private static long songDurationForCountDownTimer = 0;
     private ThemeColors currentUserThemeColors = null;
     private int from = FROM_FRAGMENT;
+
+    @BindView(R.id.rotate_view_album_art)
+    CardView rotateViewAlbumArtCard;
 
     @BindView(R.id.rescan_device)
     Button rescanDevice;
@@ -167,7 +167,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
         fadeInAnimationController = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in_controller);
         fadeOutAnimationController = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out_controller);
 
-//        rotatingAlbumAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
+        rotatingAlbumAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
 
         //marque
         currentSongTitle.setSelected(true);
@@ -195,7 +195,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if(!hideOnFastScroll) {
                     if(dy > 0) {      //scrolled up
@@ -401,13 +401,13 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
             }
 
             //set album art
-                Glide
-                        .with(getActivity())
-                        .load(path)
-                        .apply(RequestOptions
-                                .centerCropTransform()
-                                .placeholder(R.drawable.square_solid_dark))
-                        .into(currentSongAlbumArt);
+            Glide.with(getActivity())
+                    .load(path)
+                    .apply(RequestOptions
+                            .centerCropTransform()
+                            .placeholder(R.drawable.icon_drawable)
+                    )
+                    .into(currentSongAlbumArt);
 
         }
 
@@ -472,8 +472,8 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
             if(from == FROM_FRAGMENT) ((MainActivity) getActivity()).start();
 
         playPauseSong.setImageDrawable(getActivity().getDrawable(R.drawable.ic_pause_black_24dp));
-//        resetAlbumArtAnimation();
-//        currentSongAlbumArt.startAnimation(rotatingAlbumAnim);
+        resetAlbumArtAnimation();
+        rotateViewAlbumArtCard.startAnimation(rotatingAlbumAnim);
     }
 
     @Override
@@ -487,9 +487,9 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
 
     @Override
     public void resetAlbumArtAnimation() {
-        if(currentSongAlbumArt.getAnimation() != null) {
-            currentSongAlbumArt.getAnimation().cancel();
-            currentSongAlbumArt.setAnimation(null);
+        if(rotateViewAlbumArtCard.getAnimation() != null) {
+            rotateViewAlbumArtCard.getAnimation().cancel();
+            rotateViewAlbumArtCard.setAnimation(null);
         }
     }
 

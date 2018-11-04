@@ -4,24 +4,17 @@ package com.robillo.dancingplayer.views.activities.main.song_play_frag;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.ColorSpace;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.GradientDrawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.provider.MediaStore;
-import android.support.annotation.ColorInt;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.BottomSheetDialogFragment;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.graphics.Palette;
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +39,6 @@ import com.robillo.dancingplayer.views.activities.main.MainActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_ACTIVITY;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_FRAGMENT;
@@ -64,6 +56,9 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
     private ThemeColors currentUserThemeColors = null;
     private Animation rotatingAlbumAnim;
     private int currentDurationProgress, totalDurationProgress;
+
+    @BindView(R.id.rotate_view_album_art)
+    CardView rotateViewAlbumArtCard;
 
     @BindView(R.id.bottom_controller)
     LinearLayout bottomController;
@@ -102,7 +97,7 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
     ImageButton playPauseSong;
 
     @BindView(R.id.current_song_album_art)
-    CircleImageView currentSongAlbumArt;
+    ImageView currentSongAlbumArt;
 
     @BindView(R.id.current_song_title)
     TextView currentSongTitle;
@@ -186,7 +181,6 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
     @Override
     public void refreshForUserThemeColors(ThemeColors currentUserThemeColors) {
         bottomController.setBackgroundColor(getResources().getColor(currentUserThemeColors.getColorPrimary()));
-        currentSongAlbumArt.setBorderColor(getResources().getColor(currentUserThemeColors.getColorPrimaryDark()));
     }
 
     @Override
@@ -276,9 +270,9 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
 
     @Override
     public void resetAlbumArtAnimation() {
-        if(currentSongAlbumArt.getAnimation() != null) {
-            currentSongAlbumArt.getAnimation().cancel();
-            currentSongAlbumArt.setAnimation(null);
+        if(rotateViewAlbumArtCard.getAnimation() != null) {
+            rotateViewAlbumArtCard.getAnimation().cancel();
+            rotateViewAlbumArtCard.setAnimation(null);
         }
     }
 
@@ -290,7 +284,7 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
         startTimerForProgress();
         playPauseSong.setImageDrawable(getActivity().getDrawable(R.drawable.ic_pause_circle_outline_black_24dp));
         resetAlbumArtAnimation();
-        currentSongAlbumArt.startAnimation(rotatingAlbumAnim);
+        rotateViewAlbumArtCard.startAnimation(rotatingAlbumAnim);
 
         helper.setIsSongPlaying(true);
     }

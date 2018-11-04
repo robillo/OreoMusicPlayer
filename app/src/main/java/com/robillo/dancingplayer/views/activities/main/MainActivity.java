@@ -191,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     public void putSongsListIntoDatabase(List<Song> audioList) {
         if (songRepository == null) songRepository = getSongRepository();
 
+        //noinspection ToArrayCallWithZeroLengthArrayArgument
         songRepository.insertSongs(audioList.toArray(new Song[audioList.size()]));
 
         loadSongsForSelectedPlaylistFromDb();

@@ -1,28 +1,16 @@
 package com.robillo.dancingplayer.utils;
 
-import android.arch.lifecycle.LiveData;
-import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Context;
-import android.net.Uri;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_playlists.PlaylistRepository;
 import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_songs.SongRepository;
 import com.robillo.dancingplayer.models.PlaylistRowItem;
 import com.robillo.dancingplayer.models.Song;
-import com.robillo.dancingplayer.preferences.AppPreferencesHelper;
 import com.robillo.dancingplayer.views.activities.main.MainActivity;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 public class ApplicationUtils {
 
