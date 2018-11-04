@@ -27,7 +27,6 @@ import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 import io.github.inflationx.viewpump.ViewPumpContextWrapper;
 
 public class SplashActivity extends AppCompatActivity implements SplashMvpView {
@@ -36,9 +35,6 @@ public class SplashActivity extends AppCompatActivity implements SplashMvpView {
 
     @BindView(R.id.app_name)
     TextView appName;
-
-    @BindView(R.id.app_icon)
-    CircleImageView appIcon;
 
     @BindView(R.id.gradient_image_view)
     ImageView gradientImageView;
