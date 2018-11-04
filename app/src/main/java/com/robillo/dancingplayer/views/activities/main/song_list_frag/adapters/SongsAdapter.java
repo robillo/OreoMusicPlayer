@@ -1,7 +1,5 @@
 package com.robillo.dancingplayer.views.activities.main.song_list_frag.adapters;
 
-import android.animation.Animator;
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.Cursor;
@@ -27,16 +25,12 @@ import com.robillo.dancingplayer.preferences.AppPreferencesHelper;
 import com.robillo.dancingplayer.utils.ApplicationUtils;
 import com.robillo.dancingplayer.views.activities.main.MainActivity;
 import com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView;
-import com.willowtreeapps.spruce.Spruce;
-import com.willowtreeapps.spruce.animation.DefaultAnimations;
-import com.willowtreeapps.spruce.sort.DefaultSort;
 
 import java.sql.Date;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.robillo.dancingplayer.utils.AppConstants.ALBUM_ASCENDING;
 import static com.robillo.dancingplayer.utils.AppConstants.ALBUM_DESCENDING;
@@ -119,18 +113,8 @@ public class SongsAdapter
                 return true;
             });
 
-            animateCardUsingSpruce(holder.songCard);
-
             holder.moreButton.setOnClickListener(view -> ((MainActivity) context).showSongOptionsOnBottomSheet(list.get(_pos), _pos));
         }
-    }
-
-    private void animateCardUsingSpruce(ViewGroup parent) {
-//        new Spruce
-//                .SpruceBuilder(parent)
-//                .sortWith(new DefaultSort(/*interObjectDelay=*/30L))
-//                .animateWith(new Animator[] {DefaultAnimations.shrinkAnimator(parent, /*duration=*/175)})
-//                .start();
     }
 
     private void setAlbumArt(ImageView imageView, Context context, Song song) {
@@ -150,8 +134,7 @@ public class SongsAdapter
             }
 
             //set album art
-            Glide
-                    .with(context)
+            Glide.with(context)
                     .load(path)
                     .apply(RequestOptions.centerCropTransform().placeholder(R.drawable.square_solid))
                     .into(imageView);

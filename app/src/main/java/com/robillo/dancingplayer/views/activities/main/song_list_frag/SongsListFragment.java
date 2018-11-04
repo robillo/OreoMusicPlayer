@@ -58,7 +58,6 @@ import jp.wasabeef.glide.transformations.gpu.BrightnessFilterTransformation;
 import static com.robillo.dancingplayer.utils.AppConstants.BLUE_GREY;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_ACTIVITY;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_FRAGMENT;
-import static com.robillo.dancingplayer.utils.AppConstants.FROM_PLAYLIST;
 import static com.robillo.dancingplayer.utils.AppConstants.LAUNCHED_FROM_NOTIFICATION;
 import static com.robillo.dancingplayer.utils.AppConstants.PITCH_BLACK;
 
@@ -407,7 +406,7 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
                         .load(path)
                         .apply(RequestOptions
                                 .centerCropTransform()
-                                .placeholder(R.drawable.square_solid))
+                                .placeholder(R.drawable.square_solid_dark))
                         .into(currentSongAlbumArt);
 
         }

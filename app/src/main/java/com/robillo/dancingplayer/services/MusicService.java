@@ -276,7 +276,14 @@ public class MusicService extends Service implements
 
     @Override
     public void playSong() {
-        player.reset();
+
+        try {
+            player.reset();
+        }
+        catch (NullPointerException e) {
+            player = new MediaPlayer();
+            initMusicPlayer();
+        }
         //get song
         Song song = songs.get(songPosition);
         //get id
@@ -490,9 +497,9 @@ public class MusicService extends Service implements
     public void cancelNotification() {
         if(notificationManager != null) {
             notificationManager.cancel(CONTROLLER_NOTIFICATION_ID);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                notificationManager.deleteNotificationChannel(AppConstants.CHANNEL_ID);
-            }
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+////                notificationManager.deleteNotificationChannel(AppConstants.CHANNEL_ID);
+//            }
         }
     }
 
@@ -629,7 +636,12 @@ public class MusicService extends Service implements
     public void removeSongFromList(Song song) {
         Song songToDelete = null;
         if(songs != null) {
-            for (Song s : songs) if(s.getId().equals(song.getId())) songToDelete = s;
+            for (Song s : songs) {
+                //noinspection ConstantConditions
+                if(s != null && s.getId() != null && s.getId().equals(song.getId())) {
+                    songToDelete = s;
+                }
+            }
             songs.remove(songToDelete);
         }
     }

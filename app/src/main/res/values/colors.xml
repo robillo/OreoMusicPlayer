@@ -4,6 +4,14 @@
     <color name="colorOffWhite">#FFFDF4</color>
     <color name="colorVeryLightBrown">#FFE8C5</color>
 
+    <color name="colorBlackShade">#000000</color>
+    <color name="colorBlackShadeTwo">#535353</color>
+    <color name="colorBlackShadeThree">#8b8b8b</color>
+    <color name="colorBlackShadeFour">#c1c1c1</color>
+    <color name="colorBlackShadeFive">#dedede</color>
+    <color name="colorBlackShadeSix">#eaeaea</color>
+    <color name="colorBlackShadeSeven">#f2f2f2</color>
+
     <color name="colorTitle">#6E7B8C</color>
     <color name="colorArtist">#8B95A3</color>
     <color name="colorRecyclerRowDivider">#F5F5F5</color>

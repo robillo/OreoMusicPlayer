@@ -225,8 +225,7 @@
                             android:layout_gravity="center"
                             android:src="@color/white"
                             tools:ignore="ContentDescription,RtlHardcoded"
-                            tools:src="@drawable/square_solid"/>
-
+                            tools:src="@drawable/square_solid_dark"/>
 
                         <TextView
                             android:id="@+id/current_song_duration"
@@ -255,6 +254,7 @@
                             android:id="@+id/current_song_title"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="10sp"
                             android:textColor="@color/white"
                             android:textSize="20sp"
                             android:layout_marginTop="5sp"
