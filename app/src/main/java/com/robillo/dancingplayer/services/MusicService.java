@@ -16,7 +16,6 @@ import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioAttributes;
 import android.media.AudioFocusRequest;
 import android.media.AudioManager;
-import android.media.MediaMetadata;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Binder;
@@ -197,7 +196,7 @@ public class MusicService extends Service implements
 
         int importance = 0;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            importance = NotificationManager.IMPORTANCE_DEFAULT;
+            importance = NotificationManager.IMPORTANCE_LOW;
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -757,9 +756,9 @@ public class MusicService extends Service implements
 
         //notification
         mSession.setMetadata(new MediaMetadataCompat.Builder()
-                .putString(MediaMetadata.METADATA_KEY_ARTIST, songs.get(songPosition).getArtist())
-                .putString(MediaMetadata.METADATA_KEY_ALBUM, songs.get(songPosition).getAlbum())
-                .putString(MediaMetadata.METADATA_KEY_TITLE, songs.get(songPosition).getTitle())
+                .putString(MediaMetadataCompat.METADATA_KEY_ARTIST, songs.get(songPosition).getArtist())
+                .putString(MediaMetadataCompat.METADATA_KEY_ALBUM, songs.get(songPosition).getAlbum())
+                .putString(MediaMetadataCompat.METADATA_KEY_TITLE, songs.get(songPosition).getTitle())
                 .build());
 
         buildNotification(true);

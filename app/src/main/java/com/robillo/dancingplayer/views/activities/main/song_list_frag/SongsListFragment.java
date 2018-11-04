@@ -53,6 +53,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import jp.wasabeef.glide.transformations.gpu.BrightnessFilterTransformation;
 
 import static com.robillo.dancingplayer.utils.AppConstants.BLUE_GREY;
 import static com.robillo.dancingplayer.utils.AppConstants.FROM_ACTIVITY;
@@ -401,11 +402,13 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
             }
 
             //set album art
-            Glide
-                    .with(getActivity())
-                    .load(path)
-                    .apply(RequestOptions.centerCropTransform().placeholder(R.drawable.square_solid))
-                    .into(currentSongAlbumArt);
+                Glide
+                        .with(getActivity())
+                        .load(path)
+                        .apply(RequestOptions
+                                .centerCropTransform()
+                                .placeholder(R.drawable.square_solid))
+                        .into(currentSongAlbumArt);
 
         }
 

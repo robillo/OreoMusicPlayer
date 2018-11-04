@@ -222,7 +222,7 @@
                             android:id="@+id/current_song_album_art"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_gravity="bottom"
+                            android:layout_gravity="center"
                             android:src="@color/white"
                             tools:ignore="ContentDescription,RtlHardcoded"
                             tools:src="@drawable/square_solid"/>
@@ -257,6 +257,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="@color/white"
                             android:textSize="20sp"
+                            android:layout_marginTop="5sp"
                             tools:ignore="HardcodedText,MissingPrefix,RtlHardcoded,RtlSymmetry"
                             tools:text="I'll be your reason"
                             android:scrollHorizontally="true"
@@ -280,16 +281,21 @@
                             android:gravity="end|center_vertical"
                             android:paddingRight="10sp"/>
 
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0sp"
+                            android:layout_weight="1"/>
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="1sp"
+                            android:background="@color/colorTextOne"
+                            tools:ignore="ContentDescription,SmallSp"
+                            android:id="@+id/bottom_line"/>
+
                     </LinearLayout>
 
                 </LinearLayout>
-
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="1sp"
-                    android:background="@color/colorTextOne"
-                    tools:ignore="ContentDescription,SmallSp"
-                    android:id="@+id/bottom_line"/>
 
             </LinearLayout>
 
