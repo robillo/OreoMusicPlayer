@@ -67,9 +67,9 @@ public class ApplicationUtils {
         Song serviceSong = act.getMusicService().getSong();
         if(serviceSong != null && serviceSong.getId().equals(songIds[0])) {
             act.getMusicService().cancelNotification();
+            act.removeSongFromListInMusicService(song);
             act.playNextSong();
         }
-        act.removeSongFromListInMusicService(song);
 
         int numRows = context.getContentResolver().delete(
                 MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,

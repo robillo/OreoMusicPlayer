@@ -383,7 +383,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     public void rescanDevice() {
         if(getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list)) != null){
             SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
-            fragment.fetchSongs(FROM_ACTIVITY);
+            if (fragment != null) {
+                fragment.fetchSongs(FROM_ACTIVITY);
+            }
         }
     }
 
