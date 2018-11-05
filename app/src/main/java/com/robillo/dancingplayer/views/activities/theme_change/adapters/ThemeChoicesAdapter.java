@@ -54,12 +54,12 @@ public class ThemeChoicesAdapter extends RecyclerView.Adapter<ThemeChoicesAdapte
         holder.colorName.setText(themeColors.get(position).getColorName());
 
         if(position == currentUserThemeColorsIndex) {
-            holder.colorName.setTextColor(context.getResources().getColor(R.color.white));
+            holder.colorName.setTextColor(context.getResources().getColor(R.color.colorTextFive));
             holder.colorName.setBackgroundColor(context.getResources().getColor(R.color.green_primary_dark));
         }
         else {
             holder.colorName.setTextColor(context.getResources().getColor(R.color.colorTextOne));
-            holder.colorName.setBackgroundColor(context.getResources().getColor(R.color.white));
+            holder.colorName.setBackgroundColor(context.getResources().getColor(R.color.colorTextFive));
         }
 
         holder.gradientImageView.setBackground(createGradientDrawable(

@@ -35,7 +35,7 @@
                 android:layout_width="0sp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="22sp"
+                android:textSize="15sp"
                 android:text="Edit Playlist Name:"
                 android:textColor="@color/white"
                 android:gravity="start|center_vertical"
@@ -55,7 +55,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="15sp"
             android:hint="Night Music"
             android:textColor="@color/colorTextOne"
             android:padding="15sp"
@@ -79,9 +79,9 @@
 
             <TextView
                 android:layout_width="0sp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:text="Cancel"
                 android:textColor="@color/colorTextOne"
                 android:padding="8sp"
@@ -98,9 +98,9 @@
 
             <TextView
                 android:layout_width="0sp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="20sp"
+                android:textSize="15sp"
                 android:text="Done"
                 android:textColor="@color/colorTextOne"
                 android:padding="8sp"

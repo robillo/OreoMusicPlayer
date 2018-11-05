@@ -17,7 +17,7 @@ public class PlayerApplication extends Application {
         ViewPump.init(ViewPump.builder()
                 .addInterceptor(new CalligraphyInterceptor(
                         new CalligraphyConfig.Builder()
-                                .setDefaultFontPath("fonts/spr.otf")
+                                .setDefaultFontPath("fonts/Comfortaa-Regular.ttf")
                                 .setFontAttrId(R.attr.fontPath)
                                 .build()))
                 .build());

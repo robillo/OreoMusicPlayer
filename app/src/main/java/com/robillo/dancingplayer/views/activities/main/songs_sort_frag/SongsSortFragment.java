@@ -95,8 +95,8 @@ public class SongsSortFragment extends Fragment implements SongsSortMvpView {
 
     @Override
     public void refreshForUserThemeColors(ThemeColors currentUserThemeColors) {
-        header.setBackgroundColor(getResources().getColor(currentUserThemeColors.getColorPrimary()));
-        lineColored.setBackgroundColor(getResources().getColor(currentUserThemeColors.getColorPrimaryDark()));
+        header.setBackgroundColor(getResources().getColor(currentUserThemeColors.getColorPrimaryDark()));
+        lineColored.setBackgroundColor(getResources().getColor(currentUserThemeColors.getColorPrimary()));
     }
 
     @Override
