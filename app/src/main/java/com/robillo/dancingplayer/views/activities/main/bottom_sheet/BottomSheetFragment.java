@@ -59,8 +59,6 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
     int index = -1;
 
     AppPreferencesHelper helper = null;
-    @SuppressWarnings("FieldCanBeLocal")
-    private ThemeColors currentUserThemeColors = null;
 
     @BindView(R.id.title)
     TextView title;
@@ -110,7 +108,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
 
         //noinspection ConstantConditions
         helper = new AppPreferencesHelper(getActivity());
-        currentUserThemeColors = AppConstants.themeMap.get(helper.getUserThemeName());
+        ThemeColors currentUserThemeColors = AppConstants.themeMap.get(helper.getUserThemeName());
         title.setBackgroundColor(getResources().getColor(R.color.white));
         artistAndSize.setBackgroundColor(getResources().getColor(R.color.white));
         lineImage.setBackgroundColor(getResources().getColor(currentUserThemeColors.getColorPrimaryDark()));
@@ -162,7 +160,7 @@ public class BottomSheetFragment extends BottomSheetDialogFragment implements Bo
     @OnClick(R.id.delete_song)
     public void setDeleteSong() {
         MainActivity activity = (MainActivity) getActivity();
-        if(activity != null) activity.deleteSong(getActivity(), index, song, song.getId());
+        if(activity != null) activity.deleteSong(index, song);
     }
 
     @OnClick(R.id.rate_app)

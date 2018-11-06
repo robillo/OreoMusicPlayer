@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Handler;
 import android.os.IBinder;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
@@ -854,10 +855,47 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     }
 
     @Override
-    public void deleteSong(FragmentActivity activity, int index, Song song, String id) {
+    public void deleteSong(int recyclerIndex, Song deleteSong) {
         if(songRepository == null) songRepository = getSongRepository();
         if(playlistRepository == null) playlistRepository = getPlaylistRepository();
-        new ApplicationUtils().deleteFile(songRepository, playlistRepository, this, index, song, song.getId());
+
+        deleteSongFromSongRepository(deleteSong.getId());
+        deleteSongFromPlaylistRepository(deleteSong.getId());
+        changeSongIfSameAsCurrentlyPlaying(deleteSong);
+        boolean isDeleted = deleteFromDevice(deleteSong);
+
+        if(isDeleted) Toast.makeText(this, "Song Deleted From Device", Toast.LENGTH_SHORT).show();
+        else Toast.makeText(this, "Oops, there was some error in deletion!", Toast.LENGTH_SHORT).show();
+
+        refreshSongListFragmentForSongDelete(deleteSong, recyclerIndex);
+        hideOrRemoveBottomSheet();
+    }
+
+    private void deleteSongFromSongRepository(String songId) {
+        songRepository.deleteSongById(songId);
+    }
+
+    private void deleteSongFromPlaylistRepository(String songId) {
+        playlistRepository.deleteSongById(songId);
+    }
+
+    private void changeSongIfSameAsCurrentlyPlaying(Song deleteSong) {
+        Song currentSong = getMusicService().getSong();
+        if(currentSong != null && currentSong.getId().equals(deleteSong.getId())) {
+            getMusicService().cancelNotification();
+            removeSongFromListInMusicService(deleteSong);
+            playNextSong();
+        }
+        else
+            removeSongFromListInMusicService(deleteSong);
+    }
+
+    private boolean deleteFromDevice(Song deleteSong) {
+        int numRows = getContentResolver().delete(
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                MediaStore.Audio.Media._ID + "=?",
+                new String[] {deleteSong.getId()});
+        return (numRows > 0);
     }
 
     @Override

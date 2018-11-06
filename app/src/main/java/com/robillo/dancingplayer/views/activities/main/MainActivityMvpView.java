@@ -1,7 +1,5 @@
 package com.robillo.dancingplayer.views.activities.main;
 
-import android.support.v4.app.FragmentActivity;
-
 import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_most_played.MostPlayedRepository;
 import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_playlists.PlaylistRepository;
 import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_songs.SongRepository;
@@ -123,5 +121,5 @@ public interface MainActivityMvpView {
 
     void loadSongsInRvAfterRowItemsLoaded(int from, String songId);
 
-    void deleteSong(FragmentActivity activity, int index, Song song, String id);
+    void deleteSong(int index, Song song);
 }

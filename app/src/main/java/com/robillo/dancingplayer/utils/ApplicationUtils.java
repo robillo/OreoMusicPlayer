@@ -48,8 +48,6 @@ public class ApplicationUtils {
     }
 
     public void deleteFile(SongRepository songRepository, PlaylistRepository playlistRepository, Context context, int index, Song song, String... songIds) {
-        songRepository.deleteSongById(songIds[0]);
-        playlistRepository.deleteSongById(songIds[0]);
 
         MainActivity act = (MainActivity) context;
         Song serviceSong = act.getMusicService().getSong();
