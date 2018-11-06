@@ -36,10 +36,11 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:textSize="15sp"
+                fontPath="fonts/Comfortaa-Bold.ttf"
                 android:text="Edit Playlist Name:"
                 android:textColor="@color/white"
                 android:gravity="start|center_vertical"
-                tools:ignore="HardcodedText,RtlHardcoded"
+                tools:ignore="HardcodedText,MissingPrefix,RtlHardcoded"
                 android:id="@+id/header"
                 android:paddingLeft="10sp"
                 android:paddingRight="20sp"/>
@@ -81,13 +82,14 @@
                 android:layout_width="0sp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="15sp"
-                android:text="Cancel"
+                android:textSize="12sp"
+                android:text="CANCEL"
                 android:textColor="@color/colorTextOne"
-                android:padding="8sp"
+                android:padding="4sp"
                 android:gravity="center"
-                tools:ignore="HardcodedText"
+                tools:ignore="HardcodedText,MissingPrefix"
                 android:id="@+id/cancel"
+                fontPath="fonts/Comfortaa-Bold.ttf"
                 android:background="@drawable/button_impression"/>
 
             <ImageView
@@ -100,13 +102,14 @@
                 android:layout_width="0sp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="15sp"
-                android:text="Done"
+                android:textSize="12sp"
+                android:text="DONE"
                 android:textColor="@color/colorTextOne"
-                android:padding="8sp"
+                android:padding="4sp"
                 android:gravity="center"
-                tools:ignore="HardcodedText"
+                tools:ignore="HardcodedText,MissingPrefix"
                 android:id="@+id/done"
+                fontPath="fonts/Comfortaa-Bold.ttf"
                 android:background="@drawable/button_impression"/>
 
         </LinearLayout>

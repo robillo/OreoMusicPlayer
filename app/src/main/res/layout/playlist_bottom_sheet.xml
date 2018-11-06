@@ -68,7 +68,7 @@
         android:id="@+id/create_new_playlist"
         android:text="@string/create_new"
         android:textColor="@color/white"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:backgroundTint="@color/redButton"/>
 
 </LinearLayout>
