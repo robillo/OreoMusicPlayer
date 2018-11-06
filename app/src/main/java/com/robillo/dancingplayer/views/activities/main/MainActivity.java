@@ -151,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
                 //get service
                 musicService = binder.getService();
                 //pass list
-                musicService.setList(songList);
+                musicService.setSongsList(songList);
                 musicBound = true;
             }
 

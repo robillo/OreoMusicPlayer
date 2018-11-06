@@ -15,7 +15,7 @@ public interface MusicServiceInterface {
 
     void initMusicPlayer();
 
-    void setList(ArrayList<Song> songsList);
+    void setSongsList(ArrayList<Song> songsList);
 
     void playSong();
 
@@ -41,8 +41,6 @@ public interface MusicServiceInterface {
 
     void playNext();
 
-    void buildNotification(boolean play_or_pause);
-
     void cancelNotification();
 
     Bitmap getBitmapAlbumArt();
@@ -57,9 +55,7 @@ public interface MusicServiceInterface {
 
     void updateAudioList(ArrayList<Song> songs);
 
-    void callStateListener();
-
-    void setPlayerStateToNoSongPlaying();
+    void setupIncomingCallsListener();
 
     void removeSongFromList(Song song);
 

@@ -264,38 +264,5 @@ public class AppConstants {
                         R.color.cyan_mat,
                         CYAN)
         );
-//
-//        themeMap.put(
-//                ALL_BLACK,
-//                new ThemeColors(R.color.all_black_primary, R.color.all_black_primary_dark, R.color.all_black_accent, ALL_BLACK)
-//        );
-//        themeMap.put(
-//                VIOLET_LIGHT,
-//                new ThemeColors(R.color.violet_primary, R.color.violet_primary_dark, R.color.violet_accent, VIOLET_LIGHT)
-//        );
-//        themeMap.put(
-//                INDIGO_LIGHT,
-//                new ThemeColors(R.color.indigo_primary, R.color.indigo_primary_dark, R.color.indigo_accent, INDIGO_LIGHT)
-//        );
-//        themeMap.put(
-//                BLUE_LIGHT,
-//                new ThemeColors(R.color.blue_primary, R.color.blue_primary_dark, R.color.blue_accent, BLUE_LIGHT)
-//        );
-//        themeMap.put(
-//                GREEN_LIGHT,
-//                new ThemeColors(R.color.green_primary, R.color.green_primary_dark, R.color.green_accent, GREEN_LIGHT)
-//        );
-//        themeMap.put(
-//                YELLOW_LIGHT,
-//                new ThemeColors(R.color.yellow_primary, R.color.yellow_primary_dark, R.color.yellow_accent, YELLOW_LIGHT)
-//        );
-//        themeMap.put(
-//                ORANGE_LIGHT,
-//                new ThemeColors(R.color.orange_primary, R.color.orange_primary_dark, R.color.orange_accent, ORANGE_LIGHT)
-//        );
-//        themeMap.put(
-//                RED_LIGHT,
-//                new ThemeColors(R.color.red_primary, R.color.red_primary_dark, R.color.red_accent, RED_LIGHT)
-//        );
     }
 }
