@@ -43,7 +43,7 @@ public interface MusicServiceInterface {
 
     void cancelNotification();
 
-    Bitmap getBitmapAlbumArt();
+    Bitmap getAlbumArtBitmap();
 
     void toggleRepeatMode(String value);
 
@@ -59,9 +59,9 @@ public interface MusicServiceInterface {
 
     void removeSongFromList(Song song);
 
-    void audioFocusChangeListenerPrelims();
+    void setupAudioFocusChangeInstance();
 
-    boolean audioManagerRequestAudioFocus();
+    boolean isAudioManagerRequestAudioFocusDenied();
 
     PendingIntent setupNotificationPendingIntent();
 

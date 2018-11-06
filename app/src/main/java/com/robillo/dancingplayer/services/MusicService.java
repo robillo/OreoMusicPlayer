@@ -67,6 +67,8 @@ public class MusicService extends Service implements
         MediaPlayer.OnCompletionListener, MusicServiceInterface,
         AudioManager.OnAudioFocusChangeListener {
 
+    private int TEN_SECONDS = 10000;
+    private int ELEVEN_SECONDS = 10000;
     private int playOrPauseDrawable;
     private boolean isOngoingProcess;
     private boolean ongoingCall = false;
@@ -149,7 +151,7 @@ public class MusicService extends Service implements
         setupMediaSessionForNotification();
         setupNotificationChannel();
         setupIncomingCallsListener();
-        audioFocusChangeListenerPrelims();
+        setupAudioFocusChangeInstance();
     }
 
     private void setDataInPreferences() {
@@ -280,7 +282,16 @@ public class MusicService extends Service implements
 
     @Override
     public void playSong() {
+        resetPlayerForNewSong();
 
+        Song song = getSongByPosition(songPosition);
+        long currentSongId = getSongIdLong(song);
+        Uri trackUri = getTrackUri(currentSongId);
+
+        setPlayerForCurrentTrack(trackUri);
+    }
+
+    private void resetPlayerForNewSong() {
         try {
             player.reset();
         }
@@ -288,26 +299,33 @@ public class MusicService extends Service implements
             player = new MediaPlayer();
             initMusicPlayer();
         }
-        //get song
-        Song song = songs.get(songPosition);
-        //get id
-        long currSong = Long.valueOf(song.getId());
-        //set uri
-        Uri trackUri = ContentUris.withAppendedId(
+    }
+
+    private Song getSongByPosition(int songPosition) {
+        return songs.get(songPosition);
+    }
+
+    private Long getSongIdLong(Song song) {
+        return Long.valueOf(song.getId());
+    }
+
+    private Uri getTrackUri(Long currentSongId) {
+        return ContentUris.withAppendedId(
                 android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                currSong);
+                currentSongId);
+    }
+
+    private void setPlayerForCurrentTrack(Uri trackUri) {
         try{
             player.setDataSource(getApplicationContext(), trackUri);
             player.prepareAsync();
         }
-        catch(Exception e){
-            Log.e("MUSIC SERVICE", "Error setting data source", e);
-        }
+        catch(Exception ignored) {}
     }
 
     @Override
     public void setSong(int songIndex){
-        if(songIndex < songs.size() - AppConstants.EMPTY_CELLS_COUNT && songIndex >= 1) {
+        if(isSongBetweenCorrectIndices(songIndex)) {
             currentSong = songs.get(songIndex);
 
             AppPreferencesHelper helper = new AppPreferencesHelper(this);
@@ -327,6 +345,10 @@ public class MusicService extends Service implements
             EventBus.getDefault().postSticky(new PlayerStateNoSongPlayingEvent());
             EventBus.getDefault().postSticky(new SongChangeEvent(null));
         }
+    }
+
+    private boolean isSongBetweenCorrectIndices(int songIndex) {
+        return songIndex < songs.size() - AppConstants.EMPTY_CELLS_COUNT && songIndex >= 1;
     }
 
     @Override
@@ -351,19 +373,13 @@ public class MusicService extends Service implements
 
     @Override
     public void playPlayer() {
-        if (currentSong == null)
-            return;
-
-        if(audioManagerRequestAudioFocus()) {
-            return;
-        }
+        if (currentSong == null) return;
+        if(isAudioManagerRequestAudioFocusDenied()) return;
 
         player.start();
         buildNotificationForPlaying();
 
-        AppPreferencesHelper helper = new AppPreferencesHelper(this);
-        helper.setIsPlayEvent(true);
-
+        new AppPreferencesHelper(this).setIsPlayEvent(true);
         EventBus.getDefault().postSticky(new SongChangeEvent(currentSong));
     }
 
@@ -373,15 +389,12 @@ public class MusicService extends Service implements
         if(songs == null) return;
 
         if(currentSong != null) {
-            if (!mPlayOnAudioFocus) {
-                abandonAudioFocus();
-            }
+            if (!mPlayOnAudioFocus) abandonAudioFocus();
 
             player.pause();
             buildNotificationForPaused();
 
             new AppPreferencesHelper(this).setIsPlayEvent(false);
-
             EventBus.getDefault().postSticky(new SongChangeEvent(currentSong));
         }
     }
@@ -469,7 +482,7 @@ public class MusicService extends Service implements
                         .setMediaSession(mSession.getSessionToken())
                         .setShowActionsInCompactView(0, 1, 2))
                 .setColor(getResources().getColor(R.color.black))
-                .setLargeIcon(getBitmapAlbumArt())
+                .setLargeIcon(getAlbumArtBitmap())
                 .setSmallIcon(R.drawable.icon_drawable)
                 .setContentText(songs.get(songPosition).getArtist())
                 .setContentInfo(songs.get(songPosition).getAlbum())
@@ -514,35 +527,31 @@ public class MusicService extends Service implements
     }
 
     @Override
-    public Bitmap getBitmapAlbumArt() {
-        String path = null;
+    public Bitmap getAlbumArtBitmap() {
+
+        String albumArtPath = null;
         if(currentSong != null) {
-            //get path for the album art for this song
-            Cursor cursor = getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+            Cursor albumArtCursor = getContentResolver().query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
                     new String[] {MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART},
                     MediaStore.Audio.Albums._ID+ "=?",
                     new String[] {String.valueOf(currentSong.getAlbumId())},
                     null);
-            if(cursor!=null && cursor.moveToFirst()) {
-                path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
-                // do whatever you need to do
-                cursor.close();
+            if(albumArtCursor!=null && albumArtCursor.moveToFirst()) {
+                albumArtPath = albumArtCursor.getString(albumArtCursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART));
+                albumArtCursor.close();
             }
         }
 
-        File imgFile = null;
-        if(path != null) {
-            imgFile = new File(path);
-        }
+        File albumArtFile = null;
+        if(albumArtPath != null) albumArtFile = new File(albumArtPath);
 
-        Bitmap bitmap;
-        if(imgFile != null && imgFile.exists()) {
-            bitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-        }
-        else {
-            bitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.icon_drawable)).getBitmap();
-        }
-        return bitmap;
+        Bitmap albumArtBitmap;
+        if(albumArtFile != null && albumArtFile.exists())
+            albumArtBitmap = BitmapFactory.decodeFile(albumArtFile.getAbsolutePath());
+        else
+            albumArtBitmap = ((BitmapDrawable) getResources().getDrawable(R.drawable.icon_drawable)).getBitmap();
+
+        return albumArtBitmap;
     }
 
     @Override
@@ -561,11 +570,11 @@ public class MusicService extends Service implements
 
     @Override
     public void seekTenSecondsForward() {
-        if(player.getCurrentPosition() < (player.getDuration() - 11000)) {        //1 second for performance lag
-            player.seekTo(player.getCurrentPosition() + 10000);
+        if(player.getCurrentPosition() < (player.getDuration() - ELEVEN_SECONDS)) {
+            player.seekTo(player.getCurrentPosition() + TEN_SECONDS);
         }
         else {
-            if(isRepeatModeOn().equals(AppConstants.REPEAT_MODE_VALUE_REPEAT)) {
+            if(isRepeatModeOn().equals(AppConstants.REPEAT_MODE_VALUE_REPEAT_SAME_SONG)) {
                 setSong(songPosition);
             }
             else {
@@ -576,11 +585,11 @@ public class MusicService extends Service implements
 
     @Override
     public void seekTenSecondsBackwards() {
-        if(player.getCurrentPosition() > 11000) {                                 //current position is more than 10 seconds
-            player.seekTo(player.getCurrentPosition() - 10000);
+        if(player.getCurrentPosition() > ELEVEN_SECONDS) {
+            player.seekTo(player.getCurrentPosition() - TEN_SECONDS);
         }
         else {
-            if(isRepeatModeOn().equals(AppConstants.REPEAT_MODE_VALUE_REPEAT)) {
+            if(isRepeatModeOn().equals(AppConstants.REPEAT_MODE_VALUE_REPEAT_SAME_SONG)) {
                 setSong(songPosition);
             }
             else {
@@ -654,7 +663,7 @@ public class MusicService extends Service implements
     }
 
     @Override
-    public void audioFocusChangeListenerPrelims() {
+    public void setupAudioFocusChangeInstance() {
         audioManager = (AudioManager) this.getSystemService(AUDIO_SERVICE);
 
         AudioAttributes audioAttributes = new AudioAttributes.Builder()
@@ -673,13 +682,8 @@ public class MusicService extends Service implements
     }
 
     @Override
-    public boolean audioManagerRequestAudioFocus() {
-        int audioFocus = audioManager.requestAudioFocus(this, //audio focus change listener
-                // Use the music stream.
-                AudioManager.STREAM_MUSIC,
-                // Request permanent focus.
-                AudioManager.AUDIOFOCUS_GAIN);
-
+    public boolean isAudioManagerRequestAudioFocusDenied() {
+        int audioFocus = audioManager.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
 
         //noinspection StatementWithEmptyBody
         if (audioFocus == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
@@ -687,9 +691,9 @@ public class MusicService extends Service implements
         }
 
         int focusRequest = -10;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
             focusRequest = audioManager.requestAudioFocus(audioFocusRequest);
-        }
+
         switch (focusRequest) {
             case AudioManager.AUDIOFOCUS_REQUEST_FAILED:
                 // don’t start playback
@@ -697,7 +701,8 @@ public class MusicService extends Service implements
                 // actually start playback
         }
 
-        return (audioFocus != AudioManager.AUDIOFOCUS_REQUEST_GRANTED && focusRequest != AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
+        return (audioFocus != AudioManager.AUDIOFOCUS_REQUEST_GRANTED
+                && focusRequest != AudioManager.AUDIOFOCUS_REQUEST_GRANTED);
     }
 
     @Override
@@ -735,27 +740,33 @@ public class MusicService extends Service implements
     public void onCompletion(MediaPlayer mp) {
         if(songPosition < songs.size() - AppConstants.EMPTY_CELLS_COUNT){
 
-            if(!isRepeatModeOn().equals(AppConstants.REPEAT_MODE_VALUE_REPEAT)) {
-                //if repeat mode is off, update songPosition for setPlayerStateToNoSongPlaying song to be played
-
-                if(isShuffleModeOn()) {
-                    // nextInt is normally exclusive of the top value
-                    // so add 1 to make it inclusive
-                    int min = 1;
-                    int max = songs.size() - AppConstants.EMPTY_CELLS_COUNT + 1;
-                    songPosition = ThreadLocalRandom.current().nextInt(min, max);
-                }
-                else {
+            if(isRepeatSameSongModeSet()) {
+                setSong(songPosition);
+            }
+            else {
+                if(isShuffleModeOn())
+                    songPosition = getRandomNumberInSongList();
+                else
                     songPosition++;
-                }
-            }                                                   //else don't update song position so that same song plays again
-
-            setSong(songPosition);
+            }
         }
 
-        if(isRepeatModeOn().equals(REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE) && songPosition == songs.size() - EMPTY_CELLS_COUNT) {
-            pausePlayer();
-        }
+        if(isIndexExceededLastAtLinearPlayMode()) pausePlayer();
+    }
+
+    private int getRandomNumberInSongList() {
+        int min = 1;
+        int max = songs.size() - AppConstants.EMPTY_CELLS_COUNT + 1;
+        return ThreadLocalRandom.current().nextInt(min, max);
+    }
+
+    private boolean isRepeatSameSongModeSet() {
+        return isRepeatModeOn().equals(AppConstants.REPEAT_MODE_VALUE_REPEAT_SAME_SONG);
+    }
+
+    private boolean isIndexExceededLastAtLinearPlayMode() {
+        return isRepeatModeOn()
+                .equals(REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE) && songPosition == songs.size() - EMPTY_CELLS_COUNT;
     }
 
     @Override
@@ -766,7 +777,7 @@ public class MusicService extends Service implements
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
 
-        if(audioManagerRequestAudioFocus()) return;
+        if(isAudioManagerRequestAudioFocusDenied()) return;
 
         startPlaybackOnPrepared(mediaPlayer);
         setMetadataForSessionInstance();

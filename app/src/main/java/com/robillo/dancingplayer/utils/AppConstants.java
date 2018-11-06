@@ -55,7 +55,7 @@ public class AppConstants {
     public static final String MOST_PLAYED = "Most Played";
     public static final String RECENTLY_PLAYED = "Recently Played";
 
-    public static final String REPEAT_MODE_VALUE_REPEAT = "repeating";
+    public static final String REPEAT_MODE_VALUE_REPEAT_SAME_SONG = "repeating";
     public static final String REPEAT_MODE_VALUE_LOOP = "looping";
     public static final String REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE = "linearly_traversing_once";
 

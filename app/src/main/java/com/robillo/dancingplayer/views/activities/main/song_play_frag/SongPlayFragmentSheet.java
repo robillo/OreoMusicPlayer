@@ -328,7 +328,7 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
                                     ContextCompat.getColor(getActivity(), currentUserThemeColors.getColorPrimary())
                             );
                     break;
-                case AppConstants.REPEAT_MODE_VALUE_REPEAT:
+                case AppConstants.REPEAT_MODE_VALUE_REPEAT_SAME_SONG:
                     //change tint to repeat => "ticked primary" and drawable to repeat one
                     repeatSong
                             .setImageDrawable(
@@ -439,7 +439,7 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
                     break;
                 case AppConstants.REPEAT_MODE_VALUE_LOOP:
 
-                    helper.setIsRepeatModeOn(AppConstants.REPEAT_MODE_VALUE_REPEAT);
+                    helper.setIsRepeatModeOn(AppConstants.REPEAT_MODE_VALUE_REPEAT_SAME_SONG);
                     repeatSong
                             .setImageDrawable(
                                     getResources().getDrawable(R.drawable.ic_repeat_one_black_24dp)
@@ -450,7 +450,7 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
                             );
 
                     break;
-                case AppConstants.REPEAT_MODE_VALUE_REPEAT:
+                case AppConstants.REPEAT_MODE_VALUE_REPEAT_SAME_SONG:
 
                     helper.setIsRepeatModeOn(AppConstants.REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE);
                     repeatSong
