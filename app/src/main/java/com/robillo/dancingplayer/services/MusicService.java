@@ -752,6 +752,8 @@ public class MusicService extends Service implements
         }
 
         if(isIndexExceededLastAtLinearPlayMode()) pausePlayer();
+
+        else setSong(songPosition);
     }
 
     private int getRandomNumberInSongList() {

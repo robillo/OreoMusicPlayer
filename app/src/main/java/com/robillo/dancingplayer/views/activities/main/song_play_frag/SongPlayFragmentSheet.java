@@ -219,8 +219,6 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
                     cursor.close();
                 }
 
-                loadPaletteAndApply(path);
-
                 //set album art
                 if(path != null && !path.equals("null")) {
                     Glide.with(getActivity()).load(path).into(currentSongAlbumArt);
@@ -235,37 +233,6 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
                 else pausePlayer(FROM_ACTIVITY);
             }
         }
-    }
-
-    @Override
-    public void loadPaletteAndApply(String path) {
-//        Bitmap bitmap;
-//        if(path != null && !path.equals("null"))
-//            bitmap = BitmapFactory.decodeFile(path);
-//        else
-//            bitmap = BitmapFactory.decodeResource(getResources(), R.drawable.baseline_edit_white_48);
-//
-//        Palette.from(bitmap).generate(p -> {
-//            // Use generated instance
-//            int dominantColor = p.getDominantColor(getResources().getColor(R.color.colorTextFour));
-//            int darkMutedColor = p.getDarkMutedColor(getResources().getColor(R.color.colorTextFour));
-//            int vibrantColor = p.getVibrantColor(getResources().getColor(R.color.colorTextTwo));
-//            int mutedColor = p.getMutedColor(getResources().getColor(R.color.colorTextFour));
-//            int lightMutedColor = p.getLightMutedColor(getResources().getColor(R.color.colorTextFour));
-//            int darkVibrantColor = p.getDarkVibrantColor(getResources().getColor(R.color.colorTextTwo));
-//            int lightVibrantColor = p.getLightVibrantColor(getResources().getColor(R.color.white));
-//
-//            GradientDrawable drawable = new GradientDrawable(
-//                    GradientDrawable.Orientation.TOP_BOTTOM,
-//                    new int[] {
-//                            getResources().getColor(R.color.white),
-//                            lightVibrantColor,
-//                            getResources().getColor(R.color.white)
-//                    });
-//
-//            drawable.setAlpha(80);
-//            artBackgroundColor.setBackground(drawable);
-//        });
     }
 
     @Override
@@ -472,9 +439,6 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
     @OnClick(R.id.forward_ten_seconds)
     void setTenSecondsForward() {
         currentDurationProgress += 10;
-        //even if it is greater than song duration, music service
-        //will change to next song, setcurrent song will be called
-        //and current duration will be reset to zero
         setProgressToSeekBar(currentDurationProgress, totalDurationProgress);
         seekTenSecondsForward();
     }
@@ -517,19 +481,10 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
         if(totalDuration != 0) {
             int percentProgress = (currentDuration * 100)/totalDuration;
             currentSongProgressSeekBar.setProgress(percentProgress);
-            currentSongCurrentProgress
-                    .setText(
-                            new ApplicationUtils()
-                                    .formatStringOutOfSeconds(
-                                            currentDuration
-                                    )
-                    );
-            Log.e(
-                    "tag",
-                    currentDuration + " " +
-                            totalDuration + " " +
-                            currentSongProgressSeekBar.getProgress()
-            );
+
+            if(currentDuration <= totalDuration)
+                currentSongCurrentProgress
+                        .setText(new ApplicationUtils().formatStringOutOfSeconds(currentDuration));
         }
         else {
             currentSongProgressSeekBar.setProgress(0);

@@ -41,5 +41,4 @@ public interface SongPlayMvpView {
 
     void setSeekBarOnSeekChangeListener();
 
-    void loadPaletteAndApply(String path);
 }
