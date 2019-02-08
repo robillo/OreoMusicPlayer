@@ -13,7 +13,6 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
@@ -21,7 +20,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.Window;
@@ -65,8 +63,10 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -109,12 +109,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     private MusicService musicService;
     private Intent playIntent;
     private boolean musicBound = false;
-    @SuppressWarnings("FieldCanBeLocal")
     private ThemeColors currentUserThemeColors = null;
-    @SuppressWarnings("FieldCanBeLocal")
     private AppPreferencesHelper helper = null;
-    @SuppressWarnings("FieldCanBeLocal")
-    private PlaylistAdapter playlistAdapter;
     private List<PlaylistRowItem> playlistRowItems = new ArrayList<>();
     private SongDatabase songDatabase;
     private SongRepository songRepository;
@@ -277,14 +273,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
                 for(Song s : songs) {
                     if(s.getId().equals(songId)) {
                         isAlreadyPresent = true;
-                        Toast.makeText(this, "Song Already In Playlist", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.song_present_in_playlist), Toast.LENGTH_SHORT).show();
                         break;
                     }
                 }
             }
             if(!isAlreadyPresent) {
                 getPlaylistRepository().insertPlaylistItem(new Playlist(songId, playlist));
-                Toast.makeText(this, "Song Added To Playlist", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.song_added_to_playlist), Toast.LENGTH_SHORT).show();
             }
             listLiveData.removeObservers(this);
         });
@@ -657,7 +653,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
                 listFragment.setCurrentSong(null);
                 if(listFragment.getControllerVisibility() == View.VISIBLE) listFragment.fadeOutController();
 
-                Toast toast = Toast.makeText(this, "End Of List", Toast.LENGTH_SHORT);
+                Toast toast = Toast.makeText(this, getString(R.string.end_of_list), Toast.LENGTH_SHORT);
                 toast.setGravity(Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL, 0, 10);
                 toast.show();
             }
@@ -826,11 +822,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             playlistRowItems.add(utils.convertStringToPlaylistRowItem(AppConstants.RECENTLY_PLAYED));
             playlistRowItems.add(utils.convertStringToPlaylistRowItem(AppConstants.MOST_PLAYED));
 
-            if(strings != null) {
-                for(String s : strings) {
+            if(strings != null)
+                for(String s : strings)
                     playlistRowItems.add(utils.convertStringToPlaylistRowItem(s));
-                }
-            }
 
             loadSongsInRvAfterRowItemsLoaded(from, songId);
         });
@@ -846,7 +840,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             }
         }
 
-        playlistAdapter = new PlaylistAdapter(itemsToDisplay, this, from, songId);
+        PlaylistAdapter playlistAdapter = new PlaylistAdapter(itemsToDisplay, this, from, songId);
         playlistRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         if(from == FIRST_LOAD) hidePlaylistBottomSheet();
@@ -862,10 +856,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         deleteSongFromSongRepository(deleteSong.getId());
         deleteSongFromPlaylistRepository(deleteSong.getId());
         changeSongIfSameAsCurrentlyPlaying(deleteSong);
-        boolean isDeleted = deleteFromDevice(deleteSong);
-
-        if(isDeleted) Toast.makeText(this, "Song Deleted From Device", Toast.LENGTH_SHORT).show();
-        else Toast.makeText(this, "Oops, there was some error in deletion!", Toast.LENGTH_SHORT).show();
+        deleteFromDevice(deleteSong);
 
         refreshSongListFragmentForSongDelete(deleteSong, recyclerIndex);
         hideOrRemoveBottomSheet();
@@ -886,16 +877,45 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             removeSongFromListInMusicService(deleteSong);
             playNextSong();
         }
-        else
-            removeSongFromListInMusicService(deleteSong);
+        else removeSongFromListInMusicService(deleteSong);
     }
 
-    private boolean deleteFromDevice(Song deleteSong) {
+    private void deleteFromDevice(Song deleteSong) {
+
+        boolean isInfoDeleted = false, isFileDeleted = false;
+
         int numRows = getContentResolver().delete(
                 MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
                 MediaStore.Audio.Media._ID + "=?",
-                new String[] {deleteSong.getId()});
-        return (numRows > 0);
+                new String[] { deleteSong.getId() });
+
+        if(numRows > 0) isInfoDeleted = true;
+
+        File deleteFile = new File(deleteSong.getData());
+        if (deleteFile.exists())
+            isFileDeleted = deleteFile.delete();
+
+        if(isInfoDeleted && !isFileDeleted)
+            Toast.makeText(this,
+                    String.format(Locale.ENGLISH, "%s %s", getString(R.string.song_details), getString(R.string.deleted)),
+                    Toast.LENGTH_SHORT).show();
+
+        if(!isInfoDeleted && isFileDeleted)
+            Toast.makeText(this,
+                    String.format(Locale.ENGLISH, "%s %s", getString(R.string.song), getString(R.string.deleted)),
+                    Toast.LENGTH_SHORT).show();
+
+        if(isInfoDeleted && isFileDeleted)
+            Toast.makeText(this,
+                    String.format(
+                            Locale.ENGLISH, "%s and %s %s",
+                            getString(R.string.song),
+                            getString(R.string.song_details),
+                            getString(R.string.deleted)),
+                    Toast.LENGTH_SHORT).show();
+
+        if(!isInfoDeleted && !isFileDeleted)
+            Toast.makeText(this, getString(R.string.deletion_error), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -906,8 +926,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 switch (newState) {
-                    case BottomSheetBehavior.STATE_HIDDEN:
-                        break;
                     case BottomSheetBehavior.STATE_EXPANDED: {
                         imageUpDownPlaylist.animate().rotation(180).start();
                     }
@@ -918,17 +936,14 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
                         loadPlaylistsIntoRecyclerView(FROM_BOTTOM_CONTROLLER, null);
                     }
                     break;
+                    case BottomSheetBehavior.STATE_HIDDEN:
                     case BottomSheetBehavior.STATE_DRAGGING:
-                        break;
-                    case BottomSheetBehavior.STATE_SETTLING:
-                        break;
+                    case BottomSheetBehavior.STATE_SETTLING: break;
                 }
             }
 
             @Override
-            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
-
-            }
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) { }
         });
     }
 
@@ -945,14 +960,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             }
 
             @Override
-            public void onAnimationEnd(Animation animation) {
-
-            }
+            public void onAnimationEnd(Animation animation) { }
 
             @Override
-            public void onAnimationRepeat(Animation animation) {
-
-            }
+            public void onAnimationRepeat(Animation animation) { }
         });
         selectedPlaylistTv.startAnimation(animation);
     }
@@ -964,8 +975,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void updatePlaylistListForSelectedItem(PlaylistRowItem playlistRowItem, int position) {
-
-        Log.e("tag", "playlist update for selected playlist" + playlistRowItem.getTitle());
 
         selectedPlaylist = playlistRowItem;
         helper.setCurrentPlaylistTitle(selectedPlaylist.getTitle());
@@ -1025,7 +1034,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
         loadPlaylistsIntoRecyclerView(MODIFY, null);
 
-        Toast.makeText(this, "New Playlist Created", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.playlist_created), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -1035,7 +1044,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
         loadPlaylistsIntoRecyclerView(MODIFY, null);
 
-        Toast.makeText(this, "Playlist Modified Successfully", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.playlist_modified), Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -1044,7 +1053,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
         loadPlaylistsIntoRecyclerView(MODIFY, null);
 
-        Toast.makeText(this, "Playlist Deleted Successfully", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.playlist_deleted), Toast.LENGTH_SHORT).show();
     }
 
     @Override

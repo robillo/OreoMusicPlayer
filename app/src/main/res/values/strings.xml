@@ -3,6 +3,16 @@
     <string name="music_player_name">dancing player</string>
 
     <!-- TODO: Remove or change this placeholder text -->
+    <string name="playlist_deleted">Playlist Deleted Successfully</string>
+    <string name="playlist_modified">Playlist Modified Successfully</string>
+    <string name="playlist_created">New Playlist Created</string>
+    <string name="song_present_in_playlist">Song Already Present In Playlist</string>
+    <string name="song_added_to_playlist">Song Added To Playlist</string>
+    <string name="song_details">Song Details</string>
+    <string name="song">Song</string>
+    <string name="deleted">Deleted</string>
+    <string name="end_of_list">End of List</string>
+    <string name="deletion_error">Oops, there was some error in deletion!</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="nothing">nothing</string>
     <string name="string_player_name">dancing player</string>
@@ -33,7 +43,7 @@
     <string name="select_player_theme">Select Player Theme:</string>
     <string name="gradient_colors">Gradient Colors</string>
     <string name="theme_set_successful">Theme successfully set as</string>
-    <string name="sort_successful">Successfully sorted list for:</string>
+    <string name="sort_successful">successfully sorted list</string>
     <string name="back_pressed">Back Pressed</string>
     <string name="rescan_device">Rescan Device</string>
     <string name="rescanned">Device Rescanned</string>

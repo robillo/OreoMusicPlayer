@@ -3,7 +3,6 @@ package com.robillo.dancingplayer.views.activities.main.songs_sort_frag.adapters
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,9 +14,9 @@ import com.robillo.dancingplayer.models.ThemeColors;
 import com.robillo.dancingplayer.preferences.AppPreferencesHelper;
 import com.robillo.dancingplayer.utils.AppConstants;
 import com.robillo.dancingplayer.views.activities.main.MainActivity;
-import com.robillo.dancingplayer.views.activities.main.songs_sort_frag.SongsSortFragment;
 
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -70,26 +69,24 @@ public class SortSongsAdapter extends RecyclerView.Adapter<SortSongsAdapter.Sort
         }
 
         final int pos = position;
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                currentSongOrderForSongsIndex = pos;
-                holder.title.setTextColor(activityContext.getResources().getColor(
-                        currentUserThemeColors.getColorPrimary())
-                );
-                holder.title.setBackgroundColor(activityContext.getResources().getColor(R.color.colorTextFive));
-                notifyDataSetChanged();
+        holder.itemView.setOnClickListener(v -> {
+            currentSongOrderForSongsIndex = pos;
+            holder.title.setTextColor(activityContext.getResources().getColor(
+                    currentUserThemeColors.getColorPrimary())
+            );
+            holder.title.setBackgroundColor(activityContext.getResources().getColor(R.color.colorTextFive));
+            notifyDataSetChanged();
 
-                helper.setSortOrderForSongs(sortItems.get(pos).getConstantSortOrder());
+            helper.setSortOrderForSongs(sortItems.get(pos).getConstantSortOrder());
 
-                ((MainActivity) activityContext).showSnackBar(
-                        activityContext.getString(R.string.sort_successful) + sortItems.get(pos).getTextToDisplay()
-                );
+            ((MainActivity) activityContext).showSnackBar(
+                    String.format(Locale.ENGLISH, "%s - %s",
+                            activityContext.getString(R.string.sort_successful), sortItems.get(pos).getTextToDisplay())
+            );
 
-                //refresh the loader for new sort order here
-                //Possibly using EventBus on loader in SongListFragment
-                ((MainActivity) activityContext).repopulateListSongsListFragment();
-            }
+            //refresh the loader for new sort order here
+            //Possibly using EventBus on loader in SongListFragment
+            ((MainActivity) activityContext).repopulateListSongsListFragment();
         });
     }
 

@@ -214,7 +214,7 @@ public class SongRepository {
                 else return songDao.getSongsPlaylistDurationD(playlist);
             }
             case AppConstants.DATE_ADDED_ASCENDING: {
-                if(isDefault(playlist)) return songDao.getAllSongsDateAddedD();
+                if(isDefault(playlist)) return songDao.getAllSongsDateAddedA();
                 else if(isRecentlyAdded(playlist)) return getRecentlyAddedSongs(sortOrder, ra);
                 else if(isMostPlayed(playlist)) return getMostPlayedSongs(sortOrder, ra);
                 else if(isRecentlyPlayed(playlist)) return getRecentlyPlayedSongs(sortOrder, ra);

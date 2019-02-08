@@ -32,7 +32,7 @@ public class ApplicationUtils {
         return lhs + " : " + rhs;
     }
 
-    public String formatSizeKBtoMB(float size) {
+    public String formatSizeKBtoMB(double size) {
         return String.format("%s MB", String.format(Locale.ENGLISH, "%.2f", size/1024));
     }
 

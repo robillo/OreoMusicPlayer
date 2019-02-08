@@ -53,7 +53,6 @@ public class SongsAdapter
 
     private List<Song> list;
     private Context context;
-    @SuppressWarnings("FieldCanBeLocal")
     private Context parentContext;
 
     public SongsAdapter(List<Song> list, Context context) {
@@ -95,11 +94,16 @@ public class SongsAdapter
             try {
                 duration = Integer.valueOf(list.get(_pos).getDuration())/1000;
             }
-            catch (NumberFormatException e) {
-                Log.e("exception", "number format exception");
-            }
+            catch (NumberFormatException ignored) { }
             String temp = list.get(_pos).getArtist() + " (" + new ApplicationUtils().formatStringOutOfSeconds((int) duration) + ")";
             holder.artistDuration.setText(temp);
+
+            holder.albumArt.setOnClickListener(v -> {
+                if(context!=null){
+                    Log.e("song id", "id " + list.get(position).getId() + " " + list.get(position).getTitle());
+                    ((MainActivity) context).playSong(_pos);
+                }
+            });
 
             holder.linearLayout.setOnClickListener(v -> {
                 if(context!=null){
@@ -188,12 +192,10 @@ public class SongsAdapter
                 case SIZE_DESCENDING:
                     if (list.get(position).getSize() != null) {
                         try {
-                            float size = Integer.valueOf(list.get(position).getSize())/1024;
+                            double size = Integer.valueOf(list.get(position).getSize())/1024.0;
                             sectionString = new ApplicationUtils().formatSizeKBtoMB(size);
                         }
-                        catch(IllegalArgumentException e) {
-                            Log.e("tag", "illegal argument adapter 129");
-                        }
+                        catch(IllegalArgumentException ignored) { }
                     }
                     break;
                 case YEAR_ASCENDING:

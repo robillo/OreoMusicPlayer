@@ -13,7 +13,6 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -269,12 +268,10 @@ public class SongsListFragment extends Fragment implements LoaderManager.LoaderC
     public void onResume() {
         super.onResume();
         if(audioList == null && from != FROM_ACTIVITY) {
-            Log.e("tag", "from fragment onresume");
             fetchSongs(FROM_FRAGMENT);
         }
         else if(getActivity() != null){
             if(getActivity().getIntent().getBooleanExtra(LAUNCHED_FROM_NOTIFICATION, false)) {
-                Log.e("tag", "from fragment notification");
                 fetchSongs(FROM_FRAGMENT);
             }
         }
