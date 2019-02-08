@@ -55,7 +55,7 @@ import static com.robillo.dancingplayer.utils.AppConstants.ACTION_STOP;
 import static com.robillo.dancingplayer.utils.AppConstants.ACTION_TOGGLE_PLAYBACK;
 import static com.robillo.dancingplayer.utils.AppConstants.CHANNEL_ID;
 import static com.robillo.dancingplayer.utils.AppConstants.CONTROLLER_NOTIFICATION_ID;
-import static com.robillo.dancingplayer.utils.AppConstants.EMPTY_CELLS_COUNT;
+import static com.robillo.dancingplayer.utils.AppConstants.BOTTOM_EMPTY_CELLS_COUNT;
 import static com.robillo.dancingplayer.utils.AppConstants.LAUNCHED_FROM_NOTIFICATION;
 import static com.robillo.dancingplayer.utils.AppConstants.NEXT_NOT;
 import static com.robillo.dancingplayer.utils.AppConstants.PLAY_OR_PAUSE_NOT;
@@ -348,7 +348,7 @@ public class MusicService extends Service implements
     }
 
     private boolean isSongBetweenCorrectIndices(int songIndex) {
-        return songIndex < songs.size() - AppConstants.EMPTY_CELLS_COUNT && songIndex >= 1;
+        return songIndex < songs.size() - AppConstants.BOTTOM_EMPTY_CELLS_COUNT && songIndex >= 1;
     }
 
     @Override
@@ -418,7 +418,7 @@ public class MusicService extends Service implements
             // nextInt is normally exclusive of the top value
             // so add 1 to make it inclusive
             int min = 1;
-            int max = songs.size() - AppConstants.EMPTY_CELLS_COUNT + 1;
+            int max = songs.size() - AppConstants.BOTTOM_EMPTY_CELLS_COUNT + 1;
             songPosition = ThreadLocalRandom.current().nextInt(min, max);
         }
         else {
@@ -437,10 +437,10 @@ public class MusicService extends Service implements
             // nextInt is normally exclusive of the top value
             // so add 1 to make it inclusive
             int min = 1;
-            int max = songs.size() - AppConstants.EMPTY_CELLS_COUNT + 1;
+            int max = songs.size() - AppConstants.BOTTOM_EMPTY_CELLS_COUNT + 1;
             songPosition = ThreadLocalRandom.current().nextInt(min, max);
         }
-        else if(songPosition < songs.size() - AppConstants.EMPTY_CELLS_COUNT){
+        else if(songPosition < songs.size() - AppConstants.BOTTOM_EMPTY_CELLS_COUNT){
             songPosition++;
         }
 
@@ -738,7 +738,7 @@ public class MusicService extends Service implements
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-        if(songPosition < songs.size() - AppConstants.EMPTY_CELLS_COUNT){
+        if(songPosition < songs.size() - AppConstants.BOTTOM_EMPTY_CELLS_COUNT){
 
             if(isRepeatSameSongModeSet()) {
                 setSong(songPosition);
@@ -758,7 +758,7 @@ public class MusicService extends Service implements
 
     private int getRandomNumberInSongList() {
         int min = 1;
-        int max = songs.size() - AppConstants.EMPTY_CELLS_COUNT + 1;
+        int max = songs.size() - AppConstants.BOTTOM_EMPTY_CELLS_COUNT + 1;
         return ThreadLocalRandom.current().nextInt(min, max);
     }
 
@@ -768,7 +768,7 @@ public class MusicService extends Service implements
 
     private boolean isIndexExceededLastAtLinearPlayMode() {
         return isRepeatModeOn()
-                .equals(REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE) && songPosition == songs.size() - EMPTY_CELLS_COUNT;
+                .equals(REPEAT_MODE_VALUE_LINEARLY_TRAVERSE_ONCE) && songPosition == songs.size() - BOTTOM_EMPTY_CELLS_COUNT;
     }
 
     @Override

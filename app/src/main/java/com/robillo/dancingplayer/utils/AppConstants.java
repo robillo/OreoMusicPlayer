@@ -61,7 +61,8 @@ public class AppConstants {
 
     //MusicService
     public static final int DEFAULT_PLAYLIST_SONGS_COUNT = 50;
-    public static final int EMPTY_CELLS_COUNT = 2;
+    public static final int TOP_EMPTY_CELLS_COUNT = 1;
+    public static final int BOTTOM_EMPTY_CELLS_COUNT = 2;
     public static final String CHANNEL_ID = "channelId";
     public static final String CHANNEL_NAME = "Player Notifications";
     public static final String SESSION_NAME = "session_name";

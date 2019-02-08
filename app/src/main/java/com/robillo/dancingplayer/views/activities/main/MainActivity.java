@@ -391,7 +391,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     public void refreshSongListFragmentForSongDelete(Song song, int index) {
         SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
         if(fragment != null){
-            fragment.refreshSongListFragmentForSongDelete(song, index);
+            fragment.refreshSongListFragmentForSongDelete(index);
         }
     }
 
