@@ -8,12 +8,8 @@ import android.support.v4.app.LoaderManager
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.CursorLoader
 import android.support.v4.content.Loader
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
-import android.view.GestureDetector
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.Animation
@@ -50,18 +46,19 @@ class SongsListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
     companion object {
         private const val LOADER_ID = 0
+        private const val DEFAULT_VISIBILITY = -1
         private var LAUNCHED_FROM = FROM_FRAGMENT
     }
 
     private lateinit var v: View
 
-    private var hideOnFastScroll = false
-    private var isAnimatingUpper = false
-    private var isAnimatingController = false
-
     private var currentSong: Song? = null
     private var mAdapter: SongsAdapter? = null
     private var audioList: ArrayList<Song>? = null
+
+    private var isAnimatingUpper = false
+    private var hidingAllOnFastScroll = false
+    private var isAnimatingController = false
 
     private lateinit var rotatingAlbumAnim: Animation
     private lateinit  var fadeInAnimationUpper: Animation
@@ -79,29 +76,61 @@ class SongsListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     }
 
     private fun setUp(v: View) {
+
         this.v = v
+
+        loadAnimations()
+        setClickListeners()
+        fetchThemeAndApply()
+        setRecyclerScrollListener()
+        setRecyclerFastScrollListener()
+    }
+
+    private fun fetchThemeAndApply() {
         var themeName: String? = null
         if (activity != null)
             themeName = AppPreferencesHelper(activity!!).userThemeName
 
-        val currentUserThemeColors = AppConstants.themeMap[themeName]
-        refreshForUserThemeColors(currentUserThemeColors, themeName)
+        val userThemeColors = AppConstants.themeMap[themeName]
+        applyUserTheme(userThemeColors, themeName)
+    }
 
+    private fun loadAnimations() {
+        rotatingAlbumAnim = AnimationUtils.loadAnimation(activity, R.anim.rotate)
         fadeOutAnimationUpper = AnimationUtils.loadAnimation(activity, R.anim.fade_out)
         fadeInAnimationUpper = AnimationUtils.loadAnimation(activity, R.anim.fade_in)
         fadeInAnimationController = AnimationUtils.loadAnimation(activity, R.anim.fade_in_controller)
         fadeOutAnimationController = AnimationUtils.loadAnimation(activity, R.anim.fade_out_controller)
+    }
 
-        rotatingAlbumAnim = AnimationUtils.loadAnimation(activity, R.anim.rotate)
+    private fun setRecyclerScrollListener() {
+        v.recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
 
-        v.current_song_title.isSelected = true
-        v.current_song_artist.isSelected = true
+                val isScrollingUp = dy > 0
+                val isScrollingDown = dy <= 0
 
-        v.recycler_view.layoutManager = LinearLayoutManager(activity)
+                if (!hidingAllOnFastScroll) {
 
+                    if (isScrollingUp) {
+                        if (v.hide_or_show_upper.visibility == View.VISIBLE && !isAnimatingUpper) fadeOutUpper()
+                        if (v.bottom_controller.visibility == View.VISIBLE && !isAnimatingController) fadeOutController()
+                    }
+
+                    if(isScrollingDown) {
+                        if (v.hide_or_show_upper.visibility == View.GONE && !isAnimatingUpper) fadeInUpper()
+                        if (v.bottom_controller.visibility == View.GONE && !isAnimatingController && currentSong != null) fadeInController()
+                    }
+                }
+            }
+        })
+    }
+
+    private fun setRecyclerFastScrollListener() {
         v.recycler_view.setOnFastScrollStateChangeListener(object : OnFastScrollStateChangeListener {
             override fun onFastScrollStart() {
-                hideOnFastScroll = true
+                hidingAllOnFastScroll = true
                 if (v.hide_or_show_upper.visibility == View.VISIBLE && !isAnimatingUpper)
                     fadeOutUpper()
                 if (v.bottom_controller.visibility == View.VISIBLE && !isAnimatingController)
@@ -109,30 +138,9 @@ class SongsListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
             }
 
             override fun onFastScrollStop() {
-                hideOnFastScroll = false
+                hidingAllOnFastScroll = false
             }
         })
-
-        v.recycler_view.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                if (!hideOnFastScroll) {
-                    if (dy > 0) {      //scrolled up
-                        if (v.hide_or_show_upper.visibility == View.VISIBLE && !isAnimatingUpper)
-                            fadeOutUpper()
-                        if (v.bottom_controller.visibility == View.VISIBLE && !isAnimatingController)
-                            fadeOutController()
-                    } else {          //scrolled down
-                        if (v.hide_or_show_upper.visibility == View.GONE && !isAnimatingUpper)
-                            fadeInUpper()
-                        if (v.bottom_controller.visibility == View.GONE && !isAnimatingController && currentSong != null)
-                            fadeInController()
-                    }
-                }
-            }
-        })
-
-        setClickListeners()
     }
 
     private fun setClickListeners() {
@@ -147,14 +155,14 @@ class SongsListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         v.rescan_device.setOnClickListener { setRescanDevice() }
     }
 
-    fun playOrPausePlayer() {
+    private fun playOrPausePlayer() {
         activity?.let {
             if ((it as MainActivity).isPlaying) pausePlayer(FROM_FRAGMENT)
             else playPlayer(FROM_FRAGMENT)
         }
     }
 
-    fun setAppName() {}
+    private fun setAppName() {}
 
     private fun getHexColor(color: Int): Int { return context?.let { ContextCompat.getColor(it, color) } ?: 0 }
 
@@ -162,25 +170,25 @@ class SongsListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
     private fun setSongPlayFragment() { activity?.let { (it as MainActivity).setSongPlayFragment() } }
 
-    fun setSortOptions() { activity?.let { (it as MainActivity).setSongsSortFragment() } }
+    private fun setSortOptions() { activity?.let { (it as MainActivity).setSongsSortFragment() } }
 
     fun getControllerVisibility(): Int { return v.bottom_controller.visibility }
 
-    fun playNextSong() { activity?.let { (it as MainActivity).playNextSong() } }
+    private fun playNextSong() { activity?.let { (it as MainActivity).playNextSong() } }
 
-    fun setAppMenuOptions() { startThemeChangeActivity() }
+    private fun setAppMenuOptions() { startThemeChangeActivity() }
 
-    fun playPreviousSong() {
+    private fun playPreviousSong() {
         activity?.let { (it as MainActivity).playNextSong() }
         if (activity != null) (activity as MainActivity).playPreviousSong()
     }
 
-    fun setRescanDevice() {
+    private fun setRescanDevice() {
         v.error_layout.visibility = View.GONE
         fetchSongs(FROM_FRAGMENT)
     }
 
-    fun refreshForUserThemeColors(userThemeColors: ThemeColors?, themeName: String?) {
+    fun applyUserTheme(userThemeColors: ThemeColors?, themeName: String?) {
 
         userThemeColors?.let {
             v.hide_or_show_upper.setBackgroundColor(getHexColor(it.colorPrimaryDark))
@@ -236,8 +244,8 @@ class SongsListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         val list = ArrayList<Song>()
 
         cursor?.let {
-            if(cursor.count > 0)
-                while (cursor.moveToNext()) {
+            if(it.count > 0)
+                while (it.moveToNext()) {
                     list.add(Song(
                             returnCursorElement(it, MediaStore.Audio.Media.DATA),
                             returnCursorElement(it, MediaStore.Audio.Media.TITLE),
@@ -290,67 +298,69 @@ class SongsListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     override fun onLoaderReset(loader: Loader<Cursor>) {}
 
     private fun returnCursorElement(cursor: Cursor?, string: String?): String {
-        cursor?.let { c ->
-            string?.let { s ->
+        cursor?.let { c -> string?.let { s ->
                 c.getString(c.getColumnIndex(s))?.let {
                     return it
-                }
-            }
+                } }
         } ?: return ""
     }
 
-    fun setCurrentSong(song: Song) {
-
+    fun setCurrentSong(song: Song?) {
         currentSong = song
+        song?.let {
+            makeControllerVisible()
+            setTextViewsForSong(it)
 
-        if (currentSong == null)
-            return
+            val imagePath: String? = getImageForAlbumId(it.albumId)
+            setImageToSongForPath(imagePath)
 
-        if (v.bottom_controller.visibility == View.GONE)
-            if (v.hide_or_show_upper.visibility == View.VISIBLE)
-            //either both should be visible or both shouldn't
-                v.bottom_controller.visibility = View.VISIBLE
+            makeControllerVisible()
+            playPlayer(FROM_ACTIVITY)
+        }
+    }
 
+    private fun setTextViewsForSong(song: Song) {
         v.current_song_title.text = song.title
-
-        val duration = java.lang.Long.valueOf(song.duration) / 1000
         v.current_song_artist.text = song.artist
+        val duration = java.lang.Long.valueOf(song.duration) / 1000
         v.current_song_duration.text = ApplicationUtils().formatStringOutOfSeconds(duration.toInt())
+    }
 
+    private fun getImageForAlbumId(albumId: String): String? {
         var path: String? = null
-        if (activity != null) {
+        activity?.let {
 
-            //get path for the album art for this song
-            val cursor = activity!!.contentResolver.query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
+            val imageCursor = it.contentResolver.query(MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI,
                     arrayOf(MediaStore.Audio.Albums._ID, MediaStore.Audio.Albums.ALBUM_ART),
                     MediaStore.Audio.Albums._ID + "=?",
-                    arrayOf(song.albumId.toString()), null)
-            if (cursor != null && cursor.moveToFirst()) {
-                path = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART))
-                // do whatever you need to do
-                cursor.close()
+                    arrayOf(albumId), null)
+
+            imageCursor?.let {
+                if(it.moveToFirst()) {
+                    path = imageCursor.getString(imageCursor.getColumnIndex(MediaStore.Audio.Albums.ALBUM_ART))
+                    imageCursor.close()
+                }
             }
-
-            //set album art
-            Glide.with(activity!!)
-                    .load(path)
-                    .apply(RequestOptions
-                            .centerCropTransform()
-                            .placeholder(R.drawable.icon_drawable)
-                    )
-                    .into(v.current_song_album_art)
-
         }
 
-        //start rotating animation
-        if (v.bottom_controller.visibility == View.GONE) {
-            v.hide_or_show_upper.visibility = View.VISIBLE
-            v.bottom_controller.visibility = View.VISIBLE
+        return path
+    }
+
+    private fun setImageToSongForPath(imagePath: String?) {
+        activity?.let {
+            Glide.with(it).load(imagePath).apply(
+                    RequestOptions.centerCropTransform().placeholder(R.drawable.icon_drawable)
+            ).into(v.current_song_album_art)
         }
-        playPlayer(FROM_ACTIVITY)
+    }
+
+    private fun makeControllerVisible() {
+        v.hide_or_show_upper.visibility = View.VISIBLE
+        v.bottom_controller.visibility = View.VISIBLE
     }
 
     fun playPlayer(from: Int) {
+        setPlayerMarque(true)
         activity?.let {
             if (from == FROM_FRAGMENT) (it as MainActivity).start()
             v.play_pause_song.setImageDrawable(it.getDrawable(R.drawable.ic_pause_black_24dp))
@@ -360,11 +370,17 @@ class SongsListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     }
 
     fun pausePlayer(from: Int) {
+        setPlayerMarque(false)
         activity?.let {
             if (from == FROM_FRAGMENT) (it as MainActivity).pause()
             v.play_pause_song.setImageDrawable(it.getDrawable(R.drawable.ic_play_arrow_black_24dp))
         }
         resetAlbumArtAnimation()
+    }
+
+    private fun setPlayerMarque(turnOn: Boolean) {
+        v.current_song_title.isSelected = turnOn
+        v.current_song_artist.isSelected = turnOn
     }
 
     private fun resetAlbumArtAnimation() {
@@ -375,72 +391,46 @@ class SongsListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     }
 
     fun fadeOutUpper() {
-        val listener = object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation) {
-                isAnimatingUpper = true
-            }
-
-            override fun onAnimationEnd(animation: Animation) {
-                v.hide_or_show_upper.visibility = View.GONE
-                isAnimatingUpper = false
-            }
-
-            override fun onAnimationRepeat(animation: Animation) {}
-        }
-
-        fadeOutAnimationUpper.setAnimationListener(listener)
+        fadeOutAnimationUpper.setAnimationListener(genericAnimationListener(View.GONE, DEFAULT_VISIBILITY))
         v.hide_or_show_upper.startAnimation(fadeOutAnimationUpper)
     }
 
     fun fadeInUpper() {
-        val listener = object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation) {
-                isAnimatingUpper = true
-            }
-
-            override fun onAnimationEnd(animation: Animation) {
-                v.hide_or_show_upper.visibility = View.VISIBLE
-                isAnimatingUpper = false
-            }
-
-            override fun onAnimationRepeat(animation: Animation) {}
-        }
-        fadeInAnimationUpper.setAnimationListener(listener)
+        fadeInAnimationUpper.setAnimationListener(genericAnimationListener(View.VISIBLE, DEFAULT_VISIBILITY))
         v.hide_or_show_upper.startAnimation(fadeInAnimationUpper)
     }
 
     fun fadeOutController() {
-        val listener = object : Animation.AnimationListener {
-            override fun onAnimationStart(animation: Animation) {
-                isAnimatingController = true
-            }
-
-            override fun onAnimationEnd(animation: Animation) {
-                v.bottom_controller.visibility = View.GONE
-                isAnimatingController = false
-            }
-
-            override fun onAnimationRepeat(animation: Animation) {}
-        }
-        fadeOutAnimationController.setAnimationListener(listener)
+        fadeOutAnimationController.setAnimationListener(genericAnimationListener(DEFAULT_VISIBILITY, View.GONE))
         v.bottom_controller.startAnimation(fadeOutAnimationController)
     }
 
     fun fadeInController() {
-        val listener = object : Animation.AnimationListener {
+        fadeInAnimationController.setAnimationListener(genericAnimationListener(DEFAULT_VISIBILITY, View.VISIBLE))
+        v.bottom_controller.startAnimation(fadeInAnimationController)
+    }
+
+    private fun genericAnimationListener(endUpperControllerVisibility: Int, endBottomControllerVisibility: Int): Animation.AnimationListener {
+        return object: Animation.AnimationListener {
+
             override fun onAnimationStart(animation: Animation) {
-                isAnimatingController = true
+                if(endBottomControllerVisibility >= 0) isAnimatingController = true
+                if(endUpperControllerVisibility >= 0) isAnimatingUpper = true
             }
 
             override fun onAnimationEnd(animation: Animation) {
-                v.bottom_controller.visibility = View.VISIBLE
-                isAnimatingController = false
+                if(endUpperControllerVisibility >= 0) {
+                    v.hide_or_show_upper.visibility = endUpperControllerVisibility
+                    isAnimatingUpper = false
+                }
+                if(endBottomControllerVisibility >= 0) {
+                    v.bottom_controller.visibility = endBottomControllerVisibility
+                    isAnimatingController = false
+                }
             }
 
             override fun onAnimationRepeat(animation: Animation) {}
         }
-        fadeInAnimationController.setAnimationListener(listener)
-        v.bottom_controller.startAnimation(fadeInAnimationController)
     }
 
     fun showErrorLayout() {

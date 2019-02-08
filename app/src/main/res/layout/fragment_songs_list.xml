@@ -76,6 +76,7 @@
             </LinearLayout>
 
             <com.simplecityapps.recyclerview_fastscroll.views.FastScrollRecyclerView
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
                 android:id="@+id/recycler_view"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"

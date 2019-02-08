@@ -577,7 +577,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
         if(songListFragment != null) {
             refreshForUserThemeColors();
-            songListFragment.refreshForUserThemeColors(
+            songListFragment.applyUserTheme(
                     currentUserThemeColors,
                     new AppPreferencesHelper(this).getUserThemeName()
             );
