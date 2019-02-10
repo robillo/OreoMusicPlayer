@@ -83,7 +83,6 @@ class SongsListFragment : Fragment() {
 
         setObservers()
         loadAnimations()
-        fetchSongsAsync(LAUNCHED_FROM)
         setClickListeners()
         fetchThemeAndApply()
         setRecyclerScrollListener()
@@ -323,7 +322,7 @@ class SongsListFragment : Fragment() {
     private fun setImageToSongForPath(imagePath: String?) {
         activity?.let {
             Glide.with(it).load(imagePath).apply(
-                    RequestOptions.centerCropTransform().placeholder(R.drawable.icon_drawable)
+                    RequestOptions.centerCropTransform().placeholder(R.drawable.circle_placeholder)
             ).into(v.current_song_album_art)
         }
     }

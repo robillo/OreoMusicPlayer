@@ -140,7 +140,7 @@ public class SongsAdapter
             //set album art
             Glide.with(context)
                     .load(path)
-                    .apply(RequestOptions.centerCropTransform().placeholder(R.drawable.square_solid))
+                    .apply(RequestOptions.centerCropTransform().placeholder(R.drawable.song_placeholder))
                     .into(imageView);
 
         }

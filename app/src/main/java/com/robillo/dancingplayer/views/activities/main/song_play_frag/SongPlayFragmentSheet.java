@@ -224,7 +224,7 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
                     Glide.with(getActivity()).load(path).into(currentSongAlbumArt);
                 }
                 else {
-                    Glide.with(getActivity()).load(R.drawable.icon_drawable).into(currentSongAlbumArt);
+                    Glide.with(getActivity()).load(R.drawable.circle_placeholder).into(currentSongAlbumArt);
                 }
             }
 
