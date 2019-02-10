@@ -382,7 +382,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         if(getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list)) != null){
             SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
             if (fragment != null) {
-                fragment.fetchSongs(FROM_ACTIVITY);
+                fragment.fetchSongsAsync(FROM_ACTIVITY);
             }
         }
     }
@@ -477,7 +477,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         transaction.replace(mFragmentContainer.getId(), fragment, getString(R.string.songs_list));
         transaction.commitAllowingStateLoss();
 
-        fragment.fetchSongs(FROM_FRAGMENT);
+        fragment.fetchSongsAsync(FROM_FRAGMENT);
     }
 
     @Override
@@ -706,7 +706,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
                 (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
 
         if(fragment != null) {
-            fragment.fetchSongs(FROM_FRAGMENT);
+            fragment.fetchSongsAsync(FROM_FRAGMENT);
         }
     }
 

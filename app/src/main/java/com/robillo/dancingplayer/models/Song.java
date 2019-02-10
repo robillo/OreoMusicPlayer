@@ -3,6 +3,8 @@ package com.robillo.dancingplayer.models;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
+import android.content.ContentUris;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
 @Entity
@@ -180,6 +182,21 @@ public class Song {
 
     public void setArtist(String artist) {
         this.artist = artist;
+    }
+
+    public Uri getURI() {
+        return ContentUris.withAppendedId(
+                android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, Long.valueOf(id));
+    }
+
+    public Uri getAlbumArt() {
+        try {
+            Uri genericArtUri = Uri.parse("content://media/external/audio/albumart");
+            Uri actualArtUri = ContentUris.withAppendedId(genericArtUri, Long.valueOf(albumId));
+            return actualArtUri;
+        } catch(Exception e) {
+            return null;
+        }
     }
 
 }

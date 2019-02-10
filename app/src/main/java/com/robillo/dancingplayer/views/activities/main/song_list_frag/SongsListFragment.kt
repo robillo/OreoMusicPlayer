@@ -1,13 +1,11 @@
 package com.robillo.dancingplayer.views.activities.main.song_list_frag
 
+import android.arch.lifecycle.ViewModelProviders
 import android.database.Cursor
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
-import android.support.v4.app.LoaderManager
 import android.support.v4.content.ContextCompat
-import android.support.v4.content.CursorLoader
-import android.support.v4.content.Loader
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -35,17 +33,20 @@ import java.util.ArrayList
 
 import butterknife.ButterKnife
 import com.robillo.dancingplayer.utils.AppConstants.*
+import com.robillo.dancingplayer.utils.MusicFetcher
 
 import kotlinx.android.synthetic.main.fragment_songs_list.view.*
 import kotlinx.android.synthetic.main.include_bottom_controller.view.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass.
  */
-class SongsListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
+class SongsListFragment : Fragment() {
 
     companion object {
-        private const val LOADER_ID = 0
         private const val DEFAULT_VISIBILITY = -1
         private var LAUNCHED_FROM = FROM_FRAGMENT
     }
@@ -60,15 +61,15 @@ class SongsListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     private var hidingAllOnFastScroll = false
     private var isAnimatingController = false
 
+    private lateinit var viewModel: SongListViewModel
+
     private lateinit var rotatingAlbumAnim: Animation
     private lateinit  var fadeInAnimationUpper: Animation
     private lateinit  var fadeOutAnimationUpper: Animation
     private lateinit  var fadeInAnimationController: Animation
     private lateinit  var fadeOutAnimationController: Animation
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val v = inflater.inflate(R.layout.fragment_songs_list, container, false)
         ButterKnife.bind(this, v)
         setUp(v)
@@ -76,20 +77,54 @@ class SongsListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     }
 
     private fun setUp(v: View) {
-
         this.v = v
 
+        viewModel = ViewModelProviders.of(this).get(SongListViewModel::class.java)
+
+        setObservers()
         loadAnimations()
+        fetchSongsAsync(LAUNCHED_FROM)
         setClickListeners()
         fetchThemeAndApply()
         setRecyclerScrollListener()
         setRecyclerFastScrollListener()
     }
 
+    private fun setObservers() {
+
+    }
+
+    fun fetchSongsAsync(from: Int) {
+
+        LAUNCHED_FROM = from
+
+        val songsJob = GlobalScope.async {
+            activity?.let {
+                val songsFinder = MusicFetcher(it.contentResolver)
+                songsFinder.prepare()
+                songsFinder.allSongs
+            }
+        }
+
+        GlobalScope.launch {
+            val songs = songsJob.await()
+
+            val activity = activity as MainActivity?
+            activity?.putSongsListIntoDatabase(songs)
+
+            if (LAUNCHED_FROM == FROM_ACTIVITY) {
+                Toast.makeText(activity, R.string.rescanned, Toast.LENGTH_SHORT).show()
+                LAUNCHED_FROM = FROM_FRAGMENT
+            }
+        }
+    }
+
     private fun fetchThemeAndApply() {
         var themeName: String? = null
-        if (activity != null)
-            themeName = AppPreferencesHelper(activity!!).userThemeName
+
+        activity?.let {
+            themeName = AppPreferencesHelper(it).userThemeName
+        }
 
         val userThemeColors = AppConstants.themeMap[themeName]
         applyUserTheme(userThemeColors, themeName)
@@ -136,7 +171,6 @@ class SongsListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                 if (v.bottom_controller.visibility == View.VISIBLE && !isAnimatingController)
                     fadeOutController()
             }
-
             override fun onFastScrollStop() {
                 hidingAllOnFastScroll = false
             }
@@ -185,11 +219,10 @@ class SongsListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
     private fun setRescanDevice() {
         v.error_layout.visibility = View.GONE
-        fetchSongs(FROM_FRAGMENT)
+        fetchSongsAsync(FROM_FRAGMENT)
     }
 
     fun applyUserTheme(userThemeColors: ThemeColors?, themeName: String?) {
-
         userThemeColors?.let {
             v.hide_or_show_upper.setBackgroundColor(getHexColor(it.colorPrimaryDark))
             v.recycler_view.setPopupBgColor(getHexColor(it.colorPrimaryDark))
@@ -216,65 +249,16 @@ class SongsListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
         }
     }
 
-    fun fetchSongs(from: Int) {
-        LAUNCHED_FROM = from
-        if (activity != null) {
-            activity!!.supportLoaderManager.initLoader(LOADER_ID, null, this)
-        }
-    }
-
     override fun onResume() {
         super.onResume()
         if (audioList == null && LAUNCHED_FROM != FROM_ACTIVITY) {
-            fetchSongs(FROM_FRAGMENT)
-        } else if (activity != null) {
-            if (activity!!.intent.getBooleanExtra(LAUNCHED_FROM_NOTIFICATION, false)) {
-                fetchSongs(FROM_FRAGMENT)
+            fetchSongsAsync(FROM_FRAGMENT)
+        } else  {
+            activity?.let {
+                if (it.intent.getBooleanExtra(LAUNCHED_FROM_NOTIFICATION, false))
+                    fetchSongsAsync(FROM_FRAGMENT)
             }
         }
-    }
-
-    override fun onCreateLoader(id: Int, args: Bundle?): Loader<Cursor> {
-        val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
-        return CursorLoader(activity!!, uri, null, null, null, null)
-    }
-
-    override fun onLoadFinished(loader: Loader<Cursor>, cursor: Cursor?) {
-
-        val list = ArrayList<Song>()
-
-        cursor?.let {
-            if(it.count > 0)
-                while (it.moveToNext()) {
-                    list.add(Song(
-                            returnCursorElement(it, MediaStore.Audio.Media.DATA),
-                            returnCursorElement(it, MediaStore.Audio.Media.TITLE),
-                            returnCursorElement(it, MediaStore.Audio.Media.TITLE_KEY),
-                            returnCursorElement(it, MediaStore.Audio.Media._ID),
-                            returnCursorElement(it, MediaStore.Audio.Media.DATE_ADDED),
-                            returnCursorElement(it, MediaStore.Audio.Media.DATE_MODIFIED),
-                            returnCursorElement(it, MediaStore.Audio.Media.DURATION),
-                            returnCursorElement(it, MediaStore.Audio.Media.COMPOSER),
-                            returnCursorElement(it, MediaStore.Audio.Media.ALBUM),
-                            returnCursorElement(it, MediaStore.Audio.Media.ALBUM_ID),
-                            returnCursorElement(it, MediaStore.Audio.Media.ALBUM_KEY),
-                            returnCursorElement(it, MediaStore.Audio.Media.ARTIST),
-                            returnCursorElement(it, MediaStore.Audio.Media.ARTIST_ID),
-                            returnCursorElement(it, MediaStore.Audio.Media.ARTIST_KEY),
-                            returnCursorElement(it, MediaStore.Audio.Media.SIZE),
-                            returnCursorElement(it, MediaStore.Audio.Media.YEAR)
-                    ))
-                }
-        }
-
-        val activity = activity as MainActivity?
-        activity?.putSongsListIntoDatabase(list)
-
-        if (LAUNCHED_FROM == FROM_ACTIVITY) {
-            Toast.makeText(activity, R.string.rescanned, Toast.LENGTH_SHORT).show()
-            LAUNCHED_FROM = FROM_FRAGMENT
-        }
-        activity?.supportLoaderManager?.destroyLoader(LOADER_ID)
     }
 
     fun renderRecyclerViewForAudioList(list: List<Song>) {
@@ -293,16 +277,6 @@ class SongsListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
 
         mAdapter = SongsAdapter(audioList, getActivity())
         v.recycler_view.adapter = mAdapter
-    }
-
-    override fun onLoaderReset(loader: Loader<Cursor>) {}
-
-    private fun returnCursorElement(cursor: Cursor?, string: String?): String {
-        cursor?.let { c -> string?.let { s ->
-                c.getString(c.getColumnIndex(s))?.let {
-                    return it
-                } }
-        } ?: return ""
     }
 
     fun setCurrentSong(song: Song?) {
