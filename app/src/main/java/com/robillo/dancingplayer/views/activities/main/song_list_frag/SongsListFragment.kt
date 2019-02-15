@@ -1,12 +1,12 @@
 package com.robillo.dancingplayer.views.activities.main.song_list_frag
 
 import android.arch.lifecycle.ViewModelProviders
-import android.database.Cursor
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -32,11 +32,13 @@ import com.willowtreeapps.spruce.sort.DefaultSort
 import java.util.ArrayList
 
 import butterknife.ButterKnife
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.robillo.dancingplayer.utils.AppConstants.*
 import com.robillo.dancingplayer.utils.MusicFetcher
 
 import kotlinx.android.synthetic.main.fragment_songs_list.view.*
 import kotlinx.android.synthetic.main.include_bottom_controller.view.*
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -62,6 +64,7 @@ class SongsListFragment : Fragment() {
     private var isAnimatingController = false
 
     private lateinit var viewModel: SongListViewModel
+    private lateinit var preferencesHelper: AppPreferencesHelper
 
     private lateinit var rotatingAlbumAnim: Animation
     private lateinit  var fadeInAnimationUpper: Animation
@@ -80,6 +83,7 @@ class SongsListFragment : Fragment() {
         this.v = v
 
         viewModel = ViewModelProviders.of(this).get(SongListViewModel::class.java)
+        preferencesHelper = AppPreferencesHelper(activity)
 
         setObservers()
         loadAnimations()
@@ -285,9 +289,12 @@ class SongsListFragment : Fragment() {
             setTextViewsForSong(it)
 
             val imagePath: String? = getImageForAlbumId(it.albumId)
-            setImageToSongForPath(imagePath)
 
-            makeControllerVisible()
+            GlobalScope.launch(Dispatchers.Main) {
+                setImageToSongForPath(imagePath)
+                makeControllerVisible()
+            }
+
             playPlayer(FROM_ACTIVITY)
         }
     }
@@ -321,9 +328,14 @@ class SongsListFragment : Fragment() {
 
     private fun setImageToSongForPath(imagePath: String?) {
         activity?.let {
-            Glide.with(it).load(imagePath).apply(
-                    RequestOptions.centerCropTransform().placeholder(R.drawable.circle_placeholder)
-            ).into(v.current_song_album_art)
+            imagePath?.let { path ->
+                Glide.with(it).load(path)
+                        .apply(RequestOptions().centerCrop())
+                        .into(v.current_song_album_art)
+            } ?: run {
+                Glide.with(it).load(R.drawable.circle_placeholder)
+                        .apply(RequestOptions().diskCacheStrategy(DiskCacheStrategy.ALL)).into(v.current_song_album_art)
+            }
         }
     }
 
@@ -333,22 +345,29 @@ class SongsListFragment : Fragment() {
     }
 
     fun playPlayer(from: Int) {
+
         setPlayerMarque(true)
         activity?.let {
             if (from == FROM_FRAGMENT) (it as MainActivity).start()
             v.play_pause_song.setImageDrawable(it.getDrawable(R.drawable.ic_pause_black_24dp))
         }
-        resetAlbumArtAnimation()
-        v.rotate_view_album_art.startAnimation(rotatingAlbumAnim)
+
+        startDiskAnimation()
     }
 
     fun pausePlayer(from: Int) {
+
         setPlayerMarque(false)
         activity?.let {
             if (from == FROM_FRAGMENT) (it as MainActivity).pause()
             v.play_pause_song.setImageDrawable(it.getDrawable(R.drawable.ic_play_arrow_black_24dp))
         }
-        resetAlbumArtAnimation()
+        stopDiskAnimation()
+    }
+
+    private fun startDiskAnimation() {
+        stopDiskAnimation()
+        v.rotate_view_album_art.startAnimation(rotatingAlbumAnim)
     }
 
     private fun setPlayerMarque(turnOn: Boolean) {
@@ -356,11 +375,8 @@ class SongsListFragment : Fragment() {
         v.current_song_artist.isSelected = turnOn
     }
 
-    private fun resetAlbumArtAnimation() {
-        v.rotate_view_album_art.animation?.let {
-            v.rotate_view_album_art.animation.cancel()
-            v.rotate_view_album_art.animation = null
-        }
+    private fun stopDiskAnimation() {
+        v.rotate_view_album_art.clearAnimation()
     }
 
     fun fadeOutUpper() {

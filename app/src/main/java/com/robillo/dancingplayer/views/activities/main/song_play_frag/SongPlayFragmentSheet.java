@@ -15,7 +15,6 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,13 +45,11 @@ import static com.robillo.dancingplayer.utils.AppConstants.FROM_FRAGMENT;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements SongPlayMvpView {
+public class SongPlayFragmentSheet extends BottomSheetDialogFragment {
 
     private static CountDownTimer timer;
-    @SuppressWarnings("FieldCanBeLocal")
     private static Song currentSong = null;
     private AppPreferencesHelper helper = null;
-    @SuppressWarnings("FieldCanBeLocal")
     private ThemeColors currentUserThemeColors = null;
     private Animation rotatingAlbumAnim;
     private int currentDurationProgress, totalDurationProgress;
@@ -146,7 +143,6 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    @Override
     public void setUp(View v) {
         ButterKnife.bind(this, v);
 
@@ -177,13 +173,10 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
         }
     }
 
-
-    @Override
     public void refreshForUserThemeColors(ThemeColors currentUserThemeColors) {
         bottomController.setBackgroundColor(getResources().getColor(currentUserThemeColors.getColorPrimaryDark()));
     }
 
-    @Override
     public void setCurrentSong(Song song) {
 
         currentSong = song;
@@ -235,15 +228,10 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
         }
     }
 
-    @Override
     public void resetAlbumArtAnimation() {
-        if(rotateViewAlbumArtCard.getAnimation() != null) {
-            rotateViewAlbumArtCard.getAnimation().cancel();
-            rotateViewAlbumArtCard.setAnimation(null);
-        }
+        rotateViewAlbumArtCard.clearAnimation();
     }
 
-    @Override
     public void playPlayer(int from) {
         assert getActivity() != null;
         if(from == FROM_FRAGMENT) ((MainActivity) getActivity()).start();
@@ -256,19 +244,18 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
         helper.setIsSongPlaying(true);
     }
 
-    @Override
     public void pausePlayer(int from) {
         assert getActivity() != null;
         if(from == FROM_FRAGMENT) ((MainActivity) getActivity()).pause();
 
         stopTimerForProgress();
         playPauseSong.setImageDrawable(getActivity().getDrawable(R.drawable.ic_play_circle_outline_black_24dp));
+
         resetAlbumArtAnimation();
 
         helper.setIsSongPlaying(false);
     }
 
-    @Override
     public void setPreferencesToViews() {
         if(getActivity() != null) {
 
@@ -324,12 +311,10 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
         }
     }
 
-    @Override
     public void seekTenSecondsForward() {
         if(getActivity()!=null) ((MainActivity) getActivity()).seekTenSecondsForward();
     }
 
-    @Override
     public void seekTenSecondsBackwards() {
         if(getActivity()!=null) ((MainActivity) getActivity()).seekTenSecondsBackwards();
     }
@@ -476,7 +461,6 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
 
     }
 
-    @Override
     public void setProgressToSeekBar(int currentDuration, int totalDuration) {
         if(totalDuration != 0) {
             int percentProgress = (currentDuration * 100)/totalDuration;
@@ -491,7 +475,6 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
         }
     }
 
-    @Override
     public void setDurationValues(int currentDuration, int totalDuration) {
         currentDurationProgress = currentDuration;
         totalDurationProgress = totalDuration;
@@ -500,13 +483,11 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
         if(helper.isSongPlaying()) startTimerForProgress();
     }
 
-    @Override
     public void startTimerForProgress() {
         updateTimer((totalDurationProgress - currentDurationProgress) * 1000, 1000);
         timer.start();
     }
 
-    @Override
     public void stopTimerForProgress() {
         if(timer != null) {
             timer.cancel();
@@ -514,7 +495,6 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
         }
     }
 
-    @Override
     public void updateTimer(int millisInFuture, int countDownInterval) {
         if(timer != null) {
             timer.cancel();
@@ -544,21 +524,6 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
         if(helper.isSongPlaying()) startTimerForProgress();
     }
 
-
-    @Override
-    public void pauseTimer() {
-        if(timer != null) {
-            timer.cancel();
-            timer = null;
-        }
-    }
-
-    @Override
-    public void resumeTimer(int millisInFuture, int countDownInterval) {
-
-    }
-
-    @Override
     public void setSeekBarOnSeekChangeListener() {
         currentSongProgressSeekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -577,7 +542,6 @@ public class SongPlayFragmentSheet extends BottomSheetDialogFragment implements 
                 if(getActivity()!=null) ((MainActivity) getActivity()).seekTo(currentDurationProgress * 1000);
                 updateTimer((totalDurationProgress - currentDurationProgress) * 1000, 1000);
                 timer.start();
-                Log.e("progress", currentDurationProgress + " " + seekBar.getProgress());
             }
         });
     }
