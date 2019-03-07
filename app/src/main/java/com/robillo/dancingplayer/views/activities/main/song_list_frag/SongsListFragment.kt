@@ -399,7 +399,8 @@ class SongsListFragment : Fragment() {
         v.bottom_controller.startAnimation(fadeInAnimationController)
     }
 
-    private fun genericAnimationListener(endUpperControllerVisibility: Int, endBottomControllerVisibility: Int): Animation.AnimationListener {
+    private fun genericAnimationListener(endUpperControllerVisibility: Int, endBottomControllerVisibility: Int):
+            Animation.AnimationListener {
         return object: Animation.AnimationListener {
 
             override fun onAnimationStart(animation: Animation) {

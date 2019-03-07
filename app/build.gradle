@@ -61,6 +61,10 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
+    //dagger
+    implementation 'com.google.dagger:dagger:2.21'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.21'
+
     //kotlin
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1'

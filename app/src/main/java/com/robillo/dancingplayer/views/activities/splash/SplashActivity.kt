@@ -20,33 +20,26 @@ import com.robillo.dancingplayer.views.activities.main.MainActivity
 
 import butterknife.ButterKnife
 import com.robillo.dancingplayer.models.ThemeColors
+import com.robillo.dancingplayer.views.activities.base.BaseActivity
 import io.github.inflationx.viewpump.ViewPumpContextWrapper
 import kotlinx.android.synthetic.main.activity_splash.*
 
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : BaseActivity() {
 
     lateinit var colors: ThemeColors
     lateinit var preferencesHelper: AppPreferencesHelper
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash)
-
-        ButterKnife.bind(this)
-
-        setup()
+    override fun getLayoutResId(): Int {
+        return R.layout.activity_splash
     }
 
-    private fun setup() {
+    override fun init() {
 
         preferencesHelper = AppPreferencesHelper(this)
 
         getUserTheme()
-
         setViewsForTheme()
-
         setWindowFlagsForTheme()
-
         initPlaylistForNewUser()
 
         Handler().postDelayed({
@@ -97,9 +90,5 @@ class SplashActivity : AppCompatActivity() {
             playlists.add(AppConstants.RECENTLY_PLAYED)
             preferencesHelper.playlistSet = playlists
         }
-    }
-
-    override fun attachBaseContext(newBase: Context) {
-        super.attachBaseContext(ViewPumpContextWrapper.wrap(newBase))
     }
 }
