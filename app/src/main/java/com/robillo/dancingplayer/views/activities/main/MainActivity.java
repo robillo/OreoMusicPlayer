@@ -47,7 +47,7 @@ import com.robillo.dancingplayer.models.SetSeekBarEvent;
 import com.robillo.dancingplayer.models.Song;
 import com.robillo.dancingplayer.events.ThemeChangeEvent;
 import com.robillo.dancingplayer.models.ThemeColors;
-import com.robillo.dancingplayer.preferences.AppPreferencesHelper;
+import com.robillo.dancingplayer.preferences.PreferencesHelper;
 import com.robillo.dancingplayer.services.MusicService;
 import com.robillo.dancingplayer.utils.AppConstants;
 import com.robillo.dancingplayer.utils.ApplicationUtils;
@@ -102,7 +102,7 @@ import static com.robillo.dancingplayer.utils.AppConstants.TITLE;
 import static com.robillo.dancingplayer.utils.AppConstants.TITLE_KEY;
 import static com.robillo.dancingplayer.utils.AppConstants.YEAR;
 
-public class MainActivity extends AppCompatActivity implements MainActivityMvpView, MediaController.MediaPlayerControl {
+public class MainActivity extends AppCompatActivity implements MediaController.MediaPlayerControl {
 
     BottomSheetBehavior playlistSheetBehavior;
     BottomSheetFragment bottomSheetFragment = new BottomSheetFragment();
@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
     private Intent playIntent;
     private boolean musicBound = false;
     private ThemeColors currentUserThemeColors = null;
-    private AppPreferencesHelper helper = null;
+    private PreferencesHelper helper = null;
     private List<PlaylistRowItem> playlistRowItems = new ArrayList<>();
     private SongDatabase songDatabase;
     private SongRepository songRepository;
@@ -137,7 +137,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         setUp();
     }
 
-    @Override
     public void startServiceForAudioList(final ArrayList<Song> songList) {
 
         //connect to the service
@@ -164,15 +163,13 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         }
     }
 
-    @Override
     public void playSong(int songIndex) {
         if(musicService != null) musicService.setSong(songIndex);
     }
 
-    @Override
     public void setUp() {
         songDatabase = SongDatabase.getInstance(this);
-        if(helper == null) helper = new AppPreferencesHelper(this);
+        if(helper == null) helper = new PreferencesHelper(this);
         selectedPlaylist = new ApplicationUtils().convertStringToPlaylistRowItem(helper.getCurrentPlaylistTitle());
 
         songRepository = getSongRepository();
@@ -183,8 +180,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         setPlaylistBottomSheet();
     }
 
-
-    @Override
     public void putSongsListIntoDatabase(List<Song> audioList) {
         if (songRepository == null) songRepository = getSongRepository();
 
@@ -194,10 +189,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         loadSongsForSelectedPlaylistFromDb();
     }
 
-    @Override
     public void loadSongsForSelectedPlaylistFromDb() {
 
-        AppPreferencesHelper helper = new AppPreferencesHelper(this);
+        PreferencesHelper helper = new PreferencesHelper(this);
 
         listLiveData = songRepository
                 .getAllSongs(
@@ -219,12 +213,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         });
     }
 
-    @Override
     public void removeObservers() {
         if(listLiveData != null) listLiveData.removeObservers(this);
     }
 
-    @Override
     public void removeSongCurrentPlaylist(Song song, int index) {
         if(songRepository == null) songRepository = getSongRepository();
         if(playlistRepository == null) playlistRepository = getPlaylistRepository();
@@ -236,7 +228,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         }
         getMusicService().removeSongFromListInMusicServiceById(song.getId());
 
-        playlistRepository.removeSongFromPlaylist(song.getId(), new AppPreferencesHelper(this).getCurrentPlaylistTitle());
+        playlistRepository.removeSongFromPlaylist(song.getId(), new PreferencesHelper(this).getCurrentPlaylistTitle());
 
         LiveData<Integer> liveData = songRepository.getNumRows();
         liveData.observe(this, integer -> {
@@ -246,7 +238,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         });
     }
 
-    @Override
     public void updateRecyclerViewForLoadedPlaylist(List<Song> audioList, int size) {
         SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
 
@@ -259,7 +250,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         }
     }
 
-    @Override
     public void addSongToPlaylist(String songId, String playlist) {
         if(songDatabase == null) songDatabase = SongDatabase.getInstance(this);
 
@@ -286,7 +276,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         });
     }
 
-    @Override
     public void startMusicServiceForCurrentPlaylist(List<Song> audioList) {
         audioList.add(0, new Song());
         audioList.add(new Song());
@@ -299,7 +288,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         }
     }
 
-    @Override
     public SongRepository getSongRepository() {
         if(songDatabase == null)
             songDatabase = SongDatabase.getInstance(this);
@@ -307,14 +295,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         return new SongRepository(songDatabase.getSongDao());
     }
 
-    @Override
     public MostPlayedRepository getMostPlayedRepository() {
         if(songDatabase == null) songDatabase = SongDatabase.getInstance(this);
 
         return new MostPlayedRepository(songDatabase.getMostPlayedDao());
     }
 
-    @Override
     public PlaylistRepository getPlaylistRepository() {
         if(songDatabase == null)
             songDatabase = SongDatabase.getInstance(this);
@@ -322,10 +308,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         return new PlaylistRepository(songDatabase.getPlaylistDao());
     }
 
-    @Override
     public void refreshForUserThemeColors() {
 
-        helper = new AppPreferencesHelper(this);
+        helper = new PreferencesHelper(this);
         currentUserThemeColors = AppConstants.themeMap.get(helper.getUserThemeName());
 
         Window window = getWindow();
@@ -334,7 +319,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         window.setStatusBarColor(ContextCompat.getColor(this, currentUserThemeColors.getColorPrimaryDark()));
     }
 
-    @Override
     public void startThemeChangeActivity() {
         startActivityForResult(new Intent(this, ThemeChangeActivity.class), REQUEST_CODE);
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
@@ -353,31 +337,26 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         }
     }
 
-    @Override
     public void showSnackBar(String text) {
         Snackbar.make(
                     findViewById(R.id.coordinator_layout), text, Snackbar.LENGTH_SHORT
                 ).show();
     }
 
-    @Override
     public MusicService getMusicService() {
         return musicService;
     }
 
-    @Override
     public void updateServiceList(ArrayList<Song> updatedAudioList) {
         musicService.setSongPosn(0);
         musicService.updateAudioList(updatedAudioList);
     }
 
-    @Override
     public int getCurrentSongDuration() {
         if(musicService!=null && musicBound) return musicService.getPosition();
         else return 0;
     }
 
-    @Override
     public void rescanDevice() {
         if(getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list)) != null){
             SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
@@ -387,7 +366,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         }
     }
 
-    @Override
     public void refreshSongListFragmentForSongDelete(Song song, int index) {
         SongsListFragment fragment = (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
         if(fragment != null){
@@ -395,7 +373,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         }
     }
 
-    @Override
     public void removeSongFromDb(String songId) {
         if(songRepository == null) songRepository = getSongRepository();
         if(playlistRepository == null) playlistRepository = getPlaylistRepository();
@@ -404,7 +381,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         playlistRepository.deleteSongById(songId);
     }
 
-    @Override
     public void showSongOptionsOnBottomSheet(Song song, int index) {
         if (bottomSheetFragment != null) {
             Bundle bundle = new Bundle();
@@ -448,7 +424,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         }
     }
 
-    @Override
     public void hideOrRemoveBottomSheet() {
         if(bottomSheetFragment != null) {
             if(!bottomSheetFragment.isHidden()) {
@@ -458,18 +433,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         }
     }
 
-    @Override
     public void removeSongFromListInMusicService(Song song) {
         MusicService service = getMusicService();
         if(service != null) service.removeSongFromList(song);
     }
 
-    @Override
     public void hideSongPlayFragment(SongPlayFragmentSheet fragmentSheet) {
         if(fragmentSheet != null && fragmentSheet.isAdded() && fragmentSheet.isVisible()) fragmentSheet.dismiss();
     }
 
-    @Override
     public void setSongListFragment() {
         SongsListFragment fragment = new SongsListFragment();
 
@@ -480,7 +452,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         fragment.fetchSongsAsync(FROM_FRAGMENT);
     }
 
-    @Override
     public void setSongPlayFragment() {
 
         SongPlayFragmentSheet fragmentSheet = (SongPlayFragmentSheet) getSupportFragmentManager().findFragmentByTag(getString(R.string.song_play));
@@ -490,7 +461,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             if(!fragmentSheet.isAdded() && fragmentSheet.isHidden()) fragmentSheet.show(getSupportFragmentManager(), getString(R.string.song_play));
     }
 
-    @Override
     public void setSongsSortFragment() {
         if(getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_sort)) == null){
 
@@ -523,7 +493,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             if(currentSong != null) {
                 fragment.setCurrentSong(currentSong);
 
-                if(new AppPreferencesHelper(this).isPlayEvent())
+                if(new PreferencesHelper(this).isPlayEvent())
                     fragment.playPlayer(FROM_ACTIVITY);
                 else
                     fragment.pausePlayer(FROM_ACTIVITY);
@@ -579,7 +549,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             refreshForUserThemeColors();
             songListFragment.applyUserTheme(
                     currentUserThemeColors,
-                    new AppPreferencesHelper(this).getUserThemeName()
+                    new PreferencesHelper(this).getUserThemeName()
             );
         }
     }
@@ -591,7 +561,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         if(event.getSong() != null) {
 
             if(mostPlayedRepository == null) mostPlayedRepository = getMostPlayedRepository();
-            mostPlayedRepository.checkIfExistsAndInsertMostPlayed(this, event.getSong().getId());
+            //TODO: was changed
+//            mostPlayedRepository.checkIfExistsAndInsertMostPlayed(this, event.getSong().getId());
 
             currentSong = event.getSong();
 
@@ -601,7 +572,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             if(songListFragment != null) {
                 songListFragment.setCurrentSong(currentSong);
 
-                AppPreferencesHelper helper = new AppPreferencesHelper(this);
+                PreferencesHelper helper = new PreferencesHelper(this);
 
                 if(helper.isPlayEvent())
                     songListFragment.playPlayer(FROM_ACTIVITY);
@@ -614,7 +585,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             if(songPlayFragment != null) {
                 songPlayFragment.setCurrentSong(currentSong);
 
-                AppPreferencesHelper helper = new AppPreferencesHelper(this);
+                PreferencesHelper helper = new PreferencesHelper(this);
 
                 if(helper.isPlayEvent()) songPlayFragment.playPlayer(FROM_ACTIVITY);
                 else songPlayFragment.pausePlayer(FROM_ACTIVITY);
@@ -661,46 +632,38 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         EventBus.getDefault().removeStickyEvent(event);
     }
 
-    @Override
     public void playNextSong() {
         musicService.playNext();
     }
 
-    @Override
     public void playPreviousSong() {
         musicService.playPrevious();
     }
 
-    @Override
     public Song getCurrentSong() {
         return currentSong;
     }
 
-    @Override
     public void toggleRepeatModeInService(String value) {
         if(musicService != null)
             musicService.toggleRepeatMode(value);
     }
 
-    @Override
     public void toggleShuffleModeInService() {
         if(musicService != null)
             musicService.toggleShuffleMode();
     }
 
-    @Override
     public void seekTenSecondsForward() {
         if(musicService != null)
             musicService.seekTenSecondsForward();
     }
 
-    @Override
     public void seekTenSecondsBackwards() {
         if(musicService != null)
             musicService.seekTenSecondsBackwards();
     }
 
-    @Override
     public void repopulateListSongsListFragment() {
         SongsListFragment fragment =
                 (SongsListFragment) getSupportFragmentManager().findFragmentByTag(getString(R.string.songs_list));
@@ -712,7 +675,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void start() {
-        AppPreferencesHelper helper = new AppPreferencesHelper(this);
+        PreferencesHelper helper = new PreferencesHelper(this);
         helper.setIsPlayEvent(true);
 
         musicService.playPlayer();
@@ -720,7 +683,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
 
     @Override
     public void pause() {
-        AppPreferencesHelper helper = new AppPreferencesHelper(this);
+        PreferencesHelper helper = new PreferencesHelper(this);
         helper.setIsPlayEvent(false);
 
         musicService.pausePlayer();
@@ -797,7 +760,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         togglePlaylistBottomSheet();
     }
 
-    @Override
     public void setPlaylistBottomSheet() {
         loadPlaylistItems(FIRST_LOAD, null);
         setBehaviorCallbacks();
@@ -805,8 +767,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         loadPlaylistsIntoRecyclerView(FROM_BOTTOM_CONTROLLER, null);
     }
 
-
-    @Override
     public void loadPlaylistItems(int from, String songId) {
         if(playlistRepository == null) playlistRepository = getPlaylistRepository();
 
@@ -830,7 +790,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         });
     }
 
-    @Override
     public void loadSongsInRvAfterRowItemsLoaded(int from, String songId) {
         List<PlaylistRowItem> itemsToDisplay = new ArrayList<>();
 
@@ -848,7 +807,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         playlistRecyclerView.setAdapter(playlistAdapter);
     }
 
-    @Override
     public void deleteSong(int recyclerIndex, Song deleteSong) {
         if(songRepository == null) songRepository = getSongRepository();
         if(playlistRepository == null) playlistRepository = getPlaylistRepository();
@@ -918,7 +876,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
             Toast.makeText(this, getString(R.string.deletion_error), Toast.LENGTH_SHORT).show();
     }
 
-    @Override
     public void setBehaviorCallbacks() {
         playlistSheetBehavior = BottomSheetBehavior.from(layoutPlaylistBottomSheet);
 
@@ -947,7 +904,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         });
     }
 
-    @Override
     public void setCurrentPlaylistAsHeader() {
         if(selectedPlaylist == null)
             selectedPlaylist = new ApplicationUtils().convertStringToPlaylistRowItem(helper.getCurrentPlaylistTitle());
@@ -968,12 +924,10 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         selectedPlaylistTv.startAnimation(animation);
     }
 
-    @Override
     public void loadPlaylistsIntoRecyclerView(int from, String songId) {
         loadPlaylistItems(from, songId);
     }
 
-    @Override
     public void updatePlaylistListForSelectedItem(PlaylistRowItem playlistRowItem, int position) {
 
         selectedPlaylist = playlistRowItem;
@@ -987,7 +941,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         loadSongsForSelectedPlaylistFromDb();
     }
 
-    @Override
     public void hidePlaylistBottomSheet() {
         if (playlistSheetBehavior != null && playlistSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
             playlistSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
@@ -995,7 +948,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         }
     }
 
-    @Override
     public void showPlaylistBottomSheet(int from, String songId) {
         if(from == FROM_BOTTOM_CONTROLLER) {
             if (playlistSheetBehavior != null && playlistSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
@@ -1016,7 +968,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         loadPlaylistsIntoRecyclerView(from, songId);
     }
 
-    @Override
     public void showEditCreateDialogFragment(int from, int position, String oldPlaylistName) {
         EditDialogFragment fragment = new EditDialogFragment();
         Bundle args = new Bundle();
@@ -1027,7 +978,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         fragment.show(getFragmentManager(), getString(R.string.edit_dialog_fragment));
     }
 
-    @Override
     public void handleCreateNewPlaylist(String playlistName) {
         if(playlistRepository == null) playlistRepository = getPlaylistRepository();
         playlistRepository.insertPlaylistItem(new Playlist(null, playlistName));
@@ -1037,7 +987,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         Toast.makeText(this, getString(R.string.playlist_created), Toast.LENGTH_SHORT).show();
     }
 
-    @Override
     public void handleEditPlaylistName(String newPlaylistName, int position, String oldPlaylistName) {
         if(playlistRepository == null) playlistRepository = getPlaylistRepository();
         playlistRepository.changePlaylistName(oldPlaylistName, newPlaylistName);
@@ -1047,7 +996,6 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         Toast.makeText(this, getString(R.string.playlist_modified), Toast.LENGTH_SHORT).show();
     }
 
-    @Override
     public void handleDeletePlaylist(String playlistName) {
         deletePlaylistInDb(playlistName);
 
@@ -1056,14 +1004,12 @@ public class MainActivity extends AppCompatActivity implements MainActivityMvpVi
         Toast.makeText(this, getString(R.string.playlist_deleted), Toast.LENGTH_SHORT).show();
     }
 
-    @Override
     public void deletePlaylistInDb(String playlistName) {
         if(playlistRepository == null) playlistRepository = getPlaylistRepository();
 
         playlistRepository.deleteAllInstancesOfPlaylist(playlistName);
     }
 
-    @Override
     public void togglePlaylistBottomSheet() {
         if (playlistSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED) {
             playlistSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);

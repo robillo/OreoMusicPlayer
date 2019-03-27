@@ -8,7 +8,7 @@ import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_playli
 import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_songs.SongRepository;
 import com.robillo.dancingplayer.models.PlaylistRowItem;
 import com.robillo.dancingplayer.models.Song;
-import com.robillo.dancingplayer.views.activities.main.MainActivity;
+import com.robillo.dancingplayer.views.activities.home.HomeActivity;
 
 import java.util.Locale;
 
@@ -49,7 +49,7 @@ public class ApplicationUtils {
 
     public void deleteFile(SongRepository songRepository, PlaylistRepository playlistRepository, Context context, int index, Song song, String... songIds) {
 
-        MainActivity act = (MainActivity) context;
+        HomeActivity act = (HomeActivity) context;
         Song serviceSong = act.getMusicService().getSong();
         if(serviceSong != null && serviceSong.getId().equals(songIds[0])) {
             act.getMusicService().cancelNotification();

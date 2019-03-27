@@ -14,7 +14,6 @@ import com.robillo.dancingplayer.models.Playlist;
 import com.robillo.dancingplayer.models.Song;
 import com.robillo.dancingplayer.utils.AppConstants;
 
-@SuppressWarnings("unused")
 @Database(entities = {Song.class, Playlist.class, MostPlayed.class}, version = 1, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class SongDatabase extends RoomDatabase {

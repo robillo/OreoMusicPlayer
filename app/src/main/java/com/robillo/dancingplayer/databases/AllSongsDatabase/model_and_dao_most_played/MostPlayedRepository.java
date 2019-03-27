@@ -7,6 +7,7 @@ import android.util.Log;
 import com.robillo.dancingplayer.databases.AllSongsDatabase.model_and_dao_playlists.PlaylistDao;
 import com.robillo.dancingplayer.models.MostPlayed;
 import com.robillo.dancingplayer.models.Song;
+import com.robillo.dancingplayer.views.activities.home.HomeActivity;
 import com.robillo.dancingplayer.views.activities.main.MainActivity;
 
 import java.util.Date;
@@ -20,7 +21,7 @@ public class MostPlayedRepository {
         this.mostPlayedDao = mostPlayedDao;
     }
 
-    public void checkIfExistsAndInsertMostPlayed(MainActivity activity, String songId) {
+    public void checkIfExistsAndInsertMostPlayed(HomeActivity activity, String songId) {
         if(songId == null) return;
 
         LiveData<Integer> integerLiveData = mostPlayedDao.checkIfSongExists(songId);
@@ -32,7 +33,7 @@ public class MostPlayedRepository {
         });
     }
 
-    public void checkIfExistsAndInsertRecentlyPlayed(MainActivity activity, String songId) {
+    public void checkIfExistsAndInsertRecentlyPlayed(HomeActivity activity, String songId) {
         if(songId == null) return;
 
         LiveData<Integer> integerLiveData = mostPlayedDao.checkIfSongExists(songId);

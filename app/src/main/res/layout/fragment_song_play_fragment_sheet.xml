@@ -137,7 +137,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!--title-->
+            <!--mTitle-->
 
             <TextView
                 android:layout_width="match_parent"
@@ -203,6 +203,7 @@
                     android:layout_width="0sp"
                     android:layout_height="wrap_content"
                     android:max="100"
+                    tools:progress="50"
                     android:id="@+id/current_song_progress_seekbar"
                     tools:ignore="NestedWeights"
                     android:layout_weight="6"/>
@@ -260,7 +261,7 @@
                     android:layout_width="0sp"
                     android:layout_weight="1"
                     android:scaleType="fitCenter"
-                    android:src="@drawable/ic_pause_circle_outline_black_24dp"
+                    android:src="@drawable/ic_pause_circle_filled_black_24dp"
                     android:background="@color/transparent"
                     android:contentDescription="@string/pause_song"
                     android:tint="@color/white"

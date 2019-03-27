@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/song_card">
+    android:id="@+id/song_card"
+    android:elevation="0sp">
 
     <LinearLayout
         android:orientation="vertical"

@@ -6,7 +6,6 @@ import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,8 +21,7 @@ import com.robillo.dancingplayer.utils.AppConstants
 import com.robillo.dancingplayer.utils.ApplicationUtils
 import com.robillo.dancingplayer.views.activities.main.song_list_frag.adapters.SongsAdapter
 import com.robillo.dancingplayer.models.Song
-import com.robillo.dancingplayer.preferences.AppPreferencesHelper
-import com.robillo.dancingplayer.views.activities.main.MainActivity
+import com.robillo.dancingplayer.preferences.PreferencesHelper
 import com.simplecityapps.recyclerview_fastscroll.interfaces.OnFastScrollStateChangeListener
 import com.willowtreeapps.spruce.Spruce
 import com.willowtreeapps.spruce.animation.DefaultAnimations
@@ -35,6 +33,7 @@ import butterknife.ButterKnife
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.robillo.dancingplayer.utils.AppConstants.*
 import com.robillo.dancingplayer.utils.MusicFetcher
+import com.robillo.dancingplayer.views.activities.home.HomeActivity
 
 import kotlinx.android.synthetic.main.fragment_songs_list.view.*
 import kotlinx.android.synthetic.main.include_bottom_controller.view.*
@@ -64,7 +63,7 @@ class SongsListFragment : Fragment() {
     private var isAnimatingController = false
 
     private lateinit var viewModel: SongListViewModel
-    private lateinit var preferencesHelper: AppPreferencesHelper
+    private lateinit var preferencesHelper: PreferencesHelper
 
     private lateinit var rotatingAlbumAnim: Animation
     private lateinit  var fadeInAnimationUpper: Animation
@@ -83,7 +82,7 @@ class SongsListFragment : Fragment() {
         this.v = v
 
         viewModel = ViewModelProviders.of(this).get(SongListViewModel::class.java)
-        preferencesHelper = AppPreferencesHelper(activity)
+        preferencesHelper = PreferencesHelper(activity)
 
         setObservers()
         loadAnimations()
@@ -112,8 +111,8 @@ class SongsListFragment : Fragment() {
         GlobalScope.launch {
             val songs = songsJob.await()
 
-            val activity = activity as MainActivity?
-            activity?.putSongsListIntoDatabase(songs)
+            val activity = activity as HomeActivity?
+            activity?.putSongsListIntoDatabase(songs!!)
 
             if (LAUNCHED_FROM == FROM_ACTIVITY) {
                 Toast.makeText(activity, R.string.rescanned, Toast.LENGTH_SHORT).show()
@@ -126,7 +125,7 @@ class SongsListFragment : Fragment() {
         var themeName: String? = null
 
         activity?.let {
-            themeName = AppPreferencesHelper(it).userThemeName
+            themeName = PreferencesHelper(it).userThemeName
         }
 
         val userThemeColors = AppConstants.themeMap[themeName]
@@ -194,7 +193,7 @@ class SongsListFragment : Fragment() {
 
     private fun playOrPausePlayer() {
         activity?.let {
-            if ((it as MainActivity).isPlaying) pausePlayer(FROM_FRAGMENT)
+            if ((it as HomeActivity).isPlaying) pausePlayer(FROM_FRAGMENT)
             else playPlayer(FROM_FRAGMENT)
         }
     }
@@ -203,21 +202,21 @@ class SongsListFragment : Fragment() {
 
     private fun getHexColor(color: Int): Int { return context?.let { ContextCompat.getColor(it, color) } ?: 0 }
 
-    private fun startThemeChangeActivity() { activity?.let { (it as MainActivity).startThemeChangeActivity() } }
+    private fun startThemeChangeActivity() { activity?.let { (it as HomeActivity).startThemeChangeActivity() } }
 
-    private fun setSongPlayFragment() { activity?.let { (it as MainActivity).setSongPlayFragment() } }
+    private fun setSongPlayFragment() { activity?.let { (it as HomeActivity).setSongPlayFragment() } }
 
-    private fun setSortOptions() { activity?.let { (it as MainActivity).setSongsSortFragment() } }
+    private fun setSortOptions() { activity?.let { (it as HomeActivity).setSongsSortFragment() } }
 
     fun getControllerVisibility(): Int { return v.bottom_controller.visibility }
 
-    private fun playNextSong() { activity?.let { (it as MainActivity).playNextSong() } }
+    private fun playNextSong() { activity?.let { (it as HomeActivity).playNextSong() } }
 
     private fun setAppMenuOptions() { startThemeChangeActivity() }
 
     private fun playPreviousSong() {
-        activity?.let { (it as MainActivity).playNextSong() }
-        if (activity != null) (activity as MainActivity).playPreviousSong()
+        activity?.let { (it as HomeActivity).playNextSong() }
+        if (activity != null) (activity as HomeActivity).playPreviousSong()
     }
 
     private fun setRescanDevice() {
@@ -266,7 +265,7 @@ class SongsListFragment : Fragment() {
 
     fun renderRecyclerViewForAudioList(list: List<Song>) {
 
-        val activity = activity as MainActivity?
+        val activity = activity as HomeActivity?
         activity?.removeObservers()
 
         audioList = null
@@ -348,7 +347,7 @@ class SongsListFragment : Fragment() {
 
         setPlayerMarque(true)
         activity?.let {
-            if (from == FROM_FRAGMENT) (it as MainActivity).start()
+            if (from == FROM_FRAGMENT) (it as HomeActivity).start()
             v.play_pause_song.setImageDrawable(it.getDrawable(R.drawable.ic_pause_black_24dp))
         }
 
@@ -359,7 +358,7 @@ class SongsListFragment : Fragment() {
 
         setPlayerMarque(false)
         activity?.let {
-            if (from == FROM_FRAGMENT) (it as MainActivity).pause()
+            if (from == FROM_FRAGMENT) (it as HomeActivity).pause()
             v.play_pause_song.setImageDrawable(it.getDrawable(R.drawable.ic_play_arrow_black_24dp))
         }
         stopDiskAnimation()

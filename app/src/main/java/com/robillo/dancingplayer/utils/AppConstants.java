@@ -15,7 +15,7 @@ public class AppConstants {
     public static final String INDEX = "index_number";
 
     public static final String DATA = "data";
-    public static final String TITLE = "title";
+    public static final String TITLE = "mTitle";
     public static final String TITLE_KEY = "title_key";
     public static final String ID = "id";
     public static final String DATE_ADDED = "date_added";
@@ -48,7 +48,7 @@ public class AppConstants {
     public static final String KEY_RECENTLY_PLAYED_COUNT = "key_recently_played_count";
     public static final String KEY_RECENTLY_ADDED_COUNT = "key_recently_added_count";
 
-    //default playlist title
+    //default playlist mTitle
     public static final String DEFAULT_PLAYLIST_TITLE = "All Songs";
     //other persistent titles
     public static final String RECENTLY_ADDED = "Recently Added";

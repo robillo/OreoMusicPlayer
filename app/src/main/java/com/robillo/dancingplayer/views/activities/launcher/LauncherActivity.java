@@ -17,7 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.robillo.dancingplayer.R;
-import com.robillo.dancingplayer.views.activities.main.MainActivity;
+import com.robillo.dancingplayer.views.activities.home.HomeActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,7 +76,7 @@ public class LauncherActivity extends AppCompatActivity implements LauncherMvpVi
                 );
             }
             else {
-                startActivity(new Intent(this, MainActivity.class));
+                startActivity(new Intent(this, HomeActivity.class));
             }
         }
     }
@@ -92,7 +92,7 @@ public class LauncherActivity extends AppCompatActivity implements LauncherMvpVi
 
                     Toast.makeText(this, "Thank you! Moving on..", Toast.LENGTH_SHORT).show();
 
-                    startActivity(new Intent(this, MainActivity.class));
+                    startActivity(new Intent(this, HomeActivity.class));
 
                 } else {
                     if(optionalPermissions.getVisibility() == View.INVISIBLE) optionalPermissions.setVisibility(View.VISIBLE);

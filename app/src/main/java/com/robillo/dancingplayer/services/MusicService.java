@@ -37,9 +37,9 @@ import com.robillo.dancingplayer.events.PlayerStateNoSongPlayingEvent;
 import com.robillo.dancingplayer.events.SongChangeEvent;
 import com.robillo.dancingplayer.models.SetSeekBarEvent;
 import com.robillo.dancingplayer.models.Song;
-import com.robillo.dancingplayer.preferences.AppPreferencesHelper;
+import com.robillo.dancingplayer.preferences.PreferencesHelper;
 import com.robillo.dancingplayer.utils.AppConstants;
-import com.robillo.dancingplayer.views.activities.main.MainActivity;
+import com.robillo.dancingplayer.views.activities.home.HomeActivity;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -155,7 +155,7 @@ public class MusicService extends Service implements
     }
 
     private void setDataInPreferences() {
-        AppPreferencesHelper helper = new AppPreferencesHelper(this);
+        PreferencesHelper helper = new PreferencesHelper(this);
         IS_REPEAT_MODE_ON = helper.isRepeatModeOn();
         IS_SHUFFLE_MODE_ON = helper.isShuffleModeOn();
     }
@@ -328,7 +328,7 @@ public class MusicService extends Service implements
         if(isSongBetweenCorrectIndices(songIndex)) {
             currentSong = songs.get(songIndex);
 
-            AppPreferencesHelper helper = new AppPreferencesHelper(this);
+            PreferencesHelper helper = new PreferencesHelper(this);
             helper.setIsPlayEvent(true);
 
             EventBus.getDefault().postSticky(new SongChangeEvent(songs.get(songIndex)));
@@ -379,7 +379,7 @@ public class MusicService extends Service implements
         player.start();
         buildNotificationForPlaying();
 
-        new AppPreferencesHelper(this).setIsPlayEvent(true);
+        new PreferencesHelper(this).setIsPlayEvent(true);
         EventBus.getDefault().postSticky(new SongChangeEvent(currentSong));
     }
 
@@ -394,7 +394,7 @@ public class MusicService extends Service implements
             player.pause();
             buildNotificationForPaused();
 
-            new AppPreferencesHelper(this).setIsPlayEvent(false);
+            new PreferencesHelper(this).setIsPlayEvent(false);
             EventBus.getDefault().postSticky(new SongChangeEvent(currentSong));
         }
     }
@@ -561,7 +561,7 @@ public class MusicService extends Service implements
 
     @Override
     public void toggleShuffleMode() {
-        AppPreferencesHelper helper = new AppPreferencesHelper(this);
+        PreferencesHelper helper = new PreferencesHelper(this);
         if(helper.isShuffleModeOn())
             setIsShuffleModeOn(true);
         else
@@ -628,7 +628,7 @@ public class MusicService extends Service implements
 
     private void pausePlayerWhenPhoneRinging() {
         if (player != null) {
-            if (new AppPreferencesHelper(MusicService.this).isPlayEvent()) {
+            if (new PreferencesHelper(MusicService.this).isPlayEvent()) {
                 pausePlayer();
                 wasPausedByInterrupt = true;
             }
@@ -707,7 +707,7 @@ public class MusicService extends Service implements
 
     @Override
     public PendingIntent setupNotificationPendingIntent() {
-        Intent notificationIntent = new Intent(this, MainActivity.class);
+        Intent notificationIntent = new Intent(this, HomeActivity.class);
         notificationIntent.putExtra(LAUNCHED_FROM_NOTIFICATION, true);
 
         return PendingIntent.getActivity(
