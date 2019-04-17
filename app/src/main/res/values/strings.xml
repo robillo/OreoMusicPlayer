@@ -76,4 +76,6 @@
     <string name="first_50">50</string>
     <string name="first_100">100</string>
     <string name="retry">Rescan</string>
+    <string name="moving_on_string">Thank you! Moving on..</string>
+    <string name="permission_denied_string">Permission denied. Please allow to continue..</string>
 </resources>
